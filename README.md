@@ -191,8 +191,6 @@ Every turn:
     1. Draw a card
         - If there are no cards in your deck at the beginning of your turn, you cannot draw a card, and therefore you lose
 
-
-
     2. Do any of the following options, in any order:
         - Put basic Pokémon cards from your hand onto your bench (as many times as you want)
 
@@ -235,21 +233,17 @@ Every turn:
 
             - Abilities can be used from active or benched Pokémon
 
+    3. Attack
 
+        - To attack, the active Pokémon must have the right amount of energy cards prior to attacking (Make sure they are the right kinds of energy cards). Then player chooses to use the attack and does X damage to opponents active Pokémon.
 
-3. Attack
+        - If the opponents active Pokémon has relevant weakness/resistance to the Pokémon of that specific type, then damage is multiplied/mitigated.
 
-    - To attack, the active Pokémon must have the right amount of energy cards prior to attacking (Make sure they are the right kinds of energy cards). Then player chooses to use the attack and does X damage to opponents active Pokémon.
+        - Put 1 damage counter on opponents Pokémon for each 10 damage done to opponents Pokémon.
 
-    - If the opponents active Pokémon has relevant weakness/resistance to the Pokémon of that specific type, then damage is multiplied/mitigated.
+        - Check if any Pokémon were knocked out (total damage >= hp).
 
-    - Put 1 damage counter on opponents Pokémon for each 10 damage done to opponents Pokémon.
-
-    - Check if any Pokémon were knocked out (total damage >= hp).
-
-
-
-4. End of Turn
+    4. End of Turn
 
 
 
