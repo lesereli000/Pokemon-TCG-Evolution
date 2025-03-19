@@ -1,4 +1,7 @@
 ﻿# S1G2-Project
+
+TODO: Our Project is done when ...
+
 Constraints of Pokemon Trading Card Game:
 
 Cards:
@@ -123,7 +126,7 @@ Cards:
 
 
 
-Zones:
+TODO: Zones:
 
     - Hand
 
@@ -183,8 +186,12 @@ Players alternate turns starting with whoever won the coin flip above.
 
 Every turn:
 
+
+
     1. Draw a card
         - If there are no cards in your deck at the beginning of your turn, you cannot draw a card, and therefore you lose
+
+
 
     2. Do any of the following options, in any order:
         - Put basic Pokémon cards from your hand onto your bench (as many times as you want)
