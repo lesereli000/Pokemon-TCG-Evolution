@@ -1,11 +1,72 @@
-# S1G2-Project
+﻿# S1G2-Project
 Constraints of Pokemon Trading Card Game:
+
+Cards:
+    - All cards have a Name.
+    - Some cards have been made illegal for tournament play
+    - All cards have a Type from among the following:
+        - Pokémon
+             - All Pokémon cards are one or more of the energy types.
+             - All Pokémon cards are either
+                  - Basic
+                  - Stage 1
+                  - Stage 2
+             - All Pokémon cards have the following attributes:
+                  - HP
+                       - If a Pokémon’s HP is ever less than or equal to the total damage on that Pokémon it is knocked out.
+                  - Damage Counters
+                       - Each counter represents 10 damage, so total damage = 10 * damage counters
+                  - Attacks
+                       - Each attack the Pokémon can use will have:
+                            - Name
+                            - Energy Requirement
+                                 - Number and color are important here.
+                            - Damage
+                                 - Can be a fixed amount or vary based on the effects of the attack
+                            - Effects
+                                 - Any attack may or may not have effects. These effects vary greatly between cards, but often apply conditions 
+                  - Abilities
+                       - Abilities all have a name and an effect.
+                       - Similar to Attack effects, the effects of abilities vary greatly.
+                       - Unless the card says otherwise, an effect may be used multiple times per turn.
+                       - Some effects are passive an should be monitored throughout gameplay.
+                  - Weaknesses
+                       - A Pokémon card may or may not have a weakness.
+                       - If a Pokémon has a weakness, it is weak to a certain energy type. 
+                       - Attacks from a Pokémon of the weakness type do double damage to this Pokémon (i.e. a Water type does double damage to a Pokémon that is weak to Water).
+                  - Resistances
+                       - A Pokémon card may or may not have resistances.
+                       - A Pokémon with a resistance takes less damage when attacked by Pokémon of a certain type. 
+                       - The amount and type(s) of resistance vary.
+                  - Retreat Cost
+                       - All Retreat Costs are colorless energy, so the color doesn't matter, only the number of energy.
+        - Trainer
+             - All Trainer cards have
+                  - Trainer Type
+                       - Item
+                       - Supporter
+                       - Stadium
+                  - Effects
+        - Energy
+             - All energy cards are one of the 11 energy types:
+                  • Grass
+                  • Fire
+                  • Water
+                  • Lightning
+                  • Psychic
+                  • Fighting
+                  • Darkness
+                  • Metal
+                  • Fairy
+                  • Dragon
+                  • Colorless
+             - All energy cards are worth 1 energy.
 
 Set-up:
 
 1. Players
 
-a. There are two players, who both have one deck
+a. There are two players, who each have one deck
 
 2. Deck
 
@@ -13,7 +74,7 @@ a. 60 cards
 
 b. Maximum of four copies of any card
 
-i. EXCEPT basic energy card
+i. EXCEPT basic energy cards
 
 
 Gameplay setup:
@@ -22,7 +83,7 @@ Gameplay setup:
 
 2. Shuffle your 60-card deck
 
-3. Draw top 7 cards
+3. Draw the top 7 cards into your hand
 
 4. If you have ONE OR MORE basic Pokémon in your hand, put ONE face down as your active Pokémon
 
@@ -84,28 +145,40 @@ Every turn:
 
     - Put 1 damage counter on opponents Pokémon for each 10 damage done to opponents Pokémon
 
-    - Check if any Pokémon were knocked out (total damage >= hp), if opponents Pokémon is knocked out, take 1 prize card and put it into their hand and opponent puts the knocked out Pokémon and all attatched cards into the discard, if knocked out Pokémon is active, replace with one on bench, if they can't, they lose the game.
-
+    - Check if any Pokémon were knocked out (total damage >= hp), 
 4. End of Turn
 
 
 
 In between turns:
-If a Pokémon ever receives one of these special conditions, mark it with a marker (i.e poison marker, burn marker, etc.)
-Before the game continues, apply these special conditions in order
+If a Pokémon ever receives one of these special conditions, mark it with a marker (i.e poison marker, burn marker, etc.).
+Before the game continues, apply these special conditions in order.
 
-1. Poisoned: Between turns, apply a damage counter to signify 10 hp being depleted
+1. Poisoned: Between turns, apply a damage counter to signify 10 hp being depleted.
 
-(Pokémon can only have 1 poison marker at a time, new ones simply replace old ones)
+(Pokémon can only have 1 poison marker at a time, new ones simply replace old ones).
 
-2. Burned: Put 2 damage counters on burned Pokémon. Then, flip a coin, if heads, remove the special condition burned
+2. Burned: Put 2 damage counters on burned Pokémon. Then, flip a coin, if heads, remove the special condition burned.
 
 (Pokémon can only have 1 burn marker at a time, new ones simply replace old ones)
 
 3. Asleep: Cannot attack or retreat, between turns flip a coin, if heads, the Pokémon wakes up.
 
-4. Paralyzed: Cannot attack or retreat, remove the special condition paralyzed in this step if Pokémon was paralyzed since the beginning of your last turn
+4. Paralyzed: Cannot attack or retreat, remove the special condition paralyzed in this step if Pokémon was paralyzed since the beginning of your last turn.
 
-5. Confused: Must flip a coin before ever attacking with it, if heads, attack continues normally, if tails, no attack happens and put 3 damage counters on confused Pokémon
+5. Confused: Must flip a coin before ever attacking with it, if heads, attack continues normally, if tails, no attack happens and put 3 damage counters on confused Pokémon.
 
+
+
+
+Ending the Game:
+    - You win the game if any of the following occurs:
+        - You take your last Prize card.
+        - Your opponent has no more Pokémon in play. 
+        - Your opponent must draw a card, and their deck is empty.
+
+
+Additional Rules:
+    - Whenever a Pokémon is knocked out, its controller moves that card and all cards attached to it to the discard pile, then chooses a Pokémon from their bench to replace the knocked-out Pokémon. The other player puts one of their Prize cards into their hand without revealing it.
+    - Colorless Energy Requirements and costs can be met with any Type of Energy.
 
