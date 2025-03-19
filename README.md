@@ -24,22 +24,23 @@ Gameplay setup:
 
 3. Draw top 7 cards
 
-4. If you have ONE OR MORE basic Pokémon in your hand, put ONE down as your active Pokémon
+4. If you have ONE OR MORE basic Pokémon in your hand, put ONE face down as your active Pokémon
 
     - If you do not have any basic Pokémon in your hand: reshuffle hand back into the deck until you get at least 1 basic Pokémon. Every time opponent must reshuffle because they had no basic Pokémon, you may draw 1 extra card
 
-5. If you have more than ONE basic Pokémon in your hand, put up to 5 basic pokemon on your bench
+5. If you have more than ONE basic Pokémon in your hand, put up to 5 additional basic pokemon face down on your bench
 
-6. Put the 6 cards of your deck off to the side face down as your Prize cards
+6. Put the top 6 cards of your deck off to the side face down as your Prize cards
 
 7. Both players flip their Active and Benched Pokémon face up and start the game! 
 
 
+Players alternate turns starting with whoever won the coin flip above.
 
 Every turn:
 
 1. Draw a card
-    - If there is no cards in your deck at the beginning of your turn and you cannot draw a card, you lose
+    - If there are no cards in your deck at the beginning of your turn, you cannot draw a card, and therefore you lose
 
 2. Do any of the following options, in any order:
     - Put basic Pokémon cards from your hand onto your bench (as many times as you want)
@@ -60,14 +61,14 @@ Every turn:
         
         - Stadium cards have a few special rules: 
             • A Stadium card stays in play when you play it.
-            • Only one Stadium card can be in play at a time—if a new one comes into 
-            play, discard the old one and end its effects.
+            • Only one Stadium card can be in play at a time.
+            • If a new one comes into play, discard the old one and end its effects.
             • You can’t play a Stadium card if a card with the same name is already in play.
             • You can play only one Stadium card each turn
 
     - Retreat your active Pokémon (only once per turn)
 
-        - To retreat, you must discard 1 Energy from your Active Pokémon for each listed in its Retreat Cost. If no are listed, it retreats for free. Then, you switch that retreating Pokémon with a Pokémon from your Bench. Keep all damage counters and all attached cards with each Pokémon when they switch. Pokémon that are Asleep or Paralyzed cannot retreat.
+        - To retreat, you must discard 1 Energy from your Active Pokémon for each listed in its Retreat Cost. If none are listed, it retreats for free. Then, you switch that retreating Pokémon with a Pokémon from your Bench. Keep all damage counters and all attached cards with each Pokémon when they switch. Pokémon that are Asleep or Paralyzed cannot retreat.
         - When your Active Pokémon goes to your Bench (whether it retreated or got there some other way), some things do go away—Special Conditions and any effects from attacks.
         If you retreat, you can still attack that turn with your new Active Pokémon.
 
@@ -75,7 +76,7 @@ Every turn:
         
         - Abilities can be used from active or benched Pokémon
 
-3. Attack, then the turn is over
+3. Attack
 
     - To attack, the active Pokémon must have the right amount of energy cards prior to attacking (Make sure they are the right kinds of energy cards). Then player chooses to use the attack and does X damage to opponents active Pokémon
 
@@ -85,7 +86,7 @@ Every turn:
 
     - Check if any Pokémon were knocked out (total damage >= hp), if opponents Pokémon is knocked out, take 1 prize card and put it into their hand and opponent puts the knocked out Pokémon and all attatched cards into the discard, if knocked out Pokémon is active, replace with one on bench, if they can't, they lose the game.
 
-    - Turn is over
+4. End of Turn
 
 
 
