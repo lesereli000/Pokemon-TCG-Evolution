@@ -126,23 +126,82 @@ Cards:
 
 
 
-TODO: Zones:
+Zones are complete when:
 
-    - Hand
+    - Hand: 
+        - The system enforces the minimum (0 cards) and maximum (7 cards) number of cards a player can hold at any time
 
-    - Deck
+        - Players are unable to view their opponents hand (unless otherwise specified)
 
-    - Prize Cards
+        - Any cards drawn from deck go into their hand
 
-    - Active Poke
+        - Players can get prize cards into their hand
 
-    - Bench
+    - Deck: 
+        - Each player starts with a full deck of 60 Pokémon cards
 
-    - In Play
+        - Nobody may view the deck or alter the deck (unless otherwise specified)
 
-    - Discard Pile
+    - Prize Cards: 
+        - Each player has their own 6 prize cards at the start of the game
+
+        - Prize cards are face down and can not be viewed by anyone
+
+        - When an opponents Pokémon is knocked out, player picks up a prize card into their hand
+
+        - If all 6 prize cards are won by a player, they win the game
 
 
+
+    - In-Play Pokémon:
+        - In-Play Pokémon consist of both Active and Benched Pokémon
+            
+        - On players turn:
+
+            • Pokémon can evolve if the player has the next evolution of that Pokémon in their hand
+
+            • Attach an energy card to a Pokémon up to once per turn (1 max!!!)
+
+            • Use abilities
+
+
+
+    - Active Pokémon: 
+        - The top row of each players Pokémon in-play section has a single active Pokémon at all times
+
+        - The active Pokémon takes damage when the opponent attacks
+
+        - Are knocked out after their hp is <= 0
+
+        - If either player is unable to have an active Pokémon for whatever reason, they lose
+
+        - On their turn the active Pokémon can:
+            - Retreat (if they have the specified energy cards)
+
+                • After retreating or being knocked out the active Pokémon should be able to be replaced by a currently benched Pokémon
+
+            - Attack (if they have the specified energy cards)
+
+
+    Bench:
+        - The bottom row of each players Pokémon in-play section has between 0-5 Pokémon
+
+        - Every Pokémon on the bench is in-play
+
+        - On their turn the player can choose to:
+
+                • Add a Pokémon from their hand onto the bench
+
+                • Move a Pokémon from the bench to active (if there is not currently an active Pokémon)
+
+    
+    Discard Pile:
+
+        - Each player should have their own discard pile off to the side
+
+        - All cards taken out of play go into the discard pile and are out of play
+
+        - All attached cards (i.e energy cards) also go to the discard pile and are out of play
 
 Set-up:
 
