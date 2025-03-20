@@ -1,5 +1,7 @@
 ﻿# S1G2-Project
 
+TODO: Add actual BVA's Values
+
 TODO: Our Project is done when ...
 
 Constraints of Pokemon Trading Card Game:
@@ -27,8 +29,10 @@ Cards:
              - All Pokémon cards have the following attributes:
 
                   - HP
-
                        - If a Pokémon’s HP is ever less than or equal to the total damage on that Pokémon it is knocked out.
+                            BVA Test Cases:
+                            - HP = 1 (not knocked out)
+                            - HP = 0 (is knocked out)
 
                   - Damage Counters
 
@@ -47,6 +51,10 @@ Cards:
                             - Damage
 
                                  - Can be a fixed amount or vary based on the effects of the attack
+                                    BVA Test Cases:
+                                    - Normal damage amount
+                                    - Test Pokémon has weakness
+                                    - Test Pokémon has resistance 
 
                             - Effects
 
@@ -81,6 +89,8 @@ Cards:
                   - Retreat Cost
 
                        - All Retreat Costs are colorless energy, so the color doesn't matter, only the number of energy.
+                            - 1 energy short and attempt to retreat (fail)
+                            - Exact amount of energy needed (success)
 
         - Trainer
 
@@ -129,9 +139,11 @@ Cards:
 Zones are complete when:
 
     - Hand: 
-        - The system enforces the minimum (0 cards) and maximum (7 cards) number of cards a player can hold at any time
+        - Each player should start the game with exactly 7 cards in their hand
 
-        - Players are unable to view their opponents hand (unless otherwise specified)
+        - *** Players are unable to view their opponents hand (unless otherwise specified) ***
+            - We likely will not enforce this, as we want to run everything on a local machine and it would be difficult
+            to distinguish between who is playing at any time
 
         - Any cards drawn from deck go into their hand
 
@@ -141,10 +153,14 @@ Zones are complete when:
         - Each player starts with a full deck of 60 Pokémon cards
 
         - Maximum of four copies of any card
+            - Test exactly 3 cards and attempt to draw a 4th (success)
+            - Test exactly 4 cards and attempt to draw a 5th (fail)
 
             i. EXCEPT basic energy cards
 
         - Maximum of 2 Energy types per deck
+            - Test exactly 1 card and attempt to draw a 2nd (success)
+            - Test exactly 2 cards and attempt to draw a 3rd (fail)
 
         - Nobody may view the deck or alter the deck (unless otherwise specified)
 
@@ -156,7 +172,8 @@ Zones are complete when:
         - When an opponents Pokémon is knocked out, player picks up a prize card into their hand
 
         - If all 6 prize cards are won by a player, they win the game
-
+            - Test 5 prize cards do not give player a win
+            - Test 6 prize cards do give player a win
 
 
     - In-Play Pokémon:
@@ -167,7 +184,7 @@ Zones are complete when:
             • Pokémon can evolve if the player has the next evolution of that Pokémon in their hand
 
             • Attach an energy card to a Pokémon up to once per turn (1 max!!!)
-
+                
             • Use abilities
 
 
@@ -178,8 +195,10 @@ Zones are complete when:
         - The active Pokémon takes damage when the opponent attacks
 
         - Are knocked out after their hp is <= 0
-
+            
         - If either player is unable to have an active Pokémon for whatever reason, they lose
+            - Test having exactly 1 active Pokémon does not result in a loss
+            - Test having 0 active Pokémon does result in a loss
 
         - On their turn the active Pokémon can:
             - Retreat (if they have the specified energy cards)
@@ -306,6 +325,8 @@ Players Turn Functionality is Complete When:
         - End turn and continue to the next steps
 
 
+
+TODO: 
 
 In between turns:
 
