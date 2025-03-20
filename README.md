@@ -140,6 +140,12 @@ Zones are complete when:
     - Deck: 
         - Each player starts with a full deck of 60 Pokémon cards
 
+        - Maximum of four copies of any card
+
+            i. EXCEPT basic energy cards
+
+        - Maximum of 2 Energy types per deck
+
         - Nobody may view the deck or alter the deck (unless otherwise specified)
 
     - Prize Cards: 
@@ -203,43 +209,31 @@ Zones are complete when:
 
         - All attached cards (i.e energy cards) also go to the discard pile and are out of play
 
-Set-up:
+Set-up is complete when:
 
-    1. Players
+    - 2 separate players can be created
 
-        a. There are two players, who each have one deck
+    - Their decks are created and assigned accordingly
 
-    2. Deck
+    - Coin can be flipped to decide who gets to play first
 
-        a. 60 cards
+    - 7 cards from each players deck can be distributed to their hand
 
-        b. Maximum of four copies of any card
+    - Basic Pokémon can be assigned as active Pokémon or added to their bench (face down, unable to be viewed by their opponent)
+        
+        • If player does not have at least 1 basic Pokémon in their hand, they must reshuffle and their opponent may draw 1 extra card
 
-            i. EXCEPT basic energy cards
+        • If neither player has at least 1 basic Pokémon, they both reshuffle
 
-        c. Maximum of 2 Energy types per deck
+        • Reshuffles continue accordingly until both players get at least 1 basic Pokémon and choose a basic Pokémon
 
+        • Player must have at least 1 active Pokémon before the game continues
 
-Gameplay setup:
+    - Top 6 cards of the deck should be placed down as Prize cards
 
-    1. Flip coin. Winner decides which player goes first
+    - All In-Play cards are flipped face up
 
-    2. Shuffle your 60-card deck
-
-    3. Draw the top 7 cards into your hand
-
-    4. If you have ONE OR MORE basic Pokémon in your hand, put ONE face down as your active Pokémon
-
-        - If you do not have any basic Pokémon in your hand: reshuffle hand back into the deck until you get at least 1 basic Pokémon. Every time opponent must reshuffle because they had no basic Pokémon, you may draw 1 extra card
-
-    5. If you have more than ONE basic Pokémon in your hand, put up to 5 additional basic pokemon face down on your bench
-
-    6. Put the top 6 cards of your deck off to the side face down as your Prize cards
-
-    7. Both players flip their Active and Benched Pokémon face up and start the game! 
-
-
-Players alternate turns starting with whoever won the coin flip above.
+    - Whoever won the coinflip is then able to begin playing first, the other player should not be able to make any changes while it is their opponents turn
 
 
 
