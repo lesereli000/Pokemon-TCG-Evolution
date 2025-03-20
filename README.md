@@ -209,6 +209,8 @@ Zones are complete when:
 
         - All attached cards (i.e energy cards) also go to the discard pile and are out of play
 
+
+
 Set-up is complete when:
 
     - 2 separate players can be created
@@ -237,66 +239,71 @@ Set-up is complete when:
 
 
 
-Every turn:
+Players Turn Functionality is Complete When:
 
+    - Able to switch turns between player (so that only the person who should play is able to play)
 
+    - Able to draw a card and add it to their hand
 
-    1. Draw a card
-        - If there are no cards in your deck at the beginning of your turn, you cannot draw a card, and therefore you lose
+    - Able to do all of the following, in any order:
 
-    2. Do any of the following options, in any order:
-        - Put basic Pokémon cards from your hand onto your bench (as many times as you want)
+        - Put basic Pokémon cards from your hand onto your bench (as many times as you want, just max of 5 on bench)
 
-        - Evolve your Pokémon (as many times as you want up to 5 on the bench)
+        - Evolve your Pokémon (as many times as you want following the evolution rules)
 
-            - If you have a card in your hand that says “Evolves from X,” and X is the name of a Pokémon you had in play at the beginning of your turn, you may play that card in your hand on top of Pokémon X. 
+            • To play a Stage 1 or Stage 2 Pokémon, you must have had the previous stage (basic for stage 1 and stage 1 for stage 2) 
 
-            - You may evolve a Basic Pokémon to a Stage 1 Pokémon or a Stage 1 Pokémon to a Stage 2 Pokémon. When a Pokémon evolves, it keeps all cards attached to it (Energy cards, Evolution cards, etc.) and any damage counters on it. Any effects of attacks or Special Conditions affecting the Pokémon—such as Asleep, Confused, or Poisoned—end when it evolves. A Pokémon cannot use the attacks or Abilities of its previous Evolution unless a card says so.
+            • When a Pokémon evolves, it keeps all cards attached to it (Energy cards, evolution cards, etc.) and any damage counters
+
+            • A Pokémon should not be able to use attacks or abilities of previous evolution unless a card says so
 
         - Attach an Energy card from your hand to one of your Pokémon (only once per turn)
 
-            - Take an Energy card from your hand and put it under your Active Pokémon or one of your Benched Pokémon to indicate that this is Energy it can use. 
+            - Player should be able to place energy card under a Pokémon to indicate usable energy
 
         - Play trainer cards (as many as you want, but only one Supporter card and one Stadium card per turn)
 
-            - When you play any Trainer card, do what it says and obey the rule at the bottom of the card, and then put it in the discard pile. You can play as many Item cards as you like. Supporter cards are played like Item cards, but you can play only one Supporter card each turn.
+            - When a trainer card is played, all of the necessary rules and actions should be peroformed, then it should automatically be put in the discard pile
 
-            - Stadium cards have a few special rules: 
+            - Only one Supporter card should be allowed to be played per turn
 
-                • A Stadium card stays in play when you play it.
+            - Only one Stadium card should be allowed to be played per turn
 
-                • Only one Stadium card can be in play at a time.
+            - Stadium cards rules: 
 
-                • If a new one comes into play, discard the old one and end its effects.
+                • Only one Stadium card can be in play at a time
 
-                • You can’t play a Stadium card if a card with the same name is already in play.
+                • When a new Stadium card is played, it should replace the old one
 
-                • You can play only one Stadium card each turn
-
+                • Can not play a Stadium card if another Stadium card of the same name is already in play
 
         - Retreat your active Pokémon (only once per turn)
-
-            - To retreat, you must discard 1 Energy from your Active Pokémon for each listed in its Retreat Cost. If none are listed, it retreats for free. Then, you switch that retreating Pokémon with a Pokémon from your Bench. Keep all damage counters and all attached cards with each Pokémon when they switch. Pokémon that are Asleep or Paralyzed cannot retreat.
-
-            - When your Active Pokémon goes to your Bench (whether it retreated or got there some other way), some things do go away—Special Conditions and any effects from attacks.
 
             - If you retreat, you can still attack that turn with your new Active Pokémon.
 
         - Use abilities (as many as you want as long as conditions are met)
 
-            - Abilities can be used from active or benched Pokémon
+            - Abilities should be able to be used by active Pokémon
 
-    3. Attack
+            - Abilities should be able to be used by benched Pokémon
 
-        - To attack, the active Pokémon must have the right amount of energy cards prior to attacking (Make sure they are the right kinds of energy cards). Then player chooses to use the attack and does X damage to opponents active Pokémon.
 
-        - If the opponents active Pokémon has relevant weakness/resistance to the Pokémon of that specific type, then damage is multiplied/mitigated.
+        - Able to attack
 
-        - Put 1 damage counter on opponents Pokémon for each 10 damage done to opponents Pokémon.
+            - Active Pokémon must have the right amount and type of energy cards
 
-        - Check if any Pokémon were knocked out (total damage >= hp).
+                • If a player has the right amount and types of energy cards, they choose an attack
+                
+                • Attack should do the corresponding amount of damage to opponents active Pokémon
 
-    4. End of Turn
+                    - If opponents Pokémon is weak to this specific type, then attack damage should be multiplied appropriately
+
+                    - If opponents Pokémon is resistant to that specific type, then damage should be divided/mitigated appropriately
+
+                • Update the new state of the opponents Pokémon, including HP, and if necessary, knocked out
+
+
+        - End turn and continue to the next steps
 
 
 
