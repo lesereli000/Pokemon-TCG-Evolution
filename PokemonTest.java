@@ -14,10 +14,27 @@ public class PokemonTest {
     }
 
     @Test
-    public void testTakeDamage() {
+    public void testDamage() {
         Pokemon p = new Pokemon("Pikachu", "Fire", 1, 40);
         p.takeDamage(10);
         assertEquals(30, p.hp);
     }
 
+    @Test
+    public void testCreateDeck() {
+        Deck d = new Deck();
+        assertEquals(60, d.size());
+    }
+
+    @Test
+    public void testOneBasic() {
+        Deck d = new Deck();
+        assertTrue(d.hasBasicPokemon());
+    }
+
+    @Test
+    public void testNotTooManyRepeats() {
+        Deck d = new Deck();
+        assertFalse(d.hasOverFour());
+    }
 }
