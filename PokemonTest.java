@@ -1,6 +1,10 @@
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import org.easymock.EasyMock;
+
+
 
 public class PokemonTest {
 
@@ -37,4 +41,10 @@ public class PokemonTest {
         Deck d = new Deck();
         assertFalse(d.hasOverFour());
     }
+
+    @Test
+    public void testGUI() {
+        GUI gui = new GUI();
+    }
+
 }

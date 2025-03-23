@@ -15,6 +15,4 @@ public class Pokemon {
         hp -= damage;
     }
 
-
-
 }
