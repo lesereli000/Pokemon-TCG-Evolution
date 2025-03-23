@@ -1,1 +1,13 @@
 bin
+/.classpath
+/.gitignore
+/.idea/
+/.project
+/376Project.iml
+/Deck.class
+/GUI.class
+/Pokemon.class
+/PokemonTest.class
+/README.md
+/base1.json
+/out/
