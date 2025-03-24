@@ -19,11 +19,6 @@ public class PokemonTest {
     }
 
     @Test
-    public void testRandomPokemon() {
-
-    }
-
-    @Test
     public void testDamage() {
         Pokemon p = new Pokemon("Pikachu", "Fire", 1, 40);
         p.takeDamage(10);
@@ -51,6 +46,13 @@ public class PokemonTest {
         d.addCard(p);
         ArrayList<Pokemon> pokemons = d.getCards();
         assertEquals(pokemons.get(0), p);
+    }
+
+    @Test
+    public void testRandomPokemon() {
+        Deck d = EasyMock.mock(Deck.class);
+        Pokemon charizard = new Pokemon("Charizard", "Fire", 2, 120);
+        d.addCard(charizard);
     }
 
     @Test
