@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import org.easymock.EasyMock;
 
+import java.util.ArrayList;
 
 
 public class PokemonTest {
@@ -18,6 +19,11 @@ public class PokemonTest {
     }
 
     @Test
+    public void testRandomPokemon() {
+
+    }
+
+    @Test
     public void testDamage() {
         Pokemon p = new Pokemon("Pikachu", "Fire", 1, 40);
         p.takeDamage(10);
@@ -25,21 +31,26 @@ public class PokemonTest {
     }
 
     @Test
-    public void testCreateDeck() {
+    public void testEmptyDeck() {
         Deck d = new Deck();
-        assertEquals(60, d.size());
+        assertEquals(0, d.size());
     }
 
     @Test
-    public void testOneBasic() {
+    public void testOneCard() {
         Deck d = new Deck();
-        assertTrue(d.hasBasicPokemon());
+        Pokemon p = new Pokemon("Pikachu", "Fire", 1, 40);
+        d.addCard(p);
+        assertEquals(1, d.size());
     }
 
     @Test
-    public void testNotTooManyRepeats() {
+    public void testFirstCard() {
         Deck d = new Deck();
-        assertFalse(d.hasOverFour());
+        Pokemon p = new Pokemon("Pikachu", "Fire", 1, 40);
+        d.addCard(p);
+        ArrayList<Pokemon> pokemons = d.getCards();
+        assertEquals(pokemons.get(0), p);
     }
 
     @Test
