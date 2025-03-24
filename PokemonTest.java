@@ -1,11 +1,19 @@
 import static org.junit.Assert.*;
 
+import org.json.JSONArray;
 import org.junit.Test;
 
+
 import org.easymock.EasyMock;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Random;
 
+
+import java.io.FileReader;
 import java.util.ArrayList;
-
 
 public class PokemonTest {
 
@@ -65,6 +73,7 @@ public class PokemonTest {
         Pokemon p3 = new PokemonGenerator("Squirtle").generate();
         Pokemon p4 = new PokemonGenerator("Alakazam").generate();
         Pokemon p5 = new PokemonGenerator("Arcanine").generate();
+        Pokemon p6 = new PokemonGenerator("Magikarp").generate();
 
         assertEquals("Charizard", p1.name);
         assertEquals("Fire", p1.type);
@@ -91,10 +100,44 @@ public class PokemonTest {
         assertEquals(1, p5.stage);
         assertEquals(100, p5.hp);
 
-
-
-
+        assertEquals("Magikarp", p6.name);
+        assertEquals("Water", p6.type);
+        assertEquals(0, p6.stage);
+        assertEquals(30, p6.hp);
     }
+
+    public ArrayList<Pokemon> getPokemon() {
+        ArrayList<Pokemon> allPokemon = new ArrayList<Pokemon>();
+        try (FileReader reader = new FileReader("base1.json")) {
+            String content = new String(Files.readAllBytes(Paths.get("base1.json")));
+            JSONArray pokemonArray = new JSONArray(content);
+            for (int i = 0; i < pokemonArray.length(); i++) {
+                String PokemonName = pokemonArray.getJSONObject(i).getString("name");
+                allPokemon.add(new PokemonGenerator(PokemonName).generate());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("File not found");
+            return null;
+        }
+        return allPokemon;
+    }
+
+    @Test
+    public void testGetSize() {
+        Deck d = new Deck();
+        ArrayList<Pokemon> allPokemon = getPokemon();
+        for (int i = 0; i < 60; i++) {
+            Random rand = new Random();
+            int num = rand.nextInt(allPokemon.size());
+            d.addCard(allPokemon.get(num));
+            allPokemon.remove(num);
+        }
+        assertEquals(60, d.size());
+    }
+
+
+
 
     @Test
     public void testGUI() {

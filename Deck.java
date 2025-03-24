@@ -23,4 +23,9 @@ public class Deck {
         return cards;
     }
 
+    public static void main(String[] args) {
+        GUI gui = new GUI();
+        gui.createGUI();
+    }
+
 }

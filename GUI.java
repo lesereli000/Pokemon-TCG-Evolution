@@ -118,7 +118,7 @@ public class GUI extends JPanel {
 		g2d.drawRect(marginSide, marginTop + (cardHeight) + deckOffset, cardWidth, cardHeight);
 	}
 
-	private void createGUI() {
+	public void createGUI() {
 
 		// Creating the JFrame
 		JFrame frame = new JFrame();
@@ -131,12 +131,6 @@ public class GUI extends JPanel {
 
 		frame.setVisible(true);
 	}
-
-	public static void main(String[] args) {
-		GUI gui = new GUI();
-		gui.createGUI();
-	}
-
 }
 
 
