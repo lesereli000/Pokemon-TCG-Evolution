@@ -1,4 +1,6 @@
-package PACKAGE_NAME;
+public class Trainer extends Card{
+    public Trainer(String name) {
+        super(name);
 
-public class Trainer {
+    }
 }

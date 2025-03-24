@@ -203,6 +203,42 @@ public class PokemonTest {
         assertEquals(60, d.size());
     }
 
+    @Test
+    public void testMakeTrainer() {
+        Trainer t = new Trainer("Keiji Kinebuchi");
+            assertEquals("Keiji Kinebuchi", t.getName());
+    }
+
+    @Test
+    public void testAddTrainerToDeck() {
+        Card t = new Trainer("Keiji Kinebuchi");
+        Deck d = new Deck();
+        d.addCard(t);
+        assertEquals(1, d.size());
+        assertEquals(t, d.getCards().get(0));
+        assertEquals("Keiji Kinebuchi", ((Trainer) d.getCards().get(0)).getName());
+    }
+
+    @Test
+    public void mixTrainersAndPokemon() {
+        Card trainer = new Trainer("Keiji Kinebuchi");
+        Deck d = new Deck();
+        Pokemon p1 = new PokemonGenerator("Charizard").generate();
+        Pokemon p2 = new PokemonGenerator("Pikachu").generate();
+        Pokemon p3 = new PokemonGenerator("Squirtle").generate();
+
+        d.addCard(p1);
+        d.addCard(p2);
+        d.addCard(trainer);
+        d.addCard(p3);
+
+        assertEquals(4, d.size());
+        assertEquals(p1, d.getCards().get(0));
+        assertEquals(p2, d.getCards().get(1));
+        assertEquals(trainer, d.getCards().get(2));
+        assertEquals(p3, d.getCards().get(3));
+    }
+
 
     @Test
     public void testGUI() {

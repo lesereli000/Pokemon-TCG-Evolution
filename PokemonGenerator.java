@@ -23,7 +23,6 @@ public class PokemonGenerator {
             for (int i = 0; i < pokemonArray.length(); i++) {
 
                 // Found JSON examples on https://www.tutorialspoint.com/json/json_java_example.htm
-
                 // Further referenced https://www.geeksforgeeks.org/working-with-json-data-in-java/
 
                 if(pokemonArray.getJSONObject(i).getString("name").equals(name)) {
