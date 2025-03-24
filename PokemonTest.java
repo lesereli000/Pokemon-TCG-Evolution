@@ -5,6 +5,8 @@ import org.junit.Test;
 
 
 import org.easymock.EasyMock;
+
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -127,6 +129,33 @@ public class PokemonTest {
     }
 
     @Test
+    public void testGetPokemon() {
+        ArrayList<Pokemon> allPokemon = getPokemon();
+        //allPokemon should be in same order of base1.json file
+
+        assertEquals("Alakazam", allPokemon.get(0).name);
+        assertEquals("Psychic", allPokemon.get(0).type);
+        assertEquals(2, allPokemon.get(0).stage);
+        assertEquals(80, allPokemon.get(0).hp);
+
+        assertEquals("Blastoise", allPokemon.get(1).name);
+        assertEquals("Water", allPokemon.get(1).type);
+        assertEquals(2, allPokemon.get(1).stage);
+        assertEquals(100, allPokemon.get(1).hp);
+
+        assertEquals("Charmander", allPokemon.get(45).name);
+        assertEquals("Fire", allPokemon.get(45).type);
+        assertEquals(50, allPokemon.get(45).hp);
+        assertEquals(0, allPokemon.get(45).stage);
+
+        assertEquals("Weedle", allPokemon.get(68).name);
+        assertEquals("Grass", allPokemon.get(68).type);
+        assertEquals(0, allPokemon.get(68).stage);
+        assertEquals(40, allPokemon.get(68).hp);
+
+    }
+
+        @Test
     public void testGetSize() {
         Deck d = new Deck();
         ArrayList<Pokemon> allPokemon = getPokemon();
