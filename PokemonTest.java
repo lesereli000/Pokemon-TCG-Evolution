@@ -22,7 +22,7 @@ public class PokemonTest {
     @Test
     public void testSetup() {
         Pokemon p = new Pokemon("Pikachu", "Lightning", 1, 40);
-        assertEquals("Pikachu", p.name);
+        assertEquals("Pikachu", p.getName());
         assertEquals("Lightning", p.type);
         assertEquals(1, p.stage);
         assertEquals(40, p.hp);
@@ -54,7 +54,7 @@ public class PokemonTest {
         Deck d = new Deck();
         Pokemon p = new Pokemon("Pikachu", "Lightning", 1, 40);
         d.addCard(p);
-        ArrayList<Pokemon> pokemons = d.getCards();
+        ArrayList<Card> pokemons = d.getCards();
         assertEquals(pokemons.get(0), p);
     }
 
@@ -62,7 +62,7 @@ public class PokemonTest {
     public void testPokemonGen() {
         Pokemon p = new PokemonGenerator("Charizard").generate();
 
-        assertEquals("Charizard", p.name);
+        assertEquals("Charizard", p.getName());
         assertEquals("Fire", p.type);
         assertEquals(120, p.hp);
         assertEquals(2, p.stage);
@@ -77,32 +77,32 @@ public class PokemonTest {
         Pokemon p5 = new PokemonGenerator("Arcanine").generate();
         Pokemon p6 = new PokemonGenerator("Magikarp").generate();
 
-        assertEquals("Charizard", p1.name);
+        assertEquals("Charizard", p1.getName());
         assertEquals("Fire", p1.type);
         assertEquals(2, p1.stage);
         assertEquals(120, p1.hp);
 
-        assertEquals("Pikachu", p2.name);
+        assertEquals("Pikachu", p2.getName());
         assertEquals("Lightning", p2.type);
         assertEquals(0, p2.stage);
         assertEquals(40, p2.hp);
 
-        assertEquals("Squirtle", p3.name);
+        assertEquals("Squirtle", p3.getName());
         assertEquals("Water", p3.type);
         assertEquals(0, p3.stage);
         assertEquals(40, p3.hp);
 
-        assertEquals("Alakazam", p4.name);
+        assertEquals("Alakazam", p4.getName());
         assertEquals("Psychic", p4.type);
         assertEquals(2, p4.stage);
         assertEquals(80, p4.hp);
 
-        assertEquals("Arcanine", p5.name);
+        assertEquals("Arcanine", p5.getName());
         assertEquals("Fire", p5.type);
         assertEquals(1, p5.stage);
         assertEquals(100, p5.hp);
 
-        assertEquals("Magikarp", p6.name);
+        assertEquals("Magikarp", p6.getName());
         assertEquals("Water", p6.type);
         assertEquals(0, p6.stage);
         assertEquals(30, p6.hp);
@@ -133,26 +133,25 @@ public class PokemonTest {
         ArrayList<Pokemon> allPokemon = getPokemon();
         //allPokemon should be in same order of base1.json file
 
-        assertEquals("Alakazam", allPokemon.get(0).name);
+        assertEquals("Alakazam", allPokemon.get(0).getName());
         assertEquals("Psychic", allPokemon.get(0).type);
         assertEquals(2, allPokemon.get(0).stage);
         assertEquals(80, allPokemon.get(0).hp);
 
-        assertEquals("Blastoise", allPokemon.get(1).name);
+        assertEquals("Blastoise", allPokemon.get(1).getName());
         assertEquals("Water", allPokemon.get(1).type);
         assertEquals(2, allPokemon.get(1).stage);
         assertEquals(100, allPokemon.get(1).hp);
 
-        assertEquals("Charmander", allPokemon.get(45).name);
+        assertEquals("Charmander", allPokemon.get(45).getName());
         assertEquals("Fire", allPokemon.get(45).type);
         assertEquals(50, allPokemon.get(45).hp);
         assertEquals(0, allPokemon.get(45).stage);
 
-        assertEquals("Weedle", allPokemon.get(68).name);
+        assertEquals("Weedle", allPokemon.get(68).getName());
         assertEquals("Grass", allPokemon.get(68).type);
         assertEquals(0, allPokemon.get(68).stage);
         assertEquals(40, allPokemon.get(68).hp);
-
     }
 
         @Test
@@ -182,13 +181,27 @@ public class PokemonTest {
         }
 
         for (int i = 0; i < allPokemon.size(); i++) {
-            assertEquals(addedPokemon.get(i).name, d.getCards().get(i).name);
-            assertEquals(addedPokemon.get(i).type, d.getCards().get(i).type);
-            assertEquals(addedPokemon.get(i).stage, d.getCards().get(i).stage);
-            assertEquals(addedPokemon.get(i).hp, d.getCards().get(i).hp);
+            Pokemon card = (Pokemon) d.getCards().get(i);
+            assertEquals(addedPokemon.get(i).getName(), d.getCards().get(i).getName());
+            assertEquals(addedPokemon.get(i).type, card.type);
+            assertEquals(addedPokemon.get(i).stage, card.stage);
+            assertEquals(addedPokemon.get(i).hp, card.hp);
         }
     }
 
+    @Test
+    public void testMakeRandomCards() {
+        Deck d = new Deck();
+        d.addRandomCards(10);
+        assertEquals(10, d.size());
+    }
+
+    @Test
+    public void testMakeFullDeckCards() {
+        Deck d = new Deck();
+        d.addRandomCards(60);
+        assertEquals(60, d.size());
+    }
 
 
     @Test
