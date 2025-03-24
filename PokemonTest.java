@@ -205,23 +205,23 @@ public class PokemonTest {
 
     @Test
     public void testMakeTrainer() {
-        Trainer t = new Trainer("Keiji Kinebuchi");
-            assertEquals("Keiji Kinebuchi", t.getName());
+        Trainer t = new Trainer("Scoop Up");
+            assertEquals("Scoop Up", t.getName());
     }
 
     @Test
     public void testAddTrainerToDeck() {
-        Card t = new Trainer("Keiji Kinebuchi");
+        Card t = new Trainer("Scoop Up");
         Deck d = new Deck();
         d.addCard(t);
         assertEquals(1, d.size());
         assertEquals(t, d.getCards().get(0));
-        assertEquals("Keiji Kinebuchi", ((Trainer) d.getCards().get(0)).getName());
+        assertEquals("Scoop Up", ((Trainer) d.getCards().get(0)).getName());
     }
 
     @Test
     public void mixTrainersAndPokemon() {
-        Card trainer = new Trainer("Keiji Kinebuchi");
+        Card trainer = new Trainer("Defender");
         Deck d = new Deck();
         Pokemon p1 = new PokemonGenerator("Charizard").generate();
         Pokemon p2 = new PokemonGenerator("Pikachu").generate();
@@ -239,6 +239,47 @@ public class PokemonTest {
         assertEquals(p3, d.getCards().get(3));
     }
 
+    @Test
+    public void testMakeEnergy() {
+        Card e = new Energy("Lightning Energy");
+        assertEquals("Lightning Energy", e.getName());
+    }
+
+    @Test
+    public void testAddEnergyToDeck() {
+        Card e = new Energy("Lightning Energy");
+        Deck d = new Deck();
+        d.addCard(e);
+        assertEquals(1, d.size());
+        assertEquals(e, d.getCards().get(0));
+        assertEquals("Lightning Energy", ((Energy) d.getCards().get(0)).getName());
+    }
+
+    @Test
+    public void testMakeFullDeck() {
+        Card trainer = new Trainer("Scoop Up");
+        Card e = new Energy("Lightning Energy");
+        Card e2 = new Energy("Psychic Energy");
+        Deck d = new Deck();
+        Pokemon p1 = new PokemonGenerator("Charizard").generate();
+        Pokemon p2 = new PokemonGenerator("Pikachu").generate();
+        Pokemon p3 = new PokemonGenerator("Squirtle").generate();
+
+        d.addCard(p1);
+        d.addCard(e);
+        d.addCard(p2);
+        d.addCard(trainer);
+        d.addCard(p3);
+        d.addCard(e2);
+
+        assertEquals(6, d.size());
+        assertEquals(p1, d.getCards().get(0));
+        assertEquals(e, d.getCards().get(1));
+        assertEquals(p2, d.getCards().get(2));
+        assertEquals(trainer, d.getCards().get(3));
+        assertEquals(p3, d.getCards().get(4));
+        assertEquals(e2, d.getCards().get(5));
+    }
 
     @Test
     public void testGUI() {
