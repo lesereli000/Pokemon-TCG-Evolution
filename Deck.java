@@ -1,19 +1,26 @@
+import java.util.ArrayList;
+
 public class Deck {
+
+    ArrayList<Pokemon> cards = new ArrayList<>();
 
     public Deck() {
         //Actually create deck here
     }
 
+    int size = 0;
+
     public int size() {
-        return 60;
+        return size;
     }
 
-    public boolean hasBasicPokemon() {
-        return true;
+    public void addCard(Pokemon p) {
+        cards.add(p);
+        size++;
     }
 
-    public boolean hasOverFour() {
-        return false;
+    public ArrayList<Pokemon> getCards() {
+        return cards;
     }
 
 }
