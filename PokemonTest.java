@@ -49,10 +49,14 @@ public class PokemonTest {
     }
 
     @Test
-    public void testRandomPokemon() {
-        Deck d = EasyMock.mock(Deck.class);
+    public void testPokemonGen() {
+        PokemonGenerator gen = new PokemonGenerator("Charizard");
+        Pokemon p = gen.generate();
         Pokemon charizard = new Pokemon("Charizard", "Fire", 2, 120);
-        d.addCard(charizard);
+        assertEquals(charizard.name, p.name);
+        assertEquals(charizard.type, p.type);
+        assertEquals(charizard.hp, p.hp);
+        assertEquals(charizard.stage, p.stage);
     }
 
     @Test
