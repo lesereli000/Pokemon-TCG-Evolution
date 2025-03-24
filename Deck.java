@@ -21,6 +21,10 @@ public class Deck {
         size++;
     }
 
+    public int numPokemon() {
+        return cards.size();
+    }
+
     public void addRandomCards(int numCards) {
         try(FileReader reader = new FileReader("base1.json")) {
             String content = new String(Files.readAllBytes(Paths.get("base1.json")));
@@ -28,8 +32,8 @@ public class Deck {
             for (int i = 0; i < numCards; i++) {
                 Random rand = new Random();
                 int num = rand.nextInt(pokemonArray.length());
-                Pokemon p = new PokemonGenerator(pokemonArray.getJSONObject(num).getString("name")).generate();
-                cards.add(p);
+                Card card = new PokemonGenerator(pokemonArray.getJSONObject(num).getString("name")).generate();
+                cards.add(card);
                 size++;
             }
         } catch (IOException e) {

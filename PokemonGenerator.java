@@ -11,7 +11,7 @@ public class PokemonGenerator {
     String type;
     int hp;
     int stage;
-    boolean isPokemon = true;
+    Card card;
 
     // When given the name of a pokemon, should be able to create a Pokemon object with all desired information
 
@@ -37,8 +37,12 @@ public class PokemonGenerator {
                         } else {
                             this.stage = Integer.parseInt(wholeStage.substring(wholeStage.length() - 1));
                         }
+                        card = new Pokemon(name, type, stage, hp);
+                    } else if (supertype.equals("Energy")){
+                        //Energy
+                        card = new Energy(name);
                     } else {
-                        isPokemon = false;
+                        card = new Trainer(name);
                     }
                       break;
                 }
@@ -50,12 +54,8 @@ public class PokemonGenerator {
         }
     }
 
-    public Pokemon generate() {
-        if(isPokemon) {
-            return new Pokemon(name, type, stage, hp);
-        } else {
-            return null;
-        }
+    public Card generate() {
+        return card;
     }
 
 }

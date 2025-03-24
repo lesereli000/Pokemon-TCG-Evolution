@@ -4,9 +4,6 @@ import org.json.JSONArray;
 import org.junit.Test;
 
 
-import org.easymock.EasyMock;
-
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,7 +11,6 @@ import java.nio.file.Paths;
 import java.util.Random;
 
 
-import java.io.FileReader;
 import java.util.ArrayList;
 
 public class PokemonTest {
@@ -60,7 +56,7 @@ public class PokemonTest {
 
     @Test
     public void testPokemonGen() {
-        Pokemon p = new PokemonGenerator("Charizard").generate();
+        Pokemon p = (Pokemon) new PokemonGenerator("Charizard").generate();
 
         assertEquals("Charizard", p.getName());
         assertEquals("Fire", p.type);
@@ -70,12 +66,12 @@ public class PokemonTest {
 
     @Test
     public void testManyPokemon() {
-        Pokemon p1 = new PokemonGenerator("Charizard").generate();
-        Pokemon p2 = new PokemonGenerator("Pikachu").generate();
-        Pokemon p3 = new PokemonGenerator("Squirtle").generate();
-        Pokemon p4 = new PokemonGenerator("Alakazam").generate();
-        Pokemon p5 = new PokemonGenerator("Arcanine").generate();
-        Pokemon p6 = new PokemonGenerator("Magikarp").generate();
+        Pokemon p1 = (Pokemon) new PokemonGenerator("Charizard").generate();
+        Pokemon p2 = (Pokemon) new PokemonGenerator("Pikachu").generate();
+        Pokemon p3 = (Pokemon) new PokemonGenerator("Squirtle").generate();
+        Pokemon p4 = (Pokemon) new PokemonGenerator("Alakazam").generate();
+        Pokemon p5 = (Pokemon) new PokemonGenerator("Arcanine").generate();
+        Pokemon p6 = (Pokemon) new PokemonGenerator("Magikarp").generate();
 
         assertEquals("Charizard", p1.getName());
         assertEquals("Fire", p1.type);
@@ -108,56 +104,58 @@ public class PokemonTest {
         assertEquals(30, p6.hp);
     }
 
-    public ArrayList<Pokemon> getPokemon() {
-        ArrayList<Pokemon> allPokemon = new ArrayList<Pokemon>();
+    public ArrayList<Card> getAllCards() {
+        ArrayList<Card> allCards = new ArrayList<Card>();
         try (FileReader reader = new FileReader("base1.json")) {
             String content = new String(Files.readAllBytes(Paths.get("base1.json")));
             JSONArray pokemonArray = new JSONArray(content);
             for (int i = 0; i < pokemonArray.length(); i++) {
                 String PokemonName = pokemonArray.getJSONObject(i).getString("name");
-                Pokemon p = new PokemonGenerator(PokemonName).generate();
-                if(p != null) {
-                    allPokemon.add(p);
-                }
+                Card card = new PokemonGenerator(PokemonName).generate();
+                allCards.add(card);
             }
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("File not found");
             return null;
         }
-        return allPokemon;
+        return allCards;
     }
 
     @Test
     public void testGetPokemon() {
-        ArrayList<Pokemon> allPokemon = getPokemon();
+        ArrayList<Card> allCards = getAllCards();
         //allPokemon should be in same order of base1.json file
 
-        assertEquals("Alakazam", allPokemon.get(0).getName());
-        assertEquals("Psychic", allPokemon.get(0).type);
-        assertEquals(2, allPokemon.get(0).stage);
-        assertEquals(80, allPokemon.get(0).hp);
+        Pokemon p1 = (Pokemon) allCards.get(0);
+        assertEquals("Alakazam", p1.getName());
+        assertEquals("Psychic", p1.type);
+        assertEquals(2, p1.stage);
+        assertEquals(80, p1.hp);
 
-        assertEquals("Blastoise", allPokemon.get(1).getName());
-        assertEquals("Water", allPokemon.get(1).type);
-        assertEquals(2, allPokemon.get(1).stage);
-        assertEquals(100, allPokemon.get(1).hp);
+        Pokemon p2 = (Pokemon) allCards.get(1);
+        assertEquals("Blastoise", p2.getName());
+        assertEquals("Water", p2.type);
+        assertEquals(2, p2.stage);
+        assertEquals(100, p2.hp);
 
-        assertEquals("Charmander", allPokemon.get(45).getName());
-        assertEquals("Fire", allPokemon.get(45).type);
-        assertEquals(50, allPokemon.get(45).hp);
-        assertEquals(0, allPokemon.get(45).stage);
+        Pokemon p3 = (Pokemon) allCards.get(45);
+        assertEquals("Charmander", p3.getName());
+        assertEquals("Fire", p3.type);
+        assertEquals(50, p3.hp);
+        assertEquals(0, p3.stage);
 
-        assertEquals("Weedle", allPokemon.get(68).getName());
-        assertEquals("Grass", allPokemon.get(68).type);
-        assertEquals(0, allPokemon.get(68).stage);
-        assertEquals(40, allPokemon.get(68).hp);
+        Pokemon p4 = (Pokemon) allCards.get(68);
+        assertEquals("Weedle", p4.getName());
+        assertEquals("Grass", p4.type);
+        assertEquals(0, p4.stage);
+        assertEquals(40, p4.hp);
     }
 
         @Test
     public void testGetSize() {
         Deck d = new Deck();
-        ArrayList<Pokemon> allPokemon = getPokemon();
+        ArrayList<Card> allPokemon = getAllCards();
         for (int i = 0; i < 60; i++) {
             Random rand = new Random();
             int num = rand.nextInt(allPokemon.size());
@@ -170,22 +168,27 @@ public class PokemonTest {
     @Test
     public void testGetPokemonFromDeck() {
         Deck d = new Deck();
-        ArrayList<Pokemon> allPokemon = getPokemon();
-        ArrayList<Pokemon> addedPokemon = new ArrayList<Pokemon>();
-        for (int i = 0; i < allPokemon.size(); i++) {
+        ArrayList<Card> allCards = getAllCards();
+        ArrayList<Card> addedCards = new ArrayList<Card>();
+        for (int i = 0; i < allCards.size(); i++) {
             Random rand = new Random();
-            int num = rand.nextInt(allPokemon.size());
-            d.addCard(allPokemon.get(num));
-            addedPokemon.add(allPokemon.get(num));
-            allPokemon.remove(num);
+            int num = rand.nextInt(allCards.size());
+            d.addCard(allCards.get(num));
+            addedCards.add(allCards.get(num));
+            allCards.remove(num);
         }
 
-        for (int i = 0; i < allPokemon.size(); i++) {
-            Pokemon card = (Pokemon) d.getCards().get(i);
-            assertEquals(addedPokemon.get(i).getName(), d.getCards().get(i).getName());
-            assertEquals(addedPokemon.get(i).type, card.type);
-            assertEquals(addedPokemon.get(i).stage, card.stage);
-            assertEquals(addedPokemon.get(i).hp, card.hp);
+        for (int i = 0; i < allCards.size(); i++) {
+            Card card = d.getCards().get(i);
+            assertEquals(addedCards.get(i).getName(), d.getCards().get(i).getName());
+            if(card instanceof Pokemon) {
+                Pokemon p = (Pokemon) card;
+                Pokemon addedP = (Pokemon) addedCards.get(i);
+                assertEquals(addedP.type, p.type);
+                assertEquals(addedP.stage, p.stage);
+                assertEquals(addedP.hp, p.hp);
+            }
+
         }
     }
 
@@ -223,9 +226,9 @@ public class PokemonTest {
     public void mixTrainersAndPokemon() {
         Card trainer = new Trainer("Defender");
         Deck d = new Deck();
-        Pokemon p1 = new PokemonGenerator("Charizard").generate();
-        Pokemon p2 = new PokemonGenerator("Pikachu").generate();
-        Pokemon p3 = new PokemonGenerator("Squirtle").generate();
+        Pokemon p1 = (Pokemon) new PokemonGenerator("Charizard").generate();
+        Pokemon p2 = (Pokemon) new PokemonGenerator("Pikachu").generate();
+        Pokemon p3 = (Pokemon) new PokemonGenerator("Squirtle").generate();
 
         d.addCard(p1);
         d.addCard(p2);
@@ -261,9 +264,9 @@ public class PokemonTest {
         Card e = new Energy("Lightning Energy");
         Card e2 = new Energy("Psychic Energy");
         Deck d = new Deck();
-        Pokemon p1 = new PokemonGenerator("Charizard").generate();
-        Pokemon p2 = new PokemonGenerator("Pikachu").generate();
-        Pokemon p3 = new PokemonGenerator("Squirtle").generate();
+        Pokemon p1 = (Pokemon) new PokemonGenerator("Charizard").generate();
+        Pokemon p2 = (Pokemon) new PokemonGenerator("Pikachu").generate();
+        Pokemon p3 = (Pokemon) new PokemonGenerator("Squirtle").generate();
 
         d.addCard(p1);
         d.addCard(e);
