@@ -113,7 +113,10 @@ public class PokemonTest {
             JSONArray pokemonArray = new JSONArray(content);
             for (int i = 0; i < pokemonArray.length(); i++) {
                 String PokemonName = pokemonArray.getJSONObject(i).getString("name");
-                allPokemon.add(new PokemonGenerator(PokemonName).generate());
+                Pokemon p = new PokemonGenerator(PokemonName).generate();
+                if(p != null) {
+                    allPokemon.add(p);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -136,6 +139,26 @@ public class PokemonTest {
         assertEquals(60, d.size());
     }
 
+    @Test
+    public void testGetPokemonFromDeck() {
+        Deck d = new Deck();
+        ArrayList<Pokemon> allPokemon = getPokemon();
+        ArrayList<Pokemon> addedPokemon = new ArrayList<Pokemon>();
+        for (int i = 0; i < allPokemon.size(); i++) {
+            Random rand = new Random();
+            int num = rand.nextInt(allPokemon.size());
+            d.addCard(allPokemon.get(num));
+            addedPokemon.add(allPokemon.get(num));
+            allPokemon.remove(num);
+        }
+
+        for (int i = 0; i < allPokemon.size(); i++) {
+            assertEquals(addedPokemon.get(i).name, d.getCards().get(i).name);
+            assertEquals(addedPokemon.get(i).type, d.getCards().get(i).type);
+            assertEquals(addedPokemon.get(i).stage, d.getCards().get(i).stage);
+            assertEquals(addedPokemon.get(i).hp, d.getCards().get(i).hp);
+        }
+    }
 
 
 
