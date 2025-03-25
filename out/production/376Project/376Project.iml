@@ -17,6 +17,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="easymock" level="project" />
+    <orderEntry type="library" name="Set" level="project" />
+    <orderEntry type="library" name="json" level="project" />
   </component>
 </module>
