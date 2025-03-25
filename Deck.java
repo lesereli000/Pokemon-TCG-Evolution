@@ -11,18 +11,12 @@ public class Deck {
 
     ArrayList<Card> cards = new ArrayList<>();
 
-    int size = 0;
     public int size() {
-        return size;
+        return cards.size();
     }
 
     public void addCard(Card card) {
         cards.add(card);
-        size++;
-    }
-
-    public int numPokemon() {
-        return cards.size();
     }
 
     public void addRandomCards(int numCards) {
@@ -34,15 +28,23 @@ public class Deck {
                 int num = rand.nextInt(pokemonArray.length());
                 Card card = new PokemonGenerator(pokemonArray.getJSONObject(num).getString("name")).generate();
                 cards.add(card);
-                size++;
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            return;
+            System.out.println("File not found when adding random cards" + e);
         }
     }
 
     public ArrayList<Card> getCards() {
         return cards;
+    }
+
+    public void shuffle() {
+        ArrayList<Card> shuffledCards = new ArrayList<>();
+        while(!cards.isEmpty()) {
+            Random rand = new Random();
+            int num = rand.nextInt(cards.size());
+            shuffledCards.add(cards.remove(num));
+        }
+        cards = shuffledCards;
     }
 }

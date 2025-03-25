@@ -8,10 +8,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.Random;
 
 
 import java.util.ArrayList;
+import java.util.Set;
 
 public class PokemonTest {
 
@@ -115,8 +117,7 @@ public class PokemonTest {
                 allCards.add(card);
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("File not found");
+            System.out.println("File not found in getAllCards" + e);
             return null;
         }
         return allCards;
@@ -282,6 +283,27 @@ public class PokemonTest {
         assertEquals(trainer, d.getCards().get(3));
         assertEquals(p3, d.getCards().get(4));
         assertEquals(e2, d.getCards().get(5));
+    }
+
+    @Test
+    public void testDeckShuffle() {
+        Deck d = new Deck();
+        d.addCard(new PokemonGenerator("Pikachu").generate());
+        d.addCard(new PokemonGenerator("Squirtle").generate());
+        d.addCard(new PokemonGenerator("Psychic Energy").generate());
+        d.addCard(new PokemonGenerator("Potion").generate());
+        d.addCard(new PokemonGenerator("Water Energy").generate());
+
+        ArrayList<Card> originalDeck = new ArrayList<Card>(d.getCards());
+        d.shuffle();
+        ArrayList<Card> shuffledDeck = d.getCards();
+        assertEquals(originalDeck.size(), shuffledDeck.size());
+
+        Set<Card> originalSet = new HashSet<Card>(originalDeck);
+        Set<Card> shuffledSet = new HashSet<Card>(shuffledDeck);
+        assertEquals(originalSet, shuffledSet);
+
+        assertNotEquals(originalDeck, shuffledDeck);
     }
 
     @Test

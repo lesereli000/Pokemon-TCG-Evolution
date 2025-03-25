@@ -48,9 +48,7 @@ public class PokemonGenerator {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("File not found");
-            return;
+            System.out.println("File not found in PokemonGenerator" + e);
         }
     }
 
