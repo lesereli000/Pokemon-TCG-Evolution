@@ -1,8 +1,21 @@
-public class Pokemon {
+public class Pokemon extends Card{
 
-
-    // this will eventually be a game.
-    public static void main(String[] args) {
-        System.out.println("This will eventually be a Pokemon game!");
+    String type;
+    int stage;
+    int hp;
+    public Pokemon(String name, String type, int stage, int hp) {
+        super(name);
+        this.type = type;
+        this.stage = stage;
+        this.hp = hp;
     }
+
+    public String getName() {
+        return super.getName();
+    }
+
+    public void takeDamage(int damage) {
+        hp -= damage;
+    }
+
 }
