@@ -19,9 +19,6 @@ public class GUI extends JPanel {
 	final int cardWidth = frameWidth / 10;
 	final int cardHeight = frameHeight / 7;
 
-	final int numBench = 5;
-	final int numPrizeCards = 6;
-
 	final int marginSide = 40;
 	final int marginTop = 75;
 
@@ -116,6 +113,10 @@ public class GUI extends JPanel {
 
 		//Trash
 		g2d.drawRect(marginSide, marginTop + (cardHeight) + deckOffset, cardWidth, cardHeight);
+	}
+
+	public void addDeck(Deck d) {
+
 	}
 
 	public void createGUI() {
