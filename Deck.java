@@ -1,11 +1,11 @@
-import org.json.JSONArray;
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Random;
+
+import org.json.JSONArray;
 
 public class Deck {
 
