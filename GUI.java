@@ -3,9 +3,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import javax.swing.*;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class GUI extends JPanel {
 
@@ -13,6 +13,8 @@ public class GUI extends JPanel {
 	final int frameHeight = 800;
 	final int frameXLoc = 0;
 	final int frameYLoc = 0;
+
+	private JFrame frame;
 
 	final int backgroundLineThickness = 5;
 
@@ -28,6 +30,12 @@ public class GUI extends JPanel {
 	final int benchHorizontalOffset = cardWidth / 6;
 	final int activeVerticalOffset = cardHeight / 3;
 	final int deckOffset = 15;
+
+	private Color deckColor = Color.WHITE;
+
+	public GUI() {
+		createGUI();
+	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -75,9 +83,10 @@ public class GUI extends JPanel {
 		//Discard
 		g2d.drawRect(frameWidth - marginSide - cardWidth, frameHeight - marginTop - cardHeight, cardWidth, cardHeight);
 
-		//Trash
+		//Bench
+		g2d.setColor(deckColor);
 		g2d.drawRect(frameWidth - marginSide - cardWidth, frameHeight - marginTop - (cardHeight*2) - deckOffset, cardWidth, cardHeight);
-
+		g2d.setColor(Color.WHITE);
 
 		// ----- STADIUM CARD -------
 		g2d.drawRect((frameWidth/2) - ((cardWidth/4)*9), (frameHeight/2) - (cardHeight/2), cardWidth, cardHeight);
@@ -111,18 +120,14 @@ public class GUI extends JPanel {
 		//Discard
 		g2d.drawRect(marginSide, marginTop, cardWidth, cardHeight);
 
-		//Trash
+		//Bench
+		g2d.setColor(deckColor);
 		g2d.drawRect(marginSide, marginTop + (cardHeight) + deckOffset, cardWidth, cardHeight);
 	}
 
-	public void addDeck(Deck d) {
-
-	}
-
 	public void createGUI() {
-
 		// Creating the JFrame
-		JFrame frame = new JFrame();
+		frame = new JFrame();
 		frame.setTitle("Pokemon Game");
 		frame.setSize(frameWidth, frameHeight);
 		frame.setLocation(frameXLoc, frameYLoc);
@@ -131,6 +136,23 @@ public class GUI extends JPanel {
 		frame.add(this);
 
 		frame.setVisible(true);
+	}
+
+	public void addButton(JButton flipCoin) {
+		frame.add(flipCoin);
+		frame.revalidate();
+		frame.repaint();
+	}
+
+	public void removeButton(JButton button) {
+		frame.remove(button);
+		frame.revalidate();
+		frame.repaint();
+	}
+
+	public void setDeckColor(Color deckColor) {
+		this.deckColor = deckColor;
+		frame.repaint();
 	}
 }
 

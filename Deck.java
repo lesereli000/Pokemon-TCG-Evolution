@@ -1,11 +1,11 @@
-import org.json.JSONArray;
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Random;
+
+import org.json.JSONArray;
 
 public class Deck {
 
@@ -19,14 +19,13 @@ public class Deck {
         cards.add(card);
     }
 
-    public void addRandomCards(int numCards) {
+    public void addRandomCards(int numCards, Random rand) {
         try(FileReader reader = new FileReader("base1.json")) {
             String content = new String(Files.readAllBytes(Paths.get("base1.json")));
             JSONArray pokemonArray = new JSONArray(content);
             for (int i = 0; i < numCards; i++) {
-                Random rand = new Random();
                 int num = rand.nextInt(pokemonArray.length());
-                Card card = new PokemonGenerator(pokemonArray.getJSONObject(num).getString("name")).generate();
+                Card card = new CardGenerator().generateCard(pokemonArray.getJSONObject(num).getString("name"));
                 cards.add(card);
             }
         } catch (IOException e) {
@@ -46,5 +45,9 @@ public class Deck {
             shuffledCards.add(cards.remove(num));
         }
         cards = shuffledCards;
+    }
+
+    public Card removeTopCard() {
+        return cards.remove(cards.size() - 1);
     }
 }

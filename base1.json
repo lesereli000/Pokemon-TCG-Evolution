@@ -4669,13 +4669,10 @@
   },
   {
     "id": "base1-96",
-    "name": "Double Colorless Energy",
+    "name": "Colorless Energy",
     "supertype": "Energy",
     "subtypes": [
-      "Special"
-    ],
-    "rules": [
-      "Provides ColorlessColorless energy.\nDoesn't count as a basic Energy card."
+      "Basic"
     ],
     "number": "96",
     "artist": "Keiji Kinebuchi",
