@@ -41,6 +41,24 @@ public class PokemonTest {
     }
 
     @Test
+    public void testInvalidType() {
+        boolean pass = false;
+        String name = "Pikachu";
+        String type = "Poison";
+        int stage = 1;
+        int hp = 40;
+
+        try {
+            Pokemon c = new Pokemon(name, type, stage, hp);
+        } catch (CardCreationException e) {
+            pass = true;
+            assertEquals("Invalid pokemon type", e.getMessage());
+        } finally {
+            assertTrue(pass);
+        }
+    }
+
+    @Test
     public void testZeroHP() {
         boolean pass = false;
         String name = "Pikachu";
@@ -52,7 +70,7 @@ public class PokemonTest {
             Pokemon c = new Pokemon(name, type, stage, hp);
         } catch (CardCreationException e) {
             pass = true;
-            assertEquals("Pokemon stage cannot be empty", e.getMessage());
+            assertEquals("Pokemon health must be greater than 0.", e.getMessage());
         } finally {
             assertTrue(pass);
         }
