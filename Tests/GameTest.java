@@ -1,0 +1,82 @@
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+
+public class GameTest {
+
+    //TODO: Tests moved from PokemonTest.java
+    // CURRENTLY BROKEN
+    // TODO: Fix Tests by Mocking GUI, (Do after adding GUI interface)
+//
+//    @Test
+//    public void testFlipCoinHeads() {
+//        Random rand = createMock(Random.class);
+//
+//        expect(rand.nextBoolean()).andReturn(true);
+//
+//        replay(rand);
+//
+//        Game game = new Game();
+//        String result = game.flipCoin(rand);
+//
+//        assertEquals("Heads", result);
+//        assertEquals(1, game.currentTurn());
+//
+//        verify(rand);
+//    }
+//
+//    @Test
+//    public void testFlipCoinTails() {
+//        Random rand = createMock(Random.class);
+//
+//        expect(rand.nextBoolean()).andReturn(false);
+//
+//        replay(rand);
+//
+//        Game game = new Game();
+//        String result = game.flipCoin(rand);
+//
+//        assertEquals("Tails", result);
+//        assertEquals(2, game.currentTurn());
+//
+//        verify(rand);
+//    }
+//
+//    @Test
+//    public void testFirstPlayersDeck() {
+//        Game game = new Game();
+//        Deck player1Deck = game.firstDeck();
+//
+//        assertEquals(60, player1Deck.size());
+//    }
+//
+//    @Test
+//    public void testSecondPlayersDeck() {
+//        Game game = new Game();
+//        Deck player2Deck = game.secondDeck();
+//
+//        assertEquals(60, player2Deck.size());
+//    }
+//
+//    @Test
+//    public void testFirstPlayersHand() {
+//        Game game = new Game();
+//        Deck player1Deck = game.firstDeck();
+//
+//        Deck player1Hand = game.player1Hand();
+//        assertEquals(7, player1Hand.size());
+//    }
+//
+//    @Test
+//    public void testSecondPlayersHand() {
+//        Game game = new Game();
+//        Deck player2Deck = game.secondDeck();
+//        Deck player2Hand = game.player2Hand();
+//
+//        assertEquals(7, player2Hand.size());
+//    }
+}
