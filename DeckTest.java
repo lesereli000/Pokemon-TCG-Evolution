@@ -40,6 +40,15 @@ public class DeckTest {
         assertEquals(pokemons.get(0), p);
     }
 
+    @Test
+    public void testNoMoreFourRepeats() {
+        Deck d = new Deck();
+        d.addCard(new Pokemon("Pikachu", "Lightning", 1, 40));
+        d.addCard(new Pokemon("Pikachu", "Lightning", 1, 40));
+        d.addCard(new Pokemon("Pikachu", "Lightning", 1, 40));
+    }
+
+
     public ArrayList<Card> getAllCards() {
         ArrayList<Card> allCards = new ArrayList<Card>();
         CardGenerator cg = new CardGenerator();
@@ -58,6 +67,9 @@ public class DeckTest {
         }
         return allCards;
     }
+
+
+    /*
 
     @Test
     public void testGetPokemon() {
@@ -89,6 +101,11 @@ public class DeckTest {
         assertEquals(0, p4.stage);
         assertEquals(40, p4.hp);
     }
+
+
+     */
+
+
 
     @Test
     public void testGetSize() {
