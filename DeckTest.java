@@ -101,8 +101,6 @@ public class DeckTest {
         assertEquals(0, p4.stage);
         assertEquals(40, p4.hp);
     }
-
-
      */
 
 
@@ -142,7 +140,6 @@ public class DeckTest {
                 assertEquals(addedP.stage, p.stage);
                 assertEquals(addedP.hp, p.hp);
             }
-
         }
     }
 

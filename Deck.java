@@ -46,4 +46,8 @@ public class Deck {
         }
         cards = shuffledCards;
     }
+
+    public Card removeTopCard() {
+        return cards.remove(cards.size() - 1);
+    }
 }
