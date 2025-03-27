@@ -8,6 +8,7 @@ public class CardGenerator {
 
     private String name;
     private String type;
+    private String effects;
     private int hp;
     private int stage;
     private Card card;
@@ -42,10 +43,10 @@ public class CardGenerator {
                         }
                         card = new Pokemon(this.name, type, stage, hp);
                     } else if (supertype.equals("Energy")) {
-                        //Energy
                         card = new Energy(this.name);
                     } else {
-                        card = new Trainer(this.name);
+                        this.effects = pokemonArray.getJSONObject(i).getJSONArray("rules").getString(0);
+                        card = new Trainer(this.name, this.effects);
                     }
                     break;
                 }
