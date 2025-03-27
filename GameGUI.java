@@ -2,12 +2,11 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 
-import javax.swing.*;
-
-public class GUI extends JPanel {
+public class GameGUI implements GUI {
 
 	final int frameWidth = 1000;
 	final int frameHeight = 800;
@@ -15,6 +14,9 @@ public class GUI extends JPanel {
 	final int frameYLoc = 0;
 
 	private JFrame frame;
+	private GamePanel panel;
+
+	private JButton flipBtn;
 
 	final int backgroundLineThickness = 5;
 
@@ -33,96 +35,98 @@ public class GUI extends JPanel {
 
 	private Color deckColor = Color.WHITE;
 
-	public GUI() {
+	public GameGUI() {
 		createGUI();
 	}
 
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
+	private class GamePanel extends JPanel {
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
 
-		// Cast Graphics to Graphics2D
-		Graphics2D g2d = (Graphics2D) g;
+			// Cast Graphics to Graphics2D
+			Graphics2D g2d = (Graphics2D) g;
 
-		// Set stroke thickness to 5 pixels
-		g2d.setStroke(new BasicStroke(backgroundLineThickness));
+			// Set stroke thickness to 5 pixels
+			g2d.setStroke(new BasicStroke(backgroundLineThickness));
 
-		//background
-		Color backgroundBlue = new Color(37, 150, 190);
-		g2d.setColor(backgroundBlue);
-		g2d.fillRect(0, 0, frameWidth, frameHeight);
+			//background
+			Color backgroundBlue = new Color(37, 150, 190);
+			g2d.setColor(backgroundBlue);
+			g2d.fillRect(0, 0, frameWidth, frameHeight);
 
-		// ----- USER SIDE (NEAR/BOTTOM SIDE) --------
+			// ----- USER SIDE (NEAR/BOTTOM SIDE) --------
 
-		//Prize Cards
-		//left column
-		g2d.setColor(Color.WHITE);
-		g2d.drawRect(marginSide, frameHeight - cardHeight - marginTop, cardWidth, cardHeight);
-		g2d.drawRect(marginSide, frameHeight - (cardHeight*2) - marginTop - marginPrizeCardVertical, cardWidth, cardHeight);
-		g2d.drawRect(marginSide, frameHeight - (cardHeight*3) - marginTop - (marginPrizeCardVertical*2), cardWidth, cardHeight);
+			//Prize Cards
+			//left column
+			g2d.setColor(Color.WHITE);
+			g2d.drawRect(marginSide, frameHeight - cardHeight - marginTop, cardWidth, cardHeight);
+			g2d.drawRect(marginSide, frameHeight - (cardHeight*2) - marginTop - marginPrizeCardVertical, cardWidth, cardHeight);
+			g2d.drawRect(marginSide, frameHeight - (cardHeight*3) - marginTop - (marginPrizeCardVertical*2), cardWidth, cardHeight);
 
-		//right column (front of left column)
-		g2d.setColor(backgroundBlue);
-		g2d.fillRect(marginSide + prizeCardsOffset, frameHeight - cardHeight - marginTop - pcVerticalOffset, cardWidth, cardHeight);
-		g2d.fillRect(marginSide + prizeCardsOffset, frameHeight - (cardHeight*2) - marginTop - marginPrizeCardVertical - pcVerticalOffset, cardWidth, cardHeight);
-		g2d.fillRect(marginSide + prizeCardsOffset, frameHeight - (cardHeight*3) - marginTop - (marginPrizeCardVertical*2) - pcVerticalOffset, cardWidth, cardHeight);
-		g2d.setColor(Color.WHITE);
-		g2d.drawRect(marginSide + prizeCardsOffset, frameHeight - cardHeight - marginTop - pcVerticalOffset, cardWidth, cardHeight);
-		g2d.drawRect(marginSide + prizeCardsOffset, frameHeight - (cardHeight*2) - marginTop - marginPrizeCardVertical - pcVerticalOffset, cardWidth, cardHeight);
-		g2d.drawRect(marginSide + prizeCardsOffset, frameHeight - (cardHeight*3) - marginTop - (marginPrizeCardVertical*2) - pcVerticalOffset, cardWidth, cardHeight);
+			//right column (front of left column)
+			g2d.setColor(backgroundBlue);
+			g2d.fillRect(marginSide + prizeCardsOffset, frameHeight - cardHeight - marginTop - pcVerticalOffset, cardWidth, cardHeight);
+			g2d.fillRect(marginSide + prizeCardsOffset, frameHeight - (cardHeight*2) - marginTop - marginPrizeCardVertical - pcVerticalOffset, cardWidth, cardHeight);
+			g2d.fillRect(marginSide + prizeCardsOffset, frameHeight - (cardHeight*3) - marginTop - (marginPrizeCardVertical*2) - pcVerticalOffset, cardWidth, cardHeight);
+			g2d.setColor(Color.WHITE);
+			g2d.drawRect(marginSide + prizeCardsOffset, frameHeight - cardHeight - marginTop - pcVerticalOffset, cardWidth, cardHeight);
+			g2d.drawRect(marginSide + prizeCardsOffset, frameHeight - (cardHeight*2) - marginTop - marginPrizeCardVertical - pcVerticalOffset, cardWidth, cardHeight);
+			g2d.drawRect(marginSide + prizeCardsOffset, frameHeight - (cardHeight*3) - marginTop - (marginPrizeCardVertical*2) - pcVerticalOffset, cardWidth, cardHeight);
 
-		//Bench Cards
-		g2d.setColor(Color.WHITE);
-		for(int i = 0; i < 5; i++) {
-			g2d.drawRect(marginSide + (cardWidth*2) + (i*(benchHorizontalOffset + cardWidth)), frameHeight - cardHeight - marginTop, cardWidth, cardHeight);
+			//Bench Cards
+			g2d.setColor(Color.WHITE);
+			for(int i = 0; i < 5; i++) {
+				g2d.drawRect(marginSide + (cardWidth*2) + (i*(benchHorizontalOffset + cardWidth)), frameHeight - cardHeight - marginTop, cardWidth, cardHeight);
+			}
+
+			//Active Pokemon
+			g2d.drawRect((frameWidth/2) - (cardWidth/2), (frameHeight/2) + activeVerticalOffset, cardWidth, cardHeight);
+
+			//Discard
+			g2d.drawRect(frameWidth - marginSide - cardWidth, frameHeight - marginTop - cardHeight, cardWidth, cardHeight);
+
+			//Bench
+			g2d.setColor(deckColor);
+			g2d.drawRect(frameWidth - marginSide - cardWidth, frameHeight - marginTop - (cardHeight*2) - deckOffset, cardWidth, cardHeight);
+			g2d.setColor(Color.WHITE);
+
+			// ----- STADIUM CARD -------
+			g2d.drawRect((frameWidth/2) - ((cardWidth/4)*9), (frameHeight/2) - (cardHeight/2), cardWidth, cardHeight);
+
+
+			// ----- OPPONENT SIDE (FAR/TOP SIDE) --------
+
+			//Prize Cards
+			//right column (bottom)
+			for(int i = 0; i < 3; i++) {
+				g2d.drawRect(frameWidth - marginSide - cardWidth, marginTop + (i*(marginPrizeCardVertical+cardHeight)), cardWidth, cardHeight);
+			}
+			//left column (top of right column)
+			g2d.setColor(backgroundBlue);
+			for(int i = 0; i < 3; i++) {
+				g2d.fillRect(frameWidth - prizeCardsOffset - marginSide - cardWidth, marginTop + (i*(marginPrizeCardVertical+cardHeight)) + pcVerticalOffset, cardWidth, cardHeight);
+			}
+			g2d.setColor(Color.WHITE);
+			for(int i = 0; i < 3; i++) {
+				g2d.drawRect(frameWidth - prizeCardsOffset - marginSide - cardWidth, marginTop + (i*(marginPrizeCardVertical+cardHeight)) + pcVerticalOffset, cardWidth, cardHeight);
+			}
+
+			//Bench Cards
+			for(int i = 0; i < 5; i++) {
+				g2d.drawRect(frameWidth - marginSide - (cardWidth*3) - (i*(benchHorizontalOffset + cardWidth)), marginTop, cardWidth, cardHeight);
+			}
+
+			//Active Pokemon
+			g2d.drawRect((frameWidth/2) - (cardWidth/2), (frameHeight/2) - activeVerticalOffset - cardHeight, cardWidth, cardHeight);
+
+			//Discard
+			g2d.drawRect(marginSide, marginTop, cardWidth, cardHeight);
+
+			//Bench
+			g2d.setColor(deckColor);
+			g2d.drawRect(marginSide, marginTop + (cardHeight) + deckOffset, cardWidth, cardHeight);
 		}
-
-		//Active Pokemon
-		g2d.drawRect((frameWidth/2) - (cardWidth/2), (frameHeight/2) + activeVerticalOffset, cardWidth, cardHeight);
-
-		//Discard
-		g2d.drawRect(frameWidth - marginSide - cardWidth, frameHeight - marginTop - cardHeight, cardWidth, cardHeight);
-
-		//Bench
-		g2d.setColor(deckColor);
-		g2d.drawRect(frameWidth - marginSide - cardWidth, frameHeight - marginTop - (cardHeight*2) - deckOffset, cardWidth, cardHeight);
-		g2d.setColor(Color.WHITE);
-
-		// ----- STADIUM CARD -------
-		g2d.drawRect((frameWidth/2) - ((cardWidth/4)*9), (frameHeight/2) - (cardHeight/2), cardWidth, cardHeight);
-
-
-		// ----- OPPONENT SIDE (FAR/TOP SIDE) --------
-
-		//Prize Cards 
-		//right column (bottom)
-		for(int i = 0; i < 3; i++) {
-			g2d.drawRect(frameWidth - marginSide - cardWidth, marginTop + (i*(marginPrizeCardVertical+cardHeight)), cardWidth, cardHeight);
-		}
-		//left column (top of right column)
-		g2d.setColor(backgroundBlue);
-		for(int i = 0; i < 3; i++) {
-			g2d.fillRect(frameWidth - prizeCardsOffset - marginSide - cardWidth, marginTop + (i*(marginPrizeCardVertical+cardHeight)) + pcVerticalOffset, cardWidth, cardHeight);
-		}
-		g2d.setColor(Color.WHITE);
-		for(int i = 0; i < 3; i++) {
-			g2d.drawRect(frameWidth - prizeCardsOffset - marginSide - cardWidth, marginTop + (i*(marginPrizeCardVertical+cardHeight)) + pcVerticalOffset, cardWidth, cardHeight);
-		}
-
-		//Bench Cards
-		for(int i = 0; i < 5; i++) {
-			g2d.drawRect(frameWidth - marginSide - (cardWidth*3) - (i*(benchHorizontalOffset + cardWidth)), marginTop, cardWidth, cardHeight);
-		}
-
-		//Active Pokemon
-		g2d.drawRect((frameWidth/2) - (cardWidth/2), (frameHeight/2) - activeVerticalOffset - cardHeight, cardWidth, cardHeight);
-
-		//Discard
-		g2d.drawRect(marginSide, marginTop, cardWidth, cardHeight);
-
-		//Bench
-		g2d.setColor(deckColor);
-		g2d.drawRect(marginSide, marginTop + (cardHeight) + deckOffset, cardWidth, cardHeight);
 	}
 
 	public void createGUI() {
@@ -132,28 +136,35 @@ public class GUI extends JPanel {
 		frame.setSize(frameWidth, frameHeight);
 		frame.setLocation(frameXLoc, frameYLoc);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		frame.add(this);
+		this.panel = new GamePanel();
+		frame.add(panel);
 
 		frame.setVisible(true);
 	}
 
-	public void addButton(JButton flipCoin) {
-		frame.add(flipCoin);
-		frame.revalidate();
-		frame.repaint();
+	public void addButton(ActionListener listener) {
+		this.flipBtn = new JButton("Flip Coin");
+		flipBtn.addActionListener(listener);
+		panel.add(flipBtn);
+		panel.revalidate();
+		panel.repaint();
 	}
 
-	public void removeButton(JButton button) {
-		frame.remove(button);
-		frame.revalidate();
-		frame.repaint();
+	public void removeButton() {
+		panel.remove(flipBtn);
+		panel.revalidate();
+		panel.repaint();
 	}
 
 	public void setDeckColor(Color deckColor) {
 		this.deckColor = deckColor;
 		frame.repaint();
 	}
+
+	public void displayMessage(String message) {
+		JOptionPane.showMessageDialog(frame, message);
+	}
+
 }
 
 

@@ -1,6 +1,6 @@
 import org.junit.Test;
 
-import java.util.ArrayList;
+import javax.swing.*;
 import java.util.Random;
 
 import static org.easymock.EasyMock.*;
@@ -11,7 +11,7 @@ public class GameTest {
     //TODO: Tests moved from PokemonTest.java
     // CURRENTLY BROKEN
     // TODO: Fix Tests by Mocking GUI, (Do after adding GUI interface)
-//
+
 //    @Test
 //    public void testFlipCoinHeads() {
 //        Random rand = createMock(Random.class);
@@ -20,15 +20,20 @@ public class GameTest {
 //
 //        replay(rand);
 //
-//        Game game = new Game();
+//        GameGUI gui = createMock(GameGUI.class);
+//
+//        replay(gui);
+//
+//        Game game = new Game(gui, rand);
 //        String result = game.flipCoin(rand);
 //
 //        assertEquals("Heads", result);
 //        assertEquals(1, game.currentTurn());
 //
 //        verify(rand);
+//        verify(gui);
 //    }
-//
+
 //    @Test
 //    public void testFlipCoinTails() {
 //        Random rand = createMock(Random.class);

@@ -1,10 +1,12 @@
-import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Game {
     private GUI gui;
+    private Random random;
 
     private Deck player1Deck;
     private Deck player2Deck;
@@ -12,26 +14,26 @@ public class Game {
     private Deck player1Hand;
     private Deck player2Hand;
 
-    private JButton flipBtn;
-
     private int playerTurn;
 
-    public Game() {
-        this.gui = new GUI();
-        this.flipBtn = new JButton("Flip Coin");
-        flipBtn.addActionListener(e -> flipCoin(new Random()));
-        gui.addButton(flipBtn);
+    public Game(GameGUI gui, Random rand) {
+        this.gui = gui;
+        this.random = rand;
+        gui.addButton(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                flipCoin(random);
+                setupDeck();
+            }
+        });
     }
-
-
 
     public String flipCoin(Random random) {
         String output = random.nextBoolean() ? "Heads" : "Tails";
         playerTurn = output.equals("Heads") ? 1 : 2;
         String msg = "The coin landed on " + output + ".\n" + "Player " + playerTurn + " goes first!";
-        JOptionPane.showMessageDialog(null, msg);
-        gui.removeButton(flipBtn);
-        setupDeck();
+        gui.displayMessage(msg);
+        gui.removeButton();
         return output;
     }
 
@@ -43,9 +45,8 @@ public class Game {
         player2Deck = new Deck();
         player2Deck.addRandomCards(60, new Random());
         gui.setDeckColor(Color.RED);
-
-        String msg = "It is now player " + playerTurn + "'s turn.";
-        JOptionPane.showMessageDialog(null, msg);
+        String msg = "Decks have been created, it is player " + playerTurn + "'s turn";
+        gui.displayMessage(msg);
         setupCards();
     }
 
@@ -59,19 +60,19 @@ public class Game {
             player2Hand.addCard(player2Deck.removeTopCard());
         }
 
-        String msg = "Player " + playerTurn + " goes first and has ";
+        String msg = "Player " + playerTurn + " goes first and has:\n";
         if(playerTurn == 1) {
             ArrayList<Card> cards = player1Hand.getCards();
             for (int i = 0; i < player1Hand.size(); i++) {
-                msg += cards.get(i).getName() + " ";
+                msg += cards.get(i).getName() + "\n";
             }
         } else {
             ArrayList<Card> cards = player2Hand.getCards();
             for (int i = 0; i < player2Hand.size(); i++) {
-                msg += cards.get(i).getName() + " ";
+                msg += cards.get(i).getName() + "\n";
             }
         }
-        JOptionPane.showMessageDialog(null, msg);
+        gui.displayMessage(msg);
     }
 
     public int currentTurn() {
@@ -100,7 +101,7 @@ public class Game {
 
 
     public static void main(String[] args) {
-        new Game();
+        new Game(new GameGUI(), new Random());
     }
 }
 
