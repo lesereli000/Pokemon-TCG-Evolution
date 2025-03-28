@@ -16,7 +16,23 @@ public class Deck {
     }
 
     public void addCard(Card card) {
+        if(howManyRepeats(card) > 3) {
+            throw new TooManyRepeatsException("Too many repeats with card " + card.getName());
+        }
+
         cards.add(card);
+    }
+
+    public int howManyRepeats(Card c) {
+        int repeats = 0;
+
+        for(Card card : cards) {
+            if (c.equals(card)) {
+                repeats++;
+            }
+        }
+
+        return repeats;
     }
 
     public void addRandomCards(int numCards, Random rand) {
@@ -49,5 +65,11 @@ public class Deck {
 
     public Card removeTopCard() {
         return cards.remove(cards.size() - 1);
+    }
+
+    public class TooManyRepeatsException extends RuntimeException {
+        public TooManyRepeatsException(String message) {
+            super(message);
+        }
     }
 }

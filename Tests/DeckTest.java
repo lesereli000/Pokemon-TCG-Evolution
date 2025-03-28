@@ -10,8 +10,8 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 public class DeckTest {
 
@@ -26,7 +26,7 @@ public class DeckTest {
     @Test
     public void testOneCard() {
         Deck d = new Deck();
-        Pokemon p = new Pokemon("Pikachu", "Lightning", 1, 40);
+        Pokemon p = createMock(Pokemon.class);
         d.addCard(p);
         assertEquals(1, d.size());
     }
@@ -34,7 +34,7 @@ public class DeckTest {
     @Test
     public void testFirstCard() {
         Deck d = new Deck();
-        Pokemon p = new Pokemon("Pikachu", "Lightning", 1, 40);
+        Pokemon p = createMock(Pokemon.class);
         d.addCard(p);
         ArrayList<Card> pokemons = d.getCards();
         assertEquals(pokemons.get(0), p);
@@ -43,9 +43,33 @@ public class DeckTest {
     @Test
     public void testNoMoreFourRepeats() {
         Deck d = new Deck();
-        d.addCard(new Pokemon("Pikachu", "Lightning", 1, 40));
-        d.addCard(new Pokemon("Pikachu", "Lightning", 1, 40));
-        d.addCard(new Pokemon("Pikachu", "Lightning", 1, 40));
+        Pokemon p = createMock(Pokemon.class);
+        expect(p.getName()).andReturn("Pikachu");
+        replay(p);
+        boolean pass = false;
+        d.addCard(p);
+        d.addCard(p);
+        d.addCard(p);
+
+        try {
+            d.addCard(p);
+            pass = true;
+        } catch (Deck.TooManyRepeatsException e) {
+            assertNotEquals("Too many repeats with card " + "Pikachu", e.getMessage());
+        }
+
+        assertTrue(pass);
+        pass = false;
+
+        try {
+            d.addCard(p);
+        } catch (Deck.TooManyRepeatsException e) {
+            assertEquals("Too many repeats with card " + "Pikachu", e.getMessage());
+            pass = true;
+        }
+
+        assertTrue(pass);
+        verify(p);
     }
 
 
