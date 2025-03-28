@@ -16,7 +16,7 @@ public class Deck {
     }
 
     public void addCard(Card card) {
-        if(howManyRepeats(card) > 3) {
+        if(!(card instanceof Energy) && howManyRepeats(card) > 3) {
             throw new TooManyRepeatsException("Too many repeats with card " + card.getName());
         }
 

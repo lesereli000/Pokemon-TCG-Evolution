@@ -32,6 +32,16 @@ public class DeckTest {
     }
 
     @Test
+    public void testGetLargeSizeDeck() {
+        Deck d = new Deck();
+        for (int i = 0; i < 300; i++) {
+            Pokemon p = createMock(Pokemon.class);
+            d.addCard(p);
+        }
+        assertEquals(300, d.size());
+    }
+
+    @Test
     public void testFirstCard() {
         Deck d = new Deck();
         Pokemon p = createMock(Pokemon.class);
@@ -65,6 +75,62 @@ public class DeckTest {
             d.addCard(p);
         } catch (Deck.TooManyRepeatsException e) {
             assertEquals("Too many repeats with card " + "Pikachu", e.getMessage());
+            pass = true;
+        }
+
+        assertTrue(pass);
+        verify(p);
+    }
+
+    @Test
+    public void testEnergyCardsCanRepeat() {
+        Deck d = new Deck();
+        Energy e = createMock(Energy.class);
+        boolean pass = false;
+
+        try {
+            d.addCard(e);
+            d.addCard(e);
+            d.addCard(e);
+            d.addCard(e);
+            d.addCard(e);
+            d.addCard(e);
+            pass = true;
+        } catch (Deck.TooManyRepeatsException err) {
+            assertNotEquals("Too many repeats with card Fighting Energy", err.getMessage());
+        }
+        assertTrue(pass);
+    }
+
+    @Test
+    public void testPokemonAndEnergyRepeats() {
+        Deck d = new Deck();
+        Pokemon p = createMock(Pokemon.class);
+        expect(p.getName()).andReturn("Charizard");
+        replay(p);
+        Energy e = createMock(Energy.class);
+
+        d.addCard(p);
+        d.addCard(e);
+        d.addCard(p);
+        d.addCard(p);
+        d.addCard(e);
+        d.addCard(e);
+        d.addCard(p);
+        d.addCard(e);
+
+        // Deck now has 4 Energy and 4 Pokemon
+
+        d.addCard(e);
+        d.addCard(e);
+        d.addCard(e);
+
+        boolean pass = false;
+
+        try {
+            d.addCard(p);
+        } catch (Deck.TooManyRepeatsException err) {
+            assertEquals("Too many repeats with card Charizard", err.getMessage());
             pass = true;
         }
 
@@ -126,21 +192,6 @@ public class DeckTest {
         assertEquals(40, p4.hp);
     }
      */
-
-
-
-    @Test
-    public void testGetSize() {
-        Deck d = new Deck();
-        ArrayList<Card> allPokemon = getAllCards();
-        for (int i = 0; i < 60; i++) {
-            Random rand = new Random();
-            int num = rand.nextInt(allPokemon.size());
-            d.addCard(allPokemon.get(num));
-            allPokemon.remove(num);
-        }
-        assertEquals(60, d.size());
-    }
 
     @Test
     public void testGetPokemonFromDeck() {
