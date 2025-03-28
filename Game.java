@@ -19,22 +19,21 @@ public class Game {
     public Game(GameGUI gui, Random rand) {
         this.gui = gui;
         this.random = rand;
-        gui.addButton(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                flipCoin(random);
-                setupDeck();
-            }
-        });
+//        gui.addButton(new ActionListener(){
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                flipCoin(random);
+//                setupDeck();
+//            }
+//        });
+        gui.createFlipButton(flipCoin(rand));
+        setupDeck();
     }
 
     public String flipCoin(Random random) {
-        String output = random.nextBoolean() ? "Heads" : "Tails";
-        playerTurn = output.equals("Heads") ? 1 : 2;
-        String msg = "The coin landed on " + output + ".\n" + "Player " + playerTurn + " goes first!";
-        gui.displayMessage(msg);
-        gui.removeButton();
-        return output;
+        String result = random.nextBoolean() ? "Heads" : "Tails";
+        this.playerTurn = result.equals("Heads") ? 1 : 2;
+        return result;
     }
 
     private void setupDeck() {
@@ -45,9 +44,7 @@ public class Game {
         player2Deck = new Deck();
         player2Deck.addRandomCards(60, new Random());
         gui.setDeckColor(Color.RED);
-        String msg = "Decks have been created, it is player " + playerTurn + "'s turn";
-        gui.displayMessage(msg);
-        setupCards();
+//        setupCards();
     }
 
     private void setupCards() {

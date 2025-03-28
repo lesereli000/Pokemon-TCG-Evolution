@@ -19,6 +19,7 @@ public class GameGUI implements GUI {
 	private GamePanel panel;
 
 	private JButton flipBtn;
+	private int playerTurn;
 
 	static final int backgroundLineThickness = 5;
 
@@ -145,9 +146,17 @@ public class GameGUI implements GUI {
 		frame.setVisible(true);
 	}
 
-	public void addButton(ActionListener listener) {
+	public void createFlipButton(String flipResult) {
 		this.flipBtn = new JButton("Flip Coin");
-		flipBtn.addActionListener(listener);
+		this.playerTurn = flipResult.equals("Heads") ? 1 : 2;
+		flipBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String msg = "The result was: " + flipResult + "\nPlayer " + playerTurn + " goes first!";
+				displayMessage(msg);
+				removeButton();
+			}
+		});
 		panel.add(flipBtn);
 		panel.revalidate();
 		panel.repaint();
