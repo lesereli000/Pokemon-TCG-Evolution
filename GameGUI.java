@@ -8,30 +8,33 @@ import javax.swing.*;
 
 public class GameGUI implements GUI {
 
-	final int frameWidth = 1000;
-	final int frameHeight = 800;
-	final int frameXLoc = 0;
-	final int frameYLoc = 0;
+	//TODO Update GameGUI to display a spot for the active players hand
+
+	static final int frameWidth = 1200;
+	static final int frameHeight = 900;
+	static final int frameXLoc = 0;
+	static final int frameYLoc = 0;
 
 	private JFrame frame;
 	private GamePanel panel;
 
 	private JButton flipBtn;
 
-	final int backgroundLineThickness = 5;
+	static final int backgroundLineThickness = 5;
 
-	final int cardWidth = frameWidth / 10;
-	final int cardHeight = frameHeight / 7;
+	static final int cardWidth = frameWidth / 10;
+	static final int cardHeight = frameHeight / 7;
 
-	final int marginSide = 40;
-	final int marginTop = 75;
+	static final int marginSide = 40;
+	static final int marginTop = 75;
+	static final int marginBottom = 75;
 
-	final int marginPrizeCardVertical = 20;
-	final int prizeCardsOffset = cardWidth / 2;
-	final int pcVerticalOffset = cardHeight / 10;
-	final int benchHorizontalOffset = cardWidth / 6;
-	final int activeVerticalOffset = cardHeight / 3;
-	final int deckOffset = 15;
+	static final int marginPrizeCardVertical = 20;
+	static final int prizeCardsOffset = cardWidth / 2;
+	static final int pcVerticalOffset = cardHeight / 10;
+	static final int benchHorizontalOffset = cardWidth / 6;
+	static final int activeVerticalOffset = cardHeight / 3;
+	static final int deckOffset = 15;
 
 	private Color deckColor = Color.WHITE;
 
