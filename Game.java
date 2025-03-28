@@ -63,14 +63,10 @@ public class Game {
         String msg = "Player " + playerTurn + " goes first and has:\n";
         if(playerTurn == 1) {
             ArrayList<Card> cards = player1Hand.getCards();
-            for (int i = 0; i < player1Hand.size(); i++) {
-                msg += cards.get(i).getName() + "\n";
-            }
+            msg += cards.toString();
         } else {
             ArrayList<Card> cards = player2Hand.getCards();
-            for (int i = 0; i < player2Hand.size(); i++) {
-                msg += cards.get(i).getName() + "\n";
-            }
+            msg += cards.toString();
         }
         gui.displayMessage(msg);
     }

@@ -50,7 +50,7 @@ public class Deck {
     }
 
     public ArrayList<Card> getCards() {
-        return cards;
+        return (ArrayList<Card>) cards.clone();
     }
 
     public void shuffle() {

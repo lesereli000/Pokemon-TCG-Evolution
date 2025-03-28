@@ -58,7 +58,7 @@ public class CardGenerator {
         return card;
     }
 
-    public class PokemonNotFoundException extends RuntimeException {
+    public static class PokemonNotFoundException extends RuntimeException {
         public PokemonNotFoundException(String message) {
             super(message);
         }
