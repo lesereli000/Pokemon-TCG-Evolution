@@ -367,6 +367,77 @@ public class DeckTest {
     }
 
     @Test
+    public void testRemoveTopCardFromDeckSizeOne() {
+        Deck d = new Deck();
+
+        Card p = createMock(Pokemon.class);
+        expect(p.getName()).andReturn("Pikachu").anyTimes();
+        replay(p);
+
+        d.addCard(p);
+
+        assertEquals(p, d.removeTopCard());
+        assertEquals(0, d.size());
+        verify(p);
+    }
+
+    @Test
+    public void testRemoveTopCardFromLargeDeck() {
+        Deck d = new Deck();
+
+        Card p = createMock(Pokemon.class);
+        expect(p.getName()).andReturn("Pikachu").anyTimes();
+        replay(p);
+
+        Card e = createMock(Energy.class);
+        expect(e.getName()).andReturn("Grass Energy").anyTimes();
+        replay(e);
+
+        Card t = createMock(Trainer.class);
+        expect(t.getName()).andReturn("Scoop Up").anyTimes();
+        replay(t);
+
+        d.addCard(p);
+        d.addCard(e);
+        d.addCard(p);
+        d.addCard(e);
+        d.addCard(t);
+        d.addCard(t);
+        d.addCard(p);
+
+        assertEquals(p, d.removeTopCard());
+        assertEquals(6, d.size());
+        assertEquals(t, d.removeTopCard());
+        assertEquals(5, d.size());
+        assertEquals(t, d.removeTopCard());
+        assertEquals(4, d.size());
+        assertEquals(e, d.removeTopCard());
+        assertEquals(3, d.size());
+        assertEquals(p, d.removeTopCard());
+        assertEquals(2, d.size());
+        assertEquals(e, d.removeTopCard());
+        assertEquals(1, d.size());
+        assertEquals(p, d.removeTopCard());
+
+        verify(p);
+        verify(e);
+        verify(t);
+    }
+
+    @Test
+    public void testRemoveTopCardFromEmptyDeck() {
+        Deck d = new Deck();
+        boolean pass = false;
+        try {
+            d.removeTopCard();
+        } catch (Deck.EmptyDeckException err) {
+            assertEquals("Can not remove card from an empty deck", err.getMessage());
+            pass = true;
+        }
+        assertTrue(pass);
+    }
+
+    @Test
     public void testGetPokemonFromDeck() {
         Deck d = new Deck();
         ArrayList<Card> allCards = getAllCards();

@@ -61,11 +61,20 @@ public class Deck {
     }
 
     public Card removeTopCard() {
+        if (cards.isEmpty()) {
+            throw new EmptyDeckException("Can not remove card from an empty deck");
+        }
         return cards.remove(cards.size() - 1);
     }
 
     public static class TooManyRepeatsException extends RuntimeException {
         public TooManyRepeatsException(String message) {
+            super(message);
+        }
+    }
+
+    public static class EmptyDeckException extends RuntimeException {
+        public EmptyDeckException(String message) {
             super(message);
         }
     }

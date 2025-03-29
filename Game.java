@@ -19,8 +19,8 @@ public class Game {
     public Game(GameGUI gui, Random rand) {
         this.gui = gui;
         this.random = rand;
-        gui.createFlipButton(flipCoin(rand));
         setupDeck();
+        gui.createFlipButton(flipCoin(rand));
     }
 
     public String flipCoin(Random random) {
@@ -32,12 +32,11 @@ public class Game {
     private void setupDeck() {
         //Each players deck setup happens here!
         player1Deck = new Deck();
-        player1Deck.addRandomCards(60, new Random());
+        player1Deck.addRandomCards(60, random);
 
         player2Deck = new Deck();
-        player2Deck.addRandomCards(60, new Random());
+        player2Deck.addRandomCards(60, random);
         gui.setDeckColor(Color.RED);
-//        setupCards();
     }
 
     private void setupCards() {
