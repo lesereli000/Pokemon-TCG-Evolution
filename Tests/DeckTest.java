@@ -34,9 +34,9 @@ public class DeckTest {
     @Test
     public void testGetLargeSizeDeck() {
         Deck d = new Deck();
+        Energy e = createMock(Energy.class);
         for (int i = 0; i < 300; i++) {
-            Pokemon p = createMock(Pokemon.class);
-            d.addCard(p);
+            d.addCard(e);
         }
         assertEquals(300, d.size());
     }
@@ -50,11 +50,14 @@ public class DeckTest {
         assertEquals(pokemons.get(0), p);
     }
 
+    // https://stackoverflow.com/questions/34233447/is-there-any-difference-between-andreturn-anytimes-and-andstubreturn
+    //Explains anyTimes();
+
     @Test
     public void testNoMoreFourRepeats() {
         Deck d = new Deck();
         Pokemon p = createMock(Pokemon.class);
-        expect(p.getName()).andReturn("Pikachu");
+        expect(p.getName()).andReturn("Pikachu").anyTimes();
         replay(p);
         boolean pass = false;
         d.addCard(p);
@@ -106,9 +109,11 @@ public class DeckTest {
     public void testPokemonAndEnergyRepeats() {
         Deck d = new Deck();
         Pokemon p = createMock(Pokemon.class);
-        expect(p.getName()).andReturn("Charizard");
+        expect(p.getName()).andReturn("Charizard").anyTimes();
         replay(p);
         Energy e = createMock(Energy.class);
+        expect(e.getName()).andReturn("Grass Energy").anyTimes();
+        replay(e);
 
         d.addCard(p);
         d.addCard(e);
@@ -136,6 +141,27 @@ public class DeckTest {
 
         assertTrue(pass);
         verify(p);
+        verify(e);
+    }
+
+    @Test
+    public void testNotTooManyRepeatsRandom() {
+        Random rand = createMock(Random.class);
+        expect(rand.nextInt(anyInt())).andReturn(1).anyTimes();
+        replay(rand);
+
+        boolean pass = false;
+        Deck d = new Deck();
+        d.addRandomCards(4, rand);
+
+        try {
+            d.addRandomCards(1, rand);
+        } catch (Deck.TooManyRepeatsException err) {
+            assertEquals("Too many repeats with card Blastoise", err.getMessage());
+            pass = true;
+        }
+        assertTrue(pass);
+        verify(rand);
     }
 
 
@@ -157,8 +183,6 @@ public class DeckTest {
         }
         return allCards;
     }
-
-
     /*
 
     @Test

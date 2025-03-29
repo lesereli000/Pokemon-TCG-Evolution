@@ -19,13 +19,6 @@ public class Game {
     public Game(GameGUI gui, Random rand) {
         this.gui = gui;
         this.random = rand;
-//        gui.addButton(new ActionListener(){
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                flipCoin(random);
-//                setupDeck();
-//            }
-//        });
         gui.createFlipButton(flipCoin(rand));
         setupDeck();
     }

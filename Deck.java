@@ -19,19 +19,16 @@ public class Deck {
         if(!(card instanceof Energy) && howManyRepeats(card) > 3) {
             throw new TooManyRepeatsException("Too many repeats with card " + card.getName());
         }
-
         cards.add(card);
     }
 
     public int howManyRepeats(Card c) {
         int repeats = 0;
-
         for(Card card : cards) {
-            if (c.equals(card)) {
+            if (c.getName().equals(card.getName())) {
                 repeats++;
             }
         }
-
         return repeats;
     }
 
@@ -42,7 +39,7 @@ public class Deck {
             for (int i = 0; i < numCards; i++) {
                 int num = rand.nextInt(pokemonArray.length());
                 Card card = new CardGenerator().generateCard(pokemonArray.getJSONObject(num).getString("name"));
-                cards.add(card);
+                addCard(card);
             }
         } catch (IOException e) {
             System.out.println("File not found when adding random cards" + e);
@@ -67,7 +64,7 @@ public class Deck {
         return cards.remove(cards.size() - 1);
     }
 
-    public class TooManyRepeatsException extends RuntimeException {
+    public static class TooManyRepeatsException extends RuntimeException {
         public TooManyRepeatsException(String message) {
             super(message);
         }
