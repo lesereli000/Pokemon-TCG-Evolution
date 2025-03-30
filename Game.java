@@ -1,6 +1,4 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -16,14 +14,14 @@ public class Game {
 
     private int playerTurn;
 
-    public Game(GameGUI gui, Random rand) {
+    public Game(GUI gui, Random rand) {
         this.gui = gui;
         this.random = rand;
         setupDeck();
-        gui.createFlipButton(flipCoin(rand));
+        gui.createFlipButton(flipCoin());
     }
 
-    public String flipCoin(Random random) {
+    public String flipCoin() {
         String result = random.nextBoolean() ? "Heads" : "Tails";
         this.playerTurn = result.equals("Heads") ? 1 : 2;
         return result;
@@ -36,7 +34,9 @@ public class Game {
 
         player2Deck = new Deck();
         player2Deck.addRandomCards(60, random);
+
         gui.setDeckColor(Color.RED);
+        setupCards();
     }
 
     private void setupCards() {
@@ -44,44 +44,26 @@ public class Game {
         player1Hand = new Deck();
         player2Hand = new Deck();
 
+        String msg1 = "Player 1 has cards:\n";
+        String msg2 = "Player 2 has cards:\n";
         for (int i = 0; i < 7; i++) {
-            player1Hand.addCard(player1Deck.removeTopCard());
-            player2Hand.addCard(player2Deck.removeTopCard());
-        }
+            Card player1Card = player1Deck.removeTopCard();
+            player1Hand.addCard(player1Card);
+            String card1Class = player1Card.getClass().toString();
+            String justClass1 = card1Class.substring(6);
+            msg1 += player1Card.getName() + " which is a " + justClass1 + "\n";
 
-        String msg = "Player " + playerTurn + " goes first and has:\n";
-        if(playerTurn == 1) {
-            ArrayList<Card> cards = player1Hand.getCards();
-            msg += cards.toString();
-        } else {
-            ArrayList<Card> cards = player2Hand.getCards();
-            msg += cards.toString();
+            Card player2Card = player2Deck.removeTopCard();
+            player2Hand.addCard(player2Card);
+            String card2Class = player2Card.getClass().toString();
+            String justClass2 = card2Class.substring(6);
+            msg2 += player2Card.getName() + " which is a " + justClass2 + "\n";
         }
-        gui.displayMessage(msg);
+        gui.displayMessage(msg1 + "\n\n" + msg2);
     }
 
     public int currentTurn() {
         return playerTurn;
-    }
-
-    public Deck firstDeck() {
-        player1Deck = new Deck();
-        player1Deck.addRandomCards(60, new Random());
-        return player1Deck;
-    }
-
-    public Deck secondDeck() {
-        player2Deck = new Deck();
-        player2Deck.addRandomCards(60, new Random());
-        return player2Deck;
-    }
-
-    public Deck player1Hand() {
-        return new Deck();
-    }
-
-    public Deck player2Hand() {
-        return new Deck();
     }
 
 

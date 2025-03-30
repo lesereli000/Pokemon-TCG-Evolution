@@ -366,6 +366,34 @@ public class DeckTest {
         verify(rand);
     }
 
+//    @Test
+//    public void testNotTooManyEnergyRepeats() {
+//        Random rand = createMock(Random.class);
+//        expect(rand.nextInt(anyInt())).andReturn(100).anyTimes();
+//        replay(rand);
+//
+//        Card e = createMock(Energy.class);
+//        expect(e.getName()).andReturn("Grass Energy").anyTimes();
+//        replay(e);
+//
+//        boolean pass = false;
+//        Deck d = new Deck();
+//
+//        d.addCard(e);
+//        d.addCard(e);
+//
+//        try {
+//            d.addCard(e);
+//        } catch (Deck.TooManyRepeatsException err) {
+//            assertEquals("Too many repeats with card Grass Energy", err.getMessage());
+//            pass = true;
+//        }
+//
+//        assertTrue(pass);
+//        verify(rand);
+//        verify(e);
+//    }
+
     @Test
     public void testRemoveTopCardFromDeckSizeOne() {
         Deck d = new Deck();

@@ -12,6 +12,20 @@ public class GameTest {
     // CURRENTLY BROKEN
     // TODO: Fix Tests by Mocking GUI, (Do after adding GUI interface)
 
+    @Test
+    public void testFlipCoinHeads() {
+        Random rand = createMock(Random.class);
+        expect(rand.nextBoolean()).andReturn(true).times(2);
+        expect(rand.nextInt()).andReturn(0).anyTimes();
+        replay(rand);
+
+        GUI gui = createMock(GUI.class);
+        Game game = new Game(gui, rand);
+        assertEquals("Heads", game.flipCoin());
+
+        verify(rand);
+    }
+
 //    @Test
 //    public void testFlipCoinHeads() {
 //        Random rand = createMock(Random.class);
