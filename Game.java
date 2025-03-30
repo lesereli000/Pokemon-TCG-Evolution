@@ -17,7 +17,6 @@ public class Game {
     public Game(GUI gui, Random rand) {
         this.gui = gui;
         this.random = rand;
-        setupDeck();
         gui.createFlipButton(flipCoin());
     }
 
@@ -68,7 +67,8 @@ public class Game {
 
 
     public static void main(String[] args) {
-        new Game(new GameGUI(), new Random());
+        Game game = new Game(new GameGUI(), new Random());
+        game.setupDeck();
     }
 }
 
