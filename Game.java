@@ -17,12 +17,18 @@ public class Game {
     public Game(GUI gui, Random rand) {
         this.gui = gui;
         this.random = rand;
-        gui.createFlipButton(flipCoin());
+
+        // https://docs.oracle.com/javase/8/docs/api/java/lang/Runnable.html
+        // https://www.geeksforgeeks.org/runnable-interface-in-java/
+
+        gui.setFlipCoinListener(this::flipCoin);
+        gui.createFlipButton();
     }
 
     public String flipCoin() {
         String result = random.nextBoolean() ? "Heads" : "Tails";
         this.playerTurn = result.equals("Heads") ? 1 : 2;
+        gui.displayMessage("The result was " + result + "\nPlayer " + playerTurn + " turn");
         return result;
     }
 

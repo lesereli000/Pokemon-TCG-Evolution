@@ -41,6 +41,7 @@ public class GameGUI implements GUI {
 	static final int deckOffset = 15;
 
 	private Color deckColor = Color.WHITE;
+	private Runnable flipListener;
 
 	public GameGUI() {
 		createGUI();
@@ -149,20 +150,17 @@ public class GameGUI implements GUI {
 		frame.setVisible(true);
 	}
 
-	public void createFlipButton(String flipResult) {
+	public void createFlipButton() {
 		this.flipBtn = new JButton("Flip Coin");
-		this.playerTurn = flipResult.equals("Heads") ? 1 : 2;
-		flipBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String msg = "The result was: " + flipResult + "\nPlayer " + playerTurn + " goes first!";
-				displayMessage(msg);
-				removeButton();
-			}
-		});
 		panel.add(flipBtn);
 		panel.revalidate();
 		panel.repaint();
+		flipBtn.addActionListener(e -> {
+			if(flipListener != null) {
+				flipListener.run();
+				removeButton();
+			}
+		});
 	}
 
 	public void removeButton() {
@@ -178,6 +176,11 @@ public class GameGUI implements GUI {
 
 	public void displayMessage(String message) {
 		JOptionPane.showMessageDialog(frame, message);
+	}
+
+	@Override
+	public void setFlipCoinListener(Runnable flipCoinListener) {
+		this.flipListener = flipCoinListener;
 	}
 
 }
