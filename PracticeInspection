@@ -1,0 +1,93 @@
+Logistics:
+
+
+  1. When will a formal code inspection be warranted?
+
+Prior to every milestone
+
+  2. Who will take the lead on moderating inspections?
+
+Alternate between everybody, ideally the moderator would not have worked extensively on the chunk of code being reviewed
+
+  3. How will you share the results of inspections?
+
+During an in-person team meeting or over MS teams, describing all the recommended changes
+
+Criteria:
+
+
+  4. What are the key "code smells" from each chapter of Clean Code? This is the big question. Chapter 17 of Clean Code might help you recall them.
+
+Names:
+	- Non-descriptive names
+	- Unpronounceable/unsearchable names
+	- Unrelated names
+
+Functions:
+	- Non descriptive function names
+	- Large functions
+	- Have many purposes and not understandable
+
+Comments:
+	- Comments that just repeat exactly what the code say
+	- Misleading
+	- Try to make up for bad/gross code
+	- Large chunks of comments "noise"
+
+Formatting:
+	- Too much/too little spacing (density)
+	- Inconsistent formatting
+
+Demeter:
+	- Have beyond the scope of the class and the arguments passed in
+	- "Trains" of functional calls
+
+Error Handling:
+	- Not separating error handling logic
+	- Error handler in method that throws the error
+	- Throwing already checked exceptions
+	- Returning null
+
+Unit Testing:
+	- Tests are not clean
+	- Setup is not separated from asserts
+	- Tests are not domain specific/class specific
+	- Tests do not check edge cases
+
+Classes:
+	- Large
+	- Methods only contain 1-2 fields
+	- Using getters/setters in objects
+	- Hybrid classes
+
+Emergence:
+	- Not running all the tests
+	- Duplicated code
+	- Does not minimize the number of classes
+
+
+  5. Will everyone apply all criteria from every chapter from Clean Code? Or will each person specialize in a few criteria?
+
+We will rotate between who looks at what classes and we will keep all of the criteria in mind when inspecting the code.
+
+
+Scope:
+
+
+  6. Will your team inspect every file in your codebase? Every file you touch in your feature branch? Or something else entirely?
+
+We will inspect every file touched/edited in the feature branch
+
+  7. Of those files, will each person look at every file in consideration? Or will your team assign different files to different people?
+
+We will plan to look at separate files, but rotate between reviews to make sure the same person does not get the same file multiple weeks in a row.
+
+Tools:
+
+  8. To what extent can your inspection criteria be automated? Automation will increase your inspection's speed and reliability.
+
+SpotBugs can be used to solve a few of the issues.
+
+  9. Which aspects of your inspection criteria will need human intervention?
+
+Even after SpotBugs we will have to proofread edited files and check for issues that SpotBugs did not already find.
