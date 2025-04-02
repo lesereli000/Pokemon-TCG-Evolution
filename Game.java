@@ -6,23 +6,27 @@ public class Game {
     private GUI gui;
     private Random random;
 
-    private Deck player1Deck;
-    private Deck player2Deck;
-
-    private Deck player1Hand;
-    private Deck player2Hand;
+    private Player player1;
+    private Player player2;
 
     private int playerTurn;
 
     public Game(GUI gui, Random rand) {
+        this.player1 = new Player();
+        this.player2 = new Player();
         this.gui = gui;
         this.random = rand;
 
         // https://docs.oracle.com/javase/8/docs/api/java/lang/Runnable.html
         // https://www.geeksforgeeks.org/runnable-interface-in-java/
 
-        gui.setFlipCoinListener(this::flipCoin);
+        gui.setFlipCoinListener(this::setupGame);
         gui.createFlipButton();
+    }
+
+    public void setupGame() {
+        flipCoin();
+        setupDeck();
     }
 
     public String flipCoin() {
@@ -34,11 +38,9 @@ public class Game {
 
     private void setupDeck() {
         //Each players deck setup happens here!
-        player1Deck = new Deck();
-        player1Deck.addRandomCards(60, random);
+        player1.createFullDeck(random);
 
-        player2Deck = new Deck();
-        player2Deck.addRandomCards(60, random);
+        player2.createFullDeck(random);
 
         gui.setDeckColor(Color.RED);
         setupCards();
@@ -46,25 +48,37 @@ public class Game {
 
     private void setupCards() {
         //Each players original 7 cards are setup here!
-        player1Hand = new Deck();
-        player2Hand = new Deck();
 
-        String msg1 = "Player 1 has cards:\n";
-        String msg2 = "Player 2 has cards:\n";
+        if(playerTurn == 1) {
+            displayPlayer1Hand();
+            gui.setFlipCoinListener(this::setupCards);
+        } else if(playerTurn == 2) {
+            displayPlayer2Hand();
+        }
+    }
+
+    private void displayPlayer1Hand() {
+        String msg = "Player 1 has cards:\n";
         for (int i = 0; i < 7; i++) {
-            Card player1Card = player1Deck.removeTopCard();
-            player1Hand.addCard(player1Card);
+            Card player1Card = player1.removeTopCard();
+            player1.addCardToHand(player1Card);
             String card1Class = player1Card.getClass().toString();
             String justClass1 = card1Class.substring(6);
-            msg1 += player1Card.getName() + " which is a " + justClass1 + "\n";
+            msg += player1Card.getName() + " which is a " + justClass1 + "\n";
+        }
+        gui.displayMessage(msg);
+    }
 
-            Card player2Card = player2Deck.removeTopCard();
-            player2Hand.addCard(player2Card);
+    private void displayPlayer2Hand() {
+        String msg = "Player 2 has cards:\n";
+        for (int i = 0; i < 7; i++) {
+            Card player2Card = player2.removeTopCard();
+            player2.addCardToHand(player2Card);
             String card2Class = player2Card.getClass().toString();
             String justClass2 = card2Class.substring(6);
-            msg2 += player2Card.getName() + " which is a " + justClass2 + "\n";
+            msg += player2Card.getName() + " which is a " + justClass2 + "\n";
         }
-        gui.displayMessage(msg1 + "\n\n" + msg2);
+        gui.displayMessage(msg);
     }
 
     public int currentTurn() {
@@ -74,7 +88,6 @@ public class Game {
 
     public static void main(String[] args) {
         Game game = new Game(new GameGUI(), new Random());
-        game.setupDeck();
     }
 }
 
