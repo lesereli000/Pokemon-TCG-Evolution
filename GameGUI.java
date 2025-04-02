@@ -2,8 +2,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.*;
 
 public class GameGUI implements GUI {
@@ -40,7 +39,10 @@ public class GameGUI implements GUI {
 	static final int activeVerticalMargin = cardHeight / 16;
 	static final int deckOffset = 15;
 
+	private Card activeCard;
+
 	private Color deckColor = Color.WHITE;
+	private Color activeCardColor = Color.WHITE;
 	private Runnable flipListener;
 
 	public GameGUI() {
@@ -89,8 +91,15 @@ public class GameGUI implements GUI {
 			}
 
 			//Active Pokemon
+			g2d.setColor(activeCardColor);
 			g2d.drawRect((frameWidth/2) - (cardWidth/2), (frameHeight/2) + activeVerticalMargin -activeVerticalOffset, cardWidth, cardHeight);
+			if(activeCardColor == Color.GREEN) {
+				g2d.drawString("Active Pokemon:", (frameWidth / 2) - (cardWidth / 2) + marginSide / 8, (frameHeight / 2) - activeVerticalOffset + marginTop / 2);
+				g2d.drawString(activeCard.getName(), (frameWidth / 2) - (cardWidth / 2) + marginSide / 8, (frameHeight / 2) - activeVerticalOffset + marginTop );
 
+			}
+
+			g2d.setColor(Color.WHITE);
 			//Discard
 			g2d.drawRect(frameWidth - marginSide - cardWidth, frameHeight - marginBottom - cardHeight, cardWidth, cardHeight);
 
@@ -128,6 +137,9 @@ public class GameGUI implements GUI {
 			//Active Pokemon
 			g2d.drawRect((frameWidth/2) - (cardWidth/2), (frameHeight/2) - activeVerticalMargin - cardHeight - activeVerticalOffset, cardWidth, cardHeight);
 
+
+
+			g2d.setColor(Color.WHITE);
 			//Discard
 			g2d.drawRect(marginSide, marginTop, cardWidth, cardHeight);
 
@@ -181,6 +193,28 @@ public class GameGUI implements GUI {
 	@Override
 	public void setFlipCoinListener(Runnable flipCoinListener) {
 		this.flipListener = flipCoinListener;
+	}
+
+	@Override
+	public void makeActiveCard(Card newActive) {
+		activeCardColor = Color.GREEN;
+		this.activeCard = newActive;
+		frame.repaint();
+	}
+
+	@Override
+	public void displayPossibleActiveCards(ArrayList<Card> playerCards) {
+		for (int i = 0; i < playerCards.size(); i++) {
+			Card currCard = playerCards.get(i);
+			JButton pokemonBtn = new JButton(currCard.getName());
+			pokemonBtn.addActionListener(e -> {
+				makeActiveCard(currCard);
+				playerCards.remove(currCard);
+			});
+			panel.add(pokemonBtn);
+			panel.repaint();
+			frame.repaint();
+		}
 	}
 
 }

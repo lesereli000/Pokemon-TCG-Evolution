@@ -59,21 +59,28 @@ public class Game {
 
     private void displayPlayer1Hand() {
         String msg = "Player 1 has cards:\n";
+        ArrayList<Card> currentCards = new ArrayList<Card>();
         for (int i = 0; i < 7; i++) {
             Card player1Card = player1.removeTopCard();
             player1.addCardToHand(player1Card);
+            currentCards.add(player1Card);
+
             String card1Class = player1Card.getClass().toString();
             String justClass1 = card1Class.substring(6);
             msg += player1Card.getName() + " which is a " + justClass1 + "\n";
         }
         gui.displayMessage(msg);
+        gui.displayPossibleActiveCards(currentCards);
     }
 
     private void displayPlayer2Hand() {
         String msg = "Player 2 has cards:\n";
+        ArrayList<Card> currentCards = new ArrayList<Card>();
         for (int i = 0; i < 7; i++) {
             Card player2Card = player2.removeTopCard();
             player2.addCardToHand(player2Card);
+            currentCards.add(player2Card);
+
             String card2Class = player2Card.getClass().toString();
             String justClass2 = card2Class.substring(6);
             msg += player2Card.getName() + " which is a " + justClass2 + "\n";

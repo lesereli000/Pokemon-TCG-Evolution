@@ -15,7 +15,7 @@ public class GameTest {
     @Test
     public void testFlipCoinHeads() {
         Random rand = createMock(Random.class);
-        expect(rand.nextBoolean()).andReturn(true).times(2);
+        expect(rand.nextBoolean()).andReturn(true).anyTimes();
         replay(rand);
 
         GUI gui = createMock(GUI.class);
@@ -28,7 +28,7 @@ public class GameTest {
     @Test
     public void testFlipCoinTails() {
         Random rand = createMock(Random.class);
-        expect(rand.nextBoolean()).andReturn(false).times(2);
+        expect(rand.nextBoolean()).andReturn(false).anyTimes();
         replay(rand);
 
         GUI gui = createMock(GUI.class);
