@@ -39,7 +39,12 @@ public class Deck {
             for (int i = 0; i < numCards; i++) {
                 int num = rand.nextInt(pokemonArray.length());
                 Card card = new CardGenerator().generateCard(pokemonArray.getJSONObject(num).getString("name"));
-                addCard(card);
+                try {
+                    addCard(card);
+                } catch (TooManyRepeatsException e) {
+                    //Continue to add random cards, accounting for the i cards we have already added
+                    addRandomCards(numCards - i, rand);
+                }
             }
         } catch (IOException e) {
             System.out.println("File not found when adding random cards" + e);

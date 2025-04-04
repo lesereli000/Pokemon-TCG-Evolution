@@ -38,44 +38,6 @@ public class GameTest {
         verify(rand);
     }
 
-//    @Test
-//    public void testFlipCoinHeads() {
-//        Random rand = createMock(Random.class);
-//
-//        expect(rand.nextBoolean()).andReturn(true);
-//
-//        replay(rand);
-//
-//        GameGUI gui = createMock(GameGUI.class);
-//
-//        replay(gui);
-//
-//        Game game = new Game(gui, rand);
-//        String result = game.flipCoin(rand);
-//
-//        assertEquals("Heads", result);
-//        assertEquals(1, game.currentTurn());
-//
-//        verify(rand);
-//        verify(gui);
-//    }
-
-//    @Test
-//    public void testFlipCoinTails() {
-//        Random rand = createMock(Random.class);
-//
-//        expect(rand.nextBoolean()).andReturn(false);
-//
-//        replay(rand);
-//
-//        Game game = new Game();
-//        String result = game.flipCoin(rand);
-//
-//        assertEquals("Tails", result);
-//        assertEquals(2, game.currentTurn());
-//
-//        verify(rand);
-//    }
 //
 //    @Test
 //    public void testFirstPlayersDeck() {
