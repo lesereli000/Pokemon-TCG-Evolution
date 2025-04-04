@@ -346,6 +346,62 @@ public class DeckTest {
         verify(rand);
     }
 
+    @Test
+    public void testForBasicPokemon() {
+        Deck d = new Deck();
+        Pokemon p = createMock(Pokemon.class);
+        expect(p.getStage()).andReturn(0).anyTimes();
+        expect(p.getName()).andReturn("Pikachu").anyTimes();
+        replay(p);
+
+        d.addCard(p);
+        d.addCard(p);
+        d.addCard(p);
+
+        assertEquals(3, d.numberBasicPokemon());
+        verify(p);
+    }
+
+    @Test
+    public void testNoBasicPokemon() {
+        Deck d = new Deck();
+        Pokemon p = createMock(Pokemon.class);
+        expect(p.getStage()).andReturn(2).anyTimes();
+        expect(p.getName()).andReturn("Charizard").anyTimes();
+        replay(p);
+
+        d.addCard(p);
+        d.addCard(p);
+        d.addCard(p);
+
+        assertEquals(0, d.numberBasicPokemon());
+        verify(p);
+    }
+
+    @Test
+    public void testMixedBasic() {
+        Deck d = new Deck();
+        Pokemon basic = createMock(Pokemon.class);
+        expect(basic.getStage()).andReturn(0).anyTimes();
+        expect(basic.getName()).andReturn("Pikachu").anyTimes();
+
+        Pokemon p = createMock(Pokemon.class);
+        expect(p.getStage()).andReturn(1).anyTimes();
+        expect(p.getName()).andReturn("Gyarados").anyTimes();
+
+        replay(basic);
+        replay(p);
+
+        d.addCard(basic);
+        d.addCard(basic);
+        d.addCard(p);
+        d.addCard(basic);
+        d.addCard(p);
+        d.addCard(p);
+
+        assertEquals(3, d.numberBasicPokemon());
+    }
+
 //    @Test
 //    public void testNotTooManyRepeatsRandom() {
 //        Random rand = createMock(Random.class);

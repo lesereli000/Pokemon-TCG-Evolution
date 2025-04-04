@@ -53,6 +53,8 @@ public class Pokemon extends Card{
         return super.getName();
     }
 
+    public int getStage() {return this.stage;}
+
     public void takeDamage(int damageCountersTaken, char damageType) {
         if(damageType == resistance) {
             damageCountersTaken--;

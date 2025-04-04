@@ -72,6 +72,16 @@ public class Deck {
         return cards.remove(cards.size() - 1);
     }
 
+    public int numberBasicPokemon() {
+        int count = 0;
+        for (int i = 0; i < cards.size(); i++) {
+            if (cards.get(i) instanceof Pokemon && ((Pokemon) cards.get(i)).getStage() == 0) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     public static class TooManyRepeatsException extends RuntimeException {
         public TooManyRepeatsException(String message) {
             super(message);
