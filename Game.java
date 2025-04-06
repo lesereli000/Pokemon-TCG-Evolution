@@ -36,11 +36,30 @@ public class Game {
         return result;
     }
 
+    private boolean checkForBasic(Deck deck) {
+        return deck.numberBasicPokemon() > 0;
+    }
+
+    private void replacePlayerDeck(Player player) {
+        Deck deck = new Deck();
+        deck.addRandomCards(60, random);
+        player.deck = deck;
+    }
+
     private void setupDeck() {
         //Each players deck setup happens here!
         player1.createFullDeck(random);
-
         player2.createFullDeck(random);
+
+//        while(!checkForBasic(player1.deck)) {
+//            System.out.println("player 1 does not have any basic cards!");
+//            replacePlayerDeck(player1);
+//        }
+//
+//        while(!checkForBasic(player2.deck)) {
+//            System.out.println("player 2 does not have any basic cards!");
+//            replacePlayerDeck(player2);
+//        }
 
         gui.setDeckColor(Color.RED);
         setupCards();
@@ -49,7 +68,6 @@ public class Game {
     private void setupCards() {
         //Each players original 7 cards are setup here!
 
-        gui.setFlipCoinListener(this::setupCards);
         if(playerTurn == 1) {
             displayPlayer1Hand();
         } else if(playerTurn == 2) {
@@ -86,6 +104,7 @@ public class Game {
             msg += player2Card.getName() + " which is a " + justClass2 + "\n";
         }
         gui.displayMessage(msg);
+        gui.displayPossibleActiveCards(currentCards);
     }
 
     public int currentTurn() {
