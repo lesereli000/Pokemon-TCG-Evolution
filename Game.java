@@ -77,7 +77,9 @@ public class Game {
 
     private void makeActiveCard() {
         Card lastSelectedCard = gui.getLastSelectedCard();
-        gui.makeActiveCard(lastSelectedCard);
+        if(lastSelectedCard instanceof Pokemon && ((Pokemon) lastSelectedCard).stage == 0) {
+            gui.makeActiveCard(lastSelectedCard);
+        } else {gui.displayMessage(lastSelectedCard.name + " is not a basic Pokemon");}
     }
 
     private void displayPlayer1Hand() {
