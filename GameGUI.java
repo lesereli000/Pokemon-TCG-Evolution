@@ -18,7 +18,7 @@ public class GameGUI implements GUI {
 	private GamePanel panel;
 
 	private JButton flipBtn;
-	private int playerTurn;
+	private Card lastSelectedCard;
 
 	static final int backgroundLineThickness = 4;
 
@@ -203,13 +203,23 @@ public class GameGUI implements GUI {
 	}
 
 	@Override
-	public void displayPossibleActiveCards(ArrayList<Card> playerCards) {
+	public void setLastSelectedCard(Card card) {
+		this.lastSelectedCard = card;
+	}
+
+	@Override
+	public Card getLastSelectedCard() {
+		return this.lastSelectedCard;
+	}
+
+	@Override
+	public void displayPossibleActiveCards(ArrayList<Card> playerCards, Runnable makeActiveListener ) {
 		for (int i = 0; i < playerCards.size(); i++) {
 			Card currCard = playerCards.get(i);
 			JButton pokemonBtn = new JButton(currCard.getName());
 			pokemonBtn.addActionListener(e -> {
-				makeActiveCard(currCard);
-				playerCards.remove(currCard);
+				setLastSelectedCard(currCard);
+				makeActiveListener.run();
 			});
 			panel.add(pokemonBtn);
 			panel.repaint();

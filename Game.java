@@ -51,15 +51,15 @@ public class Game {
         player1.createFullDeck(random);
         player2.createFullDeck(random);
 
-//        while(!checkForBasic(player1.deck)) {
-//            System.out.println("player 1 does not have any basic cards!");
-//            replacePlayerDeck(player1);
-//        }
-//
-//        while(!checkForBasic(player2.deck)) {
-//            System.out.println("player 2 does not have any basic cards!");
-//            replacePlayerDeck(player2);
-//        }
+        while(!checkForBasic(player1.deck)) {
+            System.out.println("player 1 does not have any basic cards!");
+            replacePlayerDeck(player1);
+        }
+
+        while(!checkForBasic(player2.deck)) {
+            System.out.println("player 2 does not have any basic cards!");
+            replacePlayerDeck(player2);
+        }
 
         gui.setDeckColor(Color.RED);
         setupCards();
@@ -75,6 +75,11 @@ public class Game {
         }
     }
 
+    private void makeActiveCard() {
+        Card lastSelectedCard = gui.getLastSelectedCard();
+        gui.makeActiveCard(lastSelectedCard);
+    }
+
     private void displayPlayer1Hand() {
         String msg = "Player 1 has cards:\n";
         ArrayList<Card> currentCards = new ArrayList<Card>();
@@ -88,7 +93,7 @@ public class Game {
             msg += player1Card.getName() + " which is a " + justClass1 + "\n";
         }
         gui.displayMessage(msg);
-        gui.displayPossibleActiveCards(currentCards);
+        gui.displayPossibleActiveCards(currentCards, this::makeActiveCard);
     }
 
     private void displayPlayer2Hand() {
@@ -104,7 +109,7 @@ public class Game {
             msg += player2Card.getName() + " which is a " + justClass2 + "\n";
         }
         gui.displayMessage(msg);
-        gui.displayPossibleActiveCards(currentCards);
+        gui.displayPossibleActiveCards(currentCards, this::makeActiveCard);
     }
 
     public int currentTurn() {

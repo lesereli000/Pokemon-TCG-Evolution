@@ -8,5 +8,9 @@ public interface GUI {
     void displayMessage(String message);
     void setFlipCoinListener(Runnable flipCoinListener);
     void makeActiveCard(Card newActive);
-    void displayPossibleActiveCards(ArrayList<Card> currentCards);
+    void setLastSelectedCard(Card card);
+
+    Card getLastSelectedCard();
+
+    void displayPossibleActiveCards(ArrayList<Card> currentCards, Runnable makeActiveCard);
 }
