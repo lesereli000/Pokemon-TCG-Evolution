@@ -49,9 +49,9 @@ public class Game {
     private void setupCards() {
         //Each players original 7 cards are setup here!
 
+        gui.setFlipCoinListener(this::setupCards);
         if(playerTurn == 1) {
             displayPlayer1Hand();
-            gui.setFlipCoinListener(this::setupCards);
         } else if(playerTurn == 2) {
             displayPlayer2Hand();
         }
