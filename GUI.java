@@ -7,7 +7,7 @@ public interface GUI {
     void setDeckColor(Color deckColor);
     void displayMessage(String message);
     void setFlipCoinListener(Runnable flipCoinListener);
-    void makeActiveCard(Card newActive);
+    void makeActiveCard(Card newActive, int playerTurn);
     void setLastSelectedCard(Card card);
 
     Card getLastSelectedCard();

@@ -42,7 +42,8 @@ public class GameGUI implements GUI {
 	private Card activeCard;
 
 	private Color deckColor = Color.WHITE;
-	private Color activeCardColor = Color.WHITE;
+	private Color player1ActiveColor = Color.WHITE;
+	private Color player2ActiveColor = Color.WHITE;
 	private Runnable flipListener;
 
 	public GameGUI() {
@@ -91,12 +92,11 @@ public class GameGUI implements GUI {
 			}
 
 			//Active Pokemon
-			g2d.setColor(activeCardColor);
+			g2d.setColor(player1ActiveColor);
 			g2d.drawRect((frameWidth/2) - (cardWidth/2), (frameHeight/2) + activeVerticalMargin -activeVerticalOffset, cardWidth, cardHeight);
-			if(activeCardColor == Color.GREEN) {
+			if(player1ActiveColor == Color.GREEN) {
 				g2d.drawString("Active Pokemon:", (frameWidth / 2) - (cardWidth / 2) + marginSide / 8, (frameHeight / 2) - activeVerticalOffset + marginTop / 2);
 				g2d.drawString(activeCard.getName(), (frameWidth / 2) - (cardWidth / 2) + marginSide / 8, (frameHeight / 2) - activeVerticalOffset + marginTop );
-
 			}
 
 			g2d.setColor(Color.WHITE);
@@ -135,6 +135,11 @@ public class GameGUI implements GUI {
 			}
 
 			//Active Pokemon
+			g2d.setColor(player2ActiveColor);
+			if(player2ActiveColor == Color.GREEN) {
+				g2d.drawString("Active Pokemon:", (frameWidth / 2) - (cardWidth / 2) + marginSide / 8, (frameHeight / 2) - activeVerticalMargin - cardHeight - activeVerticalOffset/4);
+				g2d.drawString(activeCard.getName(), (frameWidth / 2) - (cardWidth / 2) + marginSide / 8, (frameHeight / 2) - activeVerticalMargin - cardHeight - activeVerticalOffset/8);
+			}
 			g2d.drawRect((frameWidth/2) - (cardWidth/2), (frameHeight/2) - activeVerticalMargin - cardHeight - activeVerticalOffset, cardWidth, cardHeight);
 
 
@@ -196,8 +201,12 @@ public class GameGUI implements GUI {
 	}
 
 	@Override
-	public void makeActiveCard(Card newActive) {
-		activeCardColor = Color.GREEN;
+	public void makeActiveCard(Card newActive, int playerTurn) {
+		if(playerTurn == 1) {
+			player1ActiveColor = Color.GREEN;
+		} else {
+			player2ActiveColor = Color.GREEN;
+		}
 		this.activeCard = newActive;
 		frame.repaint();
 	}
