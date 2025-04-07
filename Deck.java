@@ -65,6 +65,12 @@ public class Deck {
         cards = shuffledCards;
     }
 
+    public void removeCard(Card card) {
+        if(!cards.remove(card)) {
+            throw new CardDoesNotExist("Card " + card.getName() + " does not exist");
+        }
+    }
+
     public Card removeTopCard() {
         if (cards.isEmpty()) {
             throw new EmptyDeckException("Can not remove card from an empty deck");
@@ -90,6 +96,12 @@ public class Deck {
 
     public static class EmptyDeckException extends RuntimeException {
         public EmptyDeckException(String message) {
+            super(message);
+        }
+    }
+
+    public static class CardDoesNotExist extends RuntimeException {
+        public CardDoesNotExist(String message) {
             super(message);
         }
     }

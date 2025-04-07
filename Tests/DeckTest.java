@@ -402,6 +402,39 @@ public class DeckTest {
         assertEquals(3, d.numberBasicPokemon());
     }
 
+    @Test
+    public void testRemoveCard() {
+        Deck d = new Deck();
+        Pokemon p = createMock(Pokemon.class);
+        d.addCard(p);
+        replay(p);
+
+        assertEquals(1, d.size());
+        d.removeCard(p);
+        assertEquals(0, d.size());
+        verify(p);
+    }
+
+    @Test
+    public void testRemoveNullCard() {
+        Deck d = new Deck();
+        Pokemon p = createMock(Pokemon.class);
+        expect(p.getName()).andReturn("Pikachu").anyTimes();
+        replay(p);
+
+        boolean pass = false;
+
+        try {
+            d.removeCard(p);
+        } catch (Deck.CardDoesNotExist e) {
+            assertEquals("Card Pikachu does not exist", e.getMessage());
+            pass = true;
+        }
+        assertEquals(0, d.size());
+        assertTrue(pass);
+        verify(p);
+    }
+
 //    @Test
 //    public void testNotTooManyRepeatsRandom() {
 //        Random rand = createMock(Random.class);
