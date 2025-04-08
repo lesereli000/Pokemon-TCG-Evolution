@@ -13,4 +13,6 @@ public interface GUI {
     Card getLastSelectedCard();
 
     void displayPossibleActiveCards(ArrayList<Card> currentCards, Runnable makeActiveCard);
+
+    void createBenchCardButton(Runnable addBenchCard);
 }

@@ -10,6 +10,7 @@ public class Game {
     private Player player2;
 
     private int playerTurn;
+    private boolean addedBenchButton = false;
 
     public Game(GUI gui, Random rand) {
         this.player1 = new Player();
@@ -79,7 +80,10 @@ public class Game {
         Card lastSelectedCard = gui.getLastSelectedCard();
         if(lastSelectedCard instanceof Pokemon && ((Pokemon) lastSelectedCard).stage == 0) {
             gui.makeActiveCard(lastSelectedCard, playerTurn);
-        } else {gui.displayMessage(lastSelectedCard.name + " is not a basic Pokemon");}
+            displayPickBenchCardsButton();
+        } else {
+            gui.displayMessage(lastSelectedCard.name + " is not a basic Pokemon");
+        }
     }
 
     private void displayPlayer1Hand() {
@@ -96,6 +100,19 @@ public class Game {
         }
         gui.displayMessage(msg);
         gui.displayPossibleActiveCards(currentCards, this::makeActiveCard);
+    }
+
+    private void addBenchCard() {
+        //Do logic with adding the bench cards here
+        //Maybe add another button to switch back to switching out the active Pokemon
+        //Any other basic Pokemon clicked from here can be added to the bench
+    }
+
+    private void displayPickBenchCardsButton() {
+        if(!addedBenchButton) {
+            addedBenchButton = true;
+            gui.createBenchCardButton(this::addBenchCard);
+        }
     }
 
     private void displayPlayer2Hand() {

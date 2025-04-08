@@ -1,7 +1,4 @@
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
@@ -234,6 +231,15 @@ public class GameGUI implements GUI {
 			panel.repaint();
 			frame.repaint();
 		}
+	}
+
+	@Override
+	public void createBenchCardButton(Runnable addBenchCard) {
+		JButton btn = new JButton("Add Bench Cards");
+		panel.add(btn);
+		panel.repaint();
+		frame.revalidate();
+		frame.repaint();
 	}
 
 }
