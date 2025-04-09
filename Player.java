@@ -26,7 +26,7 @@ public class Player {
     }
 
     public void createFullDeck(Random rand) {
-        deck.addRandomCards(60, rand);
+        this.deck.addRandomCards(60, rand);
         checkForBasics(rand);
     }
 
@@ -59,6 +59,7 @@ public class Player {
 
     public void setActivePokemon(Card activePokemon) {
         this.activePokemon = activePokemon;
+        this.hand.removeCard(activePokemon);
     }
 
     public String getName() {
@@ -72,10 +73,22 @@ public class Player {
     }
 
     public boolean isOverHandLimit() {
-        return false;
+        return this.hand.size() > HAND_SIZE;
     }
 
     public boolean isDeckEmpty() {
-        return false;
+        return this.deck.size() <= 0;
+    }
+
+    public void addBenchPokemon(Card newPokemon) {
+        if(this.bench.size() == 5){
+            this.bench.addCard(newPokemon);
+        } else {
+            //TODO: throw an exception here
+        }
+    }
+
+    public void removeFromHand(Card lastSelectedCard) {
+        this.hand.removeCard(lastSelectedCard);
     }
 }

@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.*;
 
 public class GameGUI implements GUI {
@@ -40,6 +41,7 @@ public class GameGUI implements GUI {
 	private Color deckColor = Color.WHITE;
 	private Color player1ActiveColor = Color.WHITE;
 	private Color player2ActiveColor = Color.WHITE;
+	private ArrayList<JButton> buttons = new ArrayList<>();
 
 	public GameGUI() {
 		createGUI();
@@ -168,6 +170,7 @@ public class GameGUI implements GUI {
 	}
 
 	public void removeButton(JButton button) {
+		buttons.remove(button);
 		panel.remove(button);
 		panel.revalidate();
 		panel.repaint();
@@ -186,8 +189,10 @@ public class GameGUI implements GUI {
 	public void makeActiveCard(Card newActive, int playerTurn) {
 		if(playerTurn == 1) {
 			player1ActiveColor = Color.GREEN;
+			player2ActiveColor = Color.WHITE;
 		} else {
 			player2ActiveColor = Color.GREEN;
+			player1ActiveColor = Color.WHITE;
 		}
 		this.activeCard = newActive;
 		frame.repaint();
@@ -207,7 +212,7 @@ public class GameGUI implements GUI {
         for (Card currCard : playerCards) {
             createLinkedButton(currCard.getName(), currCard);
         }
-		createSelfDestructingButton(submitMessage, makeActiveListener);
+		createButton(submitMessage, makeActiveListener);
 	}
 
 	@Override
@@ -216,6 +221,7 @@ public class GameGUI implements GUI {
 		btn.addActionListener(e -> {
 			toRun.run();
 		});
+		buttons.add(btn);
 		panel.add(btn);
 		panel.repaint();
 		frame.revalidate();
@@ -230,6 +236,7 @@ public class GameGUI implements GUI {
 		btn.addActionListener(e -> {
 			setLastSelectedCard(currCard);
 		});
+		buttons.add(btn);
 		panel.add(btn);
 		panel.repaint();
 		frame.revalidate();
@@ -245,12 +252,28 @@ public class GameGUI implements GUI {
 			toRun.run();
 			removeButton(btn);
 		});
+		buttons.add(btn);
 		panel.add(btn);
 		panel.repaint();
 		frame.revalidate();
 		frame.repaint();
 
 		return btn;
+	}
+
+	@Override
+	public void addBenchCard(Card lastSelectedCard, int playerTurn) {
+		System.out.println("addBenchCard");
+	}
+
+	@Override
+	public void removeAllButtons(){
+		for (JButton btn : buttons) {
+			panel.remove(btn);
+			panel.revalidate();
+			panel.repaint();
+		}
+		buttons = new ArrayList<>();
 	}
 
 }
