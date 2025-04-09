@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Game {
@@ -32,6 +31,7 @@ public class Game {
         gui.displayMessage("The result was " + result + "! \n" + curPlayer.getName() + "'s turn");
 
         setupDecks();
+        setActivePokemon();
     }
 
     public String flipCoin() {
@@ -39,27 +39,13 @@ public class Game {
     }
 
     private void setupDecks() {
-        //Each players deck setup happens here!
         player1.createFullDeck(random);
-        player1.checkForBasics(random);
-
         player2.createFullDeck(random);
-        player2.checkForBasics(random);
-
-        gui.setDeckColor(Color.RED);
-        drawPlayerHands();
     }
 
-    private void drawPlayerHands() {
-        //Each players original 7 cards are setup here!
-
-        if(playerTurn == 1) {
-            gui.displayMessage(player1.handAsString());
-            gui.displayPossibleActiveCards(player1.handAsList(), this::makeActiveCard);
-        } else if(playerTurn == 2) {
-            gui.displayMessage(player2.handAsString());
-            gui.displayPossibleActiveCards(player2.handAsList(), this::makeActiveCard);
-        }
+    private void setActivePokemon() {
+        gui.displayMessage(curPlayer.handAsString());
+        gui.displayCards(curPlayer.handAsList(), this::makeActiveCard, "SelectActivePokemon");
     }
 
     private void makeActiveCard() {

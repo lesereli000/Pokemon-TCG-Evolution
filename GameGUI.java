@@ -160,6 +160,7 @@ public class GameGUI implements GUI {
 		frame.add(panel);
 
 		frame.setVisible(true);
+		setDeckColor(Color.RED);
 	}
 
 	public void createFlipButton(Runnable flipListener) {
@@ -202,10 +203,11 @@ public class GameGUI implements GUI {
 	}
 
 	@Override
-	public void displayPossibleActiveCards(ArrayList<Card> playerCards, Runnable makeActiveListener ) {
+	public void displayCards(ArrayList<Card> playerCards, Runnable makeActiveListener, String submitMessage) {
         for (Card currCard : playerCards) {
-            createButton(currCard.getName(), makeActiveListener, currCard);
+            createLinkedButton(currCard.getName(), currCard);
         }
+		createSelfDestructingButton(submitMessage, makeActiveListener);
 	}
 
 	@Override
@@ -223,11 +225,10 @@ public class GameGUI implements GUI {
 	}
 
 	@Override
-	public JButton createButton(String message, Runnable toRun, Card currCard) {
+	public JButton createLinkedButton(String message, Card currCard) {
 		JButton btn = new JButton(message);
 		btn.addActionListener(e -> {
 			setLastSelectedCard(currCard);
-			toRun.run();
 		});
 		panel.add(btn);
 		panel.repaint();

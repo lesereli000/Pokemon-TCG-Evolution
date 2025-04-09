@@ -3,12 +3,15 @@ import java.util.Random;
 
 public class Player {
 
+    private static final int HAND_SIZE = 7;
     private Deck deck;
     private Deck hand;
     private Deck bench;
     private Deck discard;
     private Card activePokemon;
+
     private String name;
+
 
     public Player() {
         this("Unnamed Player");
@@ -24,12 +27,12 @@ public class Player {
 
     public void createFullDeck(Random rand) {
         deck.addRandomCards(60, rand);
+        checkForBasics(rand);
     }
 
-    public Card drawCard(){
+    public void drawCard(){
         Card drawnCard = deck.removeTopCard();
         hand.addCard(drawnCard);
-        return drawnCard;
     }
 
     public void checkForBasics(Random rand) {
@@ -42,9 +45,7 @@ public class Player {
 
     public String handAsString() {
         String msg = this.name + " has cards:\n";
-        for (int i = 0; i < 7; i++) {
-            Card newCard = drawCard();
-
+        for (Card newCard : hand.getCards()) {
             String card1Class = newCard.getClass().toString();
             String justClass1 = card1Class.substring(6);
             msg += newCard.getName() + " which is a " + justClass1 + "\n";
@@ -62,5 +63,19 @@ public class Player {
 
     public String getName() {
         return name;
+    }
+
+    public void drawStartingHand() {
+        for (int i = 0; i < HAND_SIZE; i++) {
+            drawCard();
+        }
+    }
+
+    public boolean isOverHandLimit() {
+        return false;
+    }
+
+    public boolean isDeckEmpty() {
+        return false;
     }
 }

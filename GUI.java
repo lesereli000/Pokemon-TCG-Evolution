@@ -11,11 +11,9 @@ public interface GUI {
 
     Card getLastSelectedCard();
 
-    void displayPossibleActiveCards(ArrayList<Card> currentCards, Runnable makeActiveCard);
+    void displayCards(ArrayList<Card> currentCards, Runnable makeActiveCard, String submitMessage);
 
     JButton createButton(String message, Runnable toRun);
-
-    JButton createButton(String message, Runnable toRun, Card currCard);
-
+    JButton createLinkedButton(String message, Card currCard);
     JButton createSelfDestructingButton(String message, Runnable toRun);
 }
