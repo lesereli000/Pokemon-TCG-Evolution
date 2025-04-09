@@ -14,7 +14,6 @@ public class GameGUI implements GUI {
 	private JFrame frame;
 	private GamePanel panel;
 
-	private JButton flipBtn;
 	private Card lastSelectedCard;
 
 	static final int backgroundLineThickness = 4;
@@ -41,7 +40,6 @@ public class GameGUI implements GUI {
 	private Color deckColor = Color.WHITE;
 	private Color player1ActiveColor = Color.WHITE;
 	private Color player2ActiveColor = Color.WHITE;
-	private Runnable flipListener;
 
 	public GameGUI() {
 		createGUI();
@@ -164,21 +162,12 @@ public class GameGUI implements GUI {
 		frame.setVisible(true);
 	}
 
-	public void createFlipButton() {
-		this.flipBtn = new JButton("Flip Coin");
-		panel.add(flipBtn);
-		panel.revalidate();
-		panel.repaint();
-		flipBtn.addActionListener(e -> {
-			if(flipListener != null) {
-				flipListener.run();
-				removeButton();
-			}
-		});
+	public void createFlipButton(Runnable flipListener) {
+		createSelfDestructingButton("Flip Coin", flipListener);
 	}
 
-	public void removeButton() {
-		panel.remove(flipBtn);
+	public void removeButton(JButton button) {
+		panel.remove(button);
 		panel.revalidate();
 		panel.repaint();
 	}
@@ -193,11 +182,6 @@ public class GameGUI implements GUI {
 	}
 
 	@Override
-	public void setFlipCoinListener(Runnable flipCoinListener) {
-		this.flipListener = flipCoinListener;
-	}
-
-	@Override
 	public void makeActiveCard(Card newActive, int playerTurn) {
 		if(playerTurn == 1) {
 			player1ActiveColor = Color.GREEN;
@@ -208,8 +192,7 @@ public class GameGUI implements GUI {
 		frame.repaint();
 	}
 
-	@Override
-	public void setLastSelectedCard(Card card) {
+	private void setLastSelectedCard(Card card) {
 		this.lastSelectedCard = card;
 	}
 
@@ -220,28 +203,53 @@ public class GameGUI implements GUI {
 
 	@Override
 	public void displayPossibleActiveCards(ArrayList<Card> playerCards, Runnable makeActiveListener ) {
-		for (int i = 0; i < playerCards.size(); i++) {
-			Card currCard = playerCards.get(i);
-			JButton pokemonBtn = new JButton(currCard.getName());
-			pokemonBtn.addActionListener(e -> {
-				setLastSelectedCard(currCard);
-				makeActiveListener.run();
-			});
-			panel.add(pokemonBtn);
-			panel.repaint();
-			frame.repaint();
-		}
+        for (Card currCard : playerCards) {
+            createButton(currCard.getName(), makeActiveListener, currCard);
+        }
 	}
 
 	@Override
-	public void createBenchCardButton(Runnable addBenchCard) {
-		JButton btn = new JButton("Add Bench Cards");
+	public JButton createButton(String message, Runnable toRun) {
+		JButton btn = new JButton(message);
+		btn.addActionListener(e -> {
+			toRun.run();
+		});
 		panel.add(btn);
 		panel.repaint();
 		frame.revalidate();
 		frame.repaint();
+
+		return btn;
+	}
+
+	@Override
+	public JButton createButton(String message, Runnable toRun, Card currCard) {
+		JButton btn = new JButton(message);
+		btn.addActionListener(e -> {
+			setLastSelectedCard(currCard);
+			toRun.run();
+		});
+		panel.add(btn);
+		panel.repaint();
+		frame.revalidate();
+		frame.repaint();
+
+		return btn;
+	}
+
+	@Override
+	public JButton createSelfDestructingButton(String message, Runnable toRun) {
+		JButton btn = new JButton(message);
+		btn.addActionListener(e -> {
+			toRun.run();
+			removeButton(btn);
+		});
+		panel.add(btn);
+		panel.repaint();
+		frame.revalidate();
+		frame.repaint();
+
+		return btn;
 	}
 
 }
-
-

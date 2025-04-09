@@ -10,6 +10,7 @@ public class Game {
     private Player player2;
 
     private int playerTurn;
+    Player curPlayer;
     private boolean addedBenchButton = false;
 
     public Game(GUI gui, Random rand) {
@@ -21,22 +22,23 @@ public class Game {
         // https://docs.oracle.com/javase/8/docs/api/java/lang/Runnable.html
         // https://www.geeksforgeeks.org/runnable-interface-in-java/
 
-        gui.setFlipCoinListener(this::setupGame);
-        gui.createFlipButton();
+        gui.createFlipButton(this::setupGame);
     }
 
     public void setupGame() {
         String result = flipCoin();
         playerTurn = result.equals("Heads") ? 1 : 2;
-        gui.displayMessage("The result was " + result + "! \nPlayer " + playerTurn + " turn");
-        setupDeck();
+        curPlayer = playerTurn == 1 ? player1 : player2;
+        gui.displayMessage("The result was " + result + "! \n" + curPlayer.getName() + "'s turn");
+
+        setupDecks();
     }
 
     public String flipCoin() {
         return random.nextBoolean() ? "Heads" : "Tails";
     }
 
-    private void setupDeck() {
+    private void setupDecks() {
         //Each players deck setup happens here!
         player1.createFullDeck(random);
         player1.checkForBasics(random);
@@ -64,6 +66,7 @@ public class Game {
         Card lastSelectedCard = gui.getLastSelectedCard();
         if(lastSelectedCard instanceof Pokemon && ((Pokemon) lastSelectedCard).stage == 0) {
             gui.makeActiveCard(lastSelectedCard, playerTurn);
+            curPlayer.setActivePokemon(lastSelectedCard);
             displayPickBenchCardsButton();
         } else {
             gui.displayMessage(lastSelectedCard.name + " is not a basic Pokemon");
@@ -80,7 +83,7 @@ public class Game {
     private void displayPickBenchCardsButton() {
         if(!addedBenchButton) {
             addedBenchButton = true;
-            gui.createBenchCardButton(this::addBenchCard);
+            gui.createButton("Add Bench Cards", this::addBenchCard);
         }
     }
 

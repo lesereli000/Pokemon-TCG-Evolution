@@ -56,4 +56,11 @@ public class Player {
         return hand.getCards();
     }
 
+    public void setActivePokemon(Card activePokemon) {
+        this.activePokemon = activePokemon;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
