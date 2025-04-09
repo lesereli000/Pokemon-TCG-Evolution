@@ -91,7 +91,12 @@ public class Game {
             setCurPlayerPokemon();
         } else {
             gui.removeAllButtons();
+            mainGameLoop();
         }
+    }
+
+    private void mainGameLoop() {
+        // TODO: Turn 1 actions go here
     }
 
     public static void main(String[] args) {
