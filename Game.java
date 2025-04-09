@@ -13,8 +13,8 @@ public class Game {
     private boolean addedBenchButton = false;
 
     public Game(GUI gui, Random rand) {
-        this.player1 = new Player();
-        this.player2 = new Player();
+        this.player1 = new Player("Player 1");
+        this.player2 = new Player("Player 2");
         this.gui = gui;
         this.random = rand;
 
@@ -26,53 +26,37 @@ public class Game {
     }
 
     public void setupGame() {
-        flipCoin();
+        String result = flipCoin();
+        playerTurn = result.equals("Heads") ? 1 : 2;
+        gui.displayMessage("The result was " + result + "! \nPlayer " + playerTurn + " turn");
         setupDeck();
     }
 
     public String flipCoin() {
-        String result = random.nextBoolean() ? "Heads" : "Tails";
-        this.playerTurn = result.equals("Heads") ? 1 : 2;
-        gui.displayMessage("The result was " + result + "\nPlayer " + playerTurn + " turn");
-        return result;
-    }
-
-    private boolean checkForBasic(Deck deck) {
-        return deck.numberBasicPokemon() > 0;
-    }
-
-    private void replacePlayerDeck(Player player) {
-        Deck deck = new Deck();
-        deck.addRandomCards(60, random);
-        player.deck = deck;
+        return random.nextBoolean() ? "Heads" : "Tails";
     }
 
     private void setupDeck() {
         //Each players deck setup happens here!
         player1.createFullDeck(random);
+        player1.checkForBasics(random);
+
         player2.createFullDeck(random);
-
-        while(!checkForBasic(player1.deck)) {
-            System.out.println("player 1 does not have any basic cards!");
-            replacePlayerDeck(player1);
-        }
-
-        while(!checkForBasic(player2.deck)) {
-            System.out.println("player 2 does not have any basic cards!");
-            replacePlayerDeck(player2);
-        }
+        player2.checkForBasics(random);
 
         gui.setDeckColor(Color.RED);
-        setupCards();
+        drawPlayerHands();
     }
 
-    private void setupCards() {
+    private void drawPlayerHands() {
         //Each players original 7 cards are setup here!
 
         if(playerTurn == 1) {
-            displayPlayer1Hand();
+            gui.displayMessage(player1.handAsString());
+            gui.displayPossibleActiveCards(player1.handAsList(), this::makeActiveCard);
         } else if(playerTurn == 2) {
-            displayPlayer2Hand();
+            gui.displayMessage(player2.handAsString());
+            gui.displayPossibleActiveCards(player2.handAsList(), this::makeActiveCard);
         }
     }
 
@@ -86,21 +70,6 @@ public class Game {
         }
     }
 
-    private void displayPlayer1Hand() {
-        String msg = "Player 1 has cards:\n";
-        ArrayList<Card> currentCards = new ArrayList<Card>();
-        for (int i = 0; i < 7; i++) {
-            Card player1Card = player1.removeTopCard();
-            player1.addCardToHand(player1Card);
-            currentCards.add(player1Card);
-
-            String card1Class = player1Card.getClass().toString();
-            String justClass1 = card1Class.substring(6);
-            msg += player1Card.getName() + " which is a " + justClass1 + "\n";
-        }
-        gui.displayMessage(msg);
-        gui.displayPossibleActiveCards(currentCards, this::makeActiveCard);
-    }
 
     private void addBenchCard() {
         //Do logic with adding the bench cards here
@@ -115,30 +84,8 @@ public class Game {
         }
     }
 
-    private void displayPlayer2Hand() {
-        String msg = "Player 2 has cards:\n";
-        ArrayList<Card> currentCards = new ArrayList<Card>();
-        for (int i = 0; i < 7; i++) {
-            Card player2Card = player2.removeTopCard();
-            player2.addCardToHand(player2Card);
-            currentCards.add(player2Card);
-
-            String card2Class = player2Card.getClass().toString();
-            String justClass2 = card2Class.substring(6);
-            msg += player2Card.getName() + " which is a " + justClass2 + "\n";
-        }
-        gui.displayMessage(msg);
-        gui.displayPossibleActiveCards(currentCards, this::makeActiveCard);
-    }
-
-    public int currentTurn() {
-        return playerTurn;
-    }
-
 
     public static void main(String[] args) {
         Game game = new Game(new GameGUI(), new Random());
     }
 }
-
-
