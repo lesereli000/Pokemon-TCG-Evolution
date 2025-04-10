@@ -435,6 +435,21 @@ public class DeckTest {
         verify(p);
     }
 
+    @Test
+    public void testAddEnergies() {
+        Deck d = new Deck();
+        Random rand = createMock(Random.class);
+        expect(rand.nextInt(anyInt(), anyInt())).andReturn(100).anyTimes();
+
+        replay(rand);
+        d.addEnergies(20, rand);
+        ArrayList<Card> cards = d.getCards();
+        for (int i = 0; i < 20; i++) {
+            assertTrue(cards.get(i) instanceof Energy);
+        }
+        verify(rand);
+    }
+
 //    @Test
 //    public void testNotTooManyRepeatsRandom() {
 //        Random rand = createMock(Random.class);
