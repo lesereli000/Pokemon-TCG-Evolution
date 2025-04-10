@@ -38,15 +38,28 @@ public class GameTest {
         verify(rand);
     }
 
-//
-//    @Test
-//    public void testFirstPlayersDeck() {
-//        Game game = new Game();
-//        Deck player1Deck = game.firstDeck();
-//
-//        assertEquals(60, player1Deck.size());
-//    }
-//
+
+    @Test
+    public void testDeckSetup() {
+        Random rand = new Random();
+        GUI gui = createMock(GUI.class);
+
+        Player p1 = createMock(Player.class);
+        Player p2 = createMock(Player.class);
+
+        p1.createFullDeck(rand);
+        p1.drawStartingHand();
+        p2.createFullDeck(rand);
+        p2.drawStartingHand();
+        replay(p1,p2);
+
+        Game game = new Game(gui, rand,p1 ,p2);
+        game.setupDecks();
+
+        verify(p1);
+        verify(p2);
+    }
+
 //    @Test
 //    public void testSecondPlayersDeck() {
 //        Game game = new Game();

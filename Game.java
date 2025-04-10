@@ -42,7 +42,7 @@ public class Game {
         return random.nextBoolean() ? "Heads" : "Tails";
     }
 
-    private void setupDecks() {
+     void setupDecks() {
         player1.createFullDeck(random);
         player1.drawStartingHand();
 
