@@ -8,7 +8,7 @@ public class Player {
     private Deck hand;
     private Deck bench;
     private Deck discard;
-    private Card activePokemon;
+    private Pokemon activePokemon;
 
     private String name;
 
@@ -26,7 +26,9 @@ public class Player {
     }
 
     public void createFullDeck(Random rand) {
-        this.deck.addRandomCards(60, rand);
+        this.deck.addEnergies(15, rand);
+        this.deck.addRandomCards(45, rand);
+        this.deck.shuffle();
         checkForBasics(rand);
     }
 
@@ -39,7 +41,7 @@ public class Player {
         while(this.deck.numberBasicPokemon() == 0) {
             System.out.println(this.name + " does not have any basic cards!");
             this.deck = new Deck();
-            this.deck.addRandomCards(60, rand);
+            createFullDeck(rand);
         }
     }
 
@@ -57,7 +59,7 @@ public class Player {
         return hand.getCards();
     }
 
-    public void setActivePokemon(Card activePokemon) {
+    public void setActivePokemon(Pokemon activePokemon) {
         this.activePokemon = activePokemon;
         this.hand.removeCard(activePokemon);
     }
@@ -70,6 +72,11 @@ public class Player {
         for (int i = 0; i < HAND_SIZE; i++) {
             drawCard();
         }
+    }
+
+    public void addEnergyToActive(Energy energy) {
+        removeFromHand(energy);
+        activePokemon.addEnergy(energy);
     }
 
     public boolean isDeckEmpty() {
@@ -97,7 +104,7 @@ public class Player {
         return this.bench.getCards();
     }
 
-    public void retreat(Card lastSelectedCard) {
+    public void retreat(Pokemon lastSelectedCard) {
         // TODO: remove energy from retreating pokemon
         bench.removeCard(lastSelectedCard);
         bench.addCard(activePokemon);
@@ -106,6 +113,7 @@ public class Player {
 
     public boolean canAttack(){
         // TODO: check energy requirements for moves.
-        return false;
+
+        return true;
     }
 }

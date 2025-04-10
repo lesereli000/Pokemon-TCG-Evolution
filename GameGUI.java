@@ -226,7 +226,9 @@ public class GameGUI implements GUI {
 
 	@Override
 	public Card getLastSelectedCard() {
-		return this.lastSelectedCard;
+		Card lastCard = this.lastSelectedCard;
+		this.lastSelectedCard = null;
+		return lastCard;
 	}
 
 	@Override

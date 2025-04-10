@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Pokemon extends Card{
     private static final String[] allTypes = {"Grass", "Fire", "Water", "Lightning", "Psychic", "Fighting", "Darkness",
             "Metal", "Fairy", "Dragon", "Colorless"};
@@ -7,6 +9,7 @@ public class Pokemon extends Card{
     int damageCounters;
     char weakness;
     char resistance;
+    ArrayList<Energy> energies = new ArrayList<Energy>();
 
     public Pokemon(String name, String type, int stage, int hp, char weakness, char resistance) {
         super(name);
@@ -74,6 +77,14 @@ public class Pokemon extends Card{
 
     public int getCurHP(){
         return hp - (10 * damageCounters);
+    }
+
+    public void addEnergy(Energy energy) {
+        energies.add(energy);
+    }
+
+    public void removeEnergy(Energy energy) {
+        energies.remove(energy);
     }
 
 }

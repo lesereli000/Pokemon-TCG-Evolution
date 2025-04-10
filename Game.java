@@ -60,7 +60,7 @@ public class Game {
         Card lastSelectedCard = gui.getLastSelectedCard();
         if (lastSelectedCard instanceof Pokemon && ((Pokemon) lastSelectedCard).stage == 0) {
             gui.makeActiveCard(lastSelectedCard, playerTurn);
-            curPlayer.setActivePokemon(lastSelectedCard);
+            curPlayer.setActivePokemon((Pokemon) lastSelectedCard);
             gui.removeAllButtons();
             displayPickBenchCardsButton();
         } else {
@@ -80,7 +80,7 @@ public class Game {
             curPlayer.addBenchPokemon(lastSelectedCard);
             curPlayer.removeFromHand(lastSelectedCard);
         } else {
-            gui.displayMessage(lastSelectedCard.name + " is not a basic Pokemon");
+            gui.displayMessage("Basic Pokemon has not been selected!");
         }
         gui.removeAllButtons();
         displayPickBenchCardsButton();
@@ -96,6 +96,7 @@ public class Game {
             gui.removeAllButtons();
 
             if (!gameOver()) {
+                curPlayer.drawCard();
                 mainGameLoop();
             } else {
                 System.out.println("Game Over");
@@ -104,12 +105,31 @@ public class Game {
     }
 
     private void mainGameLoop() {
-        curPlayer.drawCard();
         gui.displayCards(curPlayer.handAsList(), this::playCard, "Play Selected Card");
         gui.createButton("Retreat", this::retreatAction);
         gui.createButton("Attack", this::attack);
+        gui.createButton("Add Energy", this::addEnergyToActive);
         gui.createButton("Pass Turn", this::passTurn);
     }
+
+    private void addEnergyToActive() {
+        Card lastSelectedCard = gui.getLastSelectedCard();
+        if(!(lastSelectedCard instanceof Energy)) {
+            gui.displayMessage("Energy has not been selected!");
+            return;
+        }
+
+        if(playerTurn == 1) {
+            player1.addEnergyToActive((Energy) lastSelectedCard);
+            gui.displayMessage(lastSelectedCard.name + " has been added to Player 1's active Pokemon");
+        } else {
+            player2.addEnergyToActive((Energy) lastSelectedCard);
+            gui.displayMessage(lastSelectedCard.name + " has been added to Player 2's active Pokemon");
+        }
+        gui.removeAllButtons();
+        mainGameLoop();
+    }
+
 
     private void playCard() {
         Card lastSelectedCard = gui.getLastSelectedCard();
@@ -118,6 +138,7 @@ public class Game {
 
 
         } else if (lastSelectedCard instanceof Energy) {
+
 
 
         } else if (lastSelectedCard instanceof Trainer) {
@@ -143,9 +164,13 @@ public class Game {
     private void handleRetreat() {
         Card lastSelectedCard = gui.getLastSelectedCard();
         gui.makeActiveCard(lastSelectedCard, playerTurn);
-        curPlayer.retreat(lastSelectedCard);
+        curPlayer.retreat((Pokemon)lastSelectedCard);
         gui.removeAllButtons();
         mainGameLoop();
+    }
+
+    private void getEnergyRequirements() {
+
     }
 
     private void attack() {
@@ -158,8 +183,8 @@ public class Game {
             }
 
             // TODO: the rest of the attack code
+            gui.removeAllButtons();
 
-            passTurn();
         } else {
             gui.displayMessage("You cannot attack right now");
             gui.removeAllButtons();

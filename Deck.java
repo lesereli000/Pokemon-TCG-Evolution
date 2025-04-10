@@ -92,6 +92,26 @@ public class Deck {
 
     }
 
+    public void addEnergies(int numberEnergies, Random rand) {
+        try(FileReader reader = new FileReader("base1.json")) {
+            String content = new String(Files.readAllBytes(Paths.get("base1.json")));
+            JSONArray pokemonArray = new JSONArray(content);
+            for (int i = 0; i < numberEnergies; i++) {
+                //97 is the first energy card in the pokemonArray
+                int num = rand.nextInt(97, pokemonArray.length());
+                Card card = new CardGenerator().generateCard(pokemonArray.getJSONObject(num).getString("name"));
+                try {
+                    addCard(card);
+                } catch (TooManyRepeatsException e) {
+                    //Continue to add random cards, accounting for the i cards we have already added
+                    addEnergies(numberEnergies - i, rand);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("File not found when adding random cards" + e);
+        }
+    }
+
     public static class TooManyRepeatsException extends RuntimeException {
         public TooManyRepeatsException(String message) {
             super(message);
