@@ -36,7 +36,8 @@ public class GameGUI implements GUI {
 	static final int activeVerticalMargin = cardHeight / 16;
 	static final int deckOffset = 15;
 
-	private Card activeCard;
+	private Card player1activeCard;
+	private Card player2activeCard;
 
 	private Color deckColor = Color.WHITE;
 	private Color player1ActiveColor = Color.WHITE;
@@ -93,7 +94,7 @@ public class GameGUI implements GUI {
 			g2d.drawRect((frameWidth/2) - (cardWidth/2), (frameHeight/2) + activeVerticalMargin -activeVerticalOffset, cardWidth, cardHeight);
 			if(player1ActiveColor == Color.GREEN) {
 				g2d.drawString("Active Pokemon:", (frameWidth / 2) - (cardWidth / 2) + marginSide / 8, (frameHeight / 2) - activeVerticalOffset + marginTop / 2);
-				g2d.drawString(activeCard.getName(), (frameWidth / 2) - (cardWidth / 2) + marginSide / 8, (frameHeight / 2) - activeVerticalOffset + marginTop );
+				g2d.drawString(player1activeCard.getName(), (frameWidth / 2) - (cardWidth / 2) + marginSide / 8, (frameHeight / 2) - activeVerticalOffset + marginTop );
 			}
 
 			g2d.setColor(Color.WHITE);
@@ -135,7 +136,7 @@ public class GameGUI implements GUI {
 			g2d.setColor(player2ActiveColor);
 			if(player2ActiveColor == Color.GREEN) {
 				g2d.drawString("Active Pokemon:", (frameWidth / 2) - (cardWidth / 2) + marginSide / 8, (frameHeight / 2) - activeVerticalMargin - cardHeight - activeVerticalOffset/4);
-				g2d.drawString(activeCard.getName(), (frameWidth / 2) - (cardWidth / 2) + marginSide / 8, (frameHeight / 2) - activeVerticalMargin - cardHeight - activeVerticalOffset/8);
+				g2d.drawString(player2activeCard.getName(), (frameWidth / 2) - (cardWidth / 2) + marginSide / 8, (frameHeight / 2) - activeVerticalMargin - cardHeight - activeVerticalOffset/8);
 			}
 			g2d.drawRect((frameWidth/2) - (cardWidth/2), (frameHeight/2) - activeVerticalMargin - cardHeight - activeVerticalOffset, cardWidth, cardHeight);
 
@@ -189,12 +190,12 @@ public class GameGUI implements GUI {
 	public void makeActiveCard(Card newActive, int playerTurn) {
 		if(playerTurn == 1) {
 			player1ActiveColor = Color.GREEN;
-			player2ActiveColor = Color.WHITE;
+			this.player1activeCard = newActive;
 		} else {
 			player2ActiveColor = Color.GREEN;
-			player1ActiveColor = Color.WHITE;
+			this.player2activeCard = newActive;
 		}
-		this.activeCard = newActive;
+
 		frame.repaint();
 	}
 
