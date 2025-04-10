@@ -117,7 +117,7 @@ public class Game {
             gui.displayMessage(lastCard.name + " has been added to Player 1's active Pokemon");
         } else {
             player2.addEnergyToActive(lastCard);
-            gui.displayMessage(lastCard + " has been added to Player 2's active Pokemon");
+            gui.displayMessage(lastCard.name + " has been added to Player 2's active Pokemon");
         }
     }
 
