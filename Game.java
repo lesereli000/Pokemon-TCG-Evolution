@@ -28,6 +28,20 @@ public class Game {
         gui.createFlipButton(this::setupGame);
     }
 
+    Game(GUI gui, Random rand, Player player1, Player player2, boolean test) {
+        this.player1 = player1;
+        this.player2 = player2;
+        this.gui = gui;
+        this.random = rand;
+        this.turn = 1;
+        this.playerTurn = 1;
+        this.curPlayer = player1;
+        // https://docs.oracle.com/javase/8/docs/api/java/lang/Runnable.html
+        // https://www.geeksforgeeks.org/runnable-interface-in-java/
+
+        //gui.createFlipButton(this::setupGame);
+    }
+
     public void setupGame() {
         String result = flipCoin();
         playerTurn = result.equals("Heads") ? 1 : 2;
@@ -42,7 +56,7 @@ public class Game {
         return random.nextBoolean() ? "Heads" : "Tails";
     }
 
-     void setupDecks() {
+    void setupDecks() {
         player1.createFullDeck(random);
         player1.drawStartingHand();
 
@@ -56,7 +70,7 @@ public class Game {
         gui.displayCards(curPlayer.handAsList(), this::makeActiveCard, "Select Active Pokemon");
     }
 
-    private void makeActiveCard() {
+    void makeActiveCard() {
         Card lastSelectedCard = gui.getLastSelectedCard();
         if (lastSelectedCard instanceof Pokemon && ((Pokemon) lastSelectedCard).stage == 0) {
             gui.makeActiveCard(lastSelectedCard, playerTurn);
@@ -73,7 +87,7 @@ public class Game {
         gui.createButton("Pass Turn", this::passTurn);
     }
 
-    private void addBenchCard() {
+    void addBenchCard() {
         Card lastSelectedCard = gui.getLastSelectedCard();
         if (lastSelectedCard instanceof Pokemon && ((Pokemon) lastSelectedCard).stage == 0) {
             gui.addBenchCard(lastSelectedCard, playerTurn);
