@@ -13,7 +13,8 @@ public class PokemonTest {
         int hp = 40;
 
         try {
-            Pokemon c = new Pokemon(name, type, stage, hp);
+            new Pokemon(name, type, stage, hp);
+
         } catch (CardCreationException e) {
             pass = true;
             assertEquals("Name cannot be empty", e.getMessage());
@@ -31,7 +32,7 @@ public class PokemonTest {
         int hp = 40;
 
         try {
-            Pokemon c = new Pokemon(name, type, stage, hp);
+            new Pokemon(name, type, stage, hp);
         } catch (CardCreationException e) {
             pass = true;
             assertEquals("Pokemon type cannot be empty", e.getMessage());
@@ -49,7 +50,7 @@ public class PokemonTest {
         int hp = 40;
 
         try {
-            Pokemon c = new Pokemon(name, type, stage, hp);
+            new Pokemon(name, type, stage, hp);
         } catch (CardCreationException e) {
             pass = true;
             assertEquals("Invalid pokemon type", e.getMessage());
@@ -67,7 +68,7 @@ public class PokemonTest {
         int hp = 0;
 
         try {
-            Pokemon c = new Pokemon(name, type, stage, hp);
+            new Pokemon(name, type, stage, hp);
         } catch (CardCreationException e) {
             pass = true;
             assertEquals("Pokemon health must be greater than 0.", e.getMessage());
@@ -85,7 +86,7 @@ public class PokemonTest {
         int hp = 40;
 
         try {
-            Pokemon c = new Pokemon(name, type, stage, hp);
+            new Pokemon(name, type, stage, hp);
         } catch (CardCreationException e) {
             pass = true;
             assertEquals("Stage cannot be less than 0. 0 is Basic.", e.getMessage());
@@ -103,7 +104,7 @@ public class PokemonTest {
         int hp = 40;
 
         try {
-            Pokemon c = new Pokemon(name, type, stage, hp);
+            new Pokemon(name, type, stage, hp);
         } catch (CardCreationException e) {
             pass = true;
             assertEquals("Stage cannot be greater than 2. Stage 2 is the highest evolution.", e.getMessage());
@@ -114,21 +115,19 @@ public class PokemonTest {
 
     @Test
     public void testCreatePokemon() {
-        boolean pass = false;
         String name = "Pikachu";
         String type = "Lightning";
         int stage = 1;
         int hp = 40;
         try {
             Pokemon c = new Pokemon(name, type, stage, hp);
-            assertTrue(c.name.equals("Pikachu"));
-            assertTrue(c.type.equals("Lightning"));
-            assertTrue(c.stage == stage);
-            assertTrue(c.hp == hp);
+            assertEquals("Pikachu", c.name);
+            assertEquals("Lightning", c.type);
+            assertEquals(stage, c.stage);
+            assertEquals(hp, c.hp);
 
         } catch (CardCreationException e) {
-            pass = false;
-            assertTrue(pass);
+            fail();
         }
     }
 
