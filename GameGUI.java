@@ -292,5 +292,4 @@ public class GameGUI implements GUI {
 		}
 		buttons = new ArrayList<>();
 	}
-
 }

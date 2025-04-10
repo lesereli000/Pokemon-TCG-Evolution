@@ -72,23 +72,40 @@ public class Player {
         }
     }
 
-    public boolean isOverHandLimit() {
-        return this.hand.size() > HAND_SIZE;
-    }
-
     public boolean isDeckEmpty() {
         return this.deck.size() <= 0;
     }
 
     public void addBenchPokemon(Card newPokemon) {
-        if(this.bench.size() == 5){
+        if(this.bench.size() < 5){
             this.bench.addCard(newPokemon);
         } else {
-            //TODO: throw an exception here
+            throw new InvalidMoveException(this.name +"'s Bench is Full");
         }
     }
 
     public void removeFromHand(Card lastSelectedCard) {
         this.hand.removeCard(lastSelectedCard);
+    }
+
+    public boolean canRetreat() {
+        // TODO: check that there is enough energy to retreat
+        return this.bench.size() != 0;
+    }
+
+    public ArrayList<Card> benchAsList() {
+        return this.bench.getCards();
+    }
+
+    public void retreat(Card lastSelectedCard) {
+        // TODO: remove energy from retreating pokemon
+        bench.removeCard(lastSelectedCard);
+        bench.addCard(activePokemon);
+        this.activePokemon = lastSelectedCard;
+    }
+
+    public boolean canAttack(){
+        // TODO: check energy requirements for moves.
+        return false;
     }
 }
