@@ -104,5 +104,4 @@ public class GameTest {
 //        game.makeActiveCard();
 //        verify(gui);
 //    }
-//
 }

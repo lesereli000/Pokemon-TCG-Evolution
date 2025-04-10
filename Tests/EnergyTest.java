@@ -10,7 +10,7 @@ public class EnergyTest {
         boolean pass = false;
 
         try{
-            Card c = new Energy("");
+            new Energy("");
         } catch (CardCreationException e) {
             pass = true;
             assertEquals("Name cannot be empty", e.getMessage());
@@ -33,7 +33,7 @@ public class EnergyTest {
         String name = "Charizard";
 
         try{
-            Card c = new Energy(name);
+            new Energy(name);
         } catch (CardCreationException e) {
             pass = true;
             assertEquals("Not an energy name", e.getMessage());

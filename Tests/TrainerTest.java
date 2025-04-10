@@ -11,7 +11,7 @@ public class TrainerTest {
         String effects = "Test";
 
         try {
-            Card c = new Trainer("", effects);
+            new Trainer("", effects);
         } catch (CardCreationException e) {
             pass = true;
             assertEquals("Name cannot be empty", e.getMessage());
@@ -37,7 +37,7 @@ public class TrainerTest {
         boolean pass = false;
 
         try {
-            Card c = new Trainer(name, subtype, effects);
+            new Trainer(name, subtype, effects);
         } catch (CardCreationException e) {
             pass = true;
             assertEquals("Trainer subtype must be either Item, Supporter or Stadium", e.getMessage());
@@ -64,6 +64,9 @@ public class TrainerTest {
         Trainer c3 = new Trainer(name, subtype, effects);
 
         assertEquals("Item", c1.getTrainerType());
+        assertEquals("Supporter", c2.getTrainerType());
+        assertEquals("Stadium", c3.getTrainerType());
+
     }
 
     @Test
@@ -73,7 +76,7 @@ public class TrainerTest {
         boolean pass = false;
 
         try {
-            Card c = new Trainer(name, effects);
+            new Trainer(name, effects);
         } catch (CardCreationException e) {
             pass = true;
             assertEquals("Trainer effects cannot be empty", e.getMessage());
