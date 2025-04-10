@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import javax.swing.*;
 
 public class GameGUI implements GUI {
@@ -38,6 +37,9 @@ public class GameGUI implements GUI {
 
 	private Card player1activeCard;
 	private Card player2activeCard;
+
+	private ArrayList<Card> player1benchCards = new ArrayList<Card>();
+	private ArrayList<Card> player2benchCards = new ArrayList<Card>();
 
 	private Color deckColor = Color.WHITE;
 	private Color player1ActiveColor = Color.WHITE;
@@ -87,6 +89,10 @@ public class GameGUI implements GUI {
 			g2d.setColor(Color.WHITE);
 			for(int i = 0; i < 5; i++) {
 				g2d.drawRect(marginSide + (cardWidth*2) + benchHorizontalOffset + (i*(benchHorizontalIncrement + cardWidth)), frameHeight - cardHeight - marginBottom - benchVerticalOffset, cardWidth, cardHeight);
+				if(player1benchCards.size() > i) {
+					Card currentCard = player1benchCards.get(i);
+					g2d.drawString(currentCard.name, marginSide + (cardWidth*2) + benchHorizontalOffset + (i*(benchHorizontalIncrement + cardWidth)) + (cardWidth/3), frameHeight - cardHeight - marginBottom - benchVerticalOffset + (cardHeight/2));
+				}
 			}
 
 			//Active Pokemon
@@ -130,6 +136,10 @@ public class GameGUI implements GUI {
 			//Bench Cards
 			for(int i = 0; i < 5; i++) {
 				g2d.drawRect(frameWidth - marginSide - (cardWidth*3) - benchHorizontalOffset - (i*(benchHorizontalIncrement + cardWidth)), marginTop, cardWidth, cardHeight);
+				if(player2benchCards.size() > i) {
+					Card currentCard = player2benchCards.get(i);
+					g2d.drawString(currentCard.name, frameWidth - marginSide - (cardWidth*3) - benchHorizontalOffset - (i*(benchHorizontalIncrement + cardWidth)) + (cardWidth/3), marginTop + (cardHeight/2));
+				}
 			}
 
 			//Active Pokemon
@@ -146,7 +156,7 @@ public class GameGUI implements GUI {
 			//Discard
 			g2d.drawRect(marginSide, marginTop, cardWidth, cardHeight);
 
-			//Bench
+			//Deck
 			g2d.setColor(deckColor);
 			g2d.drawRect(marginSide, marginTop + (cardHeight) + deckOffset, cardWidth, cardHeight);
 		}
@@ -194,6 +204,17 @@ public class GameGUI implements GUI {
 		} else {
 			player2ActiveColor = Color.GREEN;
 			this.player2activeCard = newActive;
+		}
+
+		frame.repaint();
+	}
+
+	@Override
+	public void addBenchCard(Card newBench, int playerTurn) {
+		if(playerTurn == 1 && this.player1benchCards.size() < 6) {
+			this.player1benchCards.add(newBench);
+		} else if (playerTurn == 2 && this.player2benchCards.size() < 6) {
+			this.player2benchCards.add(newBench);
 		}
 
 		frame.repaint();
@@ -260,11 +281,6 @@ public class GameGUI implements GUI {
 		frame.repaint();
 
 		return btn;
-	}
-
-	@Override
-	public void addBenchCard(Card lastSelectedCard, int playerTurn) {
-		System.out.println("addBenchCard");
 	}
 
 	@Override

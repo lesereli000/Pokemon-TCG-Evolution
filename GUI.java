@@ -17,7 +17,7 @@ public interface GUI {
     JButton createLinkedButton(String message, Card currCard);
     JButton createSelfDestructingButton(String message, Runnable toRun);
 
-    void addBenchCard(Card lastSelectedCard, int playerTurn);
+    void addBenchCard(Card newBench, int playerTurn);
 
     void removeAllButtons();
 }
