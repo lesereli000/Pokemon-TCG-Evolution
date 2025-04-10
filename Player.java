@@ -89,6 +89,7 @@ public class Player {
     }
 
     public boolean canRetreat() {
+        // TODO: check that there is enough energy to retreat
         return this.bench.size() != 0;
     }
 
@@ -97,8 +98,14 @@ public class Player {
     }
 
     public void retreat(Card lastSelectedCard) {
+        // TODO: remove energy from retreating pokemon
         bench.removeCard(lastSelectedCard);
         bench.addCard(activePokemon);
         this.activePokemon = lastSelectedCard;
+    }
+
+    public boolean canAttack(){
+        // TODO: check energy requirements for moves.
+        return false;
     }
 }

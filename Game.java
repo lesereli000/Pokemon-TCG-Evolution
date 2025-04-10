@@ -11,6 +11,7 @@ public class Game {
     private int playerTurn;
     private Player curPlayer;
     private int turn;
+    private Player defendingPlayer;
 
     public Game(GUI gui, Random rand, Player player1, Player player2) {
         this.player1 = player1;
@@ -55,7 +56,7 @@ public class Game {
 
     private void makeActiveCard() {
         Card lastSelectedCard = gui.getLastSelectedCard();
-        if(lastSelectedCard instanceof Pokemon && ((Pokemon) lastSelectedCard).stage == 0) {
+        if (lastSelectedCard instanceof Pokemon && ((Pokemon) lastSelectedCard).stage == 0) {
             gui.makeActiveCard(lastSelectedCard, playerTurn);
             curPlayer.setActivePokemon(lastSelectedCard);
             gui.removeAllButtons();
@@ -72,7 +73,7 @@ public class Game {
 
     private void addBenchCard() {
         Card lastSelectedCard = gui.getLastSelectedCard();
-        if(lastSelectedCard instanceof Pokemon && ((Pokemon) lastSelectedCard).stage == 0) {
+        if (lastSelectedCard instanceof Pokemon && ((Pokemon) lastSelectedCard).stage == 0) {
             gui.addBenchCard(lastSelectedCard, playerTurn);
             curPlayer.addBenchPokemon(lastSelectedCard);
             curPlayer.removeFromHand(lastSelectedCard);
@@ -83,16 +84,16 @@ public class Game {
         displayPickBenchCardsButton();
     }
 
-    private void passTurn(){
-        playerTurn = playerTurn%2 + 1;
+    private void passTurn() {
+        playerTurn = playerTurn % 2 + 1;
         curPlayer = playerTurn == 1 ? player1 : player2;
         turn++;
-        if(turn == 2){
+        if (turn == 2) {
             setCurPlayerPokemon();
         } else {
             gui.removeAllButtons();
 
-            if(!gameOver()) {
+            if (!gameOver()) {
                 mainGameLoop();
             } else {
                 System.out.println("Game Over");
@@ -111,13 +112,13 @@ public class Game {
     private void playCard() {
         Card lastSelectedCard = gui.getLastSelectedCard();
 
-        if(lastSelectedCard instanceof Pokemon) {
+        if (lastSelectedCard instanceof Pokemon) {
 
 
-        } else if(lastSelectedCard instanceof Energy) {
+        } else if (lastSelectedCard instanceof Energy) {
 
 
-        } else if(lastSelectedCard instanceof Trainer) {
+        } else if (lastSelectedCard instanceof Trainer) {
 
 
         } else {
@@ -129,15 +130,15 @@ public class Game {
     }
 
     private void retreatAction() {
-        if(curPlayer.canRetreat()){
+        if (curPlayer.canRetreat()) {
             gui.removeAllButtons();
             gui.displayCards(curPlayer.benchAsList(), this::handleRetreat, "Select Card to Switch In");
-        }else {
+        } else {
             gui.displayMessage("No");
         }
     }
 
-    private void handleRetreat(){
+    private void handleRetreat() {
         Card lastSelectedCard = gui.getLastSelectedCard();
         gui.makeActiveCard(lastSelectedCard, playerTurn);
         curPlayer.retreat(lastSelectedCard);
@@ -145,14 +146,27 @@ public class Game {
         mainGameLoop();
     }
 
-    private void attack(){
-        // TODO: implement attacking
+    private void attack() {
+        if (curPlayer.canAttack()) {
+            Player defendingPlayer;
+            if (curPlayer.equals(player1)) {
+                defendingPlayer = player2;
+            } else {
+                defendingPlayer = player1;
+            }
 
-        passTurn();
+            // TODO: the rest of the attack code
+
+            passTurn();
+        } else {
+            gui.displayMessage("You cannot attack right now");
+            gui.removeAllButtons();
+            mainGameLoop();
+        }
     }
 
     private boolean gameOver() {
-        // TODO: test win conditions here
+        // TODO: test win conditions here, not for M3
         return false;
     }
 
