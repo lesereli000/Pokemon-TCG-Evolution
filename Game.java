@@ -2,19 +2,19 @@ import java.awt.*;
 import java.util.Random;
 
 public class Game {
-    private GUI gui;
-    private Random random;
+    private final GUI gui;
+    private final Random random;
 
-    private Player player1;
-    private Player player2;
+    private final Player player1;
+    private final Player player2;
 
     private int playerTurn;
     private Player curPlayer;
     private int turn;
 
-    public Game(GUI gui, Random rand) {
-        this.player1 = new Player("Player 1");
-        this.player2 = new Player("Player 2");
+    public Game(GUI gui, Random rand, Player player1, Player player2) {
+        this.player1 = player1;
+        this.player2 = player2;
         this.gui = gui;
         this.random = rand;
         this.turn = 1;
@@ -66,7 +66,7 @@ public class Game {
     }
 
     private void displayPickBenchCardsButton() {
-        gui.displayCards(curPlayer.handAsList(), this::addBenchCard, "Add Bench Cards");
+        gui.displayCards(curPlayer.handAsList(), this::addBenchCard, "Add Card to Bench");
         gui.createButton("Pass Turn", this::passTurn);
     }
 
@@ -91,15 +91,72 @@ public class Game {
             setCurPlayerPokemon();
         } else {
             gui.removeAllButtons();
-            mainGameLoop();
+
+            if(!gameOver()) {
+                mainGameLoop();
+            } else {
+                System.out.println("Game Over");
+            }
         }
     }
 
     private void mainGameLoop() {
-        // TODO: Turn 1 actions go here
+        curPlayer.drawCard();
+        gui.displayCards(curPlayer.handAsList(), this::playCard, "Play Selected Card");
+        gui.createButton("Retreat", this::retreatAction);
+        gui.createButton("Attack", this::attack);
+        gui.createButton("Pass Turn", this::passTurn);
+    }
+
+    private void playCard() {
+        Card lastSelectedCard = gui.getLastSelectedCard();
+
+        if(lastSelectedCard instanceof Pokemon) {
+
+
+        } else if(lastSelectedCard instanceof Energy) {
+
+
+        } else if(lastSelectedCard instanceof Trainer) {
+
+
+        } else {
+            gui.displayMessage(lastSelectedCard.name + " is not a basic Pokemon");
+        }
+
+        gui.removeAllButtons();
+        mainGameLoop();
+    }
+
+    private void retreatAction() {
+        if(curPlayer.canRetreat()){
+            gui.removeAllButtons();
+            gui.displayCards(curPlayer.benchAsList(), this::handleRetreat, "Select Card to Switch In");
+        }else {
+            gui.displayMessage("No");
+        }
+    }
+
+    private void handleRetreat(){
+        Card lastSelectedCard = gui.getLastSelectedCard();
+        gui.makeActiveCard(lastSelectedCard, playerTurn);
+        curPlayer.retreat(lastSelectedCard);
+        gui.removeAllButtons();
+        mainGameLoop();
+    }
+
+    private void attack(){
+        // TODO: implement attacking
+
+        passTurn();
+    }
+
+    private boolean gameOver() {
+        // TODO: test win conditions here
+        return false;
     }
 
     public static void main(String[] args) {
-        Game game = new Game(new GameGUI(), new Random());
+        Game game = new Game(new GameGUI(), new Random(), new Player("Player 1"), new Player("Player 2"));
     }
 }

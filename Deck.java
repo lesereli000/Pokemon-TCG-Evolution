@@ -88,6 +88,10 @@ public class Deck {
         return count;
     }
 
+    public void replace(Card toReplace, Card replaceWith) {
+
+    }
+
     public static class TooManyRepeatsException extends RuntimeException {
         public TooManyRepeatsException(String message) {
             super(message);

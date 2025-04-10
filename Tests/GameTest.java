@@ -19,7 +19,7 @@ public class GameTest {
         replay(rand);
 
         GUI gui = createMock(GUI.class);
-        Game game = new Game(gui, rand);
+        Game game = new Game(gui, rand, new Player("Player 1"), new Player("Player 2"));
         assertEquals("Heads", game.flipCoin());
 
         verify(rand);
@@ -32,7 +32,7 @@ public class GameTest {
         replay(rand);
 
         GUI gui = createMock(GUI.class);
-        Game game = new Game(gui, rand);
+        Game game = new Game(gui, rand, new Player("Player 1"), new Player("Player 2"));
         assertEquals("Tails", game.flipCoin());
 
         verify(rand);
