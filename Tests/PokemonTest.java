@@ -119,8 +119,17 @@ public class PokemonTest {
         String type = "Lightning";
         int stage = 1;
         int hp = 40;
+        try {
+            Pokemon c = new Pokemon(name, type, stage, hp);
+            assertTrue(c.name.equals("Pikachu"));
+            assertTrue(c.type.equals("Lightning"));
+            assertTrue(c.stage == stage);
+            assertTrue(c.hp == hp);
 
-        //TODO: add asserts
+        } catch (CardCreationException e) {
+            pass = false;
+            assertTrue(pass);
+        }
     }
 
     @Test
