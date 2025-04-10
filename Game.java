@@ -1,3 +1,5 @@
+import org.easymock.internal.matchers.Null;
+
 import java.awt.*;
 import java.util.Random;
 
@@ -62,7 +64,7 @@ public class Game {
             gui.removeAllButtons();
             displayPickBenchCardsButton();
         } else {
-            gui.displayMessage(lastSelectedCard.name + " is not a basic Pokemon");
+            gui.displayMessage("Basic Pokemon has not been selected!");
         }
     }
 
