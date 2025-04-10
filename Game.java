@@ -108,26 +108,17 @@ public class Game {
         gui.displayCards(curPlayer.handAsList(), this::playCard, "Play Selected Card");
         gui.createButton("Retreat", this::retreatAction);
         gui.createButton("Attack", this::attack);
-        gui.createButton("Add Energy", this::addEnergyToActive);
         gui.createButton("Pass Turn", this::passTurn);
     }
 
-    private void addEnergyToActive() {
-        Card lastSelectedCard = gui.getLastSelectedCard();
-        if(!(lastSelectedCard instanceof Energy)) {
-            gui.displayMessage("Energy has not been selected!");
-            return;
-        }
-
+    private void addEnergyToActive(Energy lastCard) {
         if(playerTurn == 1) {
-            player1.addEnergyToActive((Energy) lastSelectedCard);
-            gui.displayMessage(lastSelectedCard.name + " has been added to Player 1's active Pokemon");
+            player1.addEnergyToActive(lastCard);
+            gui.displayMessage(lastCard.name + " has been added to Player 1's active Pokemon");
         } else {
-            player2.addEnergyToActive((Energy) lastSelectedCard);
-            gui.displayMessage(lastSelectedCard.name + " has been added to Player 2's active Pokemon");
+            player2.addEnergyToActive(lastCard);
+            gui.displayMessage(lastCard + " has been added to Player 2's active Pokemon");
         }
-        gui.removeAllButtons();
-        mainGameLoop();
     }
 
 
@@ -138,9 +129,7 @@ public class Game {
 
 
         } else if (lastSelectedCard instanceof Energy) {
-
-
-
+            addEnergyToActive((Energy) lastSelectedCard);
         } else if (lastSelectedCard instanceof Trainer) {
 
 
@@ -167,10 +156,6 @@ public class Game {
         curPlayer.retreat((Pokemon)lastSelectedCard);
         gui.removeAllButtons();
         mainGameLoop();
-    }
-
-    private void getEnergyRequirements() {
-
     }
 
     private void attack() {

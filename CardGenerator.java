@@ -12,6 +12,7 @@ public class CardGenerator {
     private int hp;
     private int stage;
     private Card card;
+    private int requiredEnergies;
 
     // When given the name of a card, should be able to create a card object with all desired information
     public Card generateCard(String name) {
@@ -41,7 +42,7 @@ public class CardGenerator {
                         } else {
                             this.stage = Integer.parseInt(wholeStage.substring(wholeStage.length() - 1));
                         }
-                        card = new Pokemon(this.name, type, stage, hp);
+                        card = new Pokemon(this.name, type, stage, hp, 'Z', 'Z', 2);
                     } else if (supertype.equals("Energy")) {
                         card = new Energy(this.name);
                     } else {
