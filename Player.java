@@ -116,4 +116,12 @@ public class Player {
         return activePokemon.canAttack();
 
     }
+
+    public void takeDamage(int damageCounters) {
+        activePokemon.takeDamage(damageCounters, 'a');
+    }
+
+    public int getActiveHP() {
+        return activePokemon.getCurHP();
+    }
 }

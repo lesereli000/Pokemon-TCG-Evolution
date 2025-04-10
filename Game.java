@@ -168,13 +168,14 @@ public class Game {
             }
 
             // TODO: the rest of the attack code
-            gui.removeAllButtons();
-
+            defendingPlayer.takeDamage(2);
+            gui.displayMessage(defendingPlayer.getName() + " has been attacked!\nThey have " + defendingPlayer.getActiveHP() + " HP remaining");
+            passTurn();
         } else {
             gui.displayMessage("You cannot attack right now");
-            gui.removeAllButtons();
-            mainGameLoop();
         }
+        gui.removeAllButtons();
+        mainGameLoop();
     }
 
     private boolean gameOver() {

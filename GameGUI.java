@@ -46,6 +46,9 @@ public class GameGUI implements GUI {
 	private Color player2ActiveColor = Color.WHITE;
 	private ArrayList<JButton> buttons = new ArrayList<>();
 
+	private Font boldFont = new Font("Arial", Font.BOLD, 16);
+	private Font plainFont = new Font("Arial", Font.PLAIN, 12);
+
 	public GameGUI() {
 		createGUI();
 	}
@@ -67,10 +70,13 @@ public class GameGUI implements GUI {
 			g2d.fillRect(0, 0, frameWidth, frameHeight);
 
 			// ----- USER SIDE (NEAR/BOTTOM SIDE) --------
+			g2d.setColor(Color.WHITE);
+			g2d.setFont(boldFont);
+			g2d.drawString("Player turn: " , marginSide/2, marginTop/2);
+			g2d.setFont(plainFont);
 
 			//Prize Cards
 			//left column
-			g2d.setColor(Color.WHITE);
 			g2d.drawRect(marginSide, frameHeight - cardHeight - marginBottom, cardWidth, cardHeight);
 			g2d.drawRect(marginSide, frameHeight - (cardHeight*2) - marginBottom - marginPrizeCardVertical, cardWidth, cardHeight);
 			g2d.drawRect(marginSide, frameHeight - (cardHeight*3) - marginBottom - (marginPrizeCardVertical*2), cardWidth, cardHeight);
