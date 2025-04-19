@@ -1,3 +1,5 @@
+package main;
+
 import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
@@ -226,6 +228,17 @@ public class GameGUI implements GUI {
 		frame.repaint();
 	}
 
+	@Override
+	public void removeBenchCard(Card newBench, int playerTurn) {
+		if(playerTurn == 1 && !this.player1benchCards.isEmpty()) {
+			this.player1benchCards.remove(newBench);
+		} else if (playerTurn == 2 && !this.player2benchCards.isEmpty()) {
+			this.player2benchCards.remove(newBench);
+		}
+
+		frame.repaint();
+	}
+
 	private void setLastSelectedCard(Card card) {
 		this.lastSelectedCard = card;
 	}
@@ -299,5 +312,21 @@ public class GameGUI implements GUI {
 			panel.repaint();
 		}
 		buttons = new ArrayList<>();
+	}
+
+	@Override
+	public void retreat(Card newCard, int playerTurn) {
+		Card oldActive = playerTurn == 1 ? player1activeCard : player2activeCard;
+		if(playerTurn == 1) {
+			this.player1benchCards.remove(newCard);
+			this.player1benchCards.add(oldActive);
+			this.player1activeCard = newCard;
+		} else if (playerTurn == 2) {
+			this.player2benchCards.remove(newCard);
+			this.player2benchCards.add(oldActive);
+			this.player2activeCard = newCard;
+		}
+
+		frame.repaint();
 	}
 }

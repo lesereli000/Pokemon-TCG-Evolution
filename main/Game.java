@@ -1,3 +1,5 @@
+package main;
+
 import org.easymock.internal.matchers.Null;
 
 import java.awt.*;
@@ -72,7 +74,7 @@ public class Game {
 
     void makeActiveCard() {
         Card lastSelectedCard = gui.getLastSelectedCard();
-        if (lastSelectedCard instanceof Pokemon && ((Pokemon) lastSelectedCard).stage == 0) {
+        if (isBasicPokemon(lastSelectedCard)) {
             gui.makeActiveCard(lastSelectedCard, playerTurn);
             curPlayer.setActivePokemon((Pokemon) lastSelectedCard);
             gui.removeAllButtons();
@@ -89,7 +91,7 @@ public class Game {
 
     void addBenchCard() {
         Card lastSelectedCard = gui.getLastSelectedCard();
-        if (lastSelectedCard instanceof Pokemon && ((Pokemon) lastSelectedCard).stage == 0) {
+        if (isBasicPokemon(lastSelectedCard)) {
             gui.addBenchCard(lastSelectedCard, playerTurn);
             curPlayer.addBenchPokemon(lastSelectedCard);
             curPlayer.removeFromHand(lastSelectedCard);
@@ -139,14 +141,17 @@ public class Game {
     private void playCard() {
         Card lastSelectedCard = gui.getLastSelectedCard();
 
-        if (lastSelectedCard instanceof Pokemon) {
+        if (isBasicPokemon(lastSelectedCard)) {
+            gui.addBenchCard(lastSelectedCard, playerTurn);
+            curPlayer.addBenchPokemon(lastSelectedCard);
+            curPlayer.removeFromHand(lastSelectedCard);
 
-
+        } else if (lastSelectedCard instanceof Pokemon) {
+            // TODO: Check if there is a card on the field to evolve from
         } else if (lastSelectedCard instanceof Energy) {
             addEnergyToActive((Energy) lastSelectedCard);
         } else if (lastSelectedCard instanceof Trainer) {
-
-
+            //(Trainer) lastSelectedCard.doEffects(player1, player2, playerTurn);
         } else {
             gui.displayMessage(lastSelectedCard.name + " is not a basic Pokemon");
         }
@@ -166,8 +171,8 @@ public class Game {
 
     private void handleRetreat() {
         Card lastSelectedCard = gui.getLastSelectedCard();
-        gui.makeActiveCard(lastSelectedCard, playerTurn);
         curPlayer.retreat((Pokemon)lastSelectedCard);
+        gui.retreat(lastSelectedCard, playerTurn);
         gui.removeAllButtons();
         mainGameLoop();
     }
@@ -182,7 +187,7 @@ public class Game {
             }
 
             // TODO: the rest of the attack code
-            defendingPlayer.takeDamage(2);
+            defendingPlayer.takeDamage(2, 'a');
             gui.displayMessage(defendingPlayer.getName() + " has been attacked!\nThey have " + defendingPlayer.getActiveHP() + " HP remaining");
             passTurn();
         } else {
@@ -195,6 +200,10 @@ public class Game {
     private boolean gameOver() {
         // TODO: test win conditions here, not for M3
         return false;
+    }
+
+    private boolean isBasicPokemon(Card card) {
+        return card instanceof Pokemon && ((Pokemon) card).stage == 0;
     }
 
     public static void main(String[] args) {

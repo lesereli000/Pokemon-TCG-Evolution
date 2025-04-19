@@ -1,3 +1,5 @@
+package main;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -8,16 +10,13 @@ public interface GUI {
     void setDeckColor(Color deckColor);
     void displayMessage(String message);
     void makeActiveCard(Card newActive, int playerTurn);
-
     Card getLastSelectedCard();
-
     void displayCards(ArrayList<Card> currentCards, Runnable makeActiveCard, String submitMessage);
-
     JButton createButton(String message, Runnable toRun);
     JButton createLinkedButton(String message, Card currCard);
     JButton createSelfDestructingButton(String message, Runnable toRun);
-
     void addBenchCard(Card newBench, int playerTurn);
-
+    void removeBenchCard(Card newBench, int playerTurn);
     void removeAllButtons();
+    void retreat(Card newCard, int playerTurn);
 }
