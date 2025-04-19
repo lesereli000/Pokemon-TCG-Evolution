@@ -1,3 +1,5 @@
+package main;
+
 import org.json.JSONArray;
 import org.junit.Test;
 
@@ -15,7 +17,7 @@ import static org.junit.Assert.*;
 
 public class DeckTest {
 
-    //TODO: Tests moved from PokemonTest.java
+    //TODO: Tests moved from main.PokemonTest.java
 
     @Test
     public void testEmptyDeck() {
