@@ -2,6 +2,7 @@ package main;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import static org.easymock.EasyMock.*;
@@ -88,6 +89,76 @@ public class GameTest {
         game.makeActiveCard();
         verify(gui);
     }
+
+    @Test
+    public void testGetOnlyPokemonEmpty() {
+        Random rand = createMock(Random.class);
+        GUI gui = createMock(GUI.class);
+        Player p1 = createMock(Player.class);
+        Player p2 = createMock(Player.class);
+
+        ArrayList<Card> cards = new ArrayList<>();
+
+        Game game = new Game(gui, rand, p1, p2, true);
+        ArrayList<Card> returnedCards = game.getOnlyPokemon(cards);
+        assertEquals(0, returnedCards.size());
+    }
+
+    @Test
+    public void testGetPokemonOne() {
+        Random rand = createMock(Random.class);
+        GUI gui = createMock(GUI.class);
+        Player p1 = createMock(Player.class);
+        Player p2 = createMock(Player.class);
+
+        ArrayList<Card> cards = new ArrayList<>();
+        Pokemon pikachu = createMock(Pokemon.class);
+        cards.add(pikachu);
+
+        Game game = new Game(gui, rand, p1, p2, true);
+        ArrayList<Card> returnedCards = game.getOnlyPokemon(cards);
+        assertEquals(pikachu, returnedCards.get(0));
+    }
+
+    @Test
+    public void testGetOnlyPokemonMany() {
+        Random rand = createMock(Random.class);
+        GUI gui = createMock(GUI.class);
+        Player p1 = createMock(Player.class);
+        Player p2 = createMock(Player.class);
+
+        ArrayList<Card> cards = new ArrayList<>();
+
+        Pokemon pok1 = createMock(Pokemon.class);
+        Energy e = createMock(Energy.class);
+        Pokemon pok2 = createMock(Pokemon.class);
+        Pokemon pok3 = createMock(Pokemon.class);
+        Trainer t = createMock(Trainer.class);
+        Pokemon pok4 = createMock(Pokemon.class);
+        Trainer t2 = createMock(Trainer.class);
+        Pokemon pok5 = createMock(Pokemon.class);
+        Energy e2 = createMock(Energy.class);
+
+        cards.add(pok1);
+        cards.add(e);
+        cards.add(pok2);
+        cards.add(pok3);
+        cards.add(t);
+        cards.add(pok4);
+        cards.add(t2);
+        cards.add(pok5);
+        cards.add(e2);
+
+        Game game = new Game(gui, rand, p1, p2, true);
+        ArrayList<Card> returnedCards = game.getOnlyPokemon(cards);
+        assertEquals(pok1, returnedCards.get(0));
+        assertEquals(pok2, returnedCards.get(1));
+        assertEquals(pok3, returnedCards.get(2));
+        assertEquals(pok4, returnedCards.get(3));
+        assertEquals(pok5, returnedCards.get(4));
+
+    }
+
 //    @Test //Doesn't work because of Runnables
 //    public void testSelectBasicPokemonToActive() {
 //        Random rand = createMock(Random.class);

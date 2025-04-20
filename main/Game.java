@@ -3,6 +3,7 @@ package main;
 import org.easymock.internal.matchers.Null;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Game {
@@ -132,7 +133,8 @@ public class Game {
         } else if (lastSelectedCard instanceof Pokemon) {
             // TODO: Check if there is a card on the field to evolve from
         } else if (lastSelectedCard instanceof Energy) {
-            addEnergyToActive((Energy) lastSelectedCard);
+//            addEnergyToActive((Energy) lastSelectedCard);
+            addEnergyToPokemon((Energy) lastSelectedCard);
         } else if (lastSelectedCard instanceof Trainer) {
             //(Trainer) lastSelectedCard.doEffects(player1, player2, playerTurn);
         } else {
@@ -141,6 +143,19 @@ public class Game {
 
         gui.removeAllButtons();
         mainGameLoop();
+    }
+
+    ArrayList<Card> getOnlyPokemon(ArrayList<Card> cards) {
+        ArrayList<Card> pokemon = new ArrayList<>();
+        for (Card card : cards) {
+            if(card instanceof Pokemon) {
+                pokemon.add(card);
+            }
+        }
+        return pokemon;
+    }
+
+    private void addEnergyToPokemon(Energy lastSelectedCard) {
     }
 
     private void retreatAction() {
