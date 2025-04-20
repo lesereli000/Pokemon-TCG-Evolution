@@ -78,28 +78,10 @@ public class Game {
             gui.makeActiveCard(lastSelectedCard, playerTurn);
             curPlayer.setActivePokemon((Pokemon) lastSelectedCard);
             gui.removeAllButtons();
-            displayPickBenchCardsButton();
+            mainGameLoop();
         } else {
             gui.displayMessage("Basic Pokemon has not been selected!");
         }
-    }
-
-    private void displayPickBenchCardsButton() {
-        gui.displayCards(curPlayer.handAsList(), this::addBenchCard, "Add Card to Bench");
-        gui.createButton("Pass Turn", this::passTurn);
-    }
-
-    void addBenchCard() {
-        Card lastSelectedCard = gui.getLastSelectedCard();
-        if (isBasicPokemon(lastSelectedCard)) {
-            gui.addBenchCard(lastSelectedCard, playerTurn);
-            curPlayer.addBenchPokemon(lastSelectedCard);
-            curPlayer.removeFromHand(lastSelectedCard);
-        } else {
-            gui.displayMessage("Basic Pokemon has not been selected!");
-        }
-        gui.removeAllButtons();
-        displayPickBenchCardsButton();
     }
 
     private void passTurn() {
@@ -118,6 +100,7 @@ public class Game {
                 System.out.println("Game Over");
             }
         }
+        gui.updateTurn(playerTurn);
     }
 
     private void mainGameLoop() {
@@ -125,7 +108,6 @@ public class Game {
         gui.createButton("Retreat", this::retreatAction);
         gui.createButton("Attack", this::attack);
         gui.createButton("Pass Turn", this::passTurn);
-        gui.updateTurn(playerTurn);
     }
 
     private void addEnergyToActive(Energy lastCard) {
@@ -154,7 +136,7 @@ public class Game {
         } else if (lastSelectedCard instanceof Trainer) {
             //(Trainer) lastSelectedCard.doEffects(player1, player2, playerTurn);
         } else {
-            gui.displayMessage(lastSelectedCard.name + " is not a basic Pokemon");
+            gui.displayMessage("Playable card has not been selected");
         }
 
         gui.removeAllButtons();
