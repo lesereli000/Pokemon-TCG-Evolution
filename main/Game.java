@@ -17,6 +17,7 @@ public class Game {
     private Player curPlayer;
     private int turn;
     private Player defendingPlayer;
+    private Energy selectedEnergy;
 
     public Game(GUI gui, Random rand, Player player1, Player player2) {
         this.player1 = player1;
@@ -111,17 +112,6 @@ public class Game {
         gui.createButton("Pass Turn", this::passTurn);
     }
 
-    private void addEnergyToActive(Energy lastCard) {
-        if(playerTurn == 1) {
-            player1.addEnergyToActive(lastCard);
-            gui.displayMessage(lastCard.name + " has been added to Player 1's active Pokemon");
-        } else {
-            player2.addEnergyToActive(lastCard);
-            gui.displayMessage(lastCard.name + " has been added to Player 2's active Pokemon");
-        }
-    }
-
-
     private void playCard() {
         Card lastSelectedCard = gui.getLastSelectedCard();
 
@@ -129,20 +119,20 @@ public class Game {
             gui.addBenchCard(lastSelectedCard, playerTurn);
             curPlayer.addBenchPokemon(lastSelectedCard);
             curPlayer.removeFromHand(lastSelectedCard);
-
+            gui.removeAllButtons();
+            mainGameLoop();
         } else if (lastSelectedCard instanceof Pokemon) {
             // TODO: Check if there is a card on the field to evolve from
         } else if (lastSelectedCard instanceof Energy) {
 //            addEnergyToActive((Energy) lastSelectedCard);
-            addEnergyToPokemon((Energy) lastSelectedCard);
+            selectedEnergy = (Energy)lastSelectedCard;
+            displayPossiblePokemon();
         } else if (lastSelectedCard instanceof Trainer) {
             //(Trainer) lastSelectedCard.doEffects(player1, player2, playerTurn);
         } else {
             gui.displayMessage("Playable card has not been selected");
+            mainGameLoop();
         }
-
-        gui.removeAllButtons();
-        mainGameLoop();
     }
 
     ArrayList<Card> getOnlyPokemon(ArrayList<Card> cards) {
@@ -155,7 +145,24 @@ public class Game {
         return pokemon;
     }
 
-    private void addEnergyToPokemon(Energy lastSelectedCard) {
+    private void displayPossiblePokemon() {
+        gui.removeAllButtons();
+        ArrayList<Card> possiblePokemon = getOnlyPokemon(curPlayer.benchAsList());
+        possiblePokemon.add(curPlayer.getActivePokemon());
+        gui.displayCards(possiblePokemon, this::addEnergyToPokemon, "Select Pokemon To Add Energy To");
+    }
+
+    private void addEnergyToPokemon() {
+        Card selectedPokemon = gui.getLastSelectedCard();
+        if(!(selectedPokemon instanceof Pokemon)) {
+            gui.displayMessage("Select Pokemon To Add Energy To");
+            displayPossiblePokemon();
+        } else {
+            curPlayer.addEnergyToPokemon((Pokemon) selectedPokemon, selectedEnergy);
+            gui.displayMessage(selectedEnergy.getName() + " has been added to " + selectedPokemon.getName());
+            gui.removeAllButtons();
+            mainGameLoop();
+        }
     }
 
     private void retreatAction() {

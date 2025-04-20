@@ -76,11 +76,6 @@ public class Player {
         }
     }
 
-    public void addEnergyToActive(Energy energy) {
-        removeFromHand(energy);
-        activePokemon.addEnergy(energy);
-    }
-
     public boolean isDeckEmpty() {
         return this.deck.size() <= 0;
     }
@@ -125,5 +120,14 @@ public class Player {
 
     public int getActiveHP() {
         return activePokemon.getCurHP();
+    }
+
+    public Card getActivePokemon() {
+        return activePokemon;
+    }
+
+    public void addEnergyToPokemon(Pokemon selectedPokemon, Energy selectedEnergy) {
+        removeFromHand(selectedEnergy);
+        selectedPokemon.addEnergy(selectedEnergy);
     }
 }
