@@ -17,6 +17,7 @@ public class GameGUI implements GUI {
 	private GamePanel panel;
 
 	private Card lastSelectedCard;
+	private int playerTurn = 0;
 
 	static final int backgroundLineThickness = 4;
 
@@ -74,7 +75,9 @@ public class GameGUI implements GUI {
 			// ----- USER SIDE (NEAR/BOTTOM SIDE) --------
 			g2d.setColor(Color.WHITE);
 			g2d.setFont(boldFont);
-			g2d.drawString("Player turn: " , marginSide/2, marginTop/2);
+			if(playerTurn != 0) {
+				g2d.drawString("Player turn: " + playerTurn, marginSide/2, frameHeight - marginTop);
+			}
 			g2d.setFont(plainFont);
 
 			//Prize Cards
@@ -326,7 +329,12 @@ public class GameGUI implements GUI {
 			this.player2benchCards.add(oldActive);
 			this.player2activeCard = newCard;
 		}
+		frame.repaint();
+	}
 
+	@Override
+	public void updateTurn(int playerTurn) {
+		this.playerTurn = playerTurn;
 		frame.repaint();
 	}
 }

@@ -19,4 +19,6 @@ public interface GUI {
     void removeBenchCard(Card newBench, int playerTurn);
     void removeAllButtons();
     void retreat(Card newCard, int playerTurn);
+
+    void updateTurn(int playerTurn);
 }

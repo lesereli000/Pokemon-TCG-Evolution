@@ -125,6 +125,7 @@ public class Game {
         gui.createButton("Retreat", this::retreatAction);
         gui.createButton("Attack", this::attack);
         gui.createButton("Pass Turn", this::passTurn);
+        gui.updateTurn(playerTurn);
     }
 
     private void addEnergyToActive(Energy lastCard) {

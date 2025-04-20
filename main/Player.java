@@ -51,7 +51,7 @@ public class Player {
         String msg = this.name + " has cards:\n";
         for (Card newCard : hand.getCards()) {
             String card1Class = newCard.getClass().toString();
-            String justClass1 = card1Class.substring(6);
+            String justClass1 = card1Class.substring(11); //Just the class of the card
             msg += newCard.getName() + " which is a " + justClass1 + "\n";
         }
         return msg;
