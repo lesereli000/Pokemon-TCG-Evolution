@@ -635,4 +635,10 @@ public class DeckTest {
 
         assertNotEquals(originalDeck, shuffledDeck);
     }
+
+    @Test
+    public void addEmptyDeckFromFile(){
+        Deck d = new Deck();
+        d.createDeckFromFile("testDeckEmpty.txt");
+    }
 }

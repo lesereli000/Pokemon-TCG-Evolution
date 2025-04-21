@@ -114,6 +114,10 @@ public class Deck {
         }
     }
 
+    public void createDeckFromFile(String file) {
+
+    }
+
     public static class TooManyRepeatsException extends RuntimeException {
         public TooManyRepeatsException(String message) {
             super(message);
