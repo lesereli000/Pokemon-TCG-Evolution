@@ -2891,6 +2891,7 @@
     "types": [
       "Fighting"
     ],
+    "convertedRetreatCost": 2,
     "evolvesTo": [
       "Dugtrio"
     ],
@@ -2945,6 +2946,7 @@
   {
     "id": "base1-48",
     "name": "Doduo",
+    "convertedRetreatCost": 2,
     "supertype": "Pokémon",
     "subtypes": [
       "Basic"

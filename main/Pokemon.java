@@ -14,8 +14,9 @@ public class Pokemon extends Card{
     char resistance;
     ArrayList<Attack> attacks;
     ArrayList<Energy> energies = new ArrayList<Energy>();
+    int retreatCost;
 
-    public Pokemon(String name, String type, int stage, int hp, char weakness, char resistance, ArrayList<Attack> attacks) {
+    public Pokemon(String name, String type, int stage, int hp, char weakness, char resistance, ArrayList<Attack> attacks, int retreatCost) {
         super(name);
 
         if(type.isEmpty()){
@@ -51,10 +52,11 @@ public class Pokemon extends Card{
         this.weakness = weakness;
         this.resistance = resistance;
         this.attacks = attacks;
+        this.retreatCost = retreatCost;
     }
 
     public Pokemon(String name, String type, int stage, int hp) {
-        this(name, type, stage, hp, 'Z', 'Z', new ArrayList<Attack>());
+        this(name, type, stage, hp, 'Z', 'Z', new ArrayList<Attack>(), 2);
     }
 
     public String getName() {
