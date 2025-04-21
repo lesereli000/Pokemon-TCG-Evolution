@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Pokemon extends Card{
     private static final String[] allTypes = {"Grass", "Fire", "Water", "Lightning", "Psychic", "Fighting", "Darkness",
@@ -11,10 +12,10 @@ public class Pokemon extends Card{
     int damageCounters;
     char weakness;
     char resistance;
-    int requiredEnergy;
+    ArrayList<Attack> attacks;
     ArrayList<Energy> energies = new ArrayList<Energy>();
 
-    public Pokemon(String name, String type, int stage, int hp, char weakness, char resistance, int requiredEnergy) {
+    public Pokemon(String name, String type, int stage, int hp, char weakness, char resistance, ArrayList<Attack> attacks) {
         super(name);
 
         if(type.isEmpty()){
@@ -49,11 +50,11 @@ public class Pokemon extends Card{
         damageCounters = 0;
         this.weakness = weakness;
         this.resistance = resistance;
-        this.requiredEnergy = requiredEnergy;
+        this.attacks = attacks;
     }
 
     public Pokemon(String name, String type, int stage, int hp) {
-        this(name, type, stage, hp, 'Z', 'Z', 3);
+        this(name, type, stage, hp, 'Z', 'Z', new ArrayList<Attack>());
     }
 
     public String getName() {
@@ -89,9 +90,5 @@ public class Pokemon extends Card{
 
     public void removeEnergy(Energy energy) {
         energies.remove(energy);
-    }
-
-    public boolean canAttack() {
-        return energies.size() >= this.requiredEnergy;
     }
 }

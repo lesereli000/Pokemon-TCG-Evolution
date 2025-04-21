@@ -2,6 +2,9 @@ package main;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import static org.junit.Assert.*;
 
 public class CardGeneratorTest {
@@ -47,6 +50,7 @@ public class CardGeneratorTest {
         assertEquals("Fire", p.type);
         assertEquals(120, p.hp);
         assertEquals(2, p.stage);
+        checkSingleCosts(p);
     }
 
     private void checkManyPokemonAreCorrect(Pokemon p1, Pokemon p2, Pokemon p3, Pokemon p4, Pokemon p5, Pokemon p6) {
@@ -79,5 +83,99 @@ public class CardGeneratorTest {
         assertEquals("Water", p6.type);
         assertEquals(0, p6.stage);
         assertEquals(30, p6.hp);
+
+        checkManyCosts(p1, p2, p3, p4, p5, p6);
     }
+
+    private void checkManyCosts(Pokemon p1, Pokemon p2, Pokemon p3, Pokemon p4, Pokemon p5, Pokemon p6) {
+
+        ArrayList<Attack> p1attacks = p1.attacks;
+        Attack p1attack1 = p1attacks.get(0);
+        assertEquals("Fire Spin", p1attack1.name);
+        assertEquals(100, p1attack1.damage);
+        HashMap<String, Integer> expectedCosts = new HashMap<>();
+        expectedCosts.put("Fire", 4);
+        assertEquals(expectedCosts, p1attack1.costs);
+
+        ArrayList<Attack> p2Attacks = p2.attacks;
+        Attack p2attack1 = p2Attacks.get(0);
+        assertEquals("Gnaw", p2attack1.name);
+        assertEquals(10, p2attack1.damage);
+        HashMap<String, Integer> p2attack1ExpectedCosts = new HashMap<>();
+        p2attack1ExpectedCosts.put("Colorless", 1);
+        assertEquals(p2attack1ExpectedCosts, p2attack1.costs);
+        Attack p2attack2 = p2Attacks.get(1);
+        assertEquals("Thunder Jolt", p2attack2.name);
+        assertEquals(30, p2attack2.damage);
+        HashMap<String, Integer> p2attack2ExpectedCosts = new HashMap<>();
+        p2attack2ExpectedCosts.put("Lightning", 1);
+        p2attack2ExpectedCosts.put("Colorless", 1);
+        assertEquals(p2attack2ExpectedCosts, p2attack2.costs);
+
+        ArrayList<Attack> p3Attacks = p3.attacks;
+        Attack p3attack1 = p3Attacks.get(0);
+        assertEquals("Bubble", p3attack1.name);
+        assertEquals(10, p3attack1.damage);
+        HashMap<String, Integer> p3attackExpectedCosts = new HashMap<>();
+        p3attackExpectedCosts.put("Water", 1);
+        assertEquals(p3attackExpectedCosts, p3attack1.costs);
+        Attack p3attack2 = p3Attacks.get(1);
+        assertEquals("Withdraw", p3attack2.name);
+        assertEquals(20, p3attack2.damage);
+        p3attackExpectedCosts.put("Colorless", 1);
+        assertEquals(p3attackExpectedCosts, p3attack2.costs);
+
+        ArrayList<Attack> p4Attacks = p4.attacks;
+        Attack p4attack = p4Attacks.get(0);
+        assertEquals("Confuse Ray", p4attack.name);
+        assertEquals(30, p4attack.damage);
+        HashMap<String, Integer> p4attackExpectedCost = new HashMap<>();
+        p4attackExpectedCost.put("Psychic", 3);
+        assertEquals(p4attackExpectedCost, p4attack.costs);
+
+        ArrayList<Attack> p5Attacks = p5.attacks;
+        Attack p5attack1 = p5Attacks.get(0);
+        assertEquals("Flamethrower", p5attack1.name);
+        assertEquals(50, p5attack1.damage);
+        HashMap<String, Integer> p5attack1ExpectedCost = new HashMap<>();
+        p5attack1ExpectedCost.put("Fire", 2);
+        p5attack1ExpectedCost.put("Colorless", 1);
+        assertEquals(p5attack1ExpectedCost, p5attack1.costs);
+        Attack p5attack2 = p5Attacks.get(1);
+        assertEquals("Take Down", p5attack2.name);
+        assertEquals(80, p5attack2.damage);
+        HashMap<String, Integer> p5attack2ExpectedCost = new HashMap<>();
+        p5attack2ExpectedCost.put("Fire", 2);
+        p5attack2ExpectedCost.put("Colorless", 2);
+        assertEquals(p5attack2ExpectedCost, p5attack2.costs);
+
+        ArrayList<Attack> p6Attacks = p6.attacks;
+        Attack p6attack1 = p6Attacks.get(0);
+        assertEquals("Tackle", p6attack1.name);
+        assertEquals(10, p6attack1.damage);
+        HashMap<String, Integer> p6attack1ExpectedCost = new HashMap<>();
+        p6attack1ExpectedCost.put("Colorless", 1);
+        assertEquals(p6attack1ExpectedCost, p6attack1.costs);
+        Attack p6attack2 = p6Attacks.get(1);
+        assertEquals("Flail", p6attack2.name);
+        assertEquals(10, p6attack2.damage);
+        HashMap<String, Integer> p6attack2ExpectedCost = new HashMap<>();
+        p6attack2ExpectedCost.put("Water", 1);
+        assertEquals(p6attack2ExpectedCost, p6attack2.costs);
+    }
+
+    private void checkSingleCosts(Pokemon p) {
+        ArrayList<Attack> attacks = p.attacks;
+
+        Attack attack1 = attacks.get(0);
+
+        assertEquals("Fire Spin", attack1.name);
+        assertEquals(100, attack1.damage);
+
+        HashMap<String, Integer> expectedCosts = new HashMap<>();
+        expectedCosts.put("Fire", 4);
+
+        assertEquals(expectedCosts, attack1.costs);
+    }
+
 }

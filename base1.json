@@ -88,7 +88,7 @@
           "Water"
         ],
         "convertedEnergyCost": 3,
-        "damage": "40+",
+        "damage": "40",
         "text": "Does 40 damage plus 10 more damage for each Water Energy attached to Blastoise but not used to pay for this attack's Energy cost. Extra Water Energy after the 2nd doesn't count."
       }
     ],
@@ -142,7 +142,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 2,
-        "damage": "",
+        "damage": "20",
         "text": "Flip a coin. If heads, prevent all damage done to Chansey during your opponent's next turn. (Any other effects of attacks still happen.)"
       },
       {
@@ -278,7 +278,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 1,
-        "damage": "",
+        "damage": "20",
         "text": "Flip a coin. If heads, the Defending Pokémon is now Asleep."
       },
       {
@@ -289,7 +289,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 3,
-        "damage": "",
+        "damage": "20",
         "text": "Choose 1 of the Defending Pokémon's attacks. Metronome copies that attack except for its Energy costs and anything else required in order to use that attack, such as discarding Energy cards. (No matter what type the Defending Pokémon is, Clefairy's type is still Colorless.)"
       }
     ],
@@ -602,7 +602,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 2,
-        "damage": "10+",
+        "damage": "10",
         "text": "Does 10 damage plus 10 more damage for each Energy card attached to the Defending Pokémon."
       },
       {
@@ -612,7 +612,7 @@
           "Psychic"
         ],
         "convertedEnergyCost": 2,
-        "damage": "",
+        "damage": "20",
         "text": "Discard 1 Psychic Energy card attached to Mewtwo in order to prevent all effects of attacks, including damage, done to Mewtwo during your opponent's next turn."
       }
     ],
@@ -665,7 +665,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 3,
-        "damage": "30+",
+        "damage": "30",
         "text": "Flip a coin. If heads, this attack does 30 damage plus 10 more damage; if tails, this attack does 30 damage and Nidoking does 10 damage to itself."
       },
       {
@@ -728,7 +728,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 2,
-        "damage": "",
+        "damage": "20",
         "text": "If your opponent has any Benched Pokémon, choose 1 of them and switch it with his or her Active Pokémon."
       },
       {
@@ -791,7 +791,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 3,
-        "damage": "30+",
+        "damage": "30",
         "text": "Does 30 damage plus 10 more damage for each Water Energy attached to Poliwrath but not used to pay for this attack's Energy cost. Extra Water Energy after the 2nd doesn't count."
       },
       {
@@ -1044,7 +1044,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 3,
-        "damage": "30×",
+        "damage": "30",
         "text": "Flip 2 coins. This attack does 30 damage times the number of heads."
       },
       {
@@ -1111,7 +1111,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 3,
-        "damage": "30×",
+        "damage": "30",
         "text": "Flip 2 coins. This attack does 30 damage times the number of heads."
       },
       {
@@ -1255,7 +1255,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 2,
-        "damage": "30+",
+        "damage": "30",
         "text": "Flip a coin. If heads, this attack does 30 damage plus 10 more damage; if tails, this attack does 30 damage plus Electabuzz does 10 damage to itself."
       }
     ],
@@ -1378,7 +1378,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 3,
-        "damage": "",
+        "damage": "20",
         "text": "If Pidgeotto was attacked last turn, do the final result of that attack on Pidgeotto to the Defending Pokémon."
       }
     ],
@@ -1802,7 +1802,7 @@
           "Psychic"
         ],
         "convertedEnergyCost": 1,
-        "damage": "",
+        "damage": "20",
         "text": "The Defending Pokémon is now Asleep."
       },
       {
@@ -1925,7 +1925,7 @@
           "Psychic"
         ],
         "convertedEnergyCost": 1,
-        "damage": "10×",
+        "damage": "10",
         "text": "Flip 2 coins. This attack does 10 damage times the number of heads."
       },
       {
@@ -1936,7 +1936,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 3,
-        "damage": "20+",
+        "damage": "20",
         "text": "Does 20 damage plus 10 more damage for each damage counter on the Defending Pokémon."
       }
     ],
@@ -1990,7 +1990,7 @@
           "Psychic"
         ],
         "convertedEnergyCost": 2,
-        "damage": "",
+        "damage": "20",
         "text": "Discard 1 Psychic Energy card attached to Kadabra in order to use this attack. Remove all damage counters from Kadabra."
       },
       {
@@ -2056,7 +2056,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 2,
-        "damage": "",
+        "damage": "20",
         "text": "Flip a coin. If heads, prevent all damage done to Kakuna during your opponent's next turn. (Any other effects of attacks still happen.)"
       },
       {
@@ -2121,7 +2121,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 3,
-        "damage": "50-",
+        "damage": "50",
         "text": "Does 50 damage minus 10 damage for each damage counter on Machoke."
       },
       {
@@ -2195,7 +2195,7 @@
           "Water"
         ],
         "convertedEnergyCost": 1,
-        "damage": "10×",
+        "damage": "10",
         "text": "Does 10 damage times the number of damage counters on Magikarp."
       }
     ],
@@ -2313,7 +2313,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 3,
-        "damage": "30×",
+        "damage": "30",
         "text": "Flip 2 coins. This attack does 30 damage times the number of heads."
       },
       {
@@ -2379,7 +2379,7 @@
           "Water"
         ],
         "convertedEnergyCost": 2,
-        "damage": "",
+        "damage": "20",
         "text": "Choose 1 of the Defending Pokémon's attacks. That Pokémon can't use that attack during your opponent's next turn."
       },
       {
@@ -2390,7 +2390,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 3,
-        "damage": "30×",
+        "damage": "30",
         "text": "Flip 2 coins. This attack does 30 damage times the number of heads."
       }
     ],
@@ -2441,7 +2441,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 1,
-        "damage": "",
+        "damage": "20",
         "text": "If the Defending Pokémon has a Weakness, you may change it to a type of your choice other than Colorless."
       },
       {
@@ -2451,7 +2451,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 2,
-        "damage": "",
+        "damage": "20",
         "text": "Change Porygon's Resistance to a type of your choice other than Colorless."
       }
     ],
@@ -2517,7 +2517,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 3,
-        "damage": "?",
+        "damage": "20",
         "text": "Does damage to the Defending Pokémon equal to half the Defending Pokémon's remaining HP (rounded up to the nearest 10)."
       }
     ],
@@ -2627,7 +2627,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 2,
-        "damage": "",
+        "damage": "20",
         "text": "Flip a coin. If heads, prevent all damage done to Wartortle during your opponent's next turn. (Any other effects of attacks still happen.)"
       },
       {
@@ -2964,7 +2964,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 1,
-        "damage": "10×",
+        "damage": "10",
         "text": "Flip 2 coins. This attack does 10 damage times the number of heads."
       }
     ],
@@ -3078,7 +3078,7 @@
           "Psychic"
         ],
         "convertedEnergyCost": 1,
-        "damage": "",
+        "damage": "20",
         "text": "Flip a coin. If heads, the Defending Pokémon is now Asleep."
       },
       {
@@ -3088,7 +3088,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 2,
-        "damage": "",
+        "damage": "20",
         "text": "Discard 1 Psychic Energy card attached to Gastly in order to use this attack. If a Pokémon Knocks Out Gastly during your opponent's next turn, Knock Out that Pokémon."
       }
     ],
@@ -3301,7 +3301,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 2,
-        "damage": "",
+        "damage": "20",
         "text": "Flip a coin. If heads, prevent all damage done to Metapod during your opponent's next turn. (Any other effects of attacks still happen.)"
       },
       {
@@ -3424,7 +3424,7 @@
           "Fighting"
         ],
         "convertedEnergyCost": 2,
-        "damage": "",
+        "damage": "20",
         "text": "During your opponent's next turn, whenever 30 or less damage is done to Onix (after applying Weakness and Resistance), prevent that damage. (Any other effects of attacks still happen.)"
       }
     ],
@@ -3596,7 +3596,7 @@
           "Water"
         ],
         "convertedEnergyCost": 1,
-        "damage": "10+",
+        "damage": "10",
         "text": "Does 10 damage plus 10 more damage for each Water Energy attached to Poliwag but not used to pay for this attack's Energy cost. Extra Water Energy after the 2nd don't count."
       }
     ],
@@ -3829,7 +3829,7 @@
           "Colorless"
         ],
         "convertedEnergyCost": 2,
-        "damage": "",
+        "damage": "20",
         "text": "Flip a coin. If heads, prevent all damage done to Squirtle during your opponent's next turn. (Any other effects of attacks still happen.)"
       }
     ],
@@ -3879,7 +3879,7 @@
           "Water"
         ],
         "convertedEnergyCost": 2,
-        "damage": "",
+        "damage": "20",
         "text": "Discard 1 Water Energy card attached to Starmie in order to use this attack. Remove all damage counters from Starmie."
       },
       {

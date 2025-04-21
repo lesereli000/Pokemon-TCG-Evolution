@@ -81,7 +81,7 @@ public class GameTest {
         GUI gui = createMock(GUI.class);
         Player p1 = createMock(Player.class);
         Player p2 = createMock(Player.class);
-        Card card = new Pokemon("Beedrill", "Grass", 1, 100, 'f', 'p',1);
+        Card card = new Pokemon("Beedrill", "Grass", 1, 100);
         expect(gui.getLastSelectedCard()).andReturn(card).anyTimes();
         gui.displayMessage("Basic Pokemon has not been selected!");
         replay(gui);

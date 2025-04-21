@@ -110,7 +110,7 @@ public class Player {
 
     public boolean canAttack(){
         // TODO: check energy requirements for moves.
-        return activePokemon.canAttack();
+        return true;
 
     }
 

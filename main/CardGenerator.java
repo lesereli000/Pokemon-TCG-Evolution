@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CardGenerator {
 
@@ -14,10 +16,11 @@ public class CardGenerator {
     private int hp;
     private int stage;
     private Card card;
-    private int requiredEnergies;
+    private ArrayList<Attack> attacks;
 
     // When given the name of a card, should be able to create a card object with all desired information
     public Card generateCard(String name) {
+        attacks = new ArrayList<Attack>();
         this.name = name;
 
         if(this.name.isEmpty()){
@@ -44,7 +47,27 @@ public class CardGenerator {
                         } else {
                             this.stage = Integer.parseInt(wholeStage.substring(wholeStage.length() - 1));
                         }
-                        card = new Pokemon(this.name, type, stage, hp, 'Z', 'Z', 2);
+
+                        JSONArray jsonAttacks = pokemonArray.getJSONObject(i).getJSONArray("attacks");
+                        for(int j = 0; j < jsonAttacks.length(); j++) {
+                            String attackName = jsonAttacks.getJSONObject(j).getString("name");
+                            int damage = Integer.parseInt(jsonAttacks.getJSONObject(j).getString("damage"));
+                            JSONArray jsonCosts = jsonAttacks.getJSONObject(j).getJSONArray("cost");
+                            HashMap<String, Integer> attackCosts = new HashMap<>();
+                            for(int k = 0; k < jsonCosts.length(); k++) {
+                                String currentEnergy = jsonCosts.getString(k);
+                                if(attackCosts.containsKey(currentEnergy)) {
+                                    int newAmountEnergy = attackCosts.get(currentEnergy) + 1;
+                                    attackCosts.put(currentEnergy, newAmountEnergy);
+                                } else {
+                                    attackCosts.put(currentEnergy, 1);
+                                }
+                            }
+
+                            Attack newAttack = new Attack(attackName, attackCosts, damage);
+                            this.attacks.add(newAttack);
+                        }
+                        card = new Pokemon(this.name, type, stage, hp, 'Z', 'Z', attacks);
                     } else if (supertype.equals("Energy")) {
                         card = new Energy(this.name);
                     } else {

@@ -131,7 +131,6 @@ public class Game {
             //(Trainer) lastSelectedCard.doEffects(player1, player2, playerTurn);
         } else {
             gui.displayMessage("Playable card has not been selected");
-            mainGameLoop();
         }
     }
 
@@ -183,21 +182,21 @@ public class Game {
     }
 
     private void attack() {
-        if (curPlayer.canAttack()) {
-            Player defendingPlayer;
-            if (curPlayer.equals(player1)) {
-                defendingPlayer = player2;
-            } else {
-                defendingPlayer = player1;
-            }
-
-            // TODO: the rest of the attack code
-            defendingPlayer.takeDamage(2, 'a');
-            gui.displayMessage(defendingPlayer.getName() + " has been attacked!\nThey have " + defendingPlayer.getActiveHP() + " HP remaining");
-            passTurn();
-        } else {
-            gui.displayMessage("You cannot attack right now");
-        }
+//        if (curPlayer.canAttack()) {
+//            Player defendingPlayer;
+//            if (curPlayer.equals(player1)) {
+//                defendingPlayer = player2;
+//            } else {
+//                defendingPlayer = player1;
+//            }
+//
+//            // TODO: the rest of the attack code
+//            defendingPlayer.takeDamage(2, 'a');
+//            gui.displayMessage(defendingPlayer.getName() + " has been attacked!\nThey have " + defendingPlayer.getActiveHP() + " HP remaining");
+//            passTurn();
+//        } else {
+//            gui.displayMessage("You cannot attack right now");
+//        }
         gui.removeAllButtons();
         mainGameLoop();
     }
