@@ -13,4 +13,6 @@ public class Attack {
         this.damage = damage;
     }
 
+
+
 }
