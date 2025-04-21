@@ -637,14 +637,14 @@ public class DeckTest {
     }
 
     @Test
-    public void addEmptyDeckFromFile(){
+    public void testAddEmptyDeckFromFile(){
         Deck d = new Deck();
         d.createDeckFromFile("testDeckEmpty.txt");
         assertTrue(d.size() == 0);
     }
 
     @Test
-    public void addDeckFromFileWithSize1(){
+    public void testAddDeckFromFileWithSize1(){
         Deck d = new Deck();
         d.createDeckFromFile("testDeckSize1.txt");
         assertTrue(d.size() == 1);
@@ -653,8 +653,9 @@ public class DeckTest {
         assertTrue(pika instanceof Pokemon);
         assertTrue(pika.getName().equals("Pikachu"));
     }
+
     @Test
-    public void addDeckFromFileWithMultiples(){
+    public void testAddDeckFromFileWithMultiples(){
         Deck d = new Deck();
         d.createDeckFromFile("testDeckMultipleCopies.txt");
         assertTrue(d.size() == 3);
@@ -664,5 +665,18 @@ public class DeckTest {
             assertTrue(bee instanceof Pokemon);
             assertTrue(bee.getName().equals("Beedrill"));
         }
+    }
+
+    @Test
+    public void testAddDeckFromFileWithTooManyCards(){
+        Deck d = new Deck();
+        try{
+            d.createDeckFromFile("testDeckWithTooManyCards.txt");
+            fail("Did not throw Too Many Cards exception");
+        }catch(RuntimeException e){
+            System.out.println(e);
+            assertTrue(true);
+        }
+
     }
 }

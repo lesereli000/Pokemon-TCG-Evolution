@@ -117,18 +117,27 @@ public class Deck {
     public void createDeckFromFile(String fileString) {
         File file = new File("DeckFiles/"+fileString);
         try (Scanner scanFile = new Scanner(file)) {
-            if(!this.fileInCorrectFormat(scanFile)){
+            if(!this.fileInCorrectFormat(file)){
                 throw new DeckInIncorrectFormatException("File " + fileString + " is in the incorrect format");
-              }
+            }
             String currPokemonLine;
-            while (scanFile.hasNext()) {
-                currPokemonLine = scanFile.nextLine();
-                int count = Integer.parseInt(currPokemonLine.split(",")[0]);
-                String name = currPokemonLine.split(",")[1];
-                for (int i = 1; i <= count; i++) {
-                    Card card = new CardGenerator().generateCard(name);
-                    this.addCard(card);
+            int total = 0;
+            try {
+                while (scanFile.hasNext()) {
+                    currPokemonLine = scanFile.nextLine();
+                    int count = Integer.parseInt(currPokemonLine.split(",")[0]);
+                    total += count;
+                    String name = currPokemonLine.split(",")[1];
+                    for (int i = 1; i <= count; i++) {
+                        Card card = new CardGenerator().generateCard(name);
+                        this.addCard(card);
+                    }
                 }
+            }catch(Exception e){
+                throw new DeckInIncorrectFormatException("Deck in the wrong format");
+            }
+            if(total>60){
+                throw new DeckInIncorrectFormatException("Deck in the wrong format");
             }
         } catch (IOException e) {
                 System.out.println("File not found when adding cards from file" + e);
@@ -136,8 +145,21 @@ public class Deck {
 
     }
 
-    private boolean fileInCorrectFormat(Scanner scan){
-        //TODO check to see if Deck file is in correct format
+    private boolean fileInCorrectFormat(File file){
+        int total = 0;
+        try (Scanner scanFile = new Scanner(file)) {
+            String currPokemonLine;
+
+                while (scanFile.hasNext()) {
+                    currPokemonLine = scanFile.nextLine();
+                    int count = Integer.parseInt(currPokemonLine.split(",")[0]);
+                    total += count;
+                    String name = currPokemonLine.split(",")[1];
+                }
+
+        } catch (IOException e) {
+            System.out.println("File not found when adding cards from file" + e);
+        }
         return true;
     }
 
