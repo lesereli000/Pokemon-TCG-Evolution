@@ -640,5 +640,17 @@ public class DeckTest {
     public void addEmptyDeckFromFile(){
         Deck d = new Deck();
         d.createDeckFromFile("testDeckEmpty.txt");
+        assertTrue(d.size() == 0);
+    }
+
+    @Test
+    public void addDeckFromFileWithSize1(){
+        Deck d = new Deck();
+        d.createDeckFromFile("testDeckSize1.txt");
+        assertTrue(d.size() == 1);
+        ArrayList<Card> deck = d.getCards();
+        Card pika = deck.get(0);
+        assertTrue(pika instanceof Pokemon);
+        assertTrue(pika.getName().equals("Pikachu"));
     }
 }
