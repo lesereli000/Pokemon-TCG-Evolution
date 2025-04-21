@@ -50,6 +50,7 @@ public class CardGeneratorTest {
         assertEquals("Fire", p.type);
         assertEquals(120, p.hp);
         assertEquals(2, p.stage);
+        assertEquals(3, p.retreatCost);
         checkSingleCosts(p);
     }
 
@@ -58,31 +59,39 @@ public class CardGeneratorTest {
         assertEquals("Fire", p1.type);
         assertEquals(2, p1.stage);
         assertEquals(120, p1.hp);
+        assertEquals(3, p1.retreatCost);
 
         assertEquals("Pikachu", p2.getName());
         assertEquals("Lightning", p2.type);
         assertEquals(0, p2.stage);
         assertEquals(40, p2.hp);
+        assertEquals(1, p2.retreatCost);
 
         assertEquals("Squirtle", p3.getName());
         assertEquals("Water", p3.type);
         assertEquals(0, p3.stage);
         assertEquals(40, p3.hp);
+        assertEquals(1, p3.retreatCost);
+
 
         assertEquals("Alakazam", p4.getName());
         assertEquals("Psychic", p4.type);
         assertEquals(2, p4.stage);
         assertEquals(80, p4.hp);
+        assertEquals(3, p4.retreatCost);
+
 
         assertEquals("Arcanine", p5.getName());
         assertEquals("Fire", p5.type);
         assertEquals(1, p5.stage);
         assertEquals(100, p5.hp);
+        assertEquals(3, p5.retreatCost);
 
         assertEquals("Magikarp", p6.getName());
         assertEquals("Water", p6.type);
         assertEquals(0, p6.stage);
         assertEquals(30, p6.hp);
+        assertEquals(1, p6.retreatCost);
 
         checkManyCosts(p1, p2, p3, p4, p5, p6);
     }

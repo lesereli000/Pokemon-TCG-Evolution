@@ -182,6 +182,26 @@ public class Game {
     }
 
     private void attack() {
+        //display attack properities
+        Pokemon activePokemon = (Pokemon) curPlayer.getActivePokemon();
+        ArrayList<Attack> attacks = activePokemon.attacks;
+        String pokemonAttackMessage = activePokemon.getName() + ":\n";
+
+        for(Attack a: attacks) {
+            pokemonAttackMessage += "\n" + a.name + "\n - Cost:  " + a.costs + "\n - Damage:  " + a.damage + "\n";
+        }
+
+        gui.displayMessage(pokemonAttackMessage);
+
+        //show attack options
+
+        //let player choose attack
+
+        //make sure pokemon has enough energy to attack
+
+        //conduct attack
+
+
 //        if (curPlayer.canAttack()) {
 //            Player defendingPlayer;
 //            if (curPlayer.equals(player1)) {

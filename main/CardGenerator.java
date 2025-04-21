@@ -1,6 +1,8 @@
 package main;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,6 +17,7 @@ public class CardGenerator {
     private String effects;
     private int hp;
     private int stage;
+    private int retreatCost;
     private Card card;
     private ArrayList<Attack> attacks;
 
@@ -41,6 +44,11 @@ public class CardGenerator {
                         //Normal Pokemon
                         this.type = pokemonArray.getJSONObject(i).getJSONArray("types").getString(0);
                         this.hp = pokemonArray.getJSONObject(i).getInt("hp");
+                        try {
+                            this.retreatCost = pokemonArray.getJSONObject(i).getInt("convertedRetreatCost");
+                        } catch (JSONException e) {
+                            this.retreatCost = 1;
+                        }
                         String wholeStage = pokemonArray.getJSONObject(i).getJSONArray("subtypes").getString(0);
                         if (wholeStage.equals("Basic")) {
                             this.stage = 0;
@@ -67,7 +75,7 @@ public class CardGenerator {
                             Attack newAttack = new Attack(attackName, attackCosts, damage);
                             this.attacks.add(newAttack);
                         }
-                        card = new Pokemon(this.name, type, stage, hp, 'Z', 'Z', attacks);
+                        card = new Pokemon(this.name, type, stage, hp, 'Z', 'Z', attacks, retreatCost);
                     } else if (supertype.equals("Energy")) {
                         card = new Energy(this.name);
                     } else {
