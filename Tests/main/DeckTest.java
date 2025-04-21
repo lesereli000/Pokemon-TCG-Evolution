@@ -653,4 +653,16 @@ public class DeckTest {
         assertTrue(pika instanceof Pokemon);
         assertTrue(pika.getName().equals("Pikachu"));
     }
+    @Test
+    public void addDeckFromFileWithMultiples(){
+        Deck d = new Deck();
+        d.createDeckFromFile("testDeckMultipleCopies.txt");
+        assertTrue(d.size() == 3);
+        ArrayList<Card> deck = d.getCards();
+        for(int i = 0; i < deck.size(); i++){
+            Card bee = deck.get(i);
+            assertTrue(bee instanceof Pokemon);
+            assertTrue(bee.getName().equals("Beedrill"));
+        }
+    }
 }
