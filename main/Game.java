@@ -18,6 +18,7 @@ public class Game {
     private int turn;
     private Player defendingPlayer;
     private Energy selectedEnergy;
+    private Attack selectedAttack;
 
     public Game(GUI gui, Random rand, Player player1, Player player2) {
         this.player1 = player1;
@@ -194,22 +195,21 @@ public class Game {
 
         gui.displayMessage(pokemonAttackMessage);
 
-        //let player choose attack
-        gui.removeAllButtons();
-        gui.displayAttacks(attacks, this::sendAttack, "Select Attack");
+        //let player choose attack\
+        if (curPlayer.canAttack()) {
+            gui.removeAllButtons();
+            gui.displayAttacks(attacks, this::sendAttack, "Select Attack");
 
-        //make sure Pokémon has enough energy to attack
+            //make sure Pokémon has enough energy to attack
+
+        }
+
 
         //conduct attack
 
 
-//        if (curPlayer.canAttack()) {
-//            Player defendingPlayer;
-//            if (curPlayer.equals(player1)) {
-//                defendingPlayer = player2;
-//            } else {
-//                defendingPlayer = player1;
-//            }
+
+
 //
 //            // TODO: the rest of the attack code
 //            defendingPlayer.takeDamage(2, 'a');
@@ -223,7 +223,20 @@ public class Game {
     }
 
     private void sendAttack() {
+        Attack lastSelectedAttack = gui.getLastSelectedAttack();
+        Pokemon actvPokemon = (Pokemon) curPlayer.getActivePokemon();
 
+        if(curPlayer.equals(player1)) {
+            Player defendingPlayer = player2;
+        } else {
+            Player defendingPlayer = player1;
+        }
+
+
+        if(actvPokemon.energies.contains(lastSelectedAttack.costs)) {
+            defendingPlayer.takeDamage(lastSelectedAttack.damage, actvPokemon.type);
+
+        }
     }
 
     private boolean gameOver() {

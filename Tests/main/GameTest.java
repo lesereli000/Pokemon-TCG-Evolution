@@ -158,7 +158,22 @@ public class GameTest {
         assertEquals(pok5, returnedCards.get(4));
     }
 
+    @Test
+    public void testBasicAttack() {
+        Random rand = createMock(Random.class);
+        GUI gui = createMock(GUI.class);
+        Player p1 = createMock(Player.class);
+        Player p2 = createMock(Player.class);
+        Pokemon attackingPokemon = createMock(Pokemon.class);
+        Pokemon defendingPokemon = createMock(Pokemon.class);
 
+        Game game = new Game(gui, rand, p1, p2, true);
+
+        p1.setActivePokemon(attackingPokemon);
+        p2.setActivePokemon(defendingPokemon);
+
+
+    }
 
 //    @Test //Doesn't work because of Runnables
 //    public void testSelectBasicPokemonToActive() {

@@ -136,7 +136,7 @@ public class PokemonTest {
     @Test
     public void testBaseDamage() {
         Pokemon p = new Pokemon("Pikachu", "Lightning", 1, 40);
-        p.takeDamage(1, 'F');
+        p.takeDamage(1, "F");
         assertEquals(30, p.getCurHP());
     }
 

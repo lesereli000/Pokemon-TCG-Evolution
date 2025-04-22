@@ -1,7 +1,6 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Pokemon extends Card{
     private static final String[] allTypes = {"Grass", "Fire", "Water", "Lightning", "Psychic", "Fighting", "Darkness",
@@ -10,13 +9,13 @@ public class Pokemon extends Card{
     int stage;
     int hp;
     int damageCounters;
-    char weakness;
-    char resistance;
+    String weakness;
+    String resistance;
     ArrayList<Attack> attacks;
     ArrayList<Energy> energies = new ArrayList<Energy>();
     int retreatCost;
 
-    public Pokemon(String name, String type, int stage, int hp, char weakness, char resistance, ArrayList<Attack> attacks, int retreatCost) {
+    public Pokemon(String name, String type, int stage, int hp, String weakness, String resistance, ArrayList<Attack> attacks, int retreatCost) {
         super(name);
 
         if(type.isEmpty()){
@@ -56,7 +55,7 @@ public class Pokemon extends Card{
     }
 
     public Pokemon(String name, String type, int stage, int hp) {
-        this(name, type, stage, hp, 'Z', 'Z', new ArrayList<Attack>(), 2);
+        this(name, type, stage, hp, "Z", "Z", new ArrayList<Attack>(), 2);
     }
 
     public String getName() {
@@ -65,7 +64,7 @@ public class Pokemon extends Card{
 
     public int getStage() {return this.stage;}
 
-    public void takeDamage(int damageCountersTaken, char damageType) {
+    public void takeDamage(int damageCountersTaken, String damageType) {
         if(damageType == resistance) {
             damageCountersTaken--;
         } else if (damageType == weakness) {

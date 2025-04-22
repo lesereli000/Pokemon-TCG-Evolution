@@ -61,21 +61,16 @@ public class CardGenerator {
                             String attackName = jsonAttacks.getJSONObject(j).getString("name");
                             int damage = Integer.parseInt(jsonAttacks.getJSONObject(j).getString("damage"));
                             JSONArray jsonCosts = jsonAttacks.getJSONObject(j).getJSONArray("cost");
-                            HashMap<String, Integer> attackCosts = new HashMap<>();
+                            ArrayList<Energy> attackCosts = new ArrayList<>();
                             for(int k = 0; k < jsonCosts.length(); k++) {
-                                String currentEnergy = jsonCosts.getString(k);
-                                if(attackCosts.containsKey(currentEnergy)) {
-                                    int newAmountEnergy = attackCosts.get(currentEnergy) + 1;
-                                    attackCosts.put(currentEnergy, newAmountEnergy);
-                                } else {
-                                    attackCosts.put(currentEnergy, 1);
-                                }
+                                Energy currentEnergy = new Energy(jsonCosts.getString(k));
+                                attackCosts.add(currentEnergy);
                             }
 
                             Attack newAttack = new Attack(attackName, attackCosts, damage);
                             this.attacks.add(newAttack);
                         }
-                        card = new Pokemon(this.name, type, stage, hp, 'Z', 'Z', attacks, retreatCost);
+                        card = new Pokemon(this.name, type, stage, hp, "Z", "Z", attacks, retreatCost);
                     } else if (supertype.equals("Energy")) {
                         card = new Energy(this.name);
                     } else {

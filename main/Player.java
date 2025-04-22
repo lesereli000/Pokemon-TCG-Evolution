@@ -110,12 +110,22 @@ public class Player {
     }
 
     public boolean canAttack(){
-        // TODO: check energy requirements for moves.
-        return true;
+        Pokemon activePokemon = this.activePokemon;
+        if (activePokemon != null) { return false; }
 
+        ArrayList<Energy> pokemonEnergies = activePokemon.energies;
+        ArrayList<Attack> pokemonAttacksCost = activePokemon.attacks;
+
+        for(Attack attack: pokemonAttacksCost){
+            if(activePokemon.energies.contains(attack.costs)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    public void takeDamage(int damageCounters, char damageType) {
+    public void takeDamage(int damageCounters, String damageType) {
         activePokemon.takeDamage(damageCounters, damageType);
     }
 
