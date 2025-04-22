@@ -1,0 +1,16 @@
+1,Gyarados
+2,Magikarp
+3,Starmie
+4,Staryu
+1,Beedrill
+2,Kakuna
+2,Ivysaur
+4,Weedle
+4,Bulbasaur
+1,Potion
+2,Bill
+2,Super Potion
+2,Switch
+2,Gust of Wind
+12,Water Energy	Water
+16,Grass Energy

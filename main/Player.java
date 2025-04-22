@@ -27,12 +27,13 @@ public class Player {
         this.name = name;
     }
 
-    public void createFullDeck(Random rand) {
+    public void createFullRandomDeck(Random rand) {
         this.deck.addEnergies(15, rand);
         this.deck.addRandomCards(45, rand);
         this.deck.shuffle();
         checkForBasics(rand);
     }
+
 
     public void drawCard(){
         Card drawnCard = deck.removeTopCard();
@@ -43,7 +44,7 @@ public class Player {
         while(this.deck.numberBasicPokemon() == 0) {
             System.out.println(this.name + " does not have any basic cards!");
             this.deck = new Deck();
-            createFullDeck(rand);
+            createFullRandomDeck(rand);
         }
     }
 

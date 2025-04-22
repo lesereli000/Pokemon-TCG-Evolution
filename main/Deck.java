@@ -1,11 +1,11 @@
 package main;
 
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 import org.json.JSONArray;
 
@@ -114,6 +114,55 @@ public class Deck {
         }
     }
 
+    public void createDeckFromFile(String fileString) {
+        File file = new File("DeckFiles/"+fileString);
+        try (Scanner scanFile = new Scanner(file)) {
+            if(!this.fileInCorrectFormat(file)){
+                throw new DeckInIncorrectFormatException("File " + fileString + " is in the incorrect format");
+            }
+            String currPokemonLine;
+            int total = 0;
+            try {
+                while (scanFile.hasNext()) {
+                    currPokemonLine = scanFile.nextLine();
+                    int count = Integer.parseInt(currPokemonLine.split(",")[0]);
+                    total += count;
+                    String name = currPokemonLine.split(",")[1];
+                    for (int i = 1; i <= count; i++) {
+                        Card card = new CardGenerator().generateCard(name);
+                        this.addCard(card);
+                    }
+                }
+            }catch(Exception e){
+                throw new DeckInIncorrectFormatException("Deck in the wrong format");
+            }
+            if(total>60){
+                throw new DeckInIncorrectFormatException("Deck in the wrong format");
+            }
+        } catch (IOException e) {
+                System.out.println("File not found when adding cards from file" + e);
+        }
+
+    }
+
+    private boolean fileInCorrectFormat(File file){
+        int total = 0;
+        try (Scanner scanFile = new Scanner(file)) {
+            String currPokemonLine;
+
+                while (scanFile.hasNext()) {
+                    currPokemonLine = scanFile.nextLine();
+                    int count = Integer.parseInt(currPokemonLine.split(",")[0]);
+                    total += count;
+                    String name = currPokemonLine.split(",")[1];
+                }
+
+        } catch (IOException e) {
+            System.out.println("File not found when adding cards from file" + e);
+        }
+        return true;
+    }
+
     public static class TooManyRepeatsException extends RuntimeException {
         public TooManyRepeatsException(String message) {
             super(message);
@@ -130,5 +179,8 @@ public class Deck {
         public CardDoesNotExist(String message) {
             super(message);
         }
+    }
+    public static class DeckInIncorrectFormatException extends RuntimeException {
+        public DeckInIncorrectFormatException(String message) {super(message); }
     }
 }

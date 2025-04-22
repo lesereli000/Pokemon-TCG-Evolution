@@ -48,9 +48,9 @@ public class GameTest {
         Player p1 = createMock(Player.class);
         Player p2 = createMock(Player.class);
 
-        p1.createFullDeck(rand);
+        p1.createFullRandomDeck(rand);
         p1.drawStartingHand();
-        p2.createFullDeck(rand);
+        p2.createFullRandomDeck(rand);
         p2.drawStartingHand();
         replay(p1, p2);
 

@@ -635,4 +635,48 @@ public class DeckTest {
 
         assertNotEquals(originalDeck, shuffledDeck);
     }
+
+    @Test
+    public void testAddEmptyDeckFromFile(){
+        Deck d = new Deck();
+        d.createDeckFromFile("testDeckEmpty.txt");
+        assertTrue(d.size() == 0);
+    }
+
+    @Test
+    public void testAddDeckFromFileWithSize1(){
+        Deck d = new Deck();
+        d.createDeckFromFile("testDeckSize1.txt");
+        assertTrue(d.size() == 1);
+        ArrayList<Card> deck = d.getCards();
+        Card pika = deck.get(0);
+        assertTrue(pika instanceof Pokemon);
+        assertTrue(pika.getName().equals("Pikachu"));
+    }
+
+    @Test
+    public void testAddDeckFromFileWithMultiples(){
+        Deck d = new Deck();
+        d.createDeckFromFile("testDeckMultipleCopies.txt");
+        assertTrue(d.size() == 3);
+        ArrayList<Card> deck = d.getCards();
+        for(int i = 0; i < deck.size(); i++){
+            Card bee = deck.get(i);
+            assertTrue(bee instanceof Pokemon);
+            assertTrue(bee.getName().equals("Beedrill"));
+        }
+    }
+
+    @Test
+    public void testAddDeckFromFileWithTooManyCards(){
+        Deck d = new Deck();
+        try{
+            d.createDeckFromFile("testDeckWithTooManyCards.txt");
+            fail("Did not throw Too Many Cards exception");
+        }catch(RuntimeException e){
+            System.out.println(e);
+            assertTrue(true);
+        }
+
+    }
 }

@@ -61,10 +61,10 @@ public class Game {
     }
 
     void setupDecks() {
-        player1.createFullDeck(random);
+        player1.createFullRandomDeck(random);
         player1.drawStartingHand();
 
-        player2.createFullDeck(random);
+        player2.createFullRandomDeck(random);
         player2.drawStartingHand();
     }
 
