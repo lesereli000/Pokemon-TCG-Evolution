@@ -156,7 +156,6 @@ public class GameTest {
         assertEquals(pok3, returnedCards.get(2));
         assertEquals(pok4, returnedCards.get(3));
         assertEquals(pok5, returnedCards.get(4));
-
     }
 
 

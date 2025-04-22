@@ -182,22 +182,23 @@ public class Game {
     }
 
     private void attack() {
-        //display attack properities
         Pokemon activePokemon = (Pokemon) curPlayer.getActivePokemon();
         ArrayList<Attack> attacks = activePokemon.attacks;
         String pokemonAttackMessage = activePokemon.getName() + ":\n";
 
         for(Attack a: attacks) {
-            pokemonAttackMessage += "\n" + a.name + "\n - Cost:  " + a.costs + "\n - Damage:  " + a.damage + "\n";
+            pokemonAttackMessage += "\n" + a.name
+                    + "\n - Cost:  " + a.costs
+                    + "\n - Damage:  " + a.damage + "\n";
         }
 
         gui.displayMessage(pokemonAttackMessage);
 
-        //show attack options
-
         //let player choose attack
+        gui.removeAllButtons();
+        gui.displayAttacks(attacks, this::sendAttack, "Select Attack");
 
-        //make sure pokemon has enough energy to attack
+        //make sure Pokémon has enough energy to attack
 
         //conduct attack
 
@@ -219,6 +220,10 @@ public class Game {
 //        }
         gui.removeAllButtons();
         mainGameLoop();
+    }
+
+    private void sendAttack() {
+
     }
 
     private boolean gameOver() {

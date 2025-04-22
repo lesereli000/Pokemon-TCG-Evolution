@@ -17,6 +17,7 @@ public class GameGUI implements GUI {
 	private GamePanel panel;
 
 	private Card lastSelectedCard;
+	private Attack lastSelectedAttack;
 	private int playerTurn = 0;
 
 	static final int backgroundLineThickness = 4;
@@ -246,6 +247,16 @@ public class GameGUI implements GUI {
 		this.lastSelectedCard = card;
 	}
 
+	private void setLastSelectedAttack(Attack attack) {
+		this.lastSelectedAttack = attack;
+	}
+
+	public Attack getLastSelectedAttack() {
+		Attack lastAttack = this.lastSelectedAttack;
+		this.lastSelectedAttack = null;
+		return lastAttack;
+	}
+
 	@Override
 	public Card getLastSelectedCard() {
 		Card lastCard = this.lastSelectedCard;
@@ -256,9 +267,17 @@ public class GameGUI implements GUI {
 	@Override
 	public void displayCards(ArrayList<Card> playerCards, Runnable makeActiveListener, String submitMessage) {
         for (Card currCard : playerCards) {
-            createLinkedButton(currCard.getName(), currCard);
+            createLinkedButtonCard(currCard.getName(), currCard);
         }
 		createButton(submitMessage, makeActiveListener);
+	}
+
+	@Override
+	public void displayAttacks(ArrayList<Attack> attacks, Runnable runAttack, String submitMessage) {
+		for(Attack currAttack: attacks) {
+			createLinkedButtonAttack(currAttack.name, currAttack);
+		}
+		createButton(submitMessage, runAttack);
 	}
 
 	@Override
@@ -277,10 +296,24 @@ public class GameGUI implements GUI {
 	}
 
 	@Override
-	public JButton createLinkedButton(String message, Card currCard) {
+	public JButton createLinkedButtonCard(String message, Card currCard) {
 		JButton btn = new JButton(message);
 		btn.addActionListener(e -> {
 			setLastSelectedCard(currCard);
+		});
+		buttons.add(btn);
+		panel.add(btn);
+		panel.repaint();
+		frame.revalidate();
+		frame.repaint();
+
+		return btn;
+	}
+
+	private JButton createLinkedButtonAttack(String name, Attack currAttack) {
+		JButton btn = new JButton(name);
+		btn.addActionListener(e -> {
+			setLastSelectedAttack(currAttack);
 		});
 		buttons.add(btn);
 		panel.add(btn);
@@ -337,4 +370,6 @@ public class GameGUI implements GUI {
 		this.playerTurn = playerTurn;
 		frame.repaint();
 	}
+
+
 }
