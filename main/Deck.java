@@ -160,6 +160,12 @@ public class Deck {
                         return "Deck has too many cards";
                     }
                     String name = currPokemonLine.split(",")[1];
+                    try {
+                        Card card = new CardGenerator().generateCard(name);
+                    } catch (RuntimeException e) {
+                        System.out.println(e.getMessage());
+                        return e.getMessage();
+                    }
                 }
         } catch (IOException e) {
             System.out.println("File not found when adding cards from file" + e);

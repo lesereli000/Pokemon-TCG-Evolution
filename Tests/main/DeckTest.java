@@ -692,4 +692,17 @@ public class DeckTest {
         }
 
     }
+    // TODO implement error catching for adding cards that dont exist.
+//    @Test
+//    public void testAddDeckFromFileWithWrongFormatCard(){
+//        Deck d = new Deck();
+//        try{
+//            d.createDeckFromFile("testDeckWithWrongFormatCard.txt");
+//            fail("Did not throw wrong format exception");
+//        }catch(Deck.DeckInIncorrectFormatException e){
+//            System.out.println(e);
+//            assertTrue(true);
+//        }
+//
+//    }
 }
