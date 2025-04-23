@@ -679,4 +679,17 @@ public class DeckTest {
         }
 
     }
+
+    @Test
+    public void testAddDeckFromFileWithWrongFormatCount(){
+        Deck d = new Deck();
+        try{
+            d.createDeckFromFile("testDeckWithWrongFormatCount.txt");
+            fail("Did not throw wrong format exception");
+        }catch(RuntimeException e){
+            System.out.println(e);
+            assertTrue(true);
+        }
+
+    }
 }

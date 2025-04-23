@@ -144,17 +144,23 @@ public class Deck {
         int total = 0;
         try (Scanner scanFile = new Scanner(file)) {
             String currPokemonLine;
-
+            int lineCount = 0;
                 while (scanFile.hasNext()) {
                     currPokemonLine = scanFile.nextLine();
-                    int count = Integer.parseInt(currPokemonLine.split(",")[0]);
+                    lineCount++;
+                    String numString = currPokemonLine.split(",")[0];
+                    int count;
+                    try{
+                        count = Integer.parseInt(numString);
+                    } catch (Exception e) {
+                        return "Count at line "+ lineCount+" in wrong format";
+                    }
                     total += count;
+                    if(total>60){
+                        return "Deck has too many cards";
+                    }
                     String name = currPokemonLine.split(",")[1];
                 }
-            if(total>60){
-                return "Deck has too many cards";
-            }
-
         } catch (IOException e) {
             System.out.println("File not found when adding cards from file" + e);
         }
