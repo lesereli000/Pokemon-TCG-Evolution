@@ -119,6 +119,10 @@ public class Player {
         return activePokemon.canAttack();
     }
 
+    public boolean canAttack(Attack attack) {
+        return activePokemon.canAttack(attack);
+    }
+
     public void takeDamage(int damageCounters, String damageType) {
         activePokemon.takeDamage(damageCounters, damageType);
     }
@@ -134,5 +138,12 @@ public class Player {
     public void addEnergyToPokemon(Pokemon selectedPokemon, Energy selectedEnergy) {
         removeFromHand(selectedEnergy);
         selectedPokemon.addEnergy(selectedEnergy);
+    }
+
+    public void removeEnergyForAttack(Attack attack) {
+        ArrayList<Energy> costs = attack.costs;
+        for (Energy cost : costs) {
+            activePokemon.removeEnergy(cost);
+        }
     }
 }

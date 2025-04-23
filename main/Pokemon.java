@@ -95,38 +95,54 @@ public class Pokemon extends Card{
         energies.remove(energy);
     }
 
-    public boolean canAttack() {
-        HashMap<String, Integer> energyCount = new HashMap<>();
-        for (Energy energy : energies) {
-            String name = energy.getName();
-            energyCount.put(name, energyCount.getOrDefault(name, 0) + 1);
+    public boolean canAttack(Attack attack) {
+        HashMap<String, Integer> energyCount = getEnergyMap();
+        HashMap<String, Integer> costCount = getCostMap(attack);
+        return canPay(energyCount, costCount);
+    }
+
+    private HashMap<String, Integer> getCostMap(Attack attack) {
+        HashMap<String, Integer> costCount = new HashMap<>();
+        for (Energy energy : attack.costs) {
+            String name = energy.name;
+            int amount = costCount.getOrDefault(name, 0) + 1;
+            costCount.put(name, amount);
         }
-        energyCount.put("Colorless Energy", numColorless());
+        return costCount;
+    }
 
+    public boolean canAttack() {
+        HashMap<String, Integer> energyCount = getEnergyMap();
         for (Attack atk : attacks) {
-            HashMap<String, Integer> costCount = new HashMap<>();
-            for (Energy energy : atk.costs) {
-                String name = energy.name;
-                int amount = costCount.getOrDefault(name, 0) + 1;
-                costCount.put(name, amount);
-            }
-
-            boolean canPay = true;
-            for (String energyType : costCount.keySet()) {
-                int required = costCount.get(energyType);
-                int available = energyCount.getOrDefault(energyType, 0);
-                if (available < required) {
-                    canPay = false;
-                    break;
-                }
-            }
-
-            if (canPay) return true;
+            HashMap<String, Integer> costCount = getCostMap(atk);
+            boolean canPay = canPay(energyCount, costCount);
+            if(canPay) return true;
         }
 
         return false;
     }
 
+    private boolean canPay(HashMap<String, Integer> energyCount, HashMap<String, Integer> costCount) {
+        for (String energyType : costCount.keySet()) {
+            int required = costCount.get(energyType);
+            int available = energyCount.getOrDefault(energyType, 0);
+            if (available < required) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public HashMap<String, Integer> getEnergyMap() {
+        HashMap<String, Integer> energyCount = new HashMap<>();
+        for (Energy energy : energies) {
+            String name = energy.getName();
+            int numEnergy = energyCount.getOrDefault(name, 0) + 1;
+            energyCount.put(name, numEnergy);
+        }
+        energyCount.put("Colorless Energy", numColorless());
+        return energyCount;
+    }
 
     public int numColorless() {
         return energies.size();

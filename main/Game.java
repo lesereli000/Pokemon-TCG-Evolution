@@ -1,7 +1,5 @@
 package main;
 
-import org.easymock.internal.matchers.Null;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
@@ -187,7 +185,6 @@ public class Game {
         Pokemon activePokemon = (Pokemon) curPlayer.getActivePokemon();
         ArrayList<Attack> attacks = activePokemon.attacks;
         String pokemonAttackMessage = activePokemon.getName() + ":\n";
-
         for(Attack a: attacks) {
             pokemonAttackMessage += "\n" + a.name
                     + "\n - Cost:  \n" + a.getCosts()
@@ -197,7 +194,7 @@ public class Game {
         gui.displayMessage(pokemonAttackMessage);
         gui.removeAllButtons();
         //let player choose attack\
-        if (curPlayer.canAttack()) {
+        if (curPlayer.canAttack() && defendingPlayer != null) {
             gui.displayAttacks(attacks, this::sendAttack, "Select Attack");
             //make sure Pokémon has enough energy to attack
         } else {
@@ -208,19 +205,19 @@ public class Game {
 
     private void sendAttack() {
         Attack lastSelectedAttack = gui.getLastSelectedAttack();
-        if((lastSelectedAttack instanceof Attack)) {
+        if((lastSelectedAttack != null) && curPlayer.canAttack(lastSelectedAttack)) {
             Pokemon actvPokemon = (Pokemon) curPlayer.getActivePokemon();
-            if (curPlayer.equals(player1)) {
-                Player defendingPlayer = player2;
-            } else {
-                Player defendingPlayer = player1;
-            }
-
-            if (actvPokemon.energies.contains(lastSelectedAttack.costs)) {
-                defendingPlayer.takeDamage(lastSelectedAttack.damage, actvPokemon.type);
-            }
+            defendingPlayer = curPlayer.equals(player1) ? player2 : player1;
+            int damage = lastSelectedAttack.damage;
+            defendingPlayer.takeDamage(damage, actvPokemon.type);
+            curPlayer.removeEnergyForAttack(lastSelectedAttack);
+            Pokemon defendingActive = (Pokemon) defendingPlayer.getActivePokemon();
+            gui.displayMessage(defendingPlayer.getName() + "'s active Pokemon: " + defendingActive.getName() + " has taken " + damage +
+                    " hp of damage!\nThere new hp is: " + defendingActive.hp);
+            passTurn();
         } else {
             gui.displayMessage("No");
+            gui.removeAllButtons();
             mainGameLoop();
         }
     }

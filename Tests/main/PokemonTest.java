@@ -2,6 +2,8 @@ package main;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
@@ -205,5 +207,4 @@ public class PokemonTest {
         assertTrue(kakuna.canAttack());
         verify(water, grass);
     }
-
 }
