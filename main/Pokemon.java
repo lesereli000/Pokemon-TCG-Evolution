@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Pokemon extends Card{
     private static final String[] allTypes = {"Grass", "Fire", "Water", "Lightning", "Psychic", "Fighting", "Darkness",
@@ -91,5 +92,22 @@ public class Pokemon extends Card{
 
     public void removeEnergy(Energy energy) {
         energies.remove(energy);
+    }
+
+    public boolean canAttack() {
+        ArrayList<String> energyStrings = new ArrayList<>();
+        for(Energy energy : energies) {
+            energyStrings.add(energy.getName());
+        }
+
+        ArrayList<String> costStrings = new ArrayList<>();
+        for (Attack atk : attacks) {
+            ArrayList<Energy> costs = atk.costs;
+            for(Energy energy : costs) {
+                costStrings.add(energy.name);
+            }
+            if(energyStrings.containsAll(costStrings)) return true;
+        }
+        return false;
     }
 }

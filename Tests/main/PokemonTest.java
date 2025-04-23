@@ -2,6 +2,7 @@ package main;
 
 import org.junit.Test;
 
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
 public class PokemonTest {
@@ -152,6 +153,20 @@ public class PokemonTest {
 
     @Test
     public void testHealthAndDamageGetters() {
+
+    }
+
+    @Test
+    public void testCanAttack() {
+        CardGenerator pg = new CardGenerator();
+        Energy e = createMock(Energy.class);
+        expect(e.getName()).andReturn("Colorless Energy");
+        Pokemon pikachu = (Pokemon) pg.generateCard("Pikachu");
+        pikachu.addEnergy(e);
+
+        replay(e);
+        assertTrue(pikachu.canAttack());
+        verify(e);
 
     }
 }

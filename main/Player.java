@@ -116,9 +116,7 @@ public class Player {
     }
 
     public boolean canAttack(){
-        Pokemon activePokemon = this.activePokemon;
-
-        return false;
+        return activePokemon.canAttack();
     }
 
     public void takeDamage(int damageCounters, String damageType) {
