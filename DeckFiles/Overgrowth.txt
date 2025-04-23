@@ -12,5 +12,5 @@
 2,Super Potion
 2,Switch
 2,Gust of Wind
-12,Water Energy	Water
+12,Water Energy
 16,Grass Energy

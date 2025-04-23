@@ -35,6 +35,11 @@ public class Player {
         checkForBasics(rand);
     }
 
+    public void createCustomDeck() {
+        this.deck.createDeckFromFile("Overgrowth.txt");
+        this.deck.shuffle();
+    }
+
 
     public void drawCard(){
         Card drawnCard = deck.removeTopCard();
