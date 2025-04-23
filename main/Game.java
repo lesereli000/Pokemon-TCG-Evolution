@@ -90,6 +90,7 @@ public class Game {
     private void passTurn() {
         playerTurn = playerTurn % 2 + 1;
         curPlayer = playerTurn == 1 ? player1 : player2;
+        defendingPlayer = playerTurn == 1 ? player2 : player1;
         turn++;
         if (turn == 2) {
             setCurPlayerPokemon();
@@ -194,47 +195,33 @@ public class Game {
         }
 
         gui.displayMessage(pokemonAttackMessage);
-
+        gui.removeAllButtons();
         //let player choose attack\
         if (curPlayer.canAttack()) {
-            gui.removeAllButtons();
             gui.displayAttacks(attacks, this::sendAttack, "Select Attack");
-
             //make sure Pokémon has enough energy to attack
-
+        } else {
+            gui.removeAllButtons();
+            mainGameLoop();
         }
-
-
-        //conduct attack
-
-
-
-
-//
-//            // TODO: the rest of the attack code
-//            defendingPlayer.takeDamage(2, 'a');
-//            gui.displayMessage(defendingPlayer.getName() + " has been attacked!\nThey have " + defendingPlayer.getActiveHP() + " HP remaining");
-//            passTurn();
-//        } else {
-//            gui.displayMessage("You cannot attack right now");
-//        }
-        gui.removeAllButtons();
-        mainGameLoop();
     }
 
     private void sendAttack() {
         Attack lastSelectedAttack = gui.getLastSelectedAttack();
-        Pokemon actvPokemon = (Pokemon) curPlayer.getActivePokemon();
+        if((lastSelectedAttack instanceof Attack)) {
+            Pokemon actvPokemon = (Pokemon) curPlayer.getActivePokemon();
+            if (curPlayer.equals(player1)) {
+                Player defendingPlayer = player2;
+            } else {
+                Player defendingPlayer = player1;
+            }
 
-        if(curPlayer.equals(player1)) {
-            Player defendingPlayer = player2;
+            if (actvPokemon.energies.contains(lastSelectedAttack.costs)) {
+                defendingPlayer.takeDamage(lastSelectedAttack.damage, actvPokemon.type);
+            }
         } else {
-            Player defendingPlayer = player1;
-        }
-
-        if(actvPokemon.energies.contains(lastSelectedAttack.costs)) {
-            defendingPlayer.takeDamage(lastSelectedAttack.damage, actvPokemon.type);
-
+            gui.displayMessage("No");
+            mainGameLoop();
         }
     }
 

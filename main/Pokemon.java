@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class Pokemon extends Card{
@@ -95,19 +96,39 @@ public class Pokemon extends Card{
     }
 
     public boolean canAttack() {
-        ArrayList<String> energyStrings = new ArrayList<>();
-        for(Energy energy : energies) {
-            energyStrings.add(energy.getName());
+        HashMap<String, Integer> energyCount = new HashMap<>();
+        for (Energy energy : energies) {
+            String name = energy.getName();
+            energyCount.put(name, energyCount.getOrDefault(name, 0) + 1);
+        }
+        energyCount.put("Colorless Energy", numColorless());
+
+        for (Attack atk : attacks) {
+            HashMap<String, Integer> costCount = new HashMap<>();
+            for (Energy energy : atk.costs) {
+                String name = energy.name;
+                int amount = costCount.getOrDefault(name, 0) + 1;
+                costCount.put(name, amount);
+            }
+
+            boolean canPay = true;
+            for (String energyType : costCount.keySet()) {
+                int required = costCount.get(energyType);
+                int available = energyCount.getOrDefault(energyType, 0);
+                if (available < required) {
+                    canPay = false;
+                    break;
+                }
+            }
+
+            if (canPay) return true;
         }
 
-        ArrayList<String> costStrings = new ArrayList<>();
-        for (Attack atk : attacks) {
-            ArrayList<Energy> costs = atk.costs;
-            for(Energy energy : costs) {
-                costStrings.add(energy.name);
-            }
-            if(energyStrings.containsAll(costStrings)) return true;
-        }
         return false;
+    }
+
+
+    public int numColorless() {
+        return energies.size();
     }
 }

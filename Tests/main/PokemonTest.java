@@ -161,12 +161,49 @@ public class PokemonTest {
         CardGenerator pg = new CardGenerator();
         Energy e = createMock(Energy.class);
         expect(e.getName()).andReturn("Colorless Energy");
+        replay(e);
         Pokemon pikachu = (Pokemon) pg.generateCard("Pikachu");
+        assertFalse(pikachu.canAttack());
         pikachu.addEnergy(e);
 
-        replay(e);
         assertTrue(pikachu.canAttack());
         verify(e);
-
     }
+
+    @Test
+    public void testCanAttackMultiple() {
+        CardGenerator pg = new CardGenerator();
+        Energy e = createMock(Energy.class);
+
+        // Set expectations BEFORE using the mock
+        expect(e.getName()).andReturn("Grass Energy").anyTimes();
+
+        replay(e); // activate the mock
+
+        Pokemon kakuna = (Pokemon) pg.generateCard("Kakuna");
+        kakuna.addEnergy(e);
+        assertFalse(kakuna.canAttack());
+        kakuna.addEnergy(e);
+        assertTrue(kakuna.canAttack());
+
+        verify(e); // verify the interactions (optional here because of anyTimes)
+    }
+
+    @Test
+    public void testColorlessAttack() {
+        CardGenerator pg = new CardGenerator();
+        Pokemon kakuna = (Pokemon) pg.generateCard("Kakuna");
+        Energy water = createMock(Energy.class);
+        Energy grass = createMock(Energy.class);
+        expect(water.getName()).andReturn("Water").anyTimes();
+        expect(grass.getName()).andReturn("Grass").anyTimes();
+
+        replay(water, grass);
+        kakuna.addEnergy(water);
+        assertFalse(kakuna.canAttack());
+        kakuna.addEnergy(grass);
+        assertTrue(kakuna.canAttack());
+        verify(water, grass);
+    }
+
 }
