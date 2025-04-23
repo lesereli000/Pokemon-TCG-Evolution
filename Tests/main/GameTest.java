@@ -160,8 +160,8 @@ public class GameTest {
         assertEquals(pok5, returnedCards.get(4));
     }
 
-//    @Test
-//    public void testCanAttack() {
+    @Test
+    public void testCanAttack() {
 //        Random rand = createMock(Random.class);
 //        GUI gui = createMock(GUI.class);
 //        Player p1 = createMock(Player.class);
@@ -181,9 +181,9 @@ public class GameTest {
 ////        expect(attack1.costs).andReturn(attackCost);
 //
 //        replay();
-//        assertTrue(attackingPokemon.energies.contains(attack1.costs));
+//        assertTrue(attackingPokemon.canAttack);
 //        verify();
-//    }
+    }
 
     @Test
     public void testBasicAttack() {
@@ -198,8 +198,6 @@ public class GameTest {
 
         p1.setActivePokemon(attackingPokemon);
         p2.setActivePokemon(defendingPokemon);
-
-
     }
 
 //    @Test //Doesn't work because of Runnables

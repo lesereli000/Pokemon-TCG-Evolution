@@ -61,15 +61,12 @@ public class CardGenerator {
                             String attackName = jsonAttacks.getJSONObject(j).getString("name");
                             int damage = Integer.parseInt(jsonAttacks.getJSONObject(j).getString("damage"));
                             JSONArray jsonCosts = jsonAttacks.getJSONObject(j).getJSONArray("cost");
-                            HashMap<String, Integer> attackCosts = new HashMap<>();
+//                            HashMap<String, Integer> attackCosts = new HashMap<>();
+                            ArrayList<Energy> attackCosts = new ArrayList<>();
                             for(int k = 0; k < jsonCosts.length(); k++) {
-                                String currentEnergy = jsonCosts.getString(k);
-                                if(attackCosts.containsKey(currentEnergy)) {
-                                    int newAmountEnergy = attackCosts.get(currentEnergy) + 1;
-                                    attackCosts.put(currentEnergy, newAmountEnergy);
-                                } else {
-                                    attackCosts.put(currentEnergy, 1);
-                                }
+                                String currentEnergyString = jsonCosts.getString(k);
+                                Energy currentEnergy = new Energy(currentEnergyString + " Energy");
+                                attackCosts.add(currentEnergy);
                             }
 
                             Attack newAttack = new Attack(attackName, attackCosts, damage);

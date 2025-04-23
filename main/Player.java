@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class Player {
@@ -111,16 +112,6 @@ public class Player {
 
     public boolean canAttack(){
         Pokemon activePokemon = this.activePokemon;
-        if (activePokemon != null) { return false; }
-
-        ArrayList<Energy> pokemonEnergies = activePokemon.energies;
-        ArrayList<Attack> pokemonAttacksCost = activePokemon.attacks;
-
-        for(Attack attack: pokemonAttacksCost){
-            if(activePokemon.energies.contains(attack.costs)) {
-                return true;
-            }
-        }
 
         return false;
     }

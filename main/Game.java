@@ -189,7 +189,7 @@ public class Game {
 
         for(Attack a: attacks) {
             pokemonAttackMessage += "\n" + a.name
-                    + "\n - Cost:  " + a.costs
+                    + "\n - Cost:  \n" + a.getCosts()
                     + "\n - Damage:  " + a.damage + "\n";
         }
 
@@ -231,7 +231,6 @@ public class Game {
         } else {
             Player defendingPlayer = player1;
         }
-
 
         if(actvPokemon.energies.contains(lastSelectedAttack.costs)) {
             defendingPlayer.takeDamage(lastSelectedAttack.damage, actvPokemon.type);
