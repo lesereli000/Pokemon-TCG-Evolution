@@ -7,6 +7,7 @@ import java.util.Random;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class GameTest {
 
@@ -156,6 +157,31 @@ public class GameTest {
         assertEquals(pok3, returnedCards.get(2));
         assertEquals(pok4, returnedCards.get(3));
         assertEquals(pok5, returnedCards.get(4));
+    }
+
+    @Test
+    public void testCanAttack() {
+        Random rand = createMock(Random.class);
+        GUI gui = createMock(GUI.class);
+        Player p1 = createMock(Player.class);
+        Player p2 = createMock(Player.class);
+        Pokemon attackingPokemon = createMock(Pokemon.class);
+        Energy fireEnergy = createMock(Energy.class);
+        Attack attack1 = createMock(Attack.class);
+
+        Game game = new Game(gui, rand, p1, p2, true);
+
+        p1.setActivePokemon(attackingPokemon);
+
+        attackingPokemon.addEnergy(fireEnergy);
+
+        ArrayList<Energy> attackCost = new ArrayList<>();
+        attackCost.add(fireEnergy);
+        expect(attack1.costs).andReturn(attackCost);
+
+        replay();
+        assertTrue(attackingPokemon.energies.contains(attack1.costs));
+        verify();
     }
 
     @Test
