@@ -117,12 +117,13 @@ public class Deck {
     public void createDeckFromFile(String fileString) {
         File file = new File("DeckFiles/"+fileString);
         try (Scanner scanFile = new Scanner(file)) {
-            if(!this.fileInCorrectFormat(file)){
-                throw new DeckInIncorrectFormatException("File " + fileString + " is in the incorrect format");
+            String message = "";
+            message = this.fileInCorrectFormat(file);
+            if(!message.equals("")) {
+                throw new DeckInIncorrectFormatException("File " + fileString + " is in the incorrect format: " +message);
             }
             String currPokemonLine;
             int total = 0;
-            try {
                 while (scanFile.hasNext()) {
                     currPokemonLine = scanFile.nextLine();
                     int count = Integer.parseInt(currPokemonLine.split(",")[0]);
@@ -133,19 +134,13 @@ public class Deck {
                         this.addCard(card);
                     }
                 }
-            }catch(Exception e){
-                throw new DeckInIncorrectFormatException("Deck in the wrong format");
-            }
-            if(total>60){
-                throw new DeckInIncorrectFormatException("Deck in the wrong format");
-            }
-        } catch (IOException e) {
+            }catch (IOException e) {
                 System.out.println("File not found when adding cards from file" + e);
         }
 
     }
 
-    private boolean fileInCorrectFormat(File file){
+    private String fileInCorrectFormat(File file){
         int total = 0;
         try (Scanner scanFile = new Scanner(file)) {
             String currPokemonLine;
@@ -156,11 +151,14 @@ public class Deck {
                     total += count;
                     String name = currPokemonLine.split(",")[1];
                 }
+            if(total>60){
+                return "Deck has too many cards";
+            }
 
         } catch (IOException e) {
             System.out.println("File not found when adding cards from file" + e);
         }
-        return true;
+        return "";
     }
 
     public static class TooManyRepeatsException extends RuntimeException {
