@@ -24,4 +24,6 @@ public interface GUI {
     void updateTurn(int playerTurn);
 
     void displayAttacks(ArrayList<Attack> attacks, Runnable makeActiveCard, String submitMessage);
+
+    void closeWindow();
 }

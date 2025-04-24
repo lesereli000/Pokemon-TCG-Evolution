@@ -212,16 +212,28 @@ public class Game {
             Pokemon actvPokemon = (Pokemon) curPlayer.getActivePokemon();
             defendingPlayer = curPlayer.equals(player1) ? player2 : player1;
             int damage = lastSelectedAttack.damage;
-            defendingPlayer.takeDamage(damage, actvPokemon.type);
+            int dmgCounters = damage/10;
+            defendingPlayer.takeDamage(dmgCounters, actvPokemon.type);
             curPlayer.removeEnergyForAttack(lastSelectedAttack);
             Pokemon defendingActive = (Pokemon) defendingPlayer.getActivePokemon();
             gui.displayMessage(defendingPlayer.getName() + "'s active Pokemon: " + defendingActive.getName() + " has taken " + damage +
-                    " hp of damage!\nThere new hp is: " + defendingActive.hp);
+                    " hp of damage!\nThere new hp is: " + defendingActive.getCurHP());
+            if(!defendingActive.isAlive()) {
+                handleDeadPokemon(defendingPlayer);
+            }
             passTurn();
         } else {
             gui.displayMessage("No");
             gui.removeAllButtons();
             mainGameLoop();
+        }
+    }
+
+    private void handleDeadPokemon(Player defendingPlayer) {
+        gui.displayMessage(defendingPlayer.getName() + "'s active Pokemon has died!");
+        if(defendingPlayer.benchIsEmpty()) {
+            gui.displayMessage("Congratulations!" + curPlayer.getName() + " wins the game!");
+            gui.closeWindow();
         }
     }
 

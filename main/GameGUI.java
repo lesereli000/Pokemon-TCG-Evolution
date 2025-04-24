@@ -290,6 +290,11 @@ public class GameGUI implements GUI {
 	}
 
 	@Override
+	public void closeWindow() {
+		frame.dispose();
+	}
+
+	@Override
 	public JButton createButton(String message, Runnable toRun) {
 		JButton btn = new JButton(message);
 		btn.addActionListener(e -> {

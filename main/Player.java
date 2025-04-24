@@ -154,4 +154,8 @@ public class Player {
             prizeCards.addCard(cardToAdd);
         }
     }
+
+    public boolean benchIsEmpty() {
+        return bench.size() <= 0;
+    }
 }

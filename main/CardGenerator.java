@@ -72,7 +72,7 @@ public class CardGenerator {
                             Attack newAttack = new Attack(attackName, attackCosts, damage);
                             this.attacks.add(newAttack);
                         }
-                        card = new Pokemon(this.name, type, stage, hp, "Z", "Z", attacks, retreatCost);
+                        card = new Pokemon(this.name, type, stage, hp, "AHDSS", "SDZZDSW", attacks, retreatCost);
                     } else if (supertype.equals("Energy")) {
                         card = new Energy(this.name);
                     } else {

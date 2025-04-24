@@ -57,7 +57,7 @@ public class Pokemon extends Card{
     }
 
     public Pokemon(String name, String type, int stage, int hp) {
-        this(name, type, stage, hp, "Z", "Z", new ArrayList<Attack>(), 2);
+        this(name, type, stage, hp, "ids", "sdad", new ArrayList<Attack>(), 2);
     }
 
     public String getName() {
