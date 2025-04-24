@@ -17,6 +17,7 @@ public class Game {
     private Player defendingPlayer;
     private Energy selectedEnergy;
     private Attack selectedAttack;
+    private boolean gameOver;
 
     public Game(GUI gui, Random rand, Player player1, Player player2) {
         this.player1 = player1;
@@ -24,6 +25,7 @@ public class Game {
         this.gui = gui;
         this.random = rand;
         this.turn = 1;
+        this.gameOver = false;
 
         // https://docs.oracle.com/javase/8/docs/api/java/lang/Runnable.html
         // https://www.geeksforgeeks.org/runnable-interface-in-java/
@@ -39,6 +41,8 @@ public class Game {
         this.turn = 1;
         this.playerTurn = 1;
         this.curPlayer = player1;
+        this.gameOver = false;
+
         // https://docs.oracle.com/javase/8/docs/api/java/lang/Runnable.html
         // https://www.geeksforgeeks.org/runnable-interface-in-java/
 
@@ -98,7 +102,7 @@ public class Game {
         } else {
             gui.removeAllButtons();
 
-            if (!gameOver()) {
+            if (!gameOver) {
                 curPlayer.drawCard();
                 mainGameLoop();
             } else {
@@ -211,12 +215,15 @@ public class Game {
         if((lastSelectedAttack != null) && curPlayer.canAttack(lastSelectedAttack)) {
             Pokemon actvPokemon = (Pokemon) curPlayer.getActivePokemon();
             defendingPlayer = curPlayer.equals(player1) ? player2 : player1;
-            int damage = lastSelectedAttack.damage;
-            int dmgCounters = damage/10;
-            defendingPlayer.takeDamage(dmgCounters, actvPokemon.type);
-            curPlayer.removeEnergyForAttack(lastSelectedAttack);
             Pokemon defendingActive = (Pokemon) defendingPlayer.getActivePokemon();
-            gui.displayMessage(defendingPlayer.getName() + "'s active Pokemon: " + defendingActive.getName() + " has taken " + damage +
+            int dmgCounters = lastSelectedAttack.damage/10;
+            int initialHP = defendingActive.getCurHP();
+            defendingPlayer.takeDamage(dmgCounters, actvPokemon.type);
+            int finalHP = defendingActive.getCurHP();
+            int trueDamage = initialHP - finalHP;
+            curPlayer.removeEnergyForAttack(lastSelectedAttack);
+
+            gui.displayMessage(defendingPlayer.getName() + "'s active Pokemon: " + defendingActive.getName() + " has taken " + trueDamage +
                     " hp of damage!\nThere new hp is: " + defendingActive.getCurHP());
             if(!defendingActive.isAlive()) {
                 handleDeadPokemon(defendingPlayer);
@@ -231,17 +238,17 @@ public class Game {
 
     private void handleDeadPokemon(Player defendingPlayer) {
         gui.displayMessage(defendingPlayer.getName() + "'s active Pokemon has died!");
-        if(defendingPlayer.benchIsEmpty()) {
+        defendingPlayer.pokemonDied();
+        if(defendingPlayer.getNumPokemonDied() == 6 || defendingPlayer.benchIsEmpty()) {
             gui.displayMessage("Congratulations!" + curPlayer.getName() + " wins the game!");
             gui.closeWindow();
+            gameOver = true;
         }
-        // TODO: add win condition from 6 pokemon killed
     }
 
-    private boolean gameOver() {
-        // TODO: test win conditions here, not for M3
-        return false;
-    }
+    //private boolean gameOver() {
+        //@Justin to @Eli: I decided to move this to a parameter of game as a boolean called "gameOver"
+    //}
 
     private boolean isBasicPokemon(Card card) {
         return card instanceof Pokemon && ((Pokemon) card).stage == 0;

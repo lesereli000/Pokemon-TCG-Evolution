@@ -165,6 +165,20 @@ public class GameTest {
     }
 
     @Test
+    public void testSixDeadPokemonWinCondition() {
+        Player p2 = new Player();
+        p2.pokemonDied();
+        p2.pokemonDied();
+        p2.pokemonDied();
+        p2.pokemonDied();
+        p2.pokemonDied();
+        assertEquals(p2.getNumPokemonDied(), 5);
+
+        p2.pokemonDied();
+        assertEquals(p2.getNumPokemonDied(), 6);
+    }
+
+    @Test
     public void testCanAttack() {
 //        Random rand = createMock(Random.class);
 //        GUI gui = createMock(GUI.class);
