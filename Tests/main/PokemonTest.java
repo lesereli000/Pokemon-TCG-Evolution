@@ -148,15 +148,15 @@ public class PokemonTest {
         CardGenerator cg = new CardGenerator();
         Pokemon attackingMachop = (Pokemon) cg.generateCard("Machop");
 
-        Pokemon resistantPikachu = (Pokemon) cg.generateCard("Pikachu");
-        assertEquals(resistantPikachu.getCurHP(), resistantPikachu.hp);
-        resistantPikachu.takeDamage(2, attackingMachop.type);
-        assertEquals(resistantPikachu.getCurHP(), resistantPikachu.hp - 40);
+        Pokemon weakPikachu = (Pokemon) cg.generateCard("Pikachu");
+        assertEquals(weakPikachu.getCurHP(), weakPikachu.hp);
+        weakPikachu.takeDamage(2, attackingMachop.type);
+        assertEquals(weakPikachu.getCurHP(), weakPikachu.hp - 40);
 
-        Pokemon nonResistantKakuna = (Pokemon) cg.generateCard("Kakuna");
-        assertEquals(nonResistantKakuna.getCurHP(), nonResistantKakuna.hp);
-        nonResistantKakuna.takeDamage(2, attackingMachop.type);
-        assertEquals(nonResistantKakuna.getCurHP(), nonResistantKakuna.hp - 20);
+        Pokemon nonWeakKakuna = (Pokemon) cg.generateCard("Kakuna");
+        assertEquals(nonWeakKakuna.getCurHP(), nonWeakKakuna.hp);
+        nonWeakKakuna.takeDamage(2, attackingMachop.type);
+        assertEquals(nonWeakKakuna.getCurHP(), nonWeakKakuna.hp - 20);
     }
 
     @Test

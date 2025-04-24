@@ -46,16 +46,36 @@ public class CardGenerator {
                         //Normal Pokemon
                         this.type = pokemonArray.getJSONObject(i).getJSONArray("types").getString(0);
                         if(this.type.equals("Grass")){
-                            this.weakness = "";
+                            this.weakness = "Fire";
+                            this.resistance = "Water";
+                        }
+                        else if(this.type.equals("Fire")){
+                            this.weakness = "Water";
+                            this.resistance = "";
+                        }
+                        else if(this.type.equals("Water")){
+                            this.weakness = "Lightning";
                             this.resistance = "";
                         }
                         else if(this.type.equals("Lightning")){
                             this.weakness = "Fighting";
+                            this.resistance = "Metal";
+                        }
+                        else if(this.type.equals("Fighting")){
+                            this.weakness = "Psychic";
                             this.resistance = "";
                         }
-                        else if(this.type.equals("Psychic")){
-                            this.weakness = "";
+                        else if(this.type.equals("Psychic") || this.type.equals("Darkness")){
+                            this.weakness = "Darkness";
                             this.resistance = "Fighting";
+                        }
+                        else if(this.type.equals("Metal")){
+                            this.weakness = "Fire";
+                            this.resistance = "Grass";
+                        }
+                        else if(this.type.equals("Dragon")){
+                            this.weakness = "";
+                            this.resistance = "";
                         }
                         this.hp = pokemonArray.getJSONObject(i).getInt("hp");
                         try {
