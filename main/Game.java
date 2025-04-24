@@ -65,6 +65,9 @@ public class Game {
 
         player2.createCustomDeck();
         player2.drawStartingHand();
+
+        player1.drawPrizeCards();
+        player2.drawPrizeCards();
     }
 
     private void setCurPlayerPokemon() {

@@ -5,14 +5,14 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class Player {
-
+    private static final int PRIZE_CARD_SIZE = 6;
     private static final int HAND_SIZE = 7;
     private Deck deck;
     private Deck hand;
     private Deck bench;
     private Deck discard;
     private Pokemon activePokemon;
-
+    private Deck prizeCards;
     private String name;
 
 
@@ -26,6 +26,7 @@ public class Player {
         this.bench = new Deck();
         this.activePokemon = null;
         this.name = name;
+        this.prizeCards = new Deck();
     }
 
     public void createFullRandomDeck(Random rand) {
@@ -144,6 +145,13 @@ public class Player {
         ArrayList<Energy> costs = attack.costs;
         for (Energy cost : costs) {
             activePokemon.removeEnergy(cost);
+        }
+    }
+
+    public void drawPrizeCards() {
+        for(int i = 0; i < PRIZE_CARD_SIZE; i++) {
+            Card cardToAdd = deck.removeTopCard();
+            prizeCards.addCard(cardToAdd);
         }
     }
 }
