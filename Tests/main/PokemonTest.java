@@ -230,7 +230,79 @@ public class PokemonTest {
         assertTrue(pikachu.isAlive());
         pikachu.takeDamage(1, "Q");
         assertFalse(pikachu.isAlive());
+    }
 
+    @Test
+    public void testRemoveEnergy() {
+        CardGenerator pg = new CardGenerator();
+        Pokemon pikachu = (Pokemon) pg.generateCard("Pikachu");
+
+        Energy e = createMock(Energy.class);
+        Energy e2 = createMock(Energy.class);
+
+        e.name = "Grass Energy";
+        e2.name = "Grass Energy";
+        replay(e, e2);
+        ArrayList<Energy> energies = pikachu.energies;
+        pikachu.addEnergy(e);
+        assertEquals(1, energies.size());
+        pikachu.removeEnergy(e2);
+        assertEquals(0, energies.size());
+        verify(e, e2);
+    }
+
+    @Test
+    public void testRemoveManyEnergies() {
+        CardGenerator pg = new CardGenerator();
+        Pokemon kakuna = (Pokemon) pg.generateCard("Kakuna");
+        Energy e = createMock(Energy.class);
+        Energy e2 = createMock(Energy.class);
+        Energy e3 = createMock(Energy.class);
+
+        e.name = "Grass Energy";
+        e2.name = "Lightning Energy";
+        e3.name = "Water Energy";
+        replay(e, e2, e3);
+
+        ArrayList<Energy> energies = kakuna.energies;
+
+        kakuna.addEnergy(e);
+        kakuna.addEnergy(e2);
+        kakuna.addEnergy(e3);
+        kakuna.addEnergy(e);
+        kakuna.addEnergy(e2);
+        kakuna.addEnergy(e3);
+        kakuna.addEnergy(e);
+        kakuna.addEnergy(e2);
+        kakuna.addEnergy(e3);
+
+        assertEquals(9, energies.size());
+
+        kakuna.removeEnergy(e2);
+        kakuna.removeEnergy(e2);
+        kakuna.removeEnergy(e2);
+
+        assertEquals(6, energies.size());
+        for(Energy energy : energies) {
+            assertNotEquals("Lightning Energy", energy.name);
+        }
+
+        kakuna.removeEnergy(e3);
+        kakuna.removeEnergy(e3);
+        kakuna.removeEnergy(e3);
+
+        assertEquals(3, energies.size());
+        for (Energy energy : energies) {
+            assertNotEquals("Water Energy", energy.name);
+            assertNotEquals("Lightning Energy", energy.name);
+        }
+
+        kakuna.removeEnergy(e);
+        kakuna.removeEnergy(e);
+        kakuna.removeEnergy(e);
+        assertEquals(0, energies.size());
+
+        verify(e, e2, e3);
 
     }
 
