@@ -45,13 +45,17 @@ public class CardGenerator {
                     if (supertype.equals("Pokémon")) {
                         //Normal Pokemon
                         this.type = pokemonArray.getJSONObject(i).getJSONArray("types").getString(0);
-                        if(this.type.equals("Psychic")){
-                            this.weakness = "";
-                            this.resistance = "Fighting";
-                        }
-                        else if(this.type.equals("Grass")){
+                        if(this.type.equals("Grass")){
                             this.weakness = "";
                             this.resistance = "";
+                        }
+                        else if(this.type.equals("Lightning")){
+                            this.weakness = "Fighting";
+                            this.resistance = "";
+                        }
+                        else if(this.type.equals("Psychic")){
+                            this.weakness = "";
+                            this.resistance = "Fighting";
                         }
                         this.hp = pokemonArray.getJSONObject(i).getInt("hp");
                         try {
