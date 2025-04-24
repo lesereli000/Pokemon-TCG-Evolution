@@ -14,6 +14,7 @@ public class Player {
     private Pokemon activePokemon;
     private Deck prizeCards;
     private String name;
+    private int numPokemonDied;
 
 
     public Player() {
@@ -27,6 +28,7 @@ public class Player {
         this.activePokemon = null;
         this.name = name;
         this.prizeCards = new Deck();
+        this.numPokemonDied = 0;
     }
 
     public void createFullRandomDeck(Random rand) {
@@ -40,7 +42,6 @@ public class Player {
         this.deck.createDeckFromFile("Overgrowth.txt");
         this.deck.shuffle();
     }
-
 
     public void drawCard(){
         Card drawnCard = deck.removeTopCard();
@@ -76,6 +77,12 @@ public class Player {
 
     public String getName() {
         return name;
+    }
+
+    public int getNumPokemonDied() { return numPokemonDied; }
+
+    public void pokemonDied() {
+        this.numPokemonDied = this.numPokemonDied + 1;
     }
 
     public void drawStartingHand() {

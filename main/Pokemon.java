@@ -67,9 +67,9 @@ public class Pokemon extends Card{
     public int getStage() {return this.stage;}
 
     public void takeDamage(int damageCountersTaken, String damageType) {
-        if(damageType == resistance) {
+        if(damageType.equals(resistance)) {
             damageCountersTaken--;
-        } else if (damageType == weakness) {
+        } else if (damageType.equals(weakness)) {
             damageCountersTaken = damageCountersTaken * 2;
         }
         damageCounters += damageCountersTaken;

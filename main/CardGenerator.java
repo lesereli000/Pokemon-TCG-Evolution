@@ -15,6 +15,8 @@ public class CardGenerator {
     private String name;
     private String type;
     private String effects;
+    private String resistance;
+    private String weakness;
     private int hp;
     private int stage;
     private int retreatCost;
@@ -43,6 +45,14 @@ public class CardGenerator {
                     if (supertype.equals("Pokémon")) {
                         //Normal Pokemon
                         this.type = pokemonArray.getJSONObject(i).getJSONArray("types").getString(0);
+                        if(this.type.equals("Lightning")){
+                            this.weakness = "";
+                            this.resistance = "Fighting";
+                        }
+                        else if(this.type.equals("Grass")){
+                            this.weakness = "";
+                            this.resistance = "";
+                        }
                         this.hp = pokemonArray.getJSONObject(i).getInt("hp");
                         try {
                             this.retreatCost = pokemonArray.getJSONObject(i).getInt("convertedRetreatCost");
@@ -72,7 +82,7 @@ public class CardGenerator {
                             Attack newAttack = new Attack(attackName, attackCosts, damage);
                             this.attacks.add(newAttack);
                         }
-                        card = new Pokemon(this.name, type, stage, hp, "AHDSS", "SDZZDSW", attacks, retreatCost);
+                        card = new Pokemon(this.name, type, stage, hp, weakness, resistance, attacks, retreatCost);
                     } else if (supertype.equals("Energy")) {
                         card = new Energy(this.name);
                     } else {

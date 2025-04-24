@@ -21,7 +21,4 @@ public class Attack {
         }
         return outputString;
     }
-
-
-
 }
