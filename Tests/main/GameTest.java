@@ -50,10 +50,14 @@ public class GameTest {
         Player p1 = createMock(Player.class);
         Player p2 = createMock(Player.class);
 
+
+
         p1.createCustomDeck();
         p1.drawStartingHand();
         p2.createCustomDeck();
         p2.drawStartingHand();
+        p1.drawPrizeCards();
+        p2.drawPrizeCards();
         replay(p1, p2);
 
         Game game = new Game(gui, rand, p1 ,p2);

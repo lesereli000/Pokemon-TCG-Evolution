@@ -207,4 +207,20 @@ public class PokemonTest {
         assertTrue(kakuna.canAttack());
         verify(water, grass);
     }
+
+    @Test
+    public void testIsAlive() {
+        CardGenerator pg = new CardGenerator();
+        Pokemon pikachu = (Pokemon) pg.generateCard("Pikachu");
+
+        pikachu.takeDamage(1, "Q");
+        pikachu.takeDamage(1, "Q");
+        pikachu.takeDamage(1, "Q");
+        assertTrue(pikachu.isAlive());
+        pikachu.takeDamage(1, "Q");
+        assertFalse(pikachu.isAlive());
+
+
+    }
+
 }

@@ -87,6 +87,10 @@ public class Pokemon extends Card{
         return hp - (10 * damageCounters);
     }
 
+    public boolean isAlive() {
+        return getCurHP() > 0;
+    }
+
     public void addEnergy(Energy energy) {
         energies.add(energy);
     }
