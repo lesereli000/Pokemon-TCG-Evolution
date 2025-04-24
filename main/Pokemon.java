@@ -2,6 +2,7 @@ package main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.stream.Collectors;
 
 public class Pokemon extends Card{
@@ -96,7 +97,16 @@ public class Pokemon extends Card{
     }
 
     public void removeEnergy(Energy energy) {
-        energies.remove(energy);
+        Iterator<Energy> iterator = energies.iterator();
+        while (iterator.hasNext()) {
+            Energy e = iterator.next();
+            String actualName = e.name;
+            String energyName = energy.name;
+            if (actualName.equals(energyName)) {
+                iterator.remove();
+                break;
+            }
+        }
     }
 
     public boolean canAttack(Attack attack) {
