@@ -177,7 +177,15 @@ public class PokemonTest {
 
     @Test
     public void testHealthGetters() {
+        CardGenerator cg = new CardGenerator();
+        Pokemon attackingMachop = (Pokemon) cg.generateCard("Machop");
+        Pokemon defendingKakuna = (Pokemon) cg.generateCard("Kakuna");
+        assertEquals(defendingKakuna.getCurHP(), defendingKakuna.hp);
+        assertEquals(defendingKakuna.getMaxHP(), defendingKakuna.hp);
 
+        defendingKakuna.takeDamage(2, attackingMachop.type);
+        assertEquals(defendingKakuna.getCurHP(), defendingKakuna.hp - 20);
+        assertEquals(defendingKakuna.getMaxHP(), defendingKakuna.hp);
     }
 
     @Test

@@ -223,7 +223,7 @@ public class Game {
             }
             passTurn();
         } else {
-            gui.displayMessage("No");
+            gui.displayMessage("No attack selected or not enough energy to attack!");
             gui.removeAllButtons();
             mainGameLoop();
         }
@@ -235,6 +235,7 @@ public class Game {
             gui.displayMessage("Congratulations!" + curPlayer.getName() + " wins the game!");
             gui.closeWindow();
         }
+        // TODO: add win condition from 6 pokemon killed
     }
 
     private boolean gameOver() {

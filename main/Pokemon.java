@@ -80,10 +80,6 @@ public class Pokemon extends Card{
         return hp;
     }
 
-    public int getDamageCounters(){
-        return damageCounters;
-    }
-
     public int getCurHP(){
         return hp - (10 * damageCounters);
     }
