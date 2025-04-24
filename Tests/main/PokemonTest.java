@@ -153,8 +153,9 @@ public class PokemonTest {
         CardGenerator cg = new CardGenerator();
         Pokemon attackingMachop = (Pokemon) cg.generateCard("Machop");
 
-        Pokemon resistantPikachu = (Pokemon) cg.generateCard("Pikachu");
+        Pokemon resistantPikachu = (Pokemon) cg.generateCard("Mewtwo");
         assertEquals(resistantPikachu.getCurHP(), resistantPikachu.hp);
+        System.out.println(resistantPikachu.type);
         resistantPikachu.takeDamage(2, attackingMachop.type);
         assertEquals(resistantPikachu.getCurHP(), resistantPikachu.hp - 10);
 

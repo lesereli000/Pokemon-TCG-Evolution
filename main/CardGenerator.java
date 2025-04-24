@@ -45,7 +45,7 @@ public class CardGenerator {
                     if (supertype.equals("Pokémon")) {
                         //Normal Pokemon
                         this.type = pokemonArray.getJSONObject(i).getJSONArray("types").getString(0);
-                        if(this.type.equals("Lightning")){
+                        if(this.type.equals("Psychic")){
                             this.weakness = "";
                             this.resistance = "Fighting";
                         }
