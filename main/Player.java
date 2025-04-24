@@ -165,4 +165,8 @@ public class Player {
     public boolean benchIsEmpty() {
         return bench.size() <= 0;
     }
+
+    public Card setNewActive() {
+        return this.activePokemon = (Pokemon) bench.removeTopCard();
+    }
 }

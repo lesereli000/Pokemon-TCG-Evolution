@@ -215,15 +215,14 @@ public class Game {
         if((lastSelectedAttack != null) && curPlayer.canAttack(lastSelectedAttack)) {
             Pokemon actvPokemon = (Pokemon) curPlayer.getActivePokemon();
             defendingPlayer = curPlayer.equals(player1) ? player2 : player1;
+            int damage = lastSelectedAttack.damage;
             Pokemon defendingActive = (Pokemon) defendingPlayer.getActivePokemon();
-            int dmgCounters = lastSelectedAttack.damage/10;
-            int initialHP = defendingActive.getCurHP();
+            int dmgCounters = damage/10;
+            System.out.println(dmgCounters);
             defendingPlayer.takeDamage(dmgCounters, actvPokemon.type);
-            int finalHP = defendingActive.getCurHP();
-            int trueDamage = initialHP - finalHP;
             curPlayer.removeEnergyForAttack(lastSelectedAttack);
 
-            gui.displayMessage(defendingPlayer.getName() + "'s active Pokemon: " + defendingActive.getName() + " has taken " + trueDamage +
+            gui.displayMessage(defendingPlayer.getName() + "'s active Pokemon: " + defendingActive.getName() + " has taken " + damage +
                     " hp of damage!\nThere new hp is: " + defendingActive.getCurHP());
             if(!defendingActive.isAlive()) {
                 handleDeadPokemon(defendingPlayer);
@@ -243,6 +242,21 @@ public class Game {
             gui.displayMessage("Congratulations!" + curPlayer.getName() + " wins the game!");
             gui.closeWindow();
             gameOver = true;
+        } else {
+            int activeNum;
+            Card newActive = defendingPlayer.setNewActive();
+            if(curPlayer == player1) {
+                activeNum = 2;
+                curPlayer = player2;
+                this.defendingPlayer = player1;
+            } else {
+                activeNum = 1;
+                curPlayer = player1;
+                this.defendingPlayer = player2;
+            }
+             gui.makeActiveCard(newActive, activeNum);
+            gui.removeBenchCard(newActive, activeNum);
+            mainGameLoop();
         }
     }
 
