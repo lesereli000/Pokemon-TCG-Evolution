@@ -322,7 +322,31 @@ public class PokemonTest {
         assertEquals(0, energies.size());
 
         verify(e, e2, e3);
-
     }
 
+    @Test
+    public void testNoColorless() {
+        CardGenerator pg = new CardGenerator();
+        Pokemon p = (Pokemon) pg.generateCard("Pikachu");
+
+        assertEquals(0, p.numColorless);
+    }
+
+    @Test
+    public void testManyColorless() {
+        CardGenerator pg = new CardGenerator();
+        Pokemon p = (Pokemon) pg.generateCard("Pikachu");
+
+        Energy e = createMock(Energy.class);
+
+        p.addEnergy(e);
+        p.addEnergy(e);
+        p.addEnergy(e);
+        p.addEnergy(e);
+        p.addEnergy(e);
+        p.addEnergy(e);
+        p.addEnergy(e);
+
+        assertEquals(7, p.numColorless);
+    }
 }
