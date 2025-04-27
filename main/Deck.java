@@ -17,11 +17,11 @@ public class Deck {
         return cards.size();
     }
 
-    public void addCard(Card card) {
+    public boolean addCard(Card card) {
         if(!(card instanceof Energy) && howManyRepeats(card) > 3) {
             throw new TooManyRepeatsException("Too many repeats with card " + card.getName());
         }
-        cards.add(card);
+        return cards.add(card);
     }
 
     public int howManyRepeats(Card c) {
@@ -57,7 +57,7 @@ public class Deck {
         return (ArrayList<Card>) cards.clone();
     }
 
-    public void shuffle() {
+    public boolean shuffle() {
         ArrayList<Card> shuffledCards = new ArrayList<>();
         while(!cards.isEmpty()) {
             Random rand = new Random();
@@ -65,6 +65,7 @@ public class Deck {
             shuffledCards.add(cards.remove(num));
         }
         cards = shuffledCards;
+        return true;
     }
 
     public void removeCard(Card card) {
@@ -82,8 +83,8 @@ public class Deck {
 
     public int numberBasicPokemon() {
         int count = 0;
-        for (int i = 0; i < cards.size(); i++) {
-            if (cards.get(i) instanceof Pokemon && ((Pokemon) cards.get(i)).getStage() == 0) {
+        for (Card card : cards) {
+            if (card instanceof Pokemon && ((Pokemon) card).getStage() == 0) {
                 count++;
             }
         }

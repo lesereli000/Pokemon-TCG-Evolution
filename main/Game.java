@@ -260,10 +260,6 @@ public class Game {
         }
     }
 
-    //private boolean gameOver() {
-        //@Justin to @Eli: I decided to move this to a parameter of game as a boolean called "gameOver"
-    //}
-
     private boolean isBasicPokemon(Card card) {
         return card instanceof Pokemon && ((Pokemon) card).stage == 0;
     }

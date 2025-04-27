@@ -7,8 +7,8 @@ import java.util.Random;
 public class Player {
     private static final int PRIZE_CARD_SIZE = 6;
     private static final int HAND_SIZE = 7;
-    private Deck deck;
-    private Deck hand;
+    protected Deck deck;
+    protected Deck hand;
     private Deck bench;
     private Deck discard;
     private Pokemon activePokemon;
@@ -89,10 +89,19 @@ public class Player {
         for (int i = 0; i < HAND_SIZE; i++) {
             drawCard();
         }
+
+        if(hand.numberBasicPokemon() == 0) {
+            restartHand();
+        }
     }
 
-    public boolean isDeckEmpty() {
-        return this.deck.size() <= 0;
+    public void restartHand() {
+        for (int i = 0; i < hand.size(); i++) {
+            Card cardToRemove = hand.removeTopCard();
+            deck.addCard(cardToRemove);
+        }
+        deck.shuffle();
+        drawStartingHand();
     }
 
     public void addBenchPokemon(Card newPokemon) {
