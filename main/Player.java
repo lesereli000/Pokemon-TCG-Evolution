@@ -96,7 +96,8 @@ public class Player {
     }
 
     public void restartHand() {
-        for (int i = 0; i < hand.size(); i++) {
+        System.out.println("Player " + this.name + " restarts hand");
+        for (int i = 0; i < HAND_SIZE; i++) {
             Card cardToRemove = hand.removeTopCard();
             deck.addCard(cardToRemove);
         }

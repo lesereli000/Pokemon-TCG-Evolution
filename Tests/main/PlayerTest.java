@@ -23,7 +23,6 @@ public class PlayerTest {
         //Once again here, 7 cards should be added to the hand and I set hand.numberBasicPokemon() to return 0 so we don't get
         //stuck in an infinite loop (the first 0 returned is just for the test case)
 
-        expect(hand.size()).andReturn(7).anyTimes();
         expect(hand.removeTopCard()).andReturn(card).times(7);
         expect(deck.addCard(card)).andReturn(true).times(7);
         expect(deck.shuffle()).andReturn(true).once();
