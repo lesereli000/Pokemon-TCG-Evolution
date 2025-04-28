@@ -264,20 +264,16 @@ public class Game {
     }
 
     private void continuePlaying(Player defendingPlayer) {
-        int activeNum;
+        int activeNum = (curPlayer == player1) ? 2 : 1;
+        int oldActive = (curPlayer == player1) ? 1 : 2;
+
         Card newActive = defendingPlayer.setNewActive();
-        if (curPlayer == player1) {
-            activeNum = 2;
-            curPlayer = player2;
-            this.defendingPlayer = player1;
-        } else {
-            activeNum = 1;
-            curPlayer = player1;
-            this.defendingPlayer = player2;
-        }
+        curPlayer = (curPlayer == player1) ? player2 : player1;
+        this.defendingPlayer = (curPlayer == player1) ? player2 : player1;
+
         gui.makeActiveCard(newActive, activeNum);
         gui.removeBenchCard(newActive, activeNum);
-        gui.removePrizeCard(activeNum);
+        gui.removePrizeCard(oldActive);
         mainGameLoop();
     }
 

@@ -49,10 +49,10 @@ public class GameGUI implements GUI {
 	private Color deckColor = Color.WHITE;
 	private Color player1ActiveColor = Color.WHITE;
 	private Color player2ActiveColor = Color.WHITE;
-	private Color player1PrizeColor = Color.WHITE;
-	private Color player2PrizeColor = Color.WHITE;
-	private int player1PrizeCards = origNumPrizeCards;
-	private int player2PrizeCards = origNumPrizeCards;
+
+	private Color[] player1PrizeCards = new Color[origNumPrizeCards];
+	private Color[] player2PrizeCards = new Color[origNumPrizeCards];
+
 
 
 	private ArrayList<JButton> buttons = new ArrayList<>();
@@ -90,20 +90,23 @@ public class GameGUI implements GUI {
 
 			//Prize Cards
 			//left column
-			g2d.setColor(player1PrizeColor);
-			g2d.drawRect(marginSide, frameHeight - cardHeight - marginBottom, cardWidth, cardHeight);
-			g2d.drawRect(marginSide, frameHeight - (cardHeight*2) - marginBottom - marginPrizeCardVertical, cardWidth, cardHeight);
-			g2d.drawRect(marginSide, frameHeight - (cardHeight*3) - marginBottom - (marginPrizeCardVertical*2), cardWidth, cardHeight);
+			for (int i = 0; i < 3; i++) {
+				Color currColor = player1PrizeCards[i];
+				g2d.setColor(currColor);
+				g2d.drawRect(marginSide, frameHeight - (cardHeight * (i + 1)) - marginBottom - marginPrizeCardVertical * i, cardWidth, cardHeight);
+			}
 
 			//right column (front of left column)
 			g2d.setColor(backgroundBlue);
 			g2d.fillRect(marginSide + prizeCardsOffset, frameHeight - cardHeight - marginBottom - pcVerticalOffset, cardWidth, cardHeight);
 			g2d.fillRect(marginSide + prizeCardsOffset, frameHeight - (cardHeight*2) - marginBottom - marginPrizeCardVertical - pcVerticalOffset, cardWidth, cardHeight);
 			g2d.fillRect(marginSide + prizeCardsOffset, frameHeight - (cardHeight*3) - marginBottom - (marginPrizeCardVertical*2) - pcVerticalOffset, cardWidth, cardHeight);
-			g2d.setColor(player1PrizeColor);
-			g2d.drawRect(marginSide + prizeCardsOffset, frameHeight - cardHeight - marginBottom - pcVerticalOffset, cardWidth, cardHeight);
-			g2d.drawRect(marginSide + prizeCardsOffset, frameHeight - (cardHeight*2) - marginBottom - marginPrizeCardVertical - pcVerticalOffset, cardWidth, cardHeight);
-			g2d.drawRect(marginSide + prizeCardsOffset, frameHeight - (cardHeight*3) - marginBottom - (marginPrizeCardVertical*2) - pcVerticalOffset, cardWidth, cardHeight);
+
+			for(int i = 0; i < 3; i++) {
+				Color currColor = player1PrizeCards[i + 3];
+				g2d.setColor(currColor);
+				g2d.drawRect(marginSide + prizeCardsOffset, frameHeight - cardHeight * (i + 1) - marginBottom - marginPrizeCardVertical * i - pcVerticalOffset, cardWidth, cardHeight);
+			}
 
 			//Bench Cards
 			g2d.setColor(Color.WHITE);
@@ -140,8 +143,9 @@ public class GameGUI implements GUI {
 
 			//Prize Cards
 			//right column (bottom)
-			g2d.setColor(player2PrizeColor);
 			for(int i = 0; i < 3; i++) {
+				Color currColor = player2PrizeCards[i];
+				g2d.setColor(currColor);
 				g2d.drawRect(frameWidth - marginSide - cardWidth, marginTop + (i*(marginPrizeCardVertical+cardHeight)), cardWidth, cardHeight);
 			}
 			//left column (top of right column)
@@ -149,8 +153,9 @@ public class GameGUI implements GUI {
 			for(int i = 0; i < 3; i++) {
 				g2d.fillRect(frameWidth - prizeCardsOffset - marginSide - cardWidth, marginTop + (i*(marginPrizeCardVertical+cardHeight)) + pcVerticalOffset, cardWidth, cardHeight);
 			}
-			g2d.setColor(player2PrizeColor);
 			for(int i = 0; i < 3; i++) {
+				Color currColor = player2PrizeCards[i + 3];
+				g2d.setColor(currColor);
 				g2d.drawRect(frameWidth - prizeCardsOffset - marginSide - cardWidth, marginTop + (i*(marginPrizeCardVertical+cardHeight)) + pcVerticalOffset, cardWidth, cardHeight);
 			}
 			g2d.setColor(Color.WHITE);
@@ -195,13 +200,14 @@ public class GameGUI implements GUI {
 
 		frame.setVisible(true);
 		setDeckColor(Color.RED);
-		setPrizeCardsColor(Color.YELLOW, 1);
-		setPrizeCardsColor(Color.YELLOW, 2);
+		setInitialPrizeColors();
 	}
 
-	private void setPrizeCardsColor(Color color, int player) {
-		this.player1PrizeColor = color;
-		this.player2PrizeColor = color;
+	private void setInitialPrizeColors() {
+		for (int i = 0; i < 6; i++) {
+			player1PrizeCards[i] = Color.YELLOW;
+			player2PrizeCards[i] = Color.YELLOW;
+		}
 	}
 
 	public void createFlipButton(Runnable flipListener) {
@@ -303,7 +309,19 @@ public class GameGUI implements GUI {
 
 	@Override
 	public void removePrizeCard(int playerNum) {
-
+		int i = 0;
+		Color white = Color.WHITE;
+		if (playerNum == 1) {
+			while(player1PrizeCards[i].equals(white)) {
+				i++;
+			}
+			player1PrizeCards[i] = white;
+		} else {
+			while(player2PrizeCards[i].equals(white)) {
+				i++;
+			}
+			player2PrizeCards[i] = white;
+		}
 	}
 
 	@Override
