@@ -160,4 +160,12 @@ public class Pokemon extends Card{
     public int numColorless() {
         return numColorless;
     }
+
+    public String getEnergiesString() {
+        StringBuilder output = new StringBuilder();
+        for (Energy e : energies) {
+            output.append(e.name).append("\n");
+        }
+        return output.toString();
+    }
 }

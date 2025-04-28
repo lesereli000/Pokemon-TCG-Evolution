@@ -188,19 +188,29 @@ public class Game {
         mainGameLoop();
     }
 
-    private void attack() {
-        Pokemon activePokemon = (Pokemon) curPlayer.getActivePokemon();
-        ArrayList<Attack> attacks = activePokemon.attacks;
+    private String generateAttackButtonMessage(Pokemon activePokemon, ArrayList<Attack> attacks) {
         String pokemonAttackMessage = activePokemon.getName() + ":\n";
         for(Attack a: attacks) {
             pokemonAttackMessage += "\n" + a.name
                     + "\n - Cost:  \n" + a.getCosts()
                     + "\n - Damage:  " + a.damage + "\n";
         }
+        pokemonAttackMessage += "\n" + activePokemon.getName() + " has Energies: \n" +
+                activePokemon.getEnergiesString();
+        return pokemonAttackMessage;
+    }
 
+    private void attack() {
+        Pokemon activePokemon = (Pokemon) curPlayer.getActivePokemon();
+        ArrayList<Attack> attacks = activePokemon.attacks;
+        String pokemonAttackMessage = generateAttackButtonMessage(activePokemon, attacks);
         gui.displayMessage(pokemonAttackMessage);
         gui.removeAllButtons();
-        //let player choose attack\
+        //let player choose attack
+        handleAttackLogic(attacks);
+    }
+
+    private void handleAttackLogic(ArrayList<Attack> attacks) {
         if (curPlayer.canAttack() && defendingPlayer != null) {
             gui.displayAttacks(attacks, this::sendAttack, "Select Attack");
             //make sure Pokémon has enough energy to attack
