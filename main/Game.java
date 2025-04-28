@@ -267,6 +267,7 @@ public class Game {
         int activeNum = (curPlayer == player1) ? 2 : 1;
         int oldActive = (curPlayer == player1) ? 1 : 2;
 
+        curPlayer.pickupPrizeCard();
         Card newActive = defendingPlayer.setNewActive();
         curPlayer = (curPlayer == player1) ? player2 : player1;
         this.defendingPlayer = (curPlayer == player1) ? player2 : player1;

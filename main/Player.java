@@ -1,7 +1,6 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 public class Player {
@@ -12,7 +11,7 @@ public class Player {
     private Deck bench;
     private Deck discard;
     private Pokemon activePokemon;
-    private Deck prizeCards;
+    protected Deck prizeCards;
     private String name;
     private int numPokemonDied;
 
@@ -178,5 +177,10 @@ public class Player {
 
     public Card setNewActive() {
         return this.activePokemon = (Pokemon) bench.removeTopCard();
+    }
+
+    public void pickupPrizeCard() {
+        Card cardToAdd = prizeCards.removeTopCard();
+        hand.addCard(cardToAdd);
     }
 }

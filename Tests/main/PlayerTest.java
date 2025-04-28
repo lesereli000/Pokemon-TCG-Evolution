@@ -39,4 +39,24 @@ public class PlayerTest {
         verify(deck, hand);
     }
 
+    @Test
+    public void testPickupPrizeCard() {
+
+        Deck prizeCards = createMock(Deck.class);
+        Deck hand = createMock(Deck.class);
+        Card card = createMock(Card.class);
+
+        expect(prizeCards.removeTopCard()).andReturn(card).once();
+        expect(hand.addCard(card)).andReturn(true).once();
+
+        Player player = new Player();
+        player.hand = hand;
+        player.prizeCards = prizeCards;
+
+        replay(prizeCards, hand);
+        player.pickupPrizeCard();
+
+        verify(prizeCards, hand);
+    }
+
 }
