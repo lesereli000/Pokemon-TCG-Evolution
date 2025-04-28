@@ -26,4 +26,6 @@ public interface GUI {
     void displayAttacks(ArrayList<Attack> attacks, Runnable makeActiveCard, String submitMessage);
 
     void closeWindow();
+
+    void removePrizeCard(int playerNum);
 }

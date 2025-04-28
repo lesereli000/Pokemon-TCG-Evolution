@@ -245,28 +245,52 @@ public class Game {
         }
     }
 
+    private boolean checkPrizeCardsGone(Player defendingPlayer) {
+        if(defendingPlayer.getNumPokemonDied() >= 6) {
+            gui.displayMessage("Congratulations " + curPlayer.getName() + "\n"
+            + "You have collected all of your prize cards and win the game!");
+            gameOver = true;
+        }
+        return gameOver;
+    }
+
+    private boolean checkDefendingBenchEmpty(Player defendingPlayer) {
+        if(defendingPlayer.benchIsEmpty()) {
+            gui.displayMessage("Congratulations " + curPlayer.getName() + "\n"
+            + defendingPlayer.getName() + " has ran out of playable active Pokemon\nso you win the game!" );
+            gameOver = true;
+        }
+        return gameOver;
+    }
+
+    private void continuePlaying(Player defendingPlayer) {
+        int activeNum;
+        Card newActive = defendingPlayer.setNewActive();
+        if (curPlayer == player1) {
+            activeNum = 2;
+            curPlayer = player2;
+            this.defendingPlayer = player1;
+        } else {
+            activeNum = 1;
+            curPlayer = player1;
+            this.defendingPlayer = player2;
+        }
+        gui.makeActiveCard(newActive, activeNum);
+        gui.removeBenchCard(newActive, activeNum);
+        gui.removePrizeCard(activeNum);
+        mainGameLoop();
+    }
+
     private void handleDeadPokemon(Player defendingPlayer) {
         gui.displayMessage(defendingPlayer.getName() + "'s active Pokemon has died!");
         defendingPlayer.pokemonDied();
-        if(defendingPlayer.getNumPokemonDied() == 6 || defendingPlayer.benchIsEmpty()) {
-            gui.displayMessage("Congratulations!" + curPlayer.getName() + " wins the game!");
+        checkPrizeCardsGone(defendingPlayer);
+        if(checkPrizeCardsGone(defendingPlayer)) {
             gui.closeWindow();
-            gameOver = true;
+        } else if(checkDefendingBenchEmpty(defendingPlayer)) {
+            gui.closeWindow();
         } else {
-            int activeNum;
-            Card newActive = defendingPlayer.setNewActive();
-            if(curPlayer == player1) {
-                activeNum = 2;
-                curPlayer = player2;
-                this.defendingPlayer = player1;
-            } else {
-                activeNum = 1;
-                curPlayer = player1;
-                this.defendingPlayer = player2;
-            }
-             gui.makeActiveCard(newActive, activeNum);
-            gui.removeBenchCard(newActive, activeNum);
-            mainGameLoop();
+            continuePlaying(defendingPlayer);
         }
     }
 
