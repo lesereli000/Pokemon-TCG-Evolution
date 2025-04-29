@@ -329,7 +329,7 @@ public class PokemonTest {
         CardGenerator pg = new CardGenerator();
         Pokemon p = (Pokemon) pg.generateCard("Pikachu");
 
-        assertEquals(0, p.numColorless);
+        assertEquals(0, p.numColorless());
     }
 
     @Test
@@ -347,6 +347,33 @@ public class PokemonTest {
         p.addEnergy(e);
         p.addEnergy(e);
 
-        assertEquals(7, p.numColorless);
+        assertEquals(7, p.numColorless());
+    }
+
+    @Test
+    public void testCanRetreat() {
+        CardGenerator pg = new CardGenerator();
+        Pokemon p = (Pokemon) pg.generateCard("Pikachu");
+
+        assertFalse(p.canRetreat());
+        Energy e = createMock(Energy.class);
+        p.addEnergy(e);
+        assertTrue(p.canRetreat());
+    }
+
+    @Test
+    public void testCanRetreatManyEnergy() {
+        CardGenerator pg = new CardGenerator();
+        Pokemon p = (Pokemon) pg.generateCard("Charizard");
+
+        Energy e = createMock(Energy.class);
+
+        assertFalse(p.canRetreat());
+        p.addEnergy(e);
+        assertFalse(p.canRetreat());
+        p.addEnergy(e);
+        assertFalse(p.canRetreat());
+        p.addEnergy(e);
+        assertTrue(p.canRetreat());
     }
 }

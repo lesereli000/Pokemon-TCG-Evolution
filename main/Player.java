@@ -117,8 +117,7 @@ public class Player {
     }
 
     public boolean canRetreat() {
-        // TODO: check that there is enough energy to retreat
-        return this.bench.size() != 0;
+        return this.bench.size() != 0 && activePokemon.canRetreat();
     }
 
     public ArrayList<Card> benchAsList() {
@@ -127,6 +126,8 @@ public class Player {
 
     public void retreat(Pokemon lastSelectedCard) {
         // TODO: remove energy from retreating pokemon
+        int retreatCost = activePokemon.retreatCost;
+        activePokemon.removeColorless(retreatCost);
         bench.removeCard(lastSelectedCard);
         bench.addCard(activePokemon);
         this.activePokemon = lastSelectedCard;

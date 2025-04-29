@@ -1,6 +1,5 @@
 package main;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -16,7 +15,6 @@ public class Game {
     private int turn;
     private Player defendingPlayer;
     private Energy selectedEnergy;
-    private Attack selectedAttack;
     private boolean gameOver;
 
     public Game(GUI gui, Random rand, Player player1, Player player2) {
@@ -45,8 +43,6 @@ public class Game {
 
         // https://docs.oracle.com/javase/8/docs/api/java/lang/Runnable.html
         // https://www.geeksforgeeks.org/runnable-interface-in-java/
-
-        //gui.createFlipButton(this::setupGame);
     }
 
     public void setupGame() {
@@ -172,6 +168,8 @@ public class Game {
     }
 
     private void retreatAction() {
+        Pokemon activePokemon = (Pokemon) curPlayer.getActivePokemon();
+        gui.displayMessage("It costs " + activePokemon.retreatCost + " Colorless Energy\nFor " + activePokemon.name + " to retreat");
         if (curPlayer.canRetreat()) {
             gui.removeAllButtons();
             gui.displayCards(curPlayer.benchAsList(), this::handleRetreat, "Select Card to Switch In");
@@ -223,26 +221,29 @@ public class Game {
     private void sendAttack() {
         Attack lastSelectedAttack = gui.getLastSelectedAttack();
         if((lastSelectedAttack != null) && curPlayer.canAttack(lastSelectedAttack)) {
-            Pokemon actvPokemon = (Pokemon) curPlayer.getActivePokemon();
-            defendingPlayer = curPlayer.equals(player1) ? player2 : player1;
-            int damage = lastSelectedAttack.damage;
-            Pokemon defendingActive = (Pokemon) defendingPlayer.getActivePokemon();
-            int dmgCounters = damage/10;
-            System.out.println(dmgCounters);
-            defendingPlayer.takeDamage(dmgCounters, actvPokemon.type);
-            curPlayer.removeEnergyForAttack(lastSelectedAttack);
-
-            gui.displayMessage(defendingPlayer.getName() + "'s active Pokemon: " + defendingActive.getName() + " has taken " + damage +
-                    " hp of damage!\nThere new hp is: " + defendingActive.getCurHP());
-            if(!defendingActive.isAlive()) {
-                handleDeadPokemon(defendingPlayer);
-            }
-            passTurn();
+            attackPlayer(lastSelectedAttack);
         } else {
             gui.displayMessage("No attack selected or not enough energy to attack!");
             gui.removeAllButtons();
             mainGameLoop();
         }
+    }
+
+    private void attackPlayer(Attack lastSelectedAttack) {
+        Pokemon actvPokemon = (Pokemon) curPlayer.getActivePokemon();
+        defendingPlayer = curPlayer.equals(player1) ? player2 : player1;
+        int damage = lastSelectedAttack.damage;
+        Pokemon defendingActive = (Pokemon) defendingPlayer.getActivePokemon();
+        int dmgCounters = damage/10;
+        defendingPlayer.takeDamage(dmgCounters, actvPokemon.type);
+        curPlayer.removeEnergyForAttack(lastSelectedAttack);
+
+        gui.displayMessage(defendingPlayer.getName() + "'s active Pokemon: " + defendingActive.getName() + " has taken " + damage +
+                " hp of damage!\nThere new hp is: " + defendingActive.getCurHP());
+        if(!defendingActive.isAlive()) {
+            handleDeadPokemon(defendingPlayer);
+        }
+        passTurn();
     }
 
     private boolean checkPrizeCardsGone(Player defendingPlayer) {

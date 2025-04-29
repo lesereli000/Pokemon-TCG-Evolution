@@ -15,7 +15,6 @@ public class Pokemon extends Card{
     String weakness;
     String resistance;
     ArrayList<Attack> attacks;
-    int numColorless = 0;
     ArrayList<Energy> energies = new ArrayList<Energy>();
     int retreatCost;
 
@@ -91,7 +90,6 @@ public class Pokemon extends Card{
 
     public void addEnergy(Energy energy) {
         energies.add(energy);
-        numColorless++;
     }
 
     public void removeEnergy(Energy energy) {
@@ -102,7 +100,6 @@ public class Pokemon extends Card{
             String energyName = energy.name;
             if (actualName.equals(energyName)) {
                 iterator.remove();
-                numColorless--;
                 break;
             }
         }
@@ -158,7 +155,7 @@ public class Pokemon extends Card{
     }
 
     public int numColorless() {
-        return numColorless;
+        return energies.size();
     }
 
     public String getEnergiesString() {
@@ -167,5 +164,15 @@ public class Pokemon extends Card{
             output.append(e.name).append("\n");
         }
         return output.toString();
+    }
+
+    public void removeColorless(int retreatCost) {
+        for (int i = 0; i < retreatCost; i++) {
+            energies.remove(i);
+        }
+    }
+
+    public boolean canRetreat() {
+        return numColorless() >= retreatCost;
     }
 }
