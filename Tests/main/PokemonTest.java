@@ -257,17 +257,15 @@ public class PokemonTest {
         Pokemon pikachu = (Pokemon) pg.generateCard("Pikachu");
 
         Energy e = createMock(Energy.class);
-        Energy e2 = createMock(Energy.class);
 
         e.name = "Grass Energy";
-        e2.name = "Grass Energy";
-        replay(e, e2);
+        replay(e);
         ArrayList<Energy> energies = pikachu.energies;
         pikachu.addEnergy(e);
         assertEquals(1, energies.size());
-        pikachu.removeEnergy(e2);
+        pikachu.removeEnergy(e);
         assertEquals(0, energies.size());
-        verify(e, e2);
+        verify(e);
     }
 
     @Test
@@ -325,6 +323,15 @@ public class PokemonTest {
     }
 
     @Test
+    public void testRemoveNonExistentEnergy() {
+        CardGenerator pg = new CardGenerator();
+        Pokemon pikachu = (Pokemon) pg.generateCard("Pikachu");
+        Energy e = createMock(Energy.class);
+
+        assertThrows(IllegalArgumentException.class, () -> pikachu.removeEnergy(e));
+    }
+
+    @Test
     public void testNoColorless() {
         CardGenerator pg = new CardGenerator();
         Pokemon p = (Pokemon) pg.generateCard("Pikachu");
@@ -375,5 +382,47 @@ public class PokemonTest {
         assertFalse(p.canRetreat());
         p.addEnergy(e);
         assertTrue(p.canRetreat());
+    }
+
+    @Test
+    public void testRemoveColorless() {
+        CardGenerator pg = new CardGenerator();
+        Pokemon p = (Pokemon) pg.generateCard("Pikachu");
+
+        Energy e = createMock(Energy.class);
+        p.addEnergy(e);
+        assertTrue(p.canAttack());
+        p.removeColorless(1);
+        assertFalse(p.canAttack());
+    }
+
+    @Test
+    public void testRemoveManyColorless() {
+        CardGenerator pg = new CardGenerator();
+        Pokemon p = (Pokemon) pg.generateCard("Charizard");
+
+        Energy e = createMock(Energy.class);
+        Energy e2 = createMock(Energy.class);
+
+        p.addEnergy(e);
+        p.addEnergy(e2);
+        p.addEnergy(e);
+        p.addEnergy(e);
+        p.addEnergy(e2);
+        p.addEnergy(e);
+        p.addEnergy(e2);
+
+        assertEquals(7, p.numColorless());
+
+        p.removeColorless(7);
+        assertEquals(0, p.numColorless());
+    }
+
+    @Test
+    public void testRemoveNoEnergy() {
+        CardGenerator pg = new CardGenerator();
+        Pokemon p = (Pokemon) pg.generateCard("Pikachu");
+
+        assertThrows(IllegalArgumentException.class, () -> p.removeColorless(1));
     }
 }

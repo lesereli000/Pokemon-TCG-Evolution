@@ -93,6 +93,9 @@ public class Pokemon extends Card{
     }
 
     public void removeEnergy(Energy energy) {
+        if(!energies.contains(energy)) {
+            throw new IllegalArgumentException("Energy does not exist in list");
+        }
         Iterator<Energy> iterator = energies.iterator();
         while (iterator.hasNext()) {
             Energy e = iterator.next();
@@ -166,11 +169,17 @@ public class Pokemon extends Card{
         return output.toString();
     }
 
-    public void removeColorless(int retreatCost) {
-        for (int i = 0; i < retreatCost; i++) {
+    public void removeColorless(int energiesToRemove) {
+        if(energiesToRemove > energies.size()) {
+            throw new IllegalArgumentException("Can not remove this many energies!");
+        }
+        int size = energies.size();
+        int fromIndex = Math.max(0, size - energiesToRemove);
+        for (int i = size - 1; i >= fromIndex; i--) {
             energies.remove(i);
         }
     }
+
 
     public boolean canRetreat() {
         return numColorless() >= retreatCost;
