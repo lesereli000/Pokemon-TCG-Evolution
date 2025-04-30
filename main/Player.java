@@ -10,7 +10,7 @@ public class Player {
     protected Deck hand;
     private Deck bench;
     private Deck discard;
-    private Pokemon activePokemon;
+    protected Pokemon activePokemon;
     protected Deck prizeCards;
     private String name;
     private int numPokemonDied;
@@ -125,7 +125,6 @@ public class Player {
     }
 
     public void retreat(Pokemon lastSelectedCard) {
-        // TODO: remove energy from retreating pokemon
         int retreatCost = activePokemon.retreatCost;
         activePokemon.removeColorless(retreatCost);
         bench.removeCard(lastSelectedCard);
