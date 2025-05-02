@@ -124,6 +124,9 @@ public class Game {
             gui.removeAllButtons();
             mainGameLoop();
         } else if (lastSelectedCard instanceof Pokemon) {
+            if(!curPlayer.evolvePokemon(lastSelectedCard)) {
+                gui.displayMessage("Pokemon can not be evolved!");
+            }
             // TODO: Check if there is a card on the field to evolve from
         } else if (lastSelectedCard instanceof Energy) {
 //            addEnergyToActive((Energy) lastSelectedCard);

@@ -194,4 +194,13 @@ public class Player {
     public void passTurn() {
         canAddEnergy = true;
     }
+
+    public boolean evolvePokemon(Card lastSelectedCard) {
+        Pokemon evolvedPokemon = (Pokemon) lastSelectedCard;
+        String evolvesFrom = evolvedPokemon.evolvesFrom;
+        if(bench.containsCardNamed(evolvesFrom)) {
+
+        }
+        return false;
+    }
 }

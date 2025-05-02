@@ -27,7 +27,9 @@ public class Deck {
     public int howManyRepeats(Card c) {
         int repeats = 0;
         for(Card card : cards) {
-            if (c.getName().equals(card.getName())) {
+            String cName = c.getName();
+            String cardName = card.getName();
+            if (cName.equals(cardName)) {
                 repeats++;
             }
         }
@@ -172,6 +174,14 @@ public class Deck {
             System.out.println("File not found when adding cards from file" + e);
         }
         return "";
+    }
+
+    public boolean containsCardNamed(String cardName) {
+        for (Card card : cards) {
+            String currentName = card.getName();
+            if(currentName.equals(cardName)) return true;
+        }
+        return false;
     }
 
     public static class TooManyRepeatsException extends RuntimeException {
