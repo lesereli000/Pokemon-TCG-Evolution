@@ -98,7 +98,6 @@ public class Game {
             setCurPlayerPokemon();
         } else {
             gui.removeAllButtons();
-
             if (!gameOver) {
                 curPlayer.drawCard();
                 mainGameLoop();
@@ -118,7 +117,6 @@ public class Game {
 
     private void playCard() {
         Card lastSelectedCard = gui.getLastSelectedCard();
-
         if (isBasicPokemon(lastSelectedCard)) {
             gui.addBenchCard(lastSelectedCard, playerTurn);
             curPlayer.addBenchPokemon(lastSelectedCard);

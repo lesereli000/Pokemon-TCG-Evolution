@@ -17,6 +17,7 @@ public class Pokemon extends Card{
     ArrayList<Attack> attacks;
     ArrayList<Energy> energies = new ArrayList<Energy>();
     int retreatCost;
+    String evolvesFrom;
 
     public Pokemon(String name, String type, int stage, int hp, String weakness, String resistance, ArrayList<Attack> attacks, int retreatCost) {
         super(name);
@@ -182,5 +183,9 @@ public class Pokemon extends Card{
 
     public boolean canRetreat() {
         return numColorless() >= retreatCost;
+    }
+
+    public void setEvolvesFrom(String evolvesFrom) {
+        this.evolvesFrom = evolvesFrom;
     }
 }

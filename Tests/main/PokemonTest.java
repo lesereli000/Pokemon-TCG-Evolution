@@ -425,4 +425,11 @@ public class PokemonTest {
 
         assertThrows(IllegalArgumentException.class, () -> p.removeColorless(1));
     }
+
+    @Test
+    public void testEvolvesFrom() {
+        CardGenerator pg = new CardGenerator();
+        Pokemon p = (Pokemon) pg.generateCard("Kakuna");
+        assertEquals("Weedle", p.evolvesFrom);
+    }
 }
