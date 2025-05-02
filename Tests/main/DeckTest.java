@@ -600,8 +600,8 @@ public class DeckTest {
         ArrayList<Card> allCards = new ArrayList<Card>();
         CardGenerator cg = new CardGenerator();
 
-        try (FileReader reader = new FileReader("base1.json")) {
-            String content = new String(Files.readAllBytes(Paths.get("base1.json")));
+        try (FileReader reader = new FileReader("src/main/resources/base1.json")) {
+            String content = new String(Files.readAllBytes(Paths.get("src/main/resources/base1.json")));
             JSONArray pokemonArray = new JSONArray(content);
             for (int i = 0; i < pokemonArray.length(); i++) {
                 String PokemonName = pokemonArray.getJSONObject(i).getString("name");

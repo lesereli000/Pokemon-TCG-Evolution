@@ -32,8 +32,8 @@ public class CardGenerator {
             throw new PokemonNotFoundException("Invalid Name");
         }
 
-        try (FileReader reader = new FileReader("base1.json")) {
-            String content = new String(Files.readAllBytes(Paths.get("base1.json")));
+        try (FileReader reader = new FileReader("src/main/resources/base1.json")) {
+            String content = new String(Files.readAllBytes(Paths.get("src/main/resources/base1.json")));
             JSONArray pokemonArray = new JSONArray(content);
             for (int i = 0; i < pokemonArray.length(); i++) {
 
@@ -123,6 +123,7 @@ public class CardGenerator {
             }
         } catch (IOException e) {
             System.out.println("File not found in PokemonGenerator" + e);
+            throw new RuntimeException("File not found in directory!", e);
         }
 
         return card;

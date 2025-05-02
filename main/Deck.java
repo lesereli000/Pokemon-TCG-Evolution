@@ -37,8 +37,8 @@ public class Deck {
     }
 
     public void addRandomCards(int numCards, Random rand) {
-        try(FileReader reader = new FileReader("base1.json")) {
-            String content = new String(Files.readAllBytes(Paths.get("base1.json")));
+        try(FileReader reader = new FileReader("src/main/resources/base1.json")) {
+            String content = new String(Files.readAllBytes(Paths.get("src/main/resources/base1.json")));
             JSONArray pokemonArray = new JSONArray(content);
             for (int i = 0; i < numCards; i++) {
                 int num = rand.nextInt(pokemonArray.length());
@@ -51,7 +51,7 @@ public class Deck {
                 }
             }
         } catch (IOException e) {
-            System.out.println("File not found when adding random cards" + e);
+            throw new RuntimeException("File not found when adding random cards", e);
         }
     }
 
@@ -98,8 +98,8 @@ public class Deck {
     }
 
     public void addEnergies(int numberEnergies, Random rand) {
-        try(FileReader reader = new FileReader("base1.json")) {
-            String content = new String(Files.readAllBytes(Paths.get("base1.json")));
+        try(FileReader reader = new FileReader("src/main/resources/base1.json")) {
+            String content = new String(Files.readAllBytes(Paths.get("src/main/resources/base1.json")));
             JSONArray pokemonArray = new JSONArray(content);
             for (int i = 0; i < numberEnergies; i++) {
                 //97 is the first energy card in the pokemonArray
@@ -113,7 +113,7 @@ public class Deck {
                 }
             }
         } catch (IOException e) {
-            System.out.println("File not found when adding random cards" + e);
+            throw new RuntimeException("File not found when adding random cards", e);
         }
     }
 
@@ -138,7 +138,7 @@ public class Deck {
                     }
                 }
             }catch (IOException e) {
-                System.out.println("File not found when adding cards from file" + e);
+                throw new RuntimeException("File not found when adding cards from file", e);
         }
 
     }
@@ -171,7 +171,7 @@ public class Deck {
                     }
                 }
         } catch (IOException e) {
-            System.out.println("File not found when adding cards from file" + e);
+            throw new RuntimeException("File not found when adding cards from file", e);
         }
         return "";
     }

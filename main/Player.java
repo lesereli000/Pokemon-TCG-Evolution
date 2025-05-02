@@ -8,7 +8,7 @@ public class Player {
     private static final int HAND_SIZE = 7;
     protected Deck deck;
     protected Deck hand;
-    private Deck bench;
+    protected Deck bench;
     private Deck discard;
     protected Pokemon activePokemon;
     protected Deck prizeCards;
@@ -200,9 +200,13 @@ public class Player {
         String evolvesFrom = evolvedPokemon.evolvesFrom;
         if(bench.containsCardNamed(evolvesFrom)) {
             Pokemon oldPokemon = (Pokemon) bench.getCardFromName(evolvesFrom);
-//            replacePokemon(oldPokemon, evolvedPokemon);
+            replacePokemon(oldPokemon, evolvedPokemon);
             return true;
         }
         return false;
+    }
+
+    protected void replacePokemon(Pokemon oldPokemon, Pokemon evolvedPokemon) {
+
     }
 }

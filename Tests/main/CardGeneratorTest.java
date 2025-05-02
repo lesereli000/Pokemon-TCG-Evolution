@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.easymock.EasyMock.createMock;
 import static org.junit.Assert.*;
 
 public class CardGeneratorTest {
