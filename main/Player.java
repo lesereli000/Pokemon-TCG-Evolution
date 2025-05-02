@@ -14,6 +14,7 @@ public class Player {
     protected Deck prizeCards;
     private String name;
     private int numPokemonDied;
+    private boolean canAddEnergy;
 
 
     public Player() {
@@ -28,6 +29,7 @@ public class Player {
         this.name = name;
         this.prizeCards = new Deck();
         this.numPokemonDied = 0;
+        this.canAddEnergy = true;
     }
 
     public void createFullRandomDeck(Random rand) {
@@ -153,6 +155,7 @@ public class Player {
     }
 
     public void addEnergyToPokemon(Pokemon selectedPokemon, Energy selectedEnergy) {
+        canAddEnergy = false;
         removeFromHand(selectedEnergy);
         selectedPokemon.addEnergy(selectedEnergy);
     }
@@ -182,5 +185,13 @@ public class Player {
     public void pickupPrizeCard() {
         Card cardToAdd = prizeCards.removeTopCard();
         hand.addCard(cardToAdd);
+    }
+
+    public boolean canAddEnergy() {
+        return canAddEnergy;
+    }
+
+    public void passTurn() {
+        canAddEnergy = true;
     }
 }

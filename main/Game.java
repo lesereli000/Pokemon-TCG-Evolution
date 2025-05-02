@@ -89,6 +89,7 @@ public class Game {
     }
 
     private void passTurn() {
+        curPlayer.passTurn();
         playerTurn = playerTurn % 2 + 1;
         curPlayer = playerTurn == 1 ? player1 : player2;
         defendingPlayer = playerTurn == 1 ? player2 : player1;
@@ -128,8 +129,13 @@ public class Game {
             // TODO: Check if there is a card on the field to evolve from
         } else if (lastSelectedCard instanceof Energy) {
 //            addEnergyToActive((Energy) lastSelectedCard);
-            selectedEnergy = (Energy)lastSelectedCard;
-            displayPossiblePokemon();
+            if(curPlayer.canAddEnergy()) {
+                selectedEnergy = (Energy)lastSelectedCard;
+                displayPossiblePokemon();
+            } else {
+                gui.displayMessage("Can only add one energy per turn");
+            }
+
         } else if (lastSelectedCard instanceof Trainer) {
             //(Trainer) lastSelectedCard.doEffects(player1, player2, playerTurn);
         } else {
