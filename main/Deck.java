@@ -184,6 +184,14 @@ public class Deck {
         return false;
     }
 
+    public Card getCardFromName(String cardName) {
+        for (Card card : cards) {
+            String currentName = card.getName();
+            if(currentName.equals(cardName)) return card;
+        }
+        throw new RuntimeException(cardName + " not found in deck!");
+    }
+
     public static class TooManyRepeatsException extends RuntimeException {
         public TooManyRepeatsException(String message) {
             super(message);

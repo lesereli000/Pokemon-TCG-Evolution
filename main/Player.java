@@ -199,7 +199,9 @@ public class Player {
         Pokemon evolvedPokemon = (Pokemon) lastSelectedCard;
         String evolvesFrom = evolvedPokemon.evolvesFrom;
         if(bench.containsCardNamed(evolvesFrom)) {
-
+            Pokemon oldPokemon = (Pokemon) bench.getCardFromName(evolvesFrom);
+//            replacePokemon(oldPokemon, evolvedPokemon);
+            return true;
         }
         return false;
     }

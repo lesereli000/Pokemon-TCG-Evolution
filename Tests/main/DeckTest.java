@@ -768,6 +768,73 @@ public class DeckTest {
         verify(e, t, p, p2);
     }
 
+    @Test
+    public void testGetCardFromName() {
+        Deck d = new Deck();
+        boolean passes = false;
+        try {
+            d.getCardFromName("Pikachu");
+        } catch (RuntimeException e) {
+            assertEquals("Pikachu not found in deck!", e.getMessage());
+            passes = true;
+        }
+        assertTrue(passes);
+    }
+
+    @Test
+    public void testGetCardFromNameMany() {
+        Deck d = new Deck();
+        boolean passes = false;
+        Pokemon p = createMock(Pokemon.class);
+        Trainer t = createMock(Trainer.class);
+        Energy e = createMock(Energy.class);
+
+        expect(e.getName()).andReturn("Energy").anyTimes();
+        expect(t.getName()).andReturn("Trainer").anyTimes();
+        expect(p.getName()).andReturn("Pikachu").anyTimes();
+
+        replay(e, t, p);
+
+        try {
+            d.getCardFromName("Charizard");
+        } catch (RuntimeException exc) {
+            assertEquals("Charizard not found in deck!", exc.getMessage());
+            passes = true;
+        }
+        assertTrue(passes);
+    }
+
+    @Test
+    public void testFindsCardFromName() {
+        Deck d = new Deck();
+        CardGenerator pg = new CardGenerator();
+        Pokemon charizard = (Pokemon) pg.generateCard("Charizard");
+        Pokemon p = createMock(Pokemon.class);
+        Energy e = createMock(Energy.class);
+        Trainer t = createMock(Trainer.class);
+
+
+        expect(e.getName()).andReturn("Energy").anyTimes();
+        expect(t.getName()).andReturn("Trainer").anyTimes();
+        expect(p.getName()).andReturn("Pikachu").anyTimes();
+
+        replay(e, t, p);
+
+        d.addCard(p);
+        d.addCard(e);
+        d.addCard(t);
+        d.addCard(e);
+        d.addCard(e);
+        d.addCard(e);
+        d.addCard(p);
+        d.addCard(t);
+        d.addCard(p);
+        d.addCard(charizard);
+
+        assertEquals(charizard, d.getCardFromName("Charizard"));
+        verify(e, t, p);
+    }
+
     // TODO implement error catching for adding cards that dont exist.
 //    @Test
 //    public void testAddDeckFromFileWithWrongFormatCard(){
