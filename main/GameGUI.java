@@ -412,6 +412,8 @@ public class GameGUI implements GUI {
 	@Override
 	public void updateTurn(int playerTurn) {
 		this.playerTurn = playerTurn;
+		this.lastSelectedCard = null;
+		this.lastSelectedAttack = null;
 		frame.repaint();
 	}
 
