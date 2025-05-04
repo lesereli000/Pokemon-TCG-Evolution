@@ -28,6 +28,7 @@ public class PlayerTest {
         expect(deck.removeTopCard()).andReturn(card).times(7);
         expect(hand.numberBasicPokemon()).andReturn(0).andReturn(1).once();
         expect(hand.addCard(card)).andReturn(true).times(7);
+        expect(deck.size()).andReturn(50).times(7);
         replay(deck, hand);
 
         assertEquals(0, hand.numberBasicPokemon());

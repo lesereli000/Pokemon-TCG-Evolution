@@ -76,7 +76,7 @@ public class GameTest {
         expect(gui.getLastSelectedCard()).andReturn(card).anyTimes();
         gui.displayMessage("Basic Pokemon has not been selected!");
         replay(gui);
-        Game game = new Game(gui, rand, p1, p2, true);
+        Game game = new Game(gui, rand, p1, p2, true,1);
         game.makeActiveCard();
         verify(gui);
     }
@@ -90,7 +90,7 @@ public class GameTest {
         expect(gui.getLastSelectedCard()).andReturn(card).anyTimes();
         gui.displayMessage("Basic Pokemon has not been selected!");
         replay(gui);
-        Game game = new Game(gui, rand, p1, p2, true);
+        Game game = new Game(gui, rand, p1, p2, true,1);
         game.makeActiveCard();
         verify(gui);
     }
@@ -104,7 +104,7 @@ public class GameTest {
 
         ArrayList<Card> cards = new ArrayList<>();
 
-        Game game = new Game(gui, rand, p1, p2, true);
+        Game game = new Game(gui, rand, p1, p2, true,1);
         ArrayList<Card> returnedCards = game.getOnlyPokemon(cards);
         assertEquals(0, returnedCards.size());
     }
@@ -120,7 +120,7 @@ public class GameTest {
         Pokemon pikachu = createMock(Pokemon.class);
         cards.add(pikachu);
 
-        Game game = new Game(gui, rand, p1, p2, true);
+        Game game = new Game(gui, rand, p1, p2, true,1);
         ArrayList<Card> returnedCards = game.getOnlyPokemon(cards);
         assertEquals(pikachu, returnedCards.get(0));
     }
@@ -154,7 +154,7 @@ public class GameTest {
         cards.add(pok5);
         cards.add(e2);
 
-        Game game = new Game(gui, rand, p1, p2, true);
+        Game game = new Game(gui, rand, p1, p2, true,1);
         ArrayList<Card> returnedCards = game.getOnlyPokemon(cards);
         assertEquals(pok1, returnedCards.get(0));
         assertEquals(pok2, returnedCards.get(1));
@@ -211,7 +211,7 @@ public class GameTest {
         Pokemon attackingPokemon = createMock(Pokemon.class);
         Pokemon defendingPokemon = createMock(Pokemon.class);
 
-        Game game = new Game(gui, rand, p1, p2, true);
+        Game game = new Game(gui, rand, p1, p2, true,1);
 
         p1.setActivePokemon(attackingPokemon);
         p2.setActivePokemon(defendingPokemon);
@@ -235,4 +235,32 @@ public class GameTest {
 //        game.makeActiveCard();
 //        verify(gui);
 //    }
+
+
+    @Test
+    public void testLoseGameWhenDrawFromEmptyDeck() {
+        Random rand = createMock(Random.class);
+        GUI gui = createMock(GUI.class);
+        Player p1 = createMock(Player.class);
+        Player p2 = createMock(Player.class);
+        p1.passTurn();
+        gui.removeAllButtons();
+        expect(p2.drawCard()).andReturn(false);
+
+        expect(p2.getName()).andReturn("player");
+        expect(p1.getName()).andReturn("player");
+        gui.displayMessage("Sadly for player\n"
+                +"You has run out of cards in your deck\nso player wins the game!");
+
+        gui.closeWindow();
+        gui.updateTurn(2);
+
+        replay(gui, p1,p2);
+        Game game = new Game(gui, rand, p1, p2, true,2);
+        game.passTurn();
+        verify(gui,p1,p2);
+    }
+
+
+
 }

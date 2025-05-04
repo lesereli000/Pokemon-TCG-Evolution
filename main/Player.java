@@ -17,6 +17,7 @@ public class Player {
     private boolean canAddEnergy;
 
 
+
     public Player() {
         this("Unnamed Player");
     }
@@ -30,6 +31,7 @@ public class Player {
         this.prizeCards = new Deck();
         this.numPokemonDied = 0;
         this.canAddEnergy = true;
+
     }
 
     public void createFullRandomDeck(Random rand) {
@@ -44,9 +46,15 @@ public class Player {
         this.deck.shuffle();
     }
 
-    public void drawCard(){
-        Card drawnCard = deck.removeTopCard();
-        hand.addCard(drawnCard);
+    public boolean drawCard(){
+        if(this.deckSize() != 0) {
+            Card drawnCard = deck.removeTopCard();
+            hand.addCard(drawnCard);
+            return true;
+        }else{
+            return false;
+        }
+
     }
 
     public void checkForBasics(Random rand) {
@@ -193,6 +201,10 @@ public class Player {
 
     public void passTurn() {
         canAddEnergy = true;
+    }
+
+    public int deckSize() {
+        return deck.size();
     }
 
     public boolean evolvePokemon(Card lastSelectedCard) {

@@ -31,12 +31,12 @@ public class Game {
         gui.createFlipButton(this::setupGame);
     }
 
-    Game(GUI gui, Random rand, Player player1, Player player2, boolean test) {
+    Game(GUI gui, Random rand, Player player1, Player player2, boolean test, int turnCount) {
         this.player1 = player1;
         this.player2 = player2;
         this.gui = gui;
         this.random = rand;
-        this.turn = 1;
+        this.turn = turnCount;
         this.playerTurn = 1;
         this.curPlayer = player1;
         this.gameOver = false;
@@ -88,7 +88,7 @@ public class Game {
         }
     }
 
-    private void passTurn() {
+    void passTurn() {
         curPlayer.passTurn();
         playerTurn = playerTurn % 2 + 1;
         curPlayer = playerTurn == 1 ? player1 : player2;
@@ -99,8 +99,15 @@ public class Game {
         } else {
             gui.removeAllButtons();
             if (!gameOver) {
-                curPlayer.drawCard();
-                mainGameLoop();
+                if(curPlayer.drawCard()) {
+                    mainGameLoop();
+                }else{
+                    gui.displayMessage("Sadly for " + curPlayer.getName() + "\n"
+                            +"You has run out of cards in your deck\nso "+ defendingPlayer.getName()+" wins the game!" );
+                    gameOver = true;
+                    gui.closeWindow();
+                    System.out.println("Game Over!");
+                }
             } else {
                 System.out.println("Game Over");
             }
