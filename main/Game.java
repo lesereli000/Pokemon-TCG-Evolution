@@ -283,6 +283,7 @@ public class Game {
         int oldActive = (curPlayer == player1) ? 1 : 2;
 
         curPlayer.pickupPrizeCard();
+        curPlayer.passTurn();
         Player oldPlayer = curPlayer;
         Card newActive = defendingPlayer.setNewActive();
         curPlayer = (curPlayer == player1) ? player2 : player1;
