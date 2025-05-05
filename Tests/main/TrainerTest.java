@@ -2,6 +2,9 @@ package main;
 
 import org.junit.Test;
 
+import java.util.Random;
+
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -94,6 +97,20 @@ public class TrainerTest {
         Trainer c = new Trainer(name, effects);
 
         assertEquals(effects, c.getEffects());
+    }
+
+    @Test
+    public void testBillTrainer(){
+        Player p1 = createMock(Player.class);
+        Player p2 = createMock(Player.class);
+        CardGenerator pg = new CardGenerator();
+        Trainer c = (Trainer) pg.generateCard("Bill");
+        assertEquals("Bill", c.getName());
+        expect(p1.drawCard()).andReturn(true);
+        expect(p1.drawCard()).andReturn(true);
+        replay(p1,p2);
+        c.doEffects(p1,p2);
+        verify(p1,p2);
     }
 
 

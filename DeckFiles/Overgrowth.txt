@@ -6,9 +6,9 @@
 2,Kakuna
 2,Ivysaur
 4,Weedle
-4,Bulbasaur
+2,Bulbasaur
 1,Potion
-2,Bill
+4,Bill
 2,Super Potion
 2,Switch
 2,Gust of Wind

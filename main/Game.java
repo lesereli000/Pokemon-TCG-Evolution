@@ -145,7 +145,10 @@ public class Game {
             }
 
         } else if (lastSelectedCard instanceof Trainer) {
-            //(Trainer) lastSelectedCard.doEffects(player1, player2, playerTurn);
+            ((Trainer) lastSelectedCard).doEffects(curPlayer, defendingPlayer);
+            curPlayer.removeFromHand(lastSelectedCard);
+            gui.removeAllButtons();
+            mainGameLoop();
         } else {
             gui.displayMessage("Playable card has not been selected");
         }

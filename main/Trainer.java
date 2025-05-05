@@ -35,4 +35,12 @@ public class Trainer extends Card{
     public String getEffects(){
         return this.effects;
     }
+
+    public void doEffects(Player activePlayer, Player opposingPlayer) {
+        switch(this.effects) {
+            case "Draw 2 cards.":
+                activePlayer.drawCard();
+                activePlayer.drawCard();
+        }
+    }
 }
