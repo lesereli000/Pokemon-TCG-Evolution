@@ -5,6 +5,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public interface GUI {
+    void createGUI();
     void createFlipButton(Runnable flipListener);
     void removeButton(JButton button);
     void setDeckColor(Color deckColor);
