@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 Test set: main.PokemonTest
 -------------------------------------------------------------------------------
-Tests run: 26, Failures: 0, Errors: 18, Skipped: 0, Time elapsed: 0.056 s <<< FAILURE! -- in main.PokemonTest
+Tests run: 26, Failures: 0, Errors: 18, Skipped: 0, Time elapsed: 0.137 s <<< FAILURE! -- in main.PokemonTest
 main.PokemonTest.testHealthGetters -- Time elapsed: 0 s <<< ERROR!
 org.json.JSONException: JSONObject["rules"] not found.
 	at org.json.JSONObject.get(JSONObject.java:652)
@@ -37,7 +37,7 @@ org.json.JSONException: JSONObject["rules"] not found.
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 
-main.PokemonTest.testNoColorless -- Time elapsed: 0.003 s <<< ERROR!
+main.PokemonTest.testNoColorless -- Time elapsed: 0.007 s <<< ERROR!
 org.json.JSONException: JSONObject["rules"] not found.
 	at org.json.JSONObject.get(JSONObject.java:652)
 	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
@@ -72,7 +72,7 @@ org.json.JSONException: JSONObject["rules"] not found.
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 
-main.PokemonTest.testCanAttackMultiple -- Time elapsed: 0.004 s <<< ERROR!
+main.PokemonTest.testCanAttackMultiple -- Time elapsed: 0.009 s <<< ERROR!
 org.json.JSONException: JSONObject["rules"] not found.
 	at org.json.JSONObject.get(JSONObject.java:652)
 	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
@@ -107,7 +107,7 @@ org.json.JSONException: JSONObject["rules"] not found.
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 
-main.PokemonTest.testCanRetreat -- Time elapsed: 0.003 s <<< ERROR!
+main.PokemonTest.testCanRetreat -- Time elapsed: 0.008 s <<< ERROR!
 org.json.JSONException: JSONObject["rules"] not found.
 	at org.json.JSONObject.get(JSONObject.java:652)
 	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
@@ -142,7 +142,7 @@ org.json.JSONException: JSONObject["rules"] not found.
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 
-main.PokemonTest.testTypeResistance -- Time elapsed: 0.004 s <<< ERROR!
+main.PokemonTest.testTypeResistance -- Time elapsed: 0.007 s <<< ERROR!
 org.json.JSONException: JSONObject["rules"] not found.
 	at org.json.JSONObject.get(JSONObject.java:652)
 	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
@@ -177,7 +177,7 @@ org.json.JSONException: JSONObject["rules"] not found.
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 
-main.PokemonTest.testRemoveColorless -- Time elapsed: 0.004 s <<< ERROR!
+main.PokemonTest.testRemoveColorless -- Time elapsed: 0.008 s <<< ERROR!
 org.json.JSONException: JSONObject["rules"] not found.
 	at org.json.JSONObject.get(JSONObject.java:652)
 	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
@@ -212,7 +212,7 @@ org.json.JSONException: JSONObject["rules"] not found.
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 
-main.PokemonTest.testRemoveEnergy -- Time elapsed: 0.004 s <<< ERROR!
+main.PokemonTest.testRemoveEnergy -- Time elapsed: 0.011 s <<< ERROR!
 org.json.JSONException: JSONObject["rules"] not found.
 	at org.json.JSONObject.get(JSONObject.java:652)
 	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
@@ -247,7 +247,7 @@ org.json.JSONException: JSONObject["rules"] not found.
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 
-main.PokemonTest.testCanRetreatManyEnergy -- Time elapsed: 0.003 s <<< ERROR!
+main.PokemonTest.testCanRetreatManyEnergy -- Time elapsed: 0.009 s <<< ERROR!
 org.json.JSONException: JSONObject["rules"] not found.
 	at org.json.JSONObject.get(JSONObject.java:652)
 	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
@@ -282,7 +282,7 @@ org.json.JSONException: JSONObject["rules"] not found.
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 
-main.PokemonTest.testCanAttack -- Time elapsed: 0.003 s <<< ERROR!
+main.PokemonTest.testCanAttack -- Time elapsed: 0.009 s <<< ERROR!
 org.json.JSONException: JSONObject["rules"] not found.
 	at org.json.JSONObject.get(JSONObject.java:652)
 	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
@@ -317,7 +317,7 @@ org.json.JSONException: JSONObject["rules"] not found.
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 
-main.PokemonTest.testRemoveNonExistentEnergy -- Time elapsed: 0.003 s <<< ERROR!
+main.PokemonTest.testRemoveNonExistentEnergy -- Time elapsed: 0.011 s <<< ERROR!
 org.json.JSONException: JSONObject["rules"] not found.
 	at org.json.JSONObject.get(JSONObject.java:652)
 	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
@@ -352,7 +352,7 @@ org.json.JSONException: JSONObject["rules"] not found.
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 
-main.PokemonTest.testManyColorless -- Time elapsed: 0.003 s <<< ERROR!
+main.PokemonTest.testManyColorless -- Time elapsed: 0.010 s <<< ERROR!
 org.json.JSONException: JSONObject["rules"] not found.
 	at org.json.JSONObject.get(JSONObject.java:652)
 	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
@@ -387,7 +387,7 @@ org.json.JSONException: JSONObject["rules"] not found.
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 
-main.PokemonTest.testTypeWeakness -- Time elapsed: 0.004 s <<< ERROR!
+main.PokemonTest.testTypeWeakness -- Time elapsed: 0.009 s <<< ERROR!
 org.json.JSONException: JSONObject["rules"] not found.
 	at org.json.JSONObject.get(JSONObject.java:652)
 	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
@@ -422,7 +422,7 @@ org.json.JSONException: JSONObject["rules"] not found.
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 
-main.PokemonTest.testColorlessAttack -- Time elapsed: 0.003 s <<< ERROR!
+main.PokemonTest.testColorlessAttack -- Time elapsed: 0.006 s <<< ERROR!
 org.json.JSONException: JSONObject["rules"] not found.
 	at org.json.JSONObject.get(JSONObject.java:652)
 	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
@@ -457,7 +457,7 @@ org.json.JSONException: JSONObject["rules"] not found.
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 
-main.PokemonTest.testRemoveManyEnergies -- Time elapsed: 0.003 s <<< ERROR!
+main.PokemonTest.testRemoveManyEnergies -- Time elapsed: 0.005 s <<< ERROR!
 org.json.JSONException: JSONObject["rules"] not found.
 	at org.json.JSONObject.get(JSONObject.java:652)
 	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
@@ -492,7 +492,7 @@ org.json.JSONException: JSONObject["rules"] not found.
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 
-main.PokemonTest.testEvolvesFrom -- Time elapsed: 0.003 s <<< ERROR!
+main.PokemonTest.testEvolvesFrom -- Time elapsed: 0.006 s <<< ERROR!
 org.json.JSONException: JSONObject["rules"] not found.
 	at org.json.JSONObject.get(JSONObject.java:652)
 	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
@@ -527,7 +527,7 @@ org.json.JSONException: JSONObject["rules"] not found.
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 
-main.PokemonTest.testIsAlive -- Time elapsed: 0.003 s <<< ERROR!
+main.PokemonTest.testIsAlive -- Time elapsed: 0.006 s <<< ERROR!
 org.json.JSONException: JSONObject["rules"] not found.
 	at org.json.JSONObject.get(JSONObject.java:652)
 	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
@@ -562,7 +562,7 @@ org.json.JSONException: JSONObject["rules"] not found.
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 
-main.PokemonTest.testRemoveNoEnergy -- Time elapsed: 0.003 s <<< ERROR!
+main.PokemonTest.testRemoveNoEnergy -- Time elapsed: 0.005 s <<< ERROR!
 org.json.JSONException: JSONObject["rules"] not found.
 	at org.json.JSONObject.get(JSONObject.java:652)
 	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
@@ -597,7 +597,7 @@ org.json.JSONException: JSONObject["rules"] not found.
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 
-main.PokemonTest.testRemoveManyColorless -- Time elapsed: 0.003 s <<< ERROR!
+main.PokemonTest.testRemoveManyColorless -- Time elapsed: 0.005 s <<< ERROR!
 org.json.JSONException: JSONObject["rules"] not found.
 	at org.json.JSONObject.get(JSONObject.java:652)
 	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
