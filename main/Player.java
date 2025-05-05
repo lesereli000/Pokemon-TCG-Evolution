@@ -209,7 +209,7 @@ public class Player {
 
     public boolean evolvePokemon(Card lastSelectedCard) {
         Pokemon evolvedPokemon = (Pokemon) lastSelectedCard;
-        String evolvesFrom = evolvedPokemon.evolvesFrom;
+        String evolvesFrom = evolvedPokemon.getEvolvesFrom();
         if(bench.containsCardNamed(evolvesFrom)) {
             Pokemon oldPokemon = (Pokemon) bench.getCardFromName(evolvesFrom);
             replacePokemon(oldPokemon, evolvedPokemon);

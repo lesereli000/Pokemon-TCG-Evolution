@@ -36,7 +36,7 @@ public class Deck {
         return repeats;
     }
 
-    public void addRandomCards(int numCards, Random rand) {
+    public boolean addRandomCards(int numCards, Random rand) {
         try(FileReader reader = new FileReader("src/main/resources/base1.json")) {
             String content = new String(Files.readAllBytes(Paths.get("src/main/resources/base1.json")));
             JSONArray pokemonArray = new JSONArray(content);
@@ -53,6 +53,7 @@ public class Deck {
         } catch (IOException e) {
             throw new RuntimeException("File not found when adding random cards", e);
         }
+        return true;
     }
 
     public ArrayList<Card> getCards() {
@@ -70,10 +71,11 @@ public class Deck {
         return true;
     }
 
-    public void removeCard(Card card) {
+    public boolean removeCard(Card card) {
         if(!cards.remove(card)) {
             throw new CardDoesNotExist("Card " + card.getName() + " does not exist");
         }
+        return true;
     }
 
     public Card removeTopCard() {
@@ -97,7 +99,7 @@ public class Deck {
 
     }
 
-    public void addEnergies(int numberEnergies, Random rand) {
+    public boolean addEnergies(int numberEnergies, Random rand) {
         try(FileReader reader = new FileReader("src/main/resources/base1.json")) {
             String content = new String(Files.readAllBytes(Paths.get("src/main/resources/base1.json")));
             JSONArray pokemonArray = new JSONArray(content);
@@ -115,6 +117,7 @@ public class Deck {
         } catch (IOException e) {
             throw new RuntimeException("File not found when adding random cards", e);
         }
+        return true;
     }
 
     public void createDeckFromFile(String fileString) {

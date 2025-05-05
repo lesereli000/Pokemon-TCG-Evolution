@@ -188,4 +188,8 @@ public class Pokemon extends Card{
     public void setEvolvesFrom(String evolvesFrom) {
         this.evolvesFrom = evolvesFrom;
     }
+
+    public String getEvolvesFrom() {
+        return evolvesFrom;
+    }
 }
