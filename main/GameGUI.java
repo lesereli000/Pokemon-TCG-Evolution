@@ -6,8 +6,6 @@ import javax.swing.*;
 
 public class GameGUI implements GUI {
 
-	//TODO Update GameGUI to display a spot for the active players hand
-
 	static final int frameWidth = 1200;
 	static final int frameHeight = frameWidth*3/4;
 	static final int frameXLoc = 0;
@@ -214,7 +212,6 @@ public class GameGUI implements GUI {
 	}
 
 	public void createFlipButton() {
-		//TODO: Do not allow the user to continue until button flipped
 		createSDHoldingButton("Flip Coin");
         while (!waitForAction) {
             Thread.onSpinWait();
@@ -307,7 +304,6 @@ public class GameGUI implements GUI {
 
 	@Override
 	public Card displayCards(ArrayList<Card> playerCards) {
-		//TODO: Return the actual selected card here
         for (Card currCard:playerCards){
             createLinkedButtonCard(currCard.getName(), currCard);
         }
