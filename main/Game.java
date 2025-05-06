@@ -84,6 +84,7 @@ public class Game {
     }
 
     public boolean checkBasicPokemon(Card card) {
+        if(!(card instanceof Pokemon)) return false;
         Pokemon pokemon = (Pokemon) card;
         pokemon.getStage();
         return false;

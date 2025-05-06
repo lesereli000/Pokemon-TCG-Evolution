@@ -193,4 +193,14 @@ public class GameTest {
         verify(p);
     }
 
+    @Test
+    public void testCheckBasicPokemonNotPokemon() {
+        GameGUI gui = createMock(GameGUI.class);
+        Energy e = createMock(Energy.class);
+
+        Game game = new Game(gui);
+        boolean output = game.checkBasicPokemon(e);
+        assertFalse(output);
+    }
+
 }
