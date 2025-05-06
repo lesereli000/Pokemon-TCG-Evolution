@@ -60,6 +60,12 @@ public class GameGUI implements GUI {
 	private Font boldFont = new Font("Arial", Font.BOLD, 16);
 	private Font plainFont = new Font("Arial", Font.PLAIN, 12);
 
+
+	private volatile boolean waitForAction = false;
+
+
+
+
 	private class GamePanel extends JPanel {
 		@Override
 		protected void paintComponent(Graphics g) {
@@ -208,7 +214,11 @@ public class GameGUI implements GUI {
 
 	public void createFlipButton() {
 		//TODO: Do not allow the user to continue until button flipped
-		createSelfDestructingButton("Flip Coin");
+		createSDHoldingButton("Flip Coin");
+        while (!waitForAction) {
+            Thread.onSpinWait();
+        }
+		this.waitForAction = false;
 	}
 
 	public void removeButton(JButton button) {
@@ -367,9 +377,10 @@ public class GameGUI implements GUI {
 	}
 
 	@Override
-	public JButton createSelfDestructingButton(String message) {
+	public JButton createSDHoldingButton(String message) {
 		JButton btn = new JButton(message);
 		btn.addActionListener(e -> {
+			this.waitForAction = true;
 			removeButton(btn);
 		});
 		buttons.add(btn);

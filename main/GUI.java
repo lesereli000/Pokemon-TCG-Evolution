@@ -16,7 +16,7 @@ public interface GUI {
     Card displayCards(ArrayList<Card> currentCards);
     JButton createButton(String message);
     JButton createLinkedButtonCard(String message, Card currCard);
-    JButton createSelfDestructingButton(String message);
+    JButton createSDHoldingButton(String message);
     void addBenchCard(Card newBench, int playerTurn);
     void removeBenchCard(Card newBench, int playerTurn);
     void removeAllButtons();
