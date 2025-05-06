@@ -225,4 +225,38 @@ public class GameTest {
 
         verify(p);
     }
+
+    @Test
+    public void testCantAddToBench() {
+        GameGUI gui = createMock(GameGUI.class);
+        gui.createGUI();
+        Pokemon p = createMock(Pokemon.class);
+        expect(p.getStage()).andReturn(1);
+        gui.displayMessage("This is not a basic Pokemon and can not place card on bench!");
+        replay(p, gui);
+
+        Game game = new Game(gui);
+        game.selectCard(p);
+
+        verify(p, gui);
+    }
+
+    @Test
+    public void testAddCardToBench() {
+        GameGUI gui = createMock(GameGUI.class);
+        gui.createGUI();
+        Pokemon p = createMock(Pokemon.class);
+        Player player = createMock(Player.class);
+        player.addBenchPokemon(p);
+        expect(p.getStage()).andReturn(0);
+        replay(p, player, gui);
+
+        Game game = new Game(gui);
+        game.currentPlayer = player;
+        game.selectCard(p);
+
+        verify(player, p, gui);
+
+    }
+
 }

@@ -34,6 +34,7 @@ public class Game {
             makeNewActivePokemon((Pokemon) selectedCard);
         } else {
             gui.displayMessage("Not a basic Pokemon!");
+            gui.removeAllButtons();
             selectActiveLoop();
         }
     }
@@ -45,6 +46,7 @@ public class Game {
     protected void setPlayerTurns(String coinFlipResult) {
         currentPlayer = coinFlipResult.equals("Heads") ? player1 : player2;
         defendingPlayer = coinFlipResult.equals("Heads") ? player2 : player1;
+        gui.displayMessage("The result was " + coinFlipResult + " " + currentPlayer.getName() + " goes first!");
     }
 
     protected String flipCoin(Random rand) {
@@ -89,11 +91,26 @@ public class Game {
         return stage == 0;
     }
 
+    public void selectCard(Card selectedCard) {
+        if(selectedCard instanceof Pokemon) {
+            handlePokemon((Pokemon) selectedCard);
+        } else {
+            gui.displayMessage("Can not handle that card right now");
+        }
+    }
+
+    private void handlePokemon(Pokemon selectedPokemon) {
+        int pokemonStage = selectedPokemon.getStage();
+        if(pokemonStage == 0) {
+            currentPlayer.addBenchPokemon(selectedPokemon);
+        } else {
+            gui.displayMessage("This is not a basic Pokemon and can not place card on bench!");
+        }
+    }
+
     public static void main(String[] args) {
         GUI gui = new GameGUI();
         Game game = new Game(gui);
         game.setupGame();
     }
-
-
 }

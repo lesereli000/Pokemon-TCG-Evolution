@@ -207,6 +207,7 @@ public class GameGUI implements GUI {
 	}
 
 	public void createFlipButton() {
+		//TODO: Do not allow the user to continue until button flipped
 		createSelfDestructingButton("Flip Coin");
 	}
 
