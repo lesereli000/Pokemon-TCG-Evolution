@@ -7,6 +7,7 @@ import java.util.Random;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class GameTest {
 
@@ -140,7 +141,7 @@ public class GameTest {
         Player player1 = createMock(Player.class);
         ArrayList<Card> cards = new ArrayList<>();
         expect(player1.handAsList()).andReturn(cards);
-        gui.displayCards(cards);
+        expect(gui.displayCards(cards)).andReturn(null);
         replay(gui, player1);
 
         Game game = new Game(gui);
@@ -161,4 +162,35 @@ public class GameTest {
         game.displayActiveDirections();
         verify(gui);
     }
+
+    @Test
+    public void testSelectActivePokemon() {
+        GameGUI gui = createMock(GameGUI.class);
+        gui.createGUI();
+        Pokemon p = createMock(Pokemon.class);
+        Player player = createMock(Player.class);
+        player.setActivePokemon(p);
+
+        replay(gui, player);
+
+        Game game = new Game(gui);
+        game.currentPlayer = player;
+        game.makeNewActivePokemon(p);
+        verify(gui, player);
+    }
+
+    @Test
+    public void testCheckBasicPokemonFalse() {
+        GameGUI gui = createMock(GameGUI.class);
+        Pokemon p = createMock(Pokemon.class);
+        expect(p.getStage()).andReturn(1);
+        replay(p);
+
+        Game game = new Game(gui);
+        boolean output = game.checkBasicPokemon(p);
+        assertFalse(output);
+
+        verify(p);
+    }
+
 }

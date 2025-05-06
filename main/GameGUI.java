@@ -60,10 +60,6 @@ public class GameGUI implements GUI {
 	private Font boldFont = new Font("Arial", Font.BOLD, 16);
 	private Font plainFont = new Font("Arial", Font.PLAIN, 12);
 
-	public GameGUI() {
-		createGUI();
-	}
-
 	private class GamePanel extends JPanel {
 		@Override
 		protected void paintComponent(Graphics g) {
@@ -287,10 +283,12 @@ public class GameGUI implements GUI {
 	}
 
 	@Override
-	public void displayCards(ArrayList<Card> playerCards) {
+	public Card displayCards(ArrayList<Card> playerCards) {
+		//TODO: Return the actual selected card here
         for (Card currCard : playerCards) {
             createLinkedButtonCard(currCard.getName(), currCard);
         }
+		return lastSelectedCard;
 	}
 
 	@Override

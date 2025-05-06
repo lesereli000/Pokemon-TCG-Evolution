@@ -13,7 +13,7 @@ public interface GUI {
     void makeActiveCard(Card newActive, int playerTurn);
     Card getLastSelectedCard();
     Attack getLastSelectedAttack();
-    void displayCards(ArrayList<Card> currentCards);
+    Card displayCards(ArrayList<Card> currentCards);
     JButton createButton(String message);
     JButton createLinkedButtonCard(String message, Card currCard);
     JButton createSelfDestructingButton(String message);

@@ -24,8 +24,18 @@ public class Game {
         setPlayerTurns(coinFlipResult);
         setupBothDecks();
         setupBothHands();
-        displayCurrentPlayerHand();
+        selectActiveLoop();
+    }
+
+    private void selectActiveLoop() {
         displayActiveDirections();
+        Card selectedCard = displayCurrentPlayerHand();
+        if(checkBasicPokemon(selectedCard)) {
+            makeNewActivePokemon((Pokemon) selectedCard);
+        } else {
+            gui.displayMessage("Not a basic Pokemon!");
+            selectActiveLoop();
+        }
     }
 
     protected void setupFlipButton() {
@@ -60,21 +70,30 @@ public class Game {
         player2.drawStartingHand();
     }
 
-    protected void displayCurrentPlayerHand() {
+    protected Card displayCurrentPlayerHand() {
         ArrayList<Card> playerCards = currentPlayer.handAsList();
-        gui.displayCards(playerCards);
+        return gui.displayCards(playerCards);
     }
 
     public void displayActiveDirections() {
         gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
     }
 
+    public void makeNewActivePokemon(Pokemon p) {
+        currentPlayer.setActivePokemon(p);
+    }
+
+    public boolean checkBasicPokemon(Card card) {
+        Pokemon pokemon = (Pokemon) card;
+        pokemon.getStage();
+        return false;
+    }
+
     public static void main(String[] args) {
-        GameGUI gui = new GameGUI();
+        GUI gui = new GameGUI();
         Game game = new Game(gui);
         game.setupGame();
     }
-
 
 
 }
