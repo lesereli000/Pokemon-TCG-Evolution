@@ -26,8 +26,8 @@ public class Game {
     }
 
     protected void setPlayerTurns(String coinFlipResult) {
-        currentPlayer = player1;
-        defendingPlayer = player2;
+        currentPlayer = coinFlipResult.equals("Heads") ? player1 : player2;
+        defendingPlayer = coinFlipResult.equals("Heads") ? player2 : player1;
     }
 
     protected String flipCoin(Random rand) {

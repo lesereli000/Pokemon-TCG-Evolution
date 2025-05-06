@@ -117,4 +117,18 @@ public class GameTest {
         assertEquals(player1, game.currentPlayer);
         assertEquals(player2, game.defendingPlayer);
     }
+
+    @Test
+    public void testPlayerTurnResultTails() {
+        GameGUI gui = createMock(GameGUI.class);
+        Player player1 = createMock(Player.class);
+        Player player2 = createMock(Player.class);
+
+        Game game = new Game(gui);
+        game.player1 = player1;
+        game.player2 = player2;
+        game.setPlayerTurns("Tails");
+        assertEquals(player2, game.currentPlayer);
+        assertEquals(player1, game.defendingPlayer);
+    }
 }
