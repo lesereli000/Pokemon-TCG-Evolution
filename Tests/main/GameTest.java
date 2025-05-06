@@ -13,20 +13,22 @@ public class GameTest {
     @Test
     public void testGameMakesGUI() {
         GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
         gui.createGUI();
         replay(gui);
-        new Game(gui);
+        new Game(gui, rand);
         verify(gui);
     }
 
     @Test
     public void testMakeFlipCoinButton() {
         GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
         gui.createGUI();
         gui.createFlipButton();
         replay(gui);
 
-        Game game = new Game(gui);
+        Game game = new Game(gui, rand);
         game.setupFlipButton();
 
         verify(gui);
@@ -39,8 +41,8 @@ public class GameTest {
         expect(rand.nextBoolean()).andReturn(true);
         replay(rand);
 
-        Game game = new Game(gui);
-        String flipResult = game.flipCoin(rand);
+        Game game = new Game(gui, rand);
+        String flipResult = game.flipCoin();
         assertEquals("Heads", flipResult);
 
         verify(rand);
@@ -53,8 +55,8 @@ public class GameTest {
         expect(rand.nextBoolean()).andReturn(false);
         replay(rand);
 
-        Game game = new Game(gui);
-        String flipResult = game.flipCoin(rand);
+        Game game = new Game(gui, rand);
+        String flipResult = game.flipCoin();
         assertEquals("Tails", flipResult);
 
         verify(rand);
@@ -63,8 +65,9 @@ public class GameTest {
     @Test
     public void testSetupPlayers() {
         GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
 
-        Game game = new Game(gui);
+        Game game = new Game(gui, rand);
         game.createPlayers();
         Player player1 = game.player1;
         Player player2 = game.player2;
@@ -75,13 +78,14 @@ public class GameTest {
     @Test
     public void testSetupBothDecks() {
         GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
         Player player1 = createMock(Player.class);
         Player player2 = createMock(Player.class);
         player1.createCustomDeck();
         player2.createCustomDeck();
         replay(player1, player2);
 
-        Game game = new Game(gui);
+        Game game = new Game(gui, rand);
         game.player1 = player1;
         game.player2 = player2;
 
@@ -92,13 +96,14 @@ public class GameTest {
     @Test
     public void testPlayerHand() {
         GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
         Player player1 = createMock(Player.class);
         Player player2 = createMock(Player.class);
         player1.drawStartingHand();
         player2.drawStartingHand();
         replay(player1, player2);
 
-        Game game = new Game(gui);
+        Game game = new Game(gui, rand);
         game.player1 = player1;
         game.player2 = player2;
         game.setupBothHands();
@@ -107,11 +112,12 @@ public class GameTest {
 
     @Test
     public void testPlayerTurnResultHeads() {
+        Random rand = createMock(Random.class);
         GameGUI gui = createMock(GameGUI.class);
         Player player1 = createMock(Player.class);
         Player player2 = createMock(Player.class);
 
-        Game game = new Game(gui);
+        Game game = new Game(gui, rand);
         game.player1 = player1;
         game.player2 = player2;
         game.setPlayerTurns("Heads");
@@ -122,10 +128,11 @@ public class GameTest {
     @Test
     public void testPlayerTurnResultTails() {
         GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
         Player player1 = createMock(Player.class);
         Player player2 = createMock(Player.class);
 
-        Game game = new Game(gui);
+        Game game = new Game(gui, rand);
         game.player1 = player1;
         game.player2 = player2;
         game.setPlayerTurns("Tails");
@@ -137,13 +144,14 @@ public class GameTest {
     public void testDisplayPlayerHand() {
         GameGUI gui = createMock(GameGUI.class);
         gui.createGUI();
+        Random rand = createMock(Random.class);
         Player player1 = createMock(Player.class);
         ArrayList<Card> cards = new ArrayList<>();
         expect(player1.handAsList()).andReturn(cards);
         expect(gui.displayCards(cards)).andReturn(null);
         replay(gui, player1);
 
-        Game game = new Game(gui);
+        Game game = new Game(gui, rand);
         game.currentPlayer = player1;
         game.displayCurrentPlayerHand();
 
@@ -153,11 +161,12 @@ public class GameTest {
     @Test
     public void testDirectionActivePokemon() {
         GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
         gui.createGUI();
         gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
         replay(gui);
 
-        Game game = new Game(gui);
+        Game game = new Game(gui, rand);
         game.displayActiveDirections();
         verify(gui);
     }
@@ -166,13 +175,14 @@ public class GameTest {
     public void testSelectActivePokemon() {
         GameGUI gui = createMock(GameGUI.class);
         gui.createGUI();
+        Random rand = createMock(Random.class);
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
         player.setActivePokemon(p);
 
         replay(gui, player);
 
-        Game game = new Game(gui);
+        Game game = new Game(gui, rand);
         game.currentPlayer = player;
         game.makeNewActivePokemon(p);
         verify(gui, player);
@@ -181,11 +191,12 @@ public class GameTest {
     @Test
     public void testCheckBasicPokemonFalse() {
         GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
         Pokemon p = createMock(Pokemon.class);
         expect(p.getStage()).andReturn(1);
         replay(p);
 
-        Game game = new Game(gui);
+        Game game = new Game(gui, rand);
         boolean output = game.checkBasicPokemon(p);
         assertFalse(output);
 
@@ -196,8 +207,9 @@ public class GameTest {
     public void testCheckBasicPokemonNotPokemon() {
         GameGUI gui = createMock(GameGUI.class);
         Energy e = createMock(Energy.class);
+        Random rand = createMock(Random.class);
 
-        Game game = new Game(gui);
+        Game game = new Game(gui, rand);
         boolean output = game.checkBasicPokemon(e);
         assertFalse(output);
     }
@@ -206,8 +218,9 @@ public class GameTest {
     public void testCheckBasicPokemonTrainer() {
         GameGUI gui = createMock(GameGUI.class);
         Trainer t = createMock(Trainer.class);
+        Random rand = createMock(Random.class);
 
-        Game game = new Game(gui);
+        Game game = new Game(gui, rand);
         boolean output = game.checkBasicPokemon(t);
         assertFalse(output);
     }
@@ -215,11 +228,12 @@ public class GameTest {
     @Test
     public void testCheckBasicPokemonTrue() {
         GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
         Pokemon p = createMock(Pokemon.class);
         expect(p.getStage()).andReturn(0);
         replay(p);
 
-        Game game = new Game(gui);
+        Game game = new Game(gui, rand);
         boolean output = game.checkBasicPokemon(p);
         assertTrue(output);
 
@@ -230,12 +244,13 @@ public class GameTest {
     public void testCantAddToBench() {
         GameGUI gui = createMock(GameGUI.class);
         gui.createGUI();
+        Random rand = createMock(Random.class);
         Pokemon p = createMock(Pokemon.class);
         expect(p.getStage()).andReturn(1);
         gui.displayMessage("This is not a basic Pokemon and can not place card on bench!");
         replay(p, gui);
 
-        Game game = new Game(gui);
+        Game game = new Game(gui, rand);
         game.selectCard(p);
 
         verify(p, gui);
@@ -244,6 +259,7 @@ public class GameTest {
     @Test
     public void testAddCardToBench() {
         GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
         gui.createGUI();
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
@@ -251,7 +267,7 @@ public class GameTest {
         expect(p.getStage()).andReturn(0);
         replay(p, player, gui);
 
-        Game game = new Game(gui);
+        Game game = new Game(gui, rand);
         game.currentPlayer = player;
         game.selectCard(p);
 
@@ -262,13 +278,14 @@ public class GameTest {
     public void testCantAddEnergy() {
         GameGUI gui = createMock(GameGUI.class);
         Player player = createMock(Player.class);
+        Random rand = createMock(Random.class);
         expect(player.canAddEnergy()).andReturn(false);
         gui.createGUI();
         gui.displayMessage("Can only add one energy per turn!");
         replay(gui,player);
         Energy e = createMock(Energy.class);
 
-        Game game = new Game(gui);
+        Game game = new Game(gui, rand);
         game.currentPlayer = player;
         game.selectCard(e);
         verify(gui, player);
@@ -277,6 +294,7 @@ public class GameTest {
     @Test
     public void testSuccessAddingEnergy() {
         GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
         Player player = createMock(Player.class);
         expect(player.canAddEnergy()).andReturn(true);
 
@@ -293,10 +311,9 @@ public class GameTest {
         replay(gui,player);
         Energy e = createMock(Energy.class);
 
-        Game game = new Game(gui);
+        Game game = new Game(gui, rand);
         game.currentPlayer = player;
         game.selectCard(e);
         verify(gui, player);
     }
-
 }
