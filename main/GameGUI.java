@@ -342,6 +342,17 @@ public class GameGUI implements GUI {
 		}
 	}
 
+	@Override
+	public String waitForButtonPressed() {
+		//TODO: Wait for any button to be pressed and return the appropriate output
+		return "";
+	}
+
+	@Override
+	public void displayActionButtons() {
+
+	}
+
 
 	@Override
 	public JButton createButton(String message) {
@@ -391,7 +402,6 @@ public class GameGUI implements GUI {
 		JButton btn = new JButton(message);
 		btn.addActionListener(e -> {
 			this.waitForAction = true;
-			this.lastSelectedButton = btn.getText();
 			removeButton(btn);
 		});
 		buttons.add(btn);

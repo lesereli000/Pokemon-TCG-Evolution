@@ -45,4 +45,7 @@ public class PlayerHandler {
     }
 
 
+    public void addToBench(Pokemon lastSelectedCard) {
+        currentPlayer.addBenchPokemon(lastSelectedCard);
+    }
 }

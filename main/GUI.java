@@ -35,4 +35,7 @@ public interface GUI {
 
     void removePrizeCard(int playerNum);
 
+    String waitForButtonPressed();
+
+    void displayActionButtons();
 }

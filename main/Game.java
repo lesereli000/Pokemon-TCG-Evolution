@@ -8,12 +8,14 @@ public class Game {
     protected Random random;
     protected SetupGame gameSetup;
     protected PlayerHandler playerHandler;
+    protected CardManager cardManager;
 
-    public Game(GUI gui, Random random, SetupGame gameSetup, PlayerHandler playerHandler) {
+    public Game(GUI gui, Random random, SetupGame gameSetup, PlayerHandler playerHandler, CardManager cardManager) {
         this.gui = gui;
         this.random = random;
         this.gameSetup = gameSetup;
         this.playerHandler = playerHandler;
+        this.cardManager = cardManager;
     }
 
     protected void setupGame() {
@@ -35,10 +37,36 @@ public class Game {
         if(checkBasicPokemon(selectedCard)) {
             makeNewActivePokemon((Pokemon) selectedCard);
             displayCurrentPlayerHand();
+            //mainGameLoop();
         } else {
             gui.displayMessage("Not a basic Pokemon!");
             gui.removeAllButtons();
             selectActiveLoop();
+        }
+    }
+
+    protected void mainGameLoop() {
+        String action = gui.waitForButtonPressed();
+        if(action.equals("AddToBench")) {
+            handleBenchAction();
+        }
+    }
+
+    protected void handleBenchAction() {
+        Card lastSelectedCard = gui.getLastSelectedCard();
+        if(!(lastSelectedCard instanceof Pokemon)) {
+            gui.displayMessage("Pokemon has not been selected!");
+        } else {
+            handleAddToBench((Pokemon)lastSelectedCard);
+        }
+    }
+
+    protected void handleEnergyAction() {
+        Card lastSelectedCard = gui.getLastSelectedCard();
+        if(!(lastSelectedCard instanceof Energy)) {
+            gui.displayMessage("Energy has not been selected!");
+        } else {
+            handleAddEnergy((Energy)lastSelectedCard);
         }
     }
 
@@ -62,9 +90,6 @@ public class Game {
         int curTurn = playerHandler.getPlayerTurn();
         currentPlayer.setActivePokemon(p);
         gui.makeActiveCard(p,curTurn);
-//        gui.waitForPassTurn();
-        //TODO add Pass Turn
-        //passTurn();
     }
 
     public boolean checkBasicPokemon(Card card) {
@@ -73,17 +98,7 @@ public class Game {
         return stage == 0;
     }
 
-    public void selectCard(Card selectedCard) {
-        if(selectedCard instanceof Pokemon) {
-            handlePokemon((Pokemon) selectedCard);
-        } else if (selectedCard instanceof Energy){
-            handleAddEnergy((Energy) selectedCard);
-        } else {
-            gui.displayMessage("Can not handle that card right now");
-        }
-    }
-
-    private void handlePokemon(Pokemon selectedPokemon) {
+    private void handleAddToBench(Pokemon selectedPokemon) {
         int pokemonStage = selectedPokemon.getStage();
         Player currentPlayer = playerHandler.getCurrentPlayer();
         if(pokemonStage == 0) {
@@ -93,7 +108,7 @@ public class Game {
         }
     }
 
-    private void handleAddEnergy(Energy energy) {
+    protected void handleAddEnergy(Energy energy) {
         Player currentPlayer = playerHandler.getCurrentPlayer();
         if(!currentPlayer.canAddEnergy()) {
             gui.displayMessage("Can only add one energy per turn!");
@@ -110,7 +125,8 @@ public class Game {
         Random random = new Random();
         SetupGame gameSetup = new SetupGame(random);
         PlayerHandler playerHandler = new PlayerHandler();
-        Game game = new Game(gui, random, gameSetup, playerHandler);
+        CardManager cardManager = new CardManager();
+        Game game = new Game(gui, random, gameSetup, playerHandler, cardManager);
         gui.createGUI();
         game.setupGame();
     }
