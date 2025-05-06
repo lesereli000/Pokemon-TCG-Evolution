@@ -81,7 +81,7 @@ public class Player {
 
     public void setActivePokemon(Pokemon activePokemon) {
         this.activePokemon = activePokemon;
-        this.hand.removeCard(activePokemon);
+        removeFromHand(this.activePokemon);
     }
 
     public ArrayList<Card> getOnlyPokemonFromHand() {
@@ -109,7 +109,6 @@ public class Player {
     }
 
     public void restartHand() {
-        System.out.println("Player " + this.name + " restarts hand");
         for (int i = 0; i < HAND_SIZE; i++) {
             Card cardToRemove = hand.removeTopCard();
             deck.addCard(cardToRemove);

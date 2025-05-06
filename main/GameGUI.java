@@ -253,7 +253,6 @@ public class GameGUI implements GUI {
 			player2ActiveColor = Color.GREEN;
 			this.player2activeCard = newActive;
 		}
-
 		frame.repaint();
 	}
 
@@ -275,7 +274,6 @@ public class GameGUI implements GUI {
 		} else if (playerTurn == 2 && !this.player2benchCards.isEmpty()) {
 			this.player2benchCards.remove(newBench);
 		}
-
 		frame.repaint();
 	}
 

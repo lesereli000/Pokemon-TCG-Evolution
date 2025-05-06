@@ -144,6 +144,7 @@ public class GameTest {
     public void testDisplayPlayerHand() {
         GameGUI gui = createMock(GameGUI.class);
         gui.createGUI();
+        gui.removeAllButtons();
         Random rand = createMock(Random.class);
         Player player1 = createMock(Player.class);
         ArrayList<Card> cards = new ArrayList<>();

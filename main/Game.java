@@ -28,12 +28,12 @@ public class Game {
         selectActiveLoop();
     }
 
-    private void selectActiveLoop() {
+    protected void selectActiveLoop() {
         displayActiveDirections();
         Card selectedCard = displayCurrentPlayerHand();
-        System.out.println("Selected card: " + selectedCard.getName());
         if(checkBasicPokemon(selectedCard)) {
             makeNewActivePokemon((Pokemon) selectedCard);
+            displayCurrentPlayerHand();
         } else {
             gui.displayMessage("Not a basic Pokemon!");
             gui.removeAllButtons();
@@ -76,6 +76,7 @@ public class Game {
     }
 
     protected Card displayCurrentPlayerHand() {
+        gui.removeAllButtons();
         ArrayList<Card> playerCards = currentPlayer.handAsList();
         return gui.displayCards(playerCards);
     }
@@ -87,7 +88,7 @@ public class Game {
     public void makeNewActivePokemon(Pokemon p) {
         currentPlayer.setActivePokemon(p);
         gui.makeActiveCard(p,curTurn);
-        gui.waitForPassTurn();
+//        gui.waitForPassTurn();
         //TODO add Pass Turn
         //passTurn();
     }

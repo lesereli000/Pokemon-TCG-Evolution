@@ -103,7 +103,6 @@ public class PlayerTest {
         Pokemon pokemon = createMock(Pokemon.class);
 
         expect(hand.removeCard(pokemon)).andReturn(true).once();
-
         player.hand = hand;
 
         replay(hand);
