@@ -11,17 +11,18 @@ public class Game {
     protected Player currentPlayer;
     protected Player defendingPlayer;
     protected int curTurn;
+    protected SetupGame gameSetup;
 
-    public Game(GUI gui, Random random) {
+    public Game(GUI gui, Random random, SetupGame gameSetup) {
         this.gui = gui;
         this.random = random;
-        gui.createGUI();
+        this.gameSetup = gameSetup;
     }
 
     protected void setupGame() {
         setupFlipButton();
-        String coinFlipResult = flipCoin();
         createPlayers();
+        String coinFlipResult = gameSetup.completeGameSetup();
         setPlayerTurns(coinFlipResult);
         setupBothDecks();
         setupBothHands();
@@ -52,13 +53,7 @@ public class Game {
         gui.displayMessage("The result was " + coinFlipResult + " " + currentPlayer.getName() + " goes first!");
     }
 
-    protected String flipCoin() {
-        boolean randomBoolean = random.nextBoolean();
-        if(randomBoolean) {
-            return "Heads";
-        }
-        return "Tails";
-    }
+
 
     protected void createPlayers() {
         player1 = new Player("Player 1");
@@ -132,7 +127,9 @@ public class Game {
     public static void main(String[] args) {
         GUI gui = new GameGUI();
         Random random = new Random();
-        Game game = new Game(gui, random);
+        SetupGame gameSetup = new SetupGame(random);
+        Game game = new Game(gui, random, gameSetup);
+        gui.createGUI();
         game.setupGame();
     }
 }
