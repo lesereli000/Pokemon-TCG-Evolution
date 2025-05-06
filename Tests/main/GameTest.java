@@ -319,4 +319,96 @@ public class GameTest {
         game.selectCard(e);
         verify(gui, player);
     }
+
+    @Test
+    public void testSelectActiveLoopBasic() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        Player player = createMock(Player.class);
+        Pokemon p = createMock(Pokemon.class);
+        gui.createGUI();
+
+        //display directions
+        gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
+
+        //Display hand pre selection
+        gui.removeAllButtons();
+        expect(player.handAsList()).andReturn(null);
+        expect(gui.displayCards(null)).andReturn(p);
+
+        //check basic pokemon
+        expect(p.getStage()).andReturn(0);
+
+        //make new active
+        player.setActivePokemon(p);
+        gui.makeActiveCard(p, 1);
+
+        //display hand post selection
+        gui.removeAllButtons();
+        expect(player.handAsList()).andReturn(null);
+        expect(gui.displayCards(null)).andReturn(p);
+
+        replay(gui, player);
+
+        Game game = new Game(gui, rand);
+        game.currentPlayer = player;
+        game.curTurn = 1;
+        game.selectActiveLoop();
+        verify(gui, player);
+    }
+
+    @Test
+    public void testSelectActiveLoopNotBasic() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        Player player = createMock(Player.class);
+        Pokemon p = createMock(Pokemon.class);
+        gui.createGUI();
+
+
+        //display directions
+        gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
+
+        //Display hand pre selection
+        gui.removeAllButtons();
+        expect(player.handAsList()).andReturn(null);
+        expect(gui.displayCards(null)).andReturn(p);
+
+        //check basic pokemon, fail then succeed
+        expect(p.getStage()).andReturn(1).andReturn(0);
+
+        //Failed
+        gui.displayMessage("Not a basic Pokemon!");
+        gui.removeAllButtons();
+
+
+        //Now succeed
+        //display directions
+        gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
+
+        //Display hand pre selection
+        gui.removeAllButtons();
+        expect(player.handAsList()).andReturn(null);
+        expect(gui.displayCards(null)).andReturn(p);
+
+        //check basic pokemon, succeeding this time
+
+        //make new active
+        player.setActivePokemon(p);
+        gui.makeActiveCard(p, 1);
+
+        //display hand post selection
+        gui.removeAllButtons();
+        expect(player.handAsList()).andReturn(null);
+        expect(gui.displayCards(null)).andReturn(p);
+
+        replay(gui, player, p);
+
+        Game game = new Game(gui, rand);
+        game.currentPlayer = player;
+        game.curTurn = 1;
+        game.selectActiveLoop();
+        verify(gui, player, p);
+    }
 }
+

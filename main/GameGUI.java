@@ -45,6 +45,7 @@ public class GameGUI implements GUI {
 	private Color deckColor = Color.WHITE;
 	private Color player1ActiveColor = Color.WHITE;
 	private Color player2ActiveColor = Color.WHITE;
+	private String lastSelectedButton;
 
 	private Color[] player1PrizeCards = new Color[origNumPrizeCards];
 	private Color[] player2PrizeCards = new Color[origNumPrizeCards];
@@ -390,6 +391,7 @@ public class GameGUI implements GUI {
 		JButton btn = new JButton(message);
 		btn.addActionListener(e -> {
 			this.waitForAction = true;
+			this.lastSelectedButton = btn.getText();
 			removeButton(btn);
 		});
 		buttons.add(btn);
