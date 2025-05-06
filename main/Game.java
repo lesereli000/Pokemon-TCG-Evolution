@@ -6,27 +6,27 @@ import java.util.Random;
 public class Game {
     protected GUI gui;
     protected Random random;
-    protected Player player1;
-    protected Player player2;
-    protected Player currentPlayer;
-    protected Player defendingPlayer;
-    protected int curTurn;
     protected SetupGame gameSetup;
+    protected PlayerHandler playerHandler;
 
-    public Game(GUI gui, Random random, SetupGame gameSetup) {
+    public Game(GUI gui, Random random, SetupGame gameSetup, PlayerHandler playerHandler) {
         this.gui = gui;
         this.random = random;
         this.gameSetup = gameSetup;
+        this.playerHandler = playerHandler;
     }
 
     protected void setupGame() {
         setupFlipButton();
-        createPlayers();
         String coinFlipResult = gameSetup.completeGameSetup();
-        setPlayerTurns(coinFlipResult);
-        setupBothDecks();
-        setupBothHands();
+        playerHandler.completePlayerSetup(coinFlipResult);
+        Player currentPlayer = playerHandler.getCurrentPlayer();
+        displaySetupResults(coinFlipResult, currentPlayer);
         selectActiveLoop();
+    }
+
+    private void displaySetupResults(String coinFlipResult, Player currentPlayer) {
+        gui.displayMessage("The result was " + coinFlipResult + " " + currentPlayer.getName() + " goes first!");
     }
 
     protected void selectActiveLoop() {
@@ -46,32 +46,9 @@ public class Game {
         gui.createFlipButton();
     }
 
-    protected void setPlayerTurns(String coinFlipResult) {
-        currentPlayer = coinFlipResult.equals("Heads") ? player1 : player2;
-        defendingPlayer = coinFlipResult.equals("Heads") ? player2 : player1;
-        curTurn = coinFlipResult.equals("Heads") ? 1 : 2;
-        gui.displayMessage("The result was " + coinFlipResult + " " + currentPlayer.getName() + " goes first!");
-    }
-
-
-
-    protected void createPlayers() {
-        player1 = new Player("Player 1");
-        player2 = new Player("Player 2");
-    }
-
-    protected void setupBothDecks() {
-        player1.createCustomDeck();
-        player2.createCustomDeck();
-    }
-
-    protected void setupBothHands() {
-        player1.drawStartingHand();
-        player2.drawStartingHand();
-    }
-
     protected Card displayCurrentPlayerHand() {
         gui.removeAllButtons();
+        Player currentPlayer = playerHandler.getCurrentPlayer();
         ArrayList<Card> playerCards = currentPlayer.handAsList();
         return gui.displayCards(playerCards);
     }
@@ -81,6 +58,8 @@ public class Game {
     }
 
     public void makeNewActivePokemon(Pokemon p) {
+        Player currentPlayer = playerHandler.getCurrentPlayer();
+        int curTurn = playerHandler.getPlayerTurn();
         currentPlayer.setActivePokemon(p);
         gui.makeActiveCard(p,curTurn);
 //        gui.waitForPassTurn();
@@ -106,6 +85,7 @@ public class Game {
 
     private void handlePokemon(Pokemon selectedPokemon) {
         int pokemonStage = selectedPokemon.getStage();
+        Player currentPlayer = playerHandler.getCurrentPlayer();
         if(pokemonStage == 0) {
             currentPlayer.addBenchPokemon(selectedPokemon);
         } else {
@@ -114,6 +94,7 @@ public class Game {
     }
 
     private void handleAddEnergy(Energy energy) {
+        Player currentPlayer = playerHandler.getCurrentPlayer();
         if(!currentPlayer.canAddEnergy()) {
             gui.displayMessage("Can only add one energy per turn!");
         } else {
@@ -128,7 +109,8 @@ public class Game {
         GUI gui = new GameGUI();
         Random random = new Random();
         SetupGame gameSetup = new SetupGame(random);
-        Game game = new Game(gui, random, gameSetup);
+        PlayerHandler playerHandler = new PlayerHandler();
+        Game game = new Game(gui, random, gameSetup, playerHandler);
         gui.createGUI();
         game.setupGame();
     }
