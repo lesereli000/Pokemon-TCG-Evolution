@@ -18,6 +18,7 @@ public class Game {
         String coinFlipResult = flipCoin(random);
         createPlayers();
         setupBothDecks();
+        setupBothHands();
     }
 
     protected String flipCoin(Random rand) {
@@ -38,6 +39,11 @@ public class Game {
         player2.createCustomDeck();
     }
 
+    protected void setupBothHands() {
+        player1.drawStartingHand();
+        player2.drawStartingHand();
+    }
+
 
 
     public static void main(String[] args) {
@@ -45,6 +51,7 @@ public class Game {
         Game game = new Game(gui);
         game.setupGame();
     }
+
 
 
 }

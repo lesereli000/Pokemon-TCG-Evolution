@@ -87,4 +87,20 @@ public class GameTest {
         game.setupBothDecks();
         verify(player1, player2);
     }
+
+    @Test
+    public void testPlayerHand() {
+        GameGUI gui = createMock(GameGUI.class);
+        Player player1 = createMock(Player.class);
+        Player player2 = createMock(Player.class);
+        player1.drawStartingHand();
+        player2.drawStartingHand();
+        replay(player1, player2);
+
+        Game game = new Game(gui);
+        game.player1 = player1;
+        game.player2 = player2;
+        game.setupBothHands();
+        verify(player1, player2);
+    }
 }
