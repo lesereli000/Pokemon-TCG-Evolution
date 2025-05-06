@@ -1,5 +1,6 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Game {
@@ -17,12 +18,17 @@ public class Game {
     }
 
     protected void setupGame() {
-        gui.createFlipButton();
+        setupFlipButton();
         String coinFlipResult = flipCoin(random);
         setPlayerTurns(coinFlipResult);
         createPlayers();
         setupBothDecks();
         setupBothHands();
+        displayCurrentPlayerHand();
+    }
+
+    protected void setupFlipButton() {
+        gui.createFlipButton();
     }
 
     protected void setPlayerTurns(String coinFlipResult) {
@@ -53,7 +59,10 @@ public class Game {
         player2.drawStartingHand();
     }
 
-
+    protected void displayCurrentPlayerHand() {
+        ArrayList<Card> playerCards = currentPlayer.handAsList();
+        gui.displayCards(playerCards, "Continue");
+    }
 
     public static void main(String[] args) {
         GameGUI gui = new GameGUI();

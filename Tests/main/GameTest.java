@@ -2,6 +2,7 @@ package main;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import static org.easymock.EasyMock.*;
@@ -26,7 +27,7 @@ public class GameTest {
         replay(gui);
 
         Game game = new Game(gui);
-        game.setupGame();
+        game.setupFlipButton();
 
         verify(gui);
     }
@@ -130,5 +131,22 @@ public class GameTest {
         game.setPlayerTurns("Tails");
         assertEquals(player2, game.currentPlayer);
         assertEquals(player1, game.defendingPlayer);
+    }
+
+    @Test
+    public void testDisplayPlayerHand() {
+        GameGUI gui = createMock(GameGUI.class);
+        gui.createGUI();
+        Player player1 = createMock(Player.class);
+        ArrayList<Card> cards = new ArrayList<>();
+        expect(player1.handAsList()).andReturn(cards);
+        gui.displayCards(cards, "Continue");
+        replay(gui, player1);
+
+        Game game = new Game(gui);
+        game.currentPlayer = player1;
+        game.displayCurrentPlayerHand();
+
+        verify(gui, player1);
     }
 }
