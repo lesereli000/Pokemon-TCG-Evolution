@@ -58,4 +58,16 @@ public class GameTest {
 
         verify(rand);
     }
+
+    @Test
+    public void testSetupPlayer1Deck() {
+        GameGUI gui = createMock(GameGUI.class);
+
+        Game game = new Game(gui);
+        game.createPlayers();
+        Player player1 = game.player1;
+        Player player2 = game.player2;
+        assertEquals("Player 1", player1.getName());
+        assertEquals("Player 2", player2.getName());
+    }
 }
