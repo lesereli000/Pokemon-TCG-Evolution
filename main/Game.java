@@ -20,11 +20,12 @@ public class Game {
     protected void setupGame() {
         setupFlipButton();
         String coinFlipResult = flipCoin(random);
-        setPlayerTurns(coinFlipResult);
         createPlayers();
+        setPlayerTurns(coinFlipResult);
         setupBothDecks();
         setupBothHands();
         displayCurrentPlayerHand();
+        displayActiveDirections();
     }
 
     protected void setupFlipButton() {
@@ -61,7 +62,11 @@ public class Game {
 
     protected void displayCurrentPlayerHand() {
         ArrayList<Card> playerCards = currentPlayer.handAsList();
-        gui.displayCards(playerCards, "Continue");
+        gui.displayCards(playerCards);
+    }
+
+    public void displayActiveDirections() {
+        gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
     }
 
     public static void main(String[] args) {

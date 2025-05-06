@@ -140,7 +140,7 @@ public class GameTest {
         Player player1 = createMock(Player.class);
         ArrayList<Card> cards = new ArrayList<>();
         expect(player1.handAsList()).andReturn(cards);
-        gui.displayCards(cards, "Continue");
+        gui.displayCards(cards);
         replay(gui, player1);
 
         Game game = new Game(gui);
@@ -148,5 +148,17 @@ public class GameTest {
         game.displayCurrentPlayerHand();
 
         verify(gui, player1);
+    }
+
+    @Test
+    public void testDirectionActivePokemon() {
+        GameGUI gui = createMock(GameGUI.class);
+        gui.createGUI();
+        gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
+        replay(gui);
+
+        Game game = new Game(gui);
+        game.displayActiveDirections();
+        verify(gui);
     }
 }

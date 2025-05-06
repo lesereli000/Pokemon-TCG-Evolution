@@ -287,11 +287,10 @@ public class GameGUI implements GUI {
 	}
 
 	@Override
-	public void displayCards(ArrayList<Card> playerCards, String submitMessage) {
+	public void displayCards(ArrayList<Card> playerCards) {
         for (Card currCard : playerCards) {
             createLinkedButtonCard(currCard.getName(), currCard);
         }
-		createButton(submitMessage);
 	}
 
 	@Override
@@ -323,6 +322,7 @@ public class GameGUI implements GUI {
 			player2PrizeCards[i] = white;
 		}
 	}
+
 
 	@Override
 	public JButton createButton(String message) {
