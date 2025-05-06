@@ -7,6 +7,9 @@ public class Game {
     protected Random random;
     protected Player player1;
     protected Player player2;
+    protected Player currentPlayer;
+    protected Player defendingPlayer;
+
     public Game(GUI gui) {
         this.gui = gui;
         this.random = new Random();
@@ -16,9 +19,15 @@ public class Game {
     protected void setupGame() {
         gui.createFlipButton();
         String coinFlipResult = flipCoin(random);
+        setPlayerTurns(coinFlipResult);
         createPlayers();
         setupBothDecks();
         setupBothHands();
+    }
+
+    protected void setPlayerTurns(String coinFlipResult) {
+        currentPlayer = player1;
+        defendingPlayer = player2;
     }
 
     protected String flipCoin(Random rand) {
