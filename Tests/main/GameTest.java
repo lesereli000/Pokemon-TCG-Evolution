@@ -179,12 +179,14 @@ public class GameTest {
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
         player.setActivePokemon(p);
-
+        gui.makeActiveCard(p,1);
         replay(gui, player);
 
         Game game = new Game(gui, rand);
+        game.curTurn = 1;
         game.currentPlayer = player;
         game.makeNewActivePokemon(p);
+
         verify(gui, player);
     }
 

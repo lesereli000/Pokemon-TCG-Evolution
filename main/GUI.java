@@ -7,6 +7,9 @@ import java.util.ArrayList;
 public interface GUI {
     void createGUI();
     void createFlipButton();
+
+    void waitForPassTurn();
+
     void removeButton(JButton button);
     void setDeckColor(Color deckColor);
     void displayMessage(String message);
@@ -19,6 +22,8 @@ public interface GUI {
     JButton createSDHoldingButton(String message);
     void addBenchCard(Card newBench, int playerTurn);
     void removeBenchCard(Card newBench, int playerTurn);
+    JButton createPassTurnButton();
+
     void removeAllButtons();
     void retreat(Card newCard, int playerTurn);
 

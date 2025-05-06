@@ -17,9 +17,7 @@ public class GameGUI implements GUI {
 	private JFrame frame;
 	private GamePanel panel;
 
-	private Card lastSelectedCard;
-	private Attack lastSelectedAttack;
-	private int playerTurn = 0;
+
 
 	static final int backgroundLineThickness = 4;
 
@@ -62,6 +60,9 @@ public class GameGUI implements GUI {
 
 
 	private volatile boolean waitForAction = false;
+	private volatile Card lastSelectedCard = null;
+	private Attack lastSelectedAttack;
+	private int playerTurn = 0;
 
 
 
@@ -221,6 +222,15 @@ public class GameGUI implements GUI {
 		this.waitForAction = false;
 	}
 
+	@Override
+	public void waitForPassTurn() {
+		createPassTurnButton();
+		while (!waitForAction) {
+			Thread.onSpinWait();
+		}
+		this.waitForAction = false;
+	}
+
 	public void removeButton(JButton button) {
 		buttons.remove(button);
 		panel.remove(button);
@@ -272,6 +282,8 @@ public class GameGUI implements GUI {
 		frame.repaint();
 	}
 
+
+
 	private void setLastSelectedCard(Card card) {
 		this.lastSelectedCard = card;
 	}
@@ -296,10 +308,13 @@ public class GameGUI implements GUI {
 	@Override
 	public Card displayCards(ArrayList<Card> playerCards) {
 		//TODO: Return the actual selected card here
-        for (Card currCard : playerCards) {
+        for (Card currCard:playerCards){
             createLinkedButtonCard(currCard.getName(), currCard);
         }
-		return lastSelectedCard;
+		while (lastSelectedCard == null) {
+			Thread.onSpinWait();
+		}
+		return getLastSelectedCard();
 	}
 
 	@Override
@@ -391,7 +406,22 @@ public class GameGUI implements GUI {
 
 		return btn;
 	}
+	@Override
+	public JButton createPassTurnButton() {
+		JButton btn = new JButton("Pass Turn");
+		btn.addActionListener(e -> {
+			this.waitForAction = true;
+			removeButton(btn);
+		});
+		buttons.add(btn);
+		panel.add(btn);
+		panel.repaint();
+		frame.revalidate();
+		frame.repaint();
 
+		return btn;
+
+	}
 	@Override
 	public void removeAllButtons(){
 		for (JButton btn : buttons) {

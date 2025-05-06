@@ -10,6 +10,7 @@ public class Game {
     protected Player player2;
     protected Player currentPlayer;
     protected Player defendingPlayer;
+    protected int curTurn;
 
     public Game(GUI gui, Random random) {
         this.gui = gui;
@@ -30,6 +31,7 @@ public class Game {
     private void selectActiveLoop() {
         displayActiveDirections();
         Card selectedCard = displayCurrentPlayerHand();
+        System.out.println("Selected card: " + selectedCard.getName());
         if(checkBasicPokemon(selectedCard)) {
             makeNewActivePokemon((Pokemon) selectedCard);
         } else {
@@ -46,6 +48,7 @@ public class Game {
     protected void setPlayerTurns(String coinFlipResult) {
         currentPlayer = coinFlipResult.equals("Heads") ? player1 : player2;
         defendingPlayer = coinFlipResult.equals("Heads") ? player2 : player1;
+        curTurn = coinFlipResult.equals("Heads") ? 1 : 2;
         gui.displayMessage("The result was " + coinFlipResult + " " + currentPlayer.getName() + " goes first!");
     }
 
@@ -83,6 +86,10 @@ public class Game {
 
     public void makeNewActivePokemon(Pokemon p) {
         currentPlayer.setActivePokemon(p);
+        gui.makeActiveCard(p,curTurn);
+        gui.waitForPassTurn();
+        //TODO add Pass Turn
+        //passTurn();
     }
 
     public boolean checkBasicPokemon(Card card) {
@@ -119,6 +126,7 @@ public class Game {
             gui.displayMessage("Select Pokemon to add card to");
         }
     }
+
 
     public static void main(String[] args) {
         GUI gui = new GameGUI();
