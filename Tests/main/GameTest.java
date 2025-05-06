@@ -6,8 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static org.easymock.EasyMock.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 public class GameTest {
 
@@ -203,4 +202,27 @@ public class GameTest {
         assertFalse(output);
     }
 
+    @Test
+    public void testCheckBasicPokemonTrainer() {
+        GameGUI gui = createMock(GameGUI.class);
+        Trainer t = createMock(Trainer.class);
+
+        Game game = new Game(gui);
+        boolean output = game.checkBasicPokemon(t);
+        assertFalse(output);
+    }
+
+    @Test
+    public void testCheckBasicPokemonTrue() {
+        GameGUI gui = createMock(GameGUI.class);
+        Pokemon p = createMock(Pokemon.class);
+        expect(p.getStage()).andReturn(0);
+        replay(p);
+
+        Game game = new Game(gui);
+        boolean output = game.checkBasicPokemon(p);
+        assertTrue(output);
+
+        verify(p);
+    }
 }
