@@ -2,7 +2,10 @@ package main;
 
 import org.junit.Test;
 
+import java.util.Random;
+
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 public class GameTest {
 
@@ -26,5 +29,19 @@ public class GameTest {
         game.setupGame();
 
         verify(gui);
+    }
+
+    @Test
+    public void testFlipCoinHeads() {
+        Random rand = createMock(Random.class);
+        GameGUI gui = createMock(GameGUI.class);
+        expect(rand.nextBoolean()).andReturn(true);
+        replay(rand);
+
+        Game game = new Game(gui);
+        String flipResult = game.flipCoin(rand);
+        assertEquals("Heads", flipResult);
+
+        verify(rand);
     }
 }

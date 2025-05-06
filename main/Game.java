@@ -1,5 +1,7 @@
 package main;
 
+import java.util.Random;
+
 public class Game {
     protected GUI gui;
     public Game(GUI gui) {
@@ -16,4 +18,8 @@ public class Game {
         new Game(gui);
     }
 
+    public String flipCoin(Random rand) {
+        rand.nextBoolean();
+        return "Heads";
+    }
 }
