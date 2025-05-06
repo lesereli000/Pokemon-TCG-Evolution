@@ -11,16 +11,16 @@ public class Game {
         this.gui = gui;
         this.random = new Random();
         gui.createGUI();
-        setupGame();
     }
 
-    public void setupGame() {
+    protected void setupGame() {
         gui.createFlipButton();
         String coinFlipResult = flipCoin(random);
         createPlayers();
+        setupBothDecks();
     }
 
-    public String flipCoin(Random rand) {
+    protected String flipCoin(Random rand) {
         boolean randomBoolean = rand.nextBoolean();
         if(randomBoolean) {
             return "Heads";
@@ -28,13 +28,23 @@ public class Game {
         return "Tails";
     }
 
-    public static void main(String[] args) {
-        GameGUI gui = new GameGUI();
-        new Game(gui);
-    }
-
-    public void createPlayers() {
+    protected void createPlayers() {
         player1 = new Player("Player 1");
         player2 = new Player("Player 2");
     }
+
+    protected void setupBothDecks() {
+        player1.createCustomDeck();
+        player2.createCustomDeck();
+    }
+
+
+
+    public static void main(String[] args) {
+        GameGUI gui = new GameGUI();
+        Game game = new Game(gui);
+        game.setupGame();
+    }
+
+
 }

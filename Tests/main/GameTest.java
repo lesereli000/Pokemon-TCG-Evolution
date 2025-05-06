@@ -60,7 +60,7 @@ public class GameTest {
     }
 
     @Test
-    public void testSetupPlayer1Deck() {
+    public void testSetupPlayers() {
         GameGUI gui = createMock(GameGUI.class);
 
         Game game = new Game(gui);
@@ -69,5 +69,22 @@ public class GameTest {
         Player player2 = game.player2;
         assertEquals("Player 1", player1.getName());
         assertEquals("Player 2", player2.getName());
+    }
+
+    @Test
+    public void testSetupBothDecks() {
+        GameGUI gui = createMock(GameGUI.class);
+        Player player1 = createMock(Player.class);
+        Player player2 = createMock(Player.class);
+        player1.createCustomDeck();
+        player2.createCustomDeck();
+        replay(player1, player2);
+
+        Game game = new Game(gui);
+        game.player1 = player1;
+        game.player2 = player2;
+
+        game.setupBothDecks();
+        verify(player1, player2);
     }
 }
