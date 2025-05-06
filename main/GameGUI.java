@@ -210,8 +210,8 @@ public class GameGUI implements GUI {
 		}
 	}
 
-	public void createFlipButton(Runnable flipListener) {
-		createSelfDestructingButton("Flip Coin", flipListener);
+	public void createFlipButton() {
+		createSelfDestructingButton("Flip Coin");
 	}
 
 	public void removeButton(JButton button) {
@@ -287,19 +287,19 @@ public class GameGUI implements GUI {
 	}
 
 	@Override
-	public void displayCards(ArrayList<Card> playerCards, Runnable makeActiveListener, String submitMessage) {
+	public void displayCards(ArrayList<Card> playerCards, String submitMessage) {
         for (Card currCard : playerCards) {
             createLinkedButtonCard(currCard.getName(), currCard);
         }
-		createButton(submitMessage, makeActiveListener);
+		createButton(submitMessage);
 	}
 
 	@Override
-	public void displayAttacks(ArrayList<Attack> attacks, Runnable runAttack, String submitMessage) {
+	public void displayAttacks(ArrayList<Attack> attacks, String submitMessage) {
 		for(Attack currAttack: attacks) {
 			createLinkedButtonAttack(currAttack.name, currAttack);
 		}
-		createButton(submitMessage, runAttack);
+		createButton(submitMessage);
 	}
 
 	@Override
@@ -325,10 +325,9 @@ public class GameGUI implements GUI {
 	}
 
 	@Override
-	public JButton createButton(String message, Runnable toRun) {
+	public JButton createButton(String message) {
 		JButton btn = new JButton(message);
 		btn.addActionListener(e -> {
-			toRun.run();
 		});
 		buttons.add(btn);
 		panel.add(btn);
@@ -369,10 +368,9 @@ public class GameGUI implements GUI {
 	}
 
 	@Override
-	public JButton createSelfDestructingButton(String message, Runnable toRun) {
+	public JButton createSelfDestructingButton(String message) {
 		JButton btn = new JButton(message);
 		btn.addActionListener(e -> {
-			toRun.run();
 			removeButton(btn);
 		});
 		buttons.add(btn);

@@ -6,17 +6,17 @@ import java.util.ArrayList;
 
 public interface GUI {
     void createGUI();
-    void createFlipButton(Runnable flipListener);
+    void createFlipButton();
     void removeButton(JButton button);
     void setDeckColor(Color deckColor);
     void displayMessage(String message);
     void makeActiveCard(Card newActive, int playerTurn);
     Card getLastSelectedCard();
     Attack getLastSelectedAttack();
-    void displayCards(ArrayList<Card> currentCards, Runnable makeActiveCard, String submitMessage);
-    JButton createButton(String message, Runnable toRun);
+    void displayCards(ArrayList<Card> currentCards, String submitMessage);
+    JButton createButton(String message);
     JButton createLinkedButtonCard(String message, Card currCard);
-    JButton createSelfDestructingButton(String message, Runnable toRun);
+    JButton createSelfDestructingButton(String message);
     void addBenchCard(Card newBench, int playerTurn);
     void removeBenchCard(Card newBench, int playerTurn);
     void removeAllButtons();
@@ -24,9 +24,10 @@ public interface GUI {
 
     void updateTurn(int playerTurn);
 
-    void displayAttacks(ArrayList<Attack> attacks, Runnable makeActiveCard, String submitMessage);
+    void displayAttacks(ArrayList<Attack> attacks, String submitMessage);
 
     void closeWindow();
 
     void removePrizeCard(int playerNum);
+
 }

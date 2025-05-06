@@ -44,4 +44,18 @@ public class GameTest {
 
         verify(rand);
     }
+
+    @Test
+    public void testFlipCoinTails() {
+        Random rand = createMock(Random.class);
+        GameGUI gui = createMock(GameGUI.class);
+        expect(rand.nextBoolean()).andReturn(false);
+        replay(rand);
+
+        Game game = new Game(gui);
+        String flipResult = game.flipCoin(rand);
+        assertEquals("Tails", flipResult);
+
+        verify(rand);
+    }
 }

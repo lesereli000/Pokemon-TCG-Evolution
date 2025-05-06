@@ -19,7 +19,10 @@ public class Game {
     }
 
     public String flipCoin(Random rand) {
-        rand.nextBoolean();
-        return "Heads";
+        boolean randomBoolean = rand.nextBoolean();
+        if(randomBoolean) {
+            return "Heads";
+        }
+        return "Tails";
     }
 }
