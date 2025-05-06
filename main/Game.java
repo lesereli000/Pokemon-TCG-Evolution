@@ -94,6 +94,8 @@ public class Game {
     public void selectCard(Card selectedCard) {
         if(selectedCard instanceof Pokemon) {
             handlePokemon((Pokemon) selectedCard);
+        } else if (selectedCard instanceof Energy){
+            handleAddEnergy((Energy) selectedCard);
         } else {
             gui.displayMessage("Can not handle that card right now");
         }
@@ -105,6 +107,16 @@ public class Game {
             currentPlayer.addBenchPokemon(selectedPokemon);
         } else {
             gui.displayMessage("This is not a basic Pokemon and can not place card on bench!");
+        }
+    }
+
+    private void handleAddEnergy(Energy energy) {
+        if(!currentPlayer.canAddEnergy()) {
+            gui.displayMessage("Can only add one energy per turn!");
+        } else {
+            ArrayList<Card> onlyPokemon = currentPlayer.getOnlyPokemonFromHand();
+            gui.displayCards(onlyPokemon);
+            gui.displayMessage("Select Pokemon to add card to");
         }
     }
 

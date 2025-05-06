@@ -84,6 +84,10 @@ public class Player {
         this.hand.removeCard(activePokemon);
     }
 
+    public ArrayList<Card> getOnlyPokemonFromHand() {
+        return hand.getOnlyPokemon();
+    }
+
     public String getName() {
         return name;
     }

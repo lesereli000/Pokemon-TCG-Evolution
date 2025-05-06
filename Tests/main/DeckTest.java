@@ -835,6 +835,64 @@ public class DeckTest {
         verify(e, t, p);
     }
 
+    @Test
+    public void testGetOnlyPokemonEmpty() {
+        Deck d = new Deck();
+        ArrayList<Card> output = d.getOnlyPokemon();
+        assertEquals(0, output.size());
+    }
+
+    @Test
+    public void testGetOnlyOnePokemon() {
+        Deck d = new Deck();
+        Pokemon p = createMock(Pokemon.class);
+        ArrayList<Card> expected = new ArrayList<>();
+        expected.add(p);
+        d.cards = expected;
+
+        ArrayList<Card> output = d.getOnlyPokemon();
+        assertEquals(expected, output);
+    }
+
+    @Test
+    public void testGetOnlyPokemonNoPokemon() {
+        Deck d = new Deck();
+        Trainer t = createMock(Trainer.class);
+        Energy e = createMock(Energy.class);
+        ArrayList<Card> input = new ArrayList<>();
+        input.add(t);
+        input.add(e);
+        d.cards = input;
+
+        ArrayList<Card> output = d.getOnlyPokemon();
+        assertEquals(0, output.size());
+    }
+
+    @Test
+    public void testGetOnlyPokemonMany() {
+        Deck d = new Deck();
+        Pokemon p = createMock(Pokemon.class);
+        Trainer t = createMock(Trainer.class);
+        Energy e = createMock(Energy.class);
+        ArrayList<Card> input = new ArrayList<>();
+        input.add(p);
+        input.add(p);
+        input.add(e);
+        input.add(t);
+        input.add(p);
+        input.add(t);
+        input.add(e);
+        d.cards = input;
+
+        ArrayList<Card> expected = new ArrayList<>();
+        expected.add(p);
+        expected.add(p);
+        expected.add(p);
+
+        ArrayList<Card> output = d.getOnlyPokemon();
+        assertEquals(expected, output);
+    }
+
     // TODO implement error catching for adding cards that dont exist.
 //    @Test
 //    public void testAddDeckFromFileWithWrongFormatCard(){

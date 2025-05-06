@@ -256,7 +256,47 @@ public class GameTest {
         game.selectCard(p);
 
         verify(player, p, gui);
+    }
 
+    @Test
+    public void testCantAddEnergy() {
+        GameGUI gui = createMock(GameGUI.class);
+        Player player = createMock(Player.class);
+        expect(player.canAddEnergy()).andReturn(false);
+        gui.createGUI();
+        gui.displayMessage("Can only add one energy per turn!");
+        replay(gui,player);
+        Energy e = createMock(Energy.class);
+
+        Game game = new Game(gui);
+        game.currentPlayer = player;
+        game.selectCard(e);
+        verify(gui, player);
+    }
+
+    @Test
+    public void testSuccessAddingEnergy() {
+        GameGUI gui = createMock(GameGUI.class);
+        Player player = createMock(Player.class);
+        expect(player.canAddEnergy()).andReturn(true);
+
+        Pokemon p = createMock(Pokemon.class);
+        ArrayList<Card> pokemon = new ArrayList<>();
+        pokemon.add(p);
+        pokemon.add(p);
+        expect(player.getOnlyPokemonFromHand()).andReturn(pokemon);
+
+        gui.createGUI();
+        expect(gui.displayCards(pokemon)).andReturn(null);
+        gui.displayMessage("Select Pokemon to add card to");
+
+        replay(gui,player);
+        Energy e = createMock(Energy.class);
+
+        Game game = new Game(gui);
+        game.currentPlayer = player;
+        game.selectCard(e);
+        verify(gui, player);
     }
 
 }

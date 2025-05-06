@@ -95,8 +95,14 @@ public class Deck {
         return count;
     }
 
-    public void replace(Card toReplace, Card replaceWith) {
-
+    public ArrayList<Card> getOnlyPokemon() {
+        ArrayList<Card> allPokemon = new ArrayList<>();
+        for (Card card : cards) {
+            if (card instanceof Pokemon) {
+                allPokemon.add(card);
+            }
+        }
+        return allPokemon;
     }
 
     public boolean addEnergies(int numberEnergies, Random rand) {

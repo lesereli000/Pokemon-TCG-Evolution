@@ -212,4 +212,16 @@ public class PlayerTest {
         assertTrue(player.evolvePokemon(evolvedPokemon));
         verify(bench, evolvedPokemon);
     }
+
+    @Test
+    public void testGetOnlyPokemonFromHand() {
+        Player player = new Player();
+        Deck hand = createMock(Deck.class);
+        expect(hand.getOnlyPokemon()).andReturn(null);
+        player.hand = hand;
+        replay(hand);
+
+        player.getOnlyPokemonFromHand();
+        verify(hand);
+    }
 }
