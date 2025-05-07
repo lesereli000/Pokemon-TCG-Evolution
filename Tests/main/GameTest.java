@@ -366,7 +366,7 @@ public class GameTest {
 
         Player player = createMock(Player.class);
         Pokemon p = createMock(Pokemon.class);
-
+        ArrayList<Card> hand = createMock(ArrayList.class);
         // Setup expectations
         gui.createFlipButton();
         expect(setupGame.completeGameSetup()).andReturn("Heads");
@@ -379,15 +379,18 @@ public class GameTest {
         // selectActiveLoop()
         gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
         gui.removeAllButtons();
-        expect(player.handAsList()).andReturn(null);
-        expect(gui.displayCards(null)).andReturn(p);
+        expect(player.handAsList()).andReturn(hand);
+        gui.displayCards(hand);
+        gui.setupActivePokemon();
+        expect(gui.waitForButtonPressed()).andReturn("AddToBench");
+        expect(gui.getLastSelectedCard()).andReturn(p);
         expect(p.getStage()).andReturn(0);
         player.setActivePokemon(p);
         expect(handler.getPlayerTurn()).andReturn(1);
         gui.makeActiveCard(p, 1);
         gui.removeAllButtons();
-        expect(player.handAsList()).andReturn(null);
-        expect(gui.displayCards(null)).andReturn(p);
+        expect(player.handAsList()).andReturn(hand);
+        gui.displayCards(hand);
 
         replay(gui, rand, setupGame, handler, player, p);
 
