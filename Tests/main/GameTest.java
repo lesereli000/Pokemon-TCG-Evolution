@@ -245,14 +245,14 @@ public class GameTest {
         CardManager cardManager = createMock(CardManager.class);
         SetupGame setupGame = createMock(SetupGame.class);
         Pokemon p = createMock(Pokemon.class);
-
+        ArrayList<Card> hand = createMock(ArrayList.class);
         //display directions
         gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
 
         //Display hand pre selection
         gui.removeAllButtons();
-        expect(player.handAsList()).andReturn(null);
-        gui.displayCards(null);
+        expect(player.handAsList()).andReturn(hand);
+        gui.displayCards(hand);
         gui.setupActivePokemon();
         expect(gui.waitForButtonPressed()).andReturn("AddToBench");
         expect(gui.getLastSelectedCard()).andReturn(p);
@@ -265,8 +265,8 @@ public class GameTest {
 
         //display hand post selection
         gui.removeAllButtons();
-        expect(player.handAsList()).andReturn(null);
-        gui.displayCards(null);
+        expect(player.handAsList()).andReturn(hand);
+        gui.displayCards(hand);
 
         expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(handler.getPlayerTurn()).andReturn(1);
