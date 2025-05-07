@@ -312,6 +312,7 @@ public class GameGUI implements GUI {
 
 
 
+
 	@Override
 	public void displayCards(ArrayList<Card> playerCards) {
         for (Card currCard:playerCards){
@@ -361,7 +362,7 @@ public class GameGUI implements GUI {
 
 	@Override
 	public void displayActionButtons() {
-
+		createLinkedButtonAction("Add Pokemon Bench", "AddToBench");
 	}
 
 

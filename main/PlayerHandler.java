@@ -1,5 +1,7 @@
 package main;
 
+import java.util.ArrayList;
+
 public class PlayerHandler {
 
     protected Player player1;
@@ -47,5 +49,10 @@ public class PlayerHandler {
 
     public void addToBench(Pokemon lastSelectedCard) {
         currentPlayer.addBenchPokemon(lastSelectedCard);
+        currentPlayer.removeFromHand(lastSelectedCard);
+    }
+
+    public ArrayList<Card> getCurrentPlayerHand() {
+        return currentPlayer.handAsList();
     }
 }

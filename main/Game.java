@@ -9,6 +9,7 @@ public class Game {
     protected SetupGame gameSetup;
     protected PlayerHandler playerHandler;
     protected CardManager cardManager;
+    protected boolean gameOver;
 
     public Game(GUI gui, Random random, SetupGame gameSetup, PlayerHandler playerHandler, CardManager cardManager) {
         this.gui = gui;
@@ -16,6 +17,7 @@ public class Game {
         this.gameSetup = gameSetup;
         this.playerHandler = playerHandler;
         this.cardManager = cardManager;
+        this.gameOver = false;
     }
 
     protected void setupGame() {
@@ -25,6 +27,9 @@ public class Game {
         Player currentPlayer = playerHandler.getCurrentPlayer();
         displaySetupResults(coinFlipResult, currentPlayer);
         selectActiveLoop();
+        while(!gameOver) {
+            mainGameLoop();
+        }
     }
 
     protected void displaySetupResults(String coinFlipResult, Player currentPlayer) {
@@ -35,12 +40,11 @@ public class Game {
         displayActiveDirections();
         displayCurrentPlayerHand();
         gui.setupActivePokemon();
-        String action = gui.waitForButtonPressed();
+        gui.waitForButtonPressed();
         Card selectedCard = gui.getLastSelectedCard();
         if(checkBasicPokemon(selectedCard)) {
             makeNewActivePokemon((Pokemon) selectedCard);
             displayCurrentPlayerHand();
-            //mainGameLoop();
         } else {
             gui.displayMessage("Not a basic Pokemon!");
             gui.removeAllButtons();
@@ -49,6 +53,10 @@ public class Game {
     }
 
     protected void mainGameLoop() {
+        ArrayList<Card> playerHand = playerHandler.getCurrentPlayerHand();
+        gui.removeAllButtons();
+        gui.displayCards(playerHand);
+        gui.displayActionButtons();
         String action = gui.waitForButtonPressed();
         if(action.equals("AddToBench")) {
             handleBenchAction();
@@ -79,8 +87,7 @@ public class Game {
 
     protected void displayCurrentPlayerHand() {
         gui.removeAllButtons();
-        Player currentPlayer = playerHandler.getCurrentPlayer();
-        ArrayList<Card> playerCards = currentPlayer.handAsList();
+        ArrayList<Card> playerCards = playerHandler.getCurrentPlayerHand();
         gui.displayCards(playerCards);
     }
 
@@ -103,9 +110,10 @@ public class Game {
 
     protected void handleAddToBench(Pokemon selectedPokemon) {
         int pokemonStage = selectedPokemon.getStage();
-        Player currentPlayer = playerHandler.getCurrentPlayer();
         if(pokemonStage == 0) {
-            currentPlayer.addBenchPokemon(selectedPokemon);
+            playerHandler.addToBench(selectedPokemon);
+            int playerTurn = playerHandler.getPlayerTurn();
+            gui.addBenchCard(selectedPokemon, playerTurn);
         } else {
             gui.displayMessage("This is not a basic Pokemon and can not place card on bench!");
         }

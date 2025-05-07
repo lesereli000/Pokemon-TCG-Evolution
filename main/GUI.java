@@ -40,4 +40,5 @@ public interface GUI {
     void displayActionButtons();
 
     void setupActivePokemon();
+
 }
