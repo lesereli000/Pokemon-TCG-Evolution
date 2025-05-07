@@ -253,7 +253,9 @@ public class GameTest {
         gui.removeAllButtons();
         expect(player.handAsList()).andReturn(null);
         gui.displayCards(null);
-
+        gui.setupActivePokemon();
+        expect(gui.waitForButtonPressed()).andReturn("AddToBench");
+        expect(gui.getLastSelectedCard()).andReturn(p);
         //check basic pokemon
         expect(p.getStage()).andReturn(0);
 
