@@ -42,7 +42,7 @@ public class Player {
     }
 
     public void createCustomDeck() {
-        this.deck.createDeckFromFile("Overgrowth.txt");
+        this.deck.createDeckFromFile("PokemonAndEnergy.txt");
         this.deck.shuffle();
     }
 

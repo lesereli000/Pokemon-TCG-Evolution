@@ -310,8 +310,14 @@ public class GameGUI implements GUI {
 		createLinkedButtonAction("Active Selected Pokemon", "AddToBench");
 	}
 
-
-
+	@Override
+	public void waitForPokemonSelected() {
+		//TODO: Wait for any Pokemon to be pressed
+		while (!waitForAction) {
+			Thread.onSpinWait();
+		}
+		this.waitForAction = false;
+	}
 
 	@Override
 	public void displayCards(ArrayList<Card> playerCards) {
@@ -352,7 +358,6 @@ public class GameGUI implements GUI {
 
 	@Override
 	public String waitForButtonPressed() {
-		//TODO: Wait for any button to be pressed and return the appropriate output
 		while (!waitForAction) {
 			Thread.onSpinWait();
 		}
@@ -363,6 +368,7 @@ public class GameGUI implements GUI {
 	@Override
 	public void displayActionButtons() {
 		createLinkedButtonAction("Add Pokemon Bench", "AddToBench");
+		createLinkedButtonAction("Add An Energy", "AddEnergy");
 	}
 
 

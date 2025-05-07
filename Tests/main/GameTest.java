@@ -17,11 +17,10 @@ public class GameTest {
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
         PlayerHandler playerHandler = createMock(PlayerHandler.class);
-        CardManager cardManager = createMock(CardManager.class);
         gui.createFlipButton();
         replay(gui);
 
-        Game game = new Game(gui, rand, setupGame, playerHandler, cardManager);
+        Game game = new Game(gui, rand, setupGame, playerHandler);
         game.setupFlipButton();
 
         verify(gui);
@@ -32,7 +31,6 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         SetupGame setupGame = createMock(SetupGame.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
-        CardManager cardManager = createMock(CardManager.class);
         Player player1 = createMock(Player.class);
         Random rand = createMock(Random.class);
         ArrayList<Card> hand = createMock(ArrayList.class);
@@ -43,7 +41,7 @@ public class GameTest {
 
         replay(gui, player1, handler);
 
-        Game game = new Game(gui, rand, setupGame, handler, cardManager);
+        Game game = new Game(gui, rand, setupGame, handler);
         game.displayCurrentPlayerHand();
 
         verify(gui, player1, handler);
@@ -53,13 +51,12 @@ public class GameTest {
     public void testDirectionActivePokemon() {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
-        CardManager cardManager = createMock(CardManager.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
         SetupGame setupGame = createMock(SetupGame.class);
         gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
         replay(gui);
 
-        Game game = new Game(gui, rand, setupGame, handler, cardManager);
+        Game game = new Game(gui, rand, setupGame, handler);
         game.displayActiveDirections();
         verify(gui);
     }
@@ -68,7 +65,6 @@ public class GameTest {
     public void testSelectActivePokemon() {
         GameGUI gui = createMock(GameGUI.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        CardManager cardManager = createMock(CardManager.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
         Random rand = createMock(Random.class);
         Pokemon p = createMock(Pokemon.class);
@@ -79,7 +75,7 @@ public class GameTest {
         expect(handler.getCurrentPlayer()).andReturn(player);
         replay(gui, player, handler);
 
-        Game game = new Game(gui, rand, setupGame, handler, cardManager);
+        Game game = new Game(gui, rand, setupGame, handler);
         game.makeNewActivePokemon(p);
 
         verify(gui, player, handler);
@@ -91,12 +87,11 @@ public class GameTest {
         Random rand = createMock(Random.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        CardManager cardManager = createMock(CardManager.class);
         Pokemon p = createMock(Pokemon.class);
         expect(p.getStage()).andReturn(1);
         replay(p);
 
-        Game game = new Game(gui, rand, setupGame, handler, cardManager);
+        Game game = new Game(gui, rand, setupGame, handler);
         boolean output = game.checkBasicPokemon(p);
         assertFalse(output);
 
@@ -109,10 +104,9 @@ public class GameTest {
         Energy e = createMock(Energy.class);
         SetupGame setupGame = createMock(SetupGame.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
-        CardManager cardManager = createMock(CardManager.class);
         Random rand = createMock(Random.class);
 
-        Game game = new Game(gui, rand, setupGame, handler, cardManager);
+        Game game = new Game(gui, rand, setupGame, handler);
         boolean output = game.checkBasicPokemon(e);
         assertFalse(output);
     }
@@ -122,11 +116,10 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Trainer t = createMock(Trainer.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
-        CardManager cardManager = createMock(CardManager.class);
         SetupGame setupGame = createMock(SetupGame.class);
         Random rand = createMock(Random.class);
 
-        Game game = new Game(gui, rand, setupGame, handler, cardManager);
+        Game game = new Game(gui, rand, setupGame, handler);
         boolean output = game.checkBasicPokemon(t);
         assertFalse(output);
     }
@@ -137,12 +130,11 @@ public class GameTest {
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
-        CardManager cardManager = createMock(CardManager.class);
         Pokemon p = createMock(Pokemon.class);
         expect(p.getStage()).andReturn(0);
         replay(p);
 
-        Game game = new Game(gui, rand, setupGame, handler, cardManager);
+        Game game = new Game(gui, rand, setupGame, handler);
         boolean output = game.checkBasicPokemon(p);
         assertTrue(output);
 
@@ -154,7 +146,6 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         SetupGame setupGame = createMock(SetupGame.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
-        CardManager cardManager = createMock(CardManager.class);
         Random rand = createMock(Random.class);
         Pokemon p = createMock(Pokemon.class);
         expect(p.getStage()).andReturn(1);
@@ -162,7 +153,7 @@ public class GameTest {
         gui.displayMessage("This is not a basic Pokemon and can not place card on bench!");
         replay(p, gui);
 
-        Game game = new Game(gui, rand, setupGame, handler, cardManager);
+        Game game = new Game(gui, rand, setupGame, handler);
         game.handleBenchAction();
 
         verify(p, gui);
@@ -173,7 +164,6 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
-        CardManager cardManager = createMock(CardManager.class);
         SetupGame setupGame = createMock(SetupGame.class);
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
@@ -186,7 +176,7 @@ public class GameTest {
 
         replay(p, player, gui, handler);
 
-        Game game = new Game(gui, rand, setupGame, handler, cardManager);
+        Game game = new Game(gui, rand, setupGame, handler);
         game.handleBenchAction();
 
         verify(player, p, gui, handler);
@@ -195,21 +185,19 @@ public class GameTest {
     @Test
     public void testCantAddEnergy() {
         GameGUI gui = createMock(GameGUI.class);
-        Player player = createMock(Player.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
         Random rand = createMock(Random.class);
-        CardManager cardManager = createMock(CardManager.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        expect(player.canAddEnergy()).andReturn(false);
-        gui.displayMessage("Can only add one energy per turn!");
         Energy e = createMock(Energy.class);
-        expect(handler.getCurrentPlayer()).andReturn(player);
-        expect(gui.getLastSelectedCard()).andReturn(e);
-        replay(gui,player, handler);
 
-        Game game = new Game(gui, rand, setupGame, handler, cardManager);
+        expect(gui.getLastSelectedCard()).andReturn(e);
+        expect(handler.activeCanAddEnergy()).andReturn(false);
+        gui.displayMessage("Unable to add energy!");
+        replay(gui, handler);
+
+        Game game = new Game(gui, rand, setupGame, handler);
         game.handleEnergyAction();
-        verify(gui, player, handler);
+        verify(gui, handler);
     }
 
     @Test
@@ -219,23 +207,29 @@ public class GameTest {
         SetupGame setupGame = createMock(SetupGame.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
         Player player = createMock(Player.class);
-        CardManager cardManager = createMock(CardManager.class);
-        expect(player.canAddEnergy()).andReturn(true);
-
         Pokemon p = createMock(Pokemon.class);
-        ArrayList<Card> pokemon = new ArrayList<>();
-        pokemon.add(p);
-        pokemon.add(p);
-        expect(player.getOnlyPokemonFromHand()).andReturn(pokemon);
-        expect(handler.getCurrentPlayer()).andReturn(player);
-        gui.displayCards(pokemon);
-        gui.displayMessage("Select Pokemon to add card to");
         Energy e = createMock(Energy.class);
+        ArrayList<Card> pokemon = new ArrayList<>();
+
         expect(gui.getLastSelectedCard()).andReturn(e);
+        expect(handler.activeCanAddEnergy()).andReturn(true);
+        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(player.getOnlyPokemonFromHand()).andReturn(pokemon);
+        expect(player.getActivePokemon()).andReturn(p);
+
+        pokemon.add(p);
+
+        gui.displayMessage("Select Pokemon to add Energy to");
+        gui.removeAllButtons();
+        gui.displayCards(pokemon);
+        gui.waitForPokemonSelected();
+        expect(gui.getLastSelectedCard()).andReturn(p);
+        handler.addEnergyToPokemon(e, p);
+
 
         replay(gui,player, handler);
 
-        Game game = new Game(gui, rand, setupGame, handler, cardManager);
+        Game game = new Game(gui, rand, setupGame, handler);
         game.handleEnergyAction();
         verify(gui, player, handler);
     }
@@ -246,7 +240,6 @@ public class GameTest {
         Random rand = createMock(Random.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
         Player player = createMock(Player.class);
-        CardManager cardManager = createMock(CardManager.class);
         SetupGame setupGame = createMock(SetupGame.class);
         Pokemon p = createMock(Pokemon.class);
         ArrayList<Card> hand = createMock(ArrayList.class);
@@ -275,7 +268,7 @@ public class GameTest {
         expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         replay(gui, player, handler);
 
-        Game game = new Game(gui, rand, setupGame, handler, cardManager);
+        Game game = new Game(gui, rand, setupGame, handler);
         game.selectActiveLoop();
         verify(gui, player, handler);
     }
@@ -287,7 +280,6 @@ public class GameTest {
         SetupGame setupGame = createMock(SetupGame.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
         Player player = createMock(Player.class);
-        CardManager cardManager = createMock(CardManager.class);
         Pokemon p = createMock(Pokemon.class);
         ArrayList<Card> hand = createMock(ArrayList.class);
 
@@ -333,7 +325,7 @@ public class GameTest {
 
         replay(gui, player, p, handler);
 
-        Game game = new Game(gui, rand, setupGame, handler, cardManager);
+        Game game = new Game(gui, rand, setupGame, handler);
         game.selectActiveLoop();
         verify(gui, player, p, handler);
     }
@@ -344,14 +336,13 @@ public class GameTest {
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
-        CardManager cardManager = createMock(CardManager.class);
 
         Player player = createMock(Player.class);
         expect(player.getName()).andReturn("Ash");
         gui.displayMessage("The result was Heads Ash goes first!");
         replay(gui, player);
 
-        Game game = new Game(gui, rand, setupGame, handler, cardManager);
+        Game game = new Game(gui, rand, setupGame, handler);
         game.displaySetupResults("Heads", player);
 
         verify(gui, player);
@@ -363,7 +354,6 @@ public class GameTest {
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
-        CardManager cardManager = createMock(CardManager.class);
 
         Player player = createMock(Player.class);
         Pokemon p = createMock(Pokemon.class);
@@ -405,7 +395,7 @@ public class GameTest {
 
         replay(gui, rand, setupGame, handler, player, p);
 
-        Game game = new Game(gui, rand, setupGame, handler, cardManager);
+        Game game = new Game(gui, rand, setupGame, handler);
         game.gameOver = true;
         game.setupGame();
 
@@ -418,7 +408,6 @@ public class GameTest {
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
-        CardManager cardManager = createMock(CardManager.class);
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
         ArrayList<Card> hand = createMock(ArrayList.class);
@@ -434,12 +423,113 @@ public class GameTest {
         expect(handler.getPlayerTurn()).andReturn(1);
         gui.addBenchCard(p, 1);
 
-        replay(gui, rand, setupGame, handler, cardManager, p, player);
+        replay(gui, rand, setupGame, handler, p, player);
 
-        Game game = new Game(gui, rand, setupGame, handler, cardManager);
+        Game game = new Game(gui, rand, setupGame, handler);
         game.mainGameLoop();
 
-        verify(gui, rand, setupGame, handler, cardManager, p, player);
+        verify(gui, rand, setupGame, handler, p, player);
+    }
+
+    @Test
+    public void testMainGameLoopAddEnergy() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Energy e = createMock(Energy.class);
+        Pokemon p = createMock(Pokemon.class);
+        Player player = createMock(Player.class);
+        ArrayList<Card> hand = new ArrayList<>();
+
+        expect(handler.getCurrentPlayerHand()).andReturn(hand);
+        gui.removeAllButtons();
+        gui.displayCards(hand);
+        gui.displayActionButtons();
+        expect(gui.waitForButtonPressed()).andReturn("AddEnergy");
+
+        //handleEnergyAction()
+        expect(gui.getLastSelectedCard()).andReturn(e);
+
+        //handleAddEnergy()
+        expect(handler.activeCanAddEnergy()).andReturn(true);
+        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(player.getOnlyPokemonFromHand()).andReturn(hand);
+        expect(player.getActivePokemon()).andReturn(p);
+
+
+        gui.displayMessage("Select Pokemon to add Energy to");
+        gui.removeAllButtons();
+        hand.add(p);
+        gui.displayCards(hand);
+        gui.waitForPokemonSelected();
+        expect(gui.getLastSelectedCard()).andReturn(p);
+        handler.addEnergyToPokemon(e, p);
+
+        replay(gui, player, handler);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.mainGameLoop();
+
+        verify(gui, player, handler);
+    }
+
+    @Test
+    public void testMainGameLoopAddEnergyWrongType() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Pokemon p = createMock(Pokemon.class);
+        ArrayList<Card> hand = new ArrayList<>();
+
+        expect(handler.getCurrentPlayerHand()).andReturn(hand);
+        gui.removeAllButtons();
+        gui.displayCards(hand);
+        gui.displayActionButtons();
+        expect(gui.waitForButtonPressed()).andReturn("AddEnergy");
+
+        //handleEnergyAction()
+        expect(gui.getLastSelectedCard()).andReturn(p);
+
+        gui.displayMessage("Energy has not been selected!");
+
+        replay(gui, handler);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.mainGameLoop();
+
+        verify(gui, handler);
+    }
+
+    @Test
+    public void testMainGameLoopAddEnergyCantAddEnergy() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Energy e = createMock(Energy.class);
+        ArrayList<Card> hand = new ArrayList<>();
+
+        expect(handler.getCurrentPlayerHand()).andReturn(hand);
+        gui.removeAllButtons();
+        gui.displayCards(hand);
+        gui.displayActionButtons();
+        expect(gui.waitForButtonPressed()).andReturn("AddEnergy");
+
+        //handleEnergyAction()
+        expect(gui.getLastSelectedCard()).andReturn(e);
+
+        //handleAddEnergy()
+        expect(handler.activeCanAddEnergy()).andReturn(false);
+        gui.displayMessage("Unable to add energy!");
+
+        replay(gui, handler);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.mainGameLoop();
+
+        verify(gui, handler);
     }
 }
 

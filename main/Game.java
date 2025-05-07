@@ -8,15 +8,13 @@ public class Game {
     protected Random random;
     protected SetupGame gameSetup;
     protected PlayerHandler playerHandler;
-    protected CardManager cardManager;
     protected boolean gameOver;
 
-    public Game(GUI gui, Random random, SetupGame gameSetup, PlayerHandler playerHandler, CardManager cardManager) {
+    public Game(GUI gui, Random random, SetupGame gameSetup, PlayerHandler playerHandler) {
         this.gui = gui;
         this.random = random;
         this.gameSetup = gameSetup;
         this.playerHandler = playerHandler;
-        this.cardManager = cardManager;
         this.gameOver = false;
     }
 
@@ -60,7 +58,10 @@ public class Game {
         String action = gui.waitForButtonPressed();
         if(action.equals("AddToBench")) {
             handleBenchAction();
+        } else if (action.equals("AddEnergy")) {
+            handleEnergyAction();
         }
+
     }
 
     protected void handleBenchAction() {
@@ -120,13 +121,20 @@ public class Game {
     }
 
     protected void handleAddEnergy(Energy energy) {
-        Player currentPlayer = playerHandler.getCurrentPlayer();
-        if(!currentPlayer.canAddEnergy()) {
-            gui.displayMessage("Can only add one energy per turn!");
+        if(!playerHandler.activeCanAddEnergy()) {
+            gui.displayMessage("Unable to add energy!");
         } else {
+            Player currentPlayer = playerHandler.getCurrentPlayer();
             ArrayList<Card> onlyPokemon = currentPlayer.getOnlyPokemonFromHand();
+            Card activePokemon = currentPlayer.getActivePokemon();
+            onlyPokemon.add(activePokemon);
+
+            gui.displayMessage("Select Pokemon to add Energy to");
+            gui.removeAllButtons();
             gui.displayCards(onlyPokemon);
-            gui.displayMessage("Select Pokemon to add card to");
+            gui.waitForPokemonSelected();
+            Pokemon selectedPokemon = (Pokemon) gui.getLastSelectedCard();
+            playerHandler.addEnergyToPokemon(energy, selectedPokemon);
         }
     }
 
@@ -136,8 +144,7 @@ public class Game {
         Random random = new Random();
         SetupGame gameSetup = new SetupGame(random);
         PlayerHandler playerHandler = new PlayerHandler();
-        CardManager cardManager = new CardManager();
-        Game game = new Game(gui, random, gameSetup, playerHandler, cardManager);
+        Game game = new Game(gui, random, gameSetup, playerHandler);
         gui.createGUI();
         game.setupGame();
     }

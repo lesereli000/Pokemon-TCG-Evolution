@@ -55,4 +55,12 @@ public class PlayerHandler {
     public ArrayList<Card> getCurrentPlayerHand() {
         return currentPlayer.handAsList();
     }
+
+    public boolean activeCanAddEnergy() {
+        return currentPlayer.canAddEnergy();
+    }
+
+    public void addEnergyToPokemon(Energy energy, Pokemon pokemon) {
+        currentPlayer.addEnergyToPokemon(pokemon, energy);
+    }
 }
