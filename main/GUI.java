@@ -16,7 +16,7 @@ public interface GUI {
     void makeActiveCard(Card newActive, int playerTurn);
     Card getLastSelectedCard();
     Attack getLastSelectedAttack();
-    Card displayCards(ArrayList<Card> currentCards);
+    void displayCards(ArrayList<Card> currentCards);
     JButton createButton(String message);
     JButton createLinkedButtonCard(String message, Card currCard);
     JButton createSDHoldingButton(String message);
@@ -38,4 +38,6 @@ public interface GUI {
     String waitForButtonPressed();
 
     void displayActionButtons();
+
+    void setupActivePokemon();
 }

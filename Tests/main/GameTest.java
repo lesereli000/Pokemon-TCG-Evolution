@@ -38,7 +38,7 @@ public class GameTest {
         Player player1 = createMock(Player.class);
         ArrayList<Card> cards = new ArrayList<>();
         expect(player1.handAsList()).andReturn(cards);
-        expect(gui.displayCards(cards)).andReturn(null);
+        gui.displayCards(cards);
         expect(handler.getCurrentPlayer()).andReturn(player1);
         replay(gui, player1, handler);
 
@@ -224,7 +224,7 @@ public class GameTest {
         pokemon.add(p);
         expect(player.getOnlyPokemonFromHand()).andReturn(pokemon);
         expect(handler.getCurrentPlayer()).andReturn(player);
-        expect(gui.displayCards(pokemon)).andReturn(null);
+        gui.displayCards(pokemon);
         gui.displayMessage("Select Pokemon to add card to");
         Energy e = createMock(Energy.class);
         expect(gui.getLastSelectedCard()).andReturn(e);
@@ -252,7 +252,7 @@ public class GameTest {
         //Display hand pre selection
         gui.removeAllButtons();
         expect(player.handAsList()).andReturn(null);
-        expect(gui.displayCards(null)).andReturn(p);
+        gui.displayCards(null);
 
         //check basic pokemon
         expect(p.getStage()).andReturn(0);
@@ -264,7 +264,7 @@ public class GameTest {
         //display hand post selection
         gui.removeAllButtons();
         expect(player.handAsList()).andReturn(null);
-        expect(gui.displayCards(null)).andReturn(p);
+        gui.displayCards(null);
 
         expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(handler.getPlayerTurn()).andReturn(1);
@@ -292,7 +292,7 @@ public class GameTest {
         //Display hand pre selection
         gui.removeAllButtons();
         expect(player.handAsList()).andReturn(null);
-        expect(gui.displayCards(null)).andReturn(p);
+        gui.displayCards(null);
 
         //check basic pokemon, fail then succeed
         expect(p.getStage()).andReturn(1).andReturn(0);
@@ -309,7 +309,7 @@ public class GameTest {
         //Display hand pre selection
         gui.removeAllButtons();
         expect(player.handAsList()).andReturn(null);
-        expect(gui.displayCards(null)).andReturn(p);
+        gui.displayCards(null);
 
         //check basic pokemon, succeeding this time
 
@@ -320,7 +320,7 @@ public class GameTest {
         //display hand post selection
         gui.removeAllButtons();
         expect(player.handAsList()).andReturn(null);
-        expect(gui.displayCards(null)).andReturn(p);
+        gui.displayCards(null);
         expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(handler.getPlayerTurn()).andReturn(1);
 

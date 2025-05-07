@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
+
 public class GameGUI implements GUI {
 
 	static final int frameWidth = 1200;
@@ -14,7 +15,7 @@ public class GameGUI implements GUI {
 
 	private JFrame frame;
 	private GamePanel panel;
-
+	private JPanel actionPanel;
 
 
 	static final int backgroundLineThickness = 4;
@@ -23,7 +24,7 @@ public class GameGUI implements GUI {
 	static final int cardHeight = cardWidth*7/5;
 
 	static final int marginSide = 40;
-	static final int marginTop = 40;
+	static final int marginTop = 80;
 	static final int marginBottom = 75;
 
 	static final int marginPrizeCardVertical = 20;
@@ -31,8 +32,8 @@ public class GameGUI implements GUI {
 	static final int pcVerticalOffset = cardHeight / 10;
 	static final int benchHorizontalOffset = frameWidth / 19;
 	static final int benchHorizontalIncrement = cardHeight / 6;
-	static final int benchVerticalOffset = frameHeight / 6;
-	static final int activeVerticalOffset = frameHeight / 10;
+	static final int benchVerticalOffset = frameHeight / 8;
+	static final int activeVerticalOffset = frameHeight / 16;
 	static final int activeVerticalMargin = cardHeight / 16;
 	static final int deckOffset = 15;
 
@@ -61,12 +62,14 @@ public class GameGUI implements GUI {
 	private volatile boolean waitForAction = false;
 	private volatile Card lastSelectedCard = null;
 	private Attack lastSelectedAttack;
+	private volatile String lastActionButtonPressed;
 	private int playerTurn = 0;
 
 
 
 
 	private class GamePanel extends JPanel {
+
 		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
@@ -301,15 +304,19 @@ public class GameGUI implements GUI {
 		return lastCard;
 	}
 
+
+	public void setupActivePokemon(){
+		lastSelectedCard = null;
+		createLinkedButtonAction("Active Selected Pokemon", "AddToBench");
+	}
+
+
+
 	@Override
-	public Card displayCards(ArrayList<Card> playerCards) {
+	public void displayCards(ArrayList<Card> playerCards) {
         for (Card currCard:playerCards){
             createLinkedButtonCard(currCard.getName(), currCard);
         }
-		while (lastSelectedCard == null) {
-			Thread.onSpinWait();
-		}
-		return getLastSelectedCard();
 	}
 
 	@Override
@@ -345,7 +352,11 @@ public class GameGUI implements GUI {
 	@Override
 	public String waitForButtonPressed() {
 		//TODO: Wait for any button to be pressed and return the appropriate output
-		return "";
+		while (!waitForAction) {
+			Thread.onSpinWait();
+		}
+		this.waitForAction = false;
+		return this.lastActionButtonPressed;
 	}
 
 	@Override
@@ -397,6 +408,21 @@ public class GameGUI implements GUI {
 		return btn;
 	}
 
+	private JButton createLinkedButtonAction(String name, String action) {
+		JButton btn = new JButton(name);
+		btn.addActionListener(e -> {
+			this.lastActionButtonPressed = action;
+			waitForAction  = true;
+		});
+		buttons.add(btn);
+		panel.add(btn);
+		panel.repaint();
+		frame.revalidate();
+		frame.repaint();
+
+		return btn;
+	}
+
 	@Override
 	public JButton createSDHoldingButton(String message) {
 		JButton btn = new JButton(message);
@@ -420,7 +446,8 @@ public class GameGUI implements GUI {
 			removeButton(btn);
 		});
 		buttons.add(btn);
-		panel.add(btn);
+		actionPanel.add(btn);
+		actionPanel.repaint();
 		panel.repaint();
 		frame.revalidate();
 		frame.repaint();

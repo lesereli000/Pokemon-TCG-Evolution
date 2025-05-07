@@ -33,7 +33,10 @@ public class Game {
 
     protected void selectActiveLoop() {
         displayActiveDirections();
-        Card selectedCard = displayCurrentPlayerHand();
+        displayCurrentPlayerHand();
+        gui.setupActivePokemon();
+        String action = gui.waitForButtonPressed();
+        Card selectedCard = gui.getLastSelectedCard();
         if(checkBasicPokemon(selectedCard)) {
             makeNewActivePokemon((Pokemon) selectedCard);
             displayCurrentPlayerHand();
@@ -74,11 +77,11 @@ public class Game {
         gui.createFlipButton();
     }
 
-    protected Card displayCurrentPlayerHand() {
+    protected void displayCurrentPlayerHand() {
         gui.removeAllButtons();
         Player currentPlayer = playerHandler.getCurrentPlayer();
         ArrayList<Card> playerCards = currentPlayer.handAsList();
-        return gui.displayCards(playerCards);
+        gui.displayCards(playerCards);
     }
 
     public void displayActiveDirections() {
