@@ -27,7 +27,7 @@ public class Game {
         selectActiveLoop();
     }
 
-    private void displaySetupResults(String coinFlipResult, Player currentPlayer) {
+    protected void displaySetupResults(String coinFlipResult, Player currentPlayer) {
         gui.displayMessage("The result was " + coinFlipResult + " " + currentPlayer.getName() + " goes first!");
     }
 
@@ -101,7 +101,7 @@ public class Game {
         return stage == 0;
     }
 
-    private void handleAddToBench(Pokemon selectedPokemon) {
+    protected void handleAddToBench(Pokemon selectedPokemon) {
         int pokemonStage = selectedPokemon.getStage();
         Player currentPlayer = playerHandler.getCurrentPlayer();
         if(pokemonStage == 0) {

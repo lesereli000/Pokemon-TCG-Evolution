@@ -337,6 +337,88 @@ public class GameTest {
         verify(gui, player, p, handler);
     }
 
+    @Test
+    public void testDisplaySetupResults() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        CardManager cardManager = createMock(CardManager.class);
 
+        Player player = createMock(Player.class);
+        expect(player.getName()).andReturn("Ash");
+        gui.displayMessage("The result was Heads Ash goes first!");
+        replay(gui, player);
+
+        Game game = new Game(gui, rand, setupGame, handler, cardManager);
+        game.displaySetupResults("Heads", player);
+
+        verify(gui, player);
+    }
+
+    @Test
+    public void testSetupGame() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        CardManager cardManager = createMock(CardManager.class);
+
+        Player player = createMock(Player.class);
+        Pokemon p = createMock(Pokemon.class);
+
+        // Setup expectations
+        gui.createFlipButton();
+        expect(setupGame.completeGameSetup()).andReturn("Heads");
+        handler.completePlayerSetup("Heads");
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
+        expect(player.getName()).andReturn("Player 1");
+
+        gui.displayMessage("The result was Heads Player 1 goes first!");
+
+        // selectActiveLoop()
+        gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
+        gui.removeAllButtons();
+        expect(player.handAsList()).andReturn(null);
+        expect(gui.displayCards(null)).andReturn(p);
+        expect(p.getStage()).andReturn(0);
+        player.setActivePokemon(p);
+        expect(handler.getPlayerTurn()).andReturn(1);
+        gui.makeActiveCard(p, 1);
+        gui.removeAllButtons();
+        expect(player.handAsList()).andReturn(null);
+        expect(gui.displayCards(null)).andReturn(p);
+
+        replay(gui, rand, setupGame, handler, player, p);
+
+        Game game = new Game(gui, rand, setupGame, handler, cardManager);
+        game.setupGame();
+
+        verify(gui, rand, setupGame, handler, player, p);
+    }
+
+    @Test
+    public void testMainGameLoopAddToBench() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        CardManager cardManager = createMock(CardManager.class);
+        Pokemon p = createMock(Pokemon.class);
+        Player player = createMock(Player.class);
+
+        expect(gui.waitForButtonPressed()).andReturn("AddToBench");
+        expect(gui.getLastSelectedCard()).andReturn(p);
+        expect(p.getStage()).andReturn(0);
+        expect(handler.getCurrentPlayer()).andReturn(player);
+        player.addBenchPokemon(p);
+
+        replay(gui, rand, setupGame, handler, cardManager, p, player);
+
+        Game game = new Game(gui, rand, setupGame, handler, cardManager);
+        game.mainGameLoop();
+
+        verify(gui, rand, setupGame, handler, cardManager, p, player);
+    }
 }
 
