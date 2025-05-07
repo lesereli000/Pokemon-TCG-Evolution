@@ -284,6 +284,7 @@ public class GameTest {
         Player player = createMock(Player.class);
         CardManager cardManager = createMock(CardManager.class);
         Pokemon p = createMock(Pokemon.class);
+        ArrayList<Card> hand = new ArrayList<Card>();
 
 
         //display directions
@@ -291,26 +292,28 @@ public class GameTest {
 
         //Display hand pre selection
         gui.removeAllButtons();
-        expect(player.handAsList()).andReturn(null);
-        gui.displayCards(null);
-
+        expect(player.handAsList()).andReturn(hand);
+        gui.displayCards(hand);
+        gui.setupActivePokemon();
+        expect(gui.waitForButtonPressed()).andReturn("AddToBench");
+        expect(gui.getLastSelectedCard()).andReturn(p);
         //check basic pokemon, fail then succeed
         expect(p.getStage()).andReturn(1).andReturn(0);
 
         //Failed
         gui.displayMessage("Not a basic Pokemon!");
         gui.removeAllButtons();
-
-
         //Now succeed
         //display directions
         gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
 
         //Display hand pre selection
         gui.removeAllButtons();
-        expect(player.handAsList()).andReturn(null);
-        gui.displayCards(null);
-
+        expect(player.handAsList()).andReturn(hand);
+        gui.displayCards(hand);
+        gui.setupActivePokemon();
+        expect(gui.waitForButtonPressed()).andReturn("AddToBench");
+        expect(gui.getLastSelectedCard()).andReturn(p);
         //check basic pokemon, succeeding this time
 
         //make new active
@@ -319,8 +322,9 @@ public class GameTest {
 
         //display hand post selection
         gui.removeAllButtons();
-        expect(player.handAsList()).andReturn(null);
-        gui.displayCards(null);
+
+        expect(player.handAsList()).andReturn(hand);
+        gui.displayCards(hand);
         expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(handler.getPlayerTurn()).andReturn(1);
 
