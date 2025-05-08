@@ -224,27 +224,6 @@ public class PlayerTest {
         verify(hand);
     }
 
-    @Test
-    public void testRemoveEnergyForAttack() {
-        Player player = new Player();
-        Pokemon active = createMock(Pokemon.class);
-        Energy energy1 = createMock(Energy.class);
-        Energy energy2 = createMock(Energy.class);
-        Attack attack = createMock(Attack.class);
-
-        player.activePokemon = active;
-        ArrayList<Energy> costs = new ArrayList<>();
-        costs.add(energy1);
-        costs.add(energy2);
-
-        expect(attack.allCosts()).andReturn(costs);
-        active.removeEnergy(energy1);
-        active.removeEnergy(energy2);
-
-        replay(active, attack);
-        player.removeEnergyForAttack(attack);
-        verify(active, attack);
-    }
 
     @Test
     public void testTakeDamage() {

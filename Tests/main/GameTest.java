@@ -224,7 +224,7 @@ public class GameTest {
         gui.removeAllButtons();
         gui.displayCards(pokemon);
         gui.displayConfirmButton();
-        gui.waitForPokemonSelected();
+        gui.waitForAction();
 
         expect(gui.getLastSelectedCard()).andReturn(p);
         handler.addEnergyToPokemon(e, p);
@@ -466,7 +466,7 @@ public class GameTest {
         gui.removeAllButtons();
         hand.add(p);
         gui.displayCards(hand);
-        gui.waitForPokemonSelected();
+        gui.waitForAction();
         expect(gui.getLastSelectedCard()).andReturn(p);
         handler.addEnergyToPokemon(e, p);
         gui.displayCardReport(p);
@@ -597,5 +597,72 @@ public class GameTest {
         verify(gui, handler);
     }
 
+    @Test
+    public void testHandleAttackActionPlayerCannotAttack() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        ArrayList<Card> hand = createMock(ArrayList.class);
+
+        expect(handler.getCurrentPlayerHand()).andReturn(hand);
+        gui.removeAllButtons();
+        gui.displayCards(hand);
+        gui.displayActionButtons();
+        expect(gui.waitForButtonPressed()).andReturn("Attack");
+
+        expect(handler.playerCanAttack()).andReturn(false);
+        gui.displayMessage("You are unable to attack right now!");
+
+        replay(gui, handler);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.mainGameLoop();
+
+        verify(gui, handler);
+    }
+
+    @Test
+    public void testHandleAttackActionPlayerCanAttack() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Attack attack = createMock(Attack.class);
+        Player player1 = createMock(Player.class);
+        Player player2 = createMock(Player.class);
+        ArrayList<Attack> attacks = new ArrayList<>();
+        attacks.add(attack);
+
+        expect(handler.getCurrentPlayerHand()).andReturn(new ArrayList<>());
+        gui.removeAllButtons();
+        gui.displayCards(new ArrayList<>());
+        gui.displayActionButtons();
+        expect(gui.waitForButtonPressed()).andReturn("Attack");
+
+        expect(handler.playerCanAttack()).andReturn(true);
+
+        // displayAttackInfo()
+        gui.removeAllButtons();
+        expect(handler.getCurrentPlayerAttacks()).andReturn(attacks);
+        gui.displayPossibleAttacks(attacks);
+        gui.displayConfirmButton();
+        gui.waitForAction();
+        expect(gui.getLastSelectedAttack()).andReturn(attack);
+
+        expect(handler.getCurrentPlayer()).andReturn(player1);
+        expect(handler.getDefendingPlayer()).andReturn(player2);
+        gui.displayAttackMessage(player1, player2, attack);
+
+        expect(handler.attackOpponent(attack)).andReturn(true);
+        handler.swapPlayerTurns();
+
+        replay(gui, handler);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.mainGameLoop();
+
+        verify(gui, handler);
+    }
 }
 

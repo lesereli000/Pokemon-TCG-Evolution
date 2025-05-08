@@ -60,8 +60,42 @@ public class Game {
             case "AddToBench" -> handleBenchAction();
             case "AddEnergy" -> handleEnergyAction();
             case "PassTurn" -> handlePassTurnAction();
+            case "Attack" -> handleAttackAction();
         }
 
+    }
+
+    protected void handleAttackAction() {
+        if(!playerHandler.playerCanAttack()) {
+            gui.displayMessage("You are unable to attack right now!");
+        } else {
+            handleAttackOpponent();
+        }
+    }
+
+    protected void handleAttackOpponent() {
+        Attack selectedAttack = displayAttackInfo();
+        if(!playerHandler.attackOpponent(selectedAttack)) {
+            gui.displayMessage("Do not have the energy for that attack!");
+        } else {
+            displayPostAttackInfo(selectedAttack);
+            playerHandler.swapPlayerTurns();
+        }
+    }
+
+    protected void displayPostAttackInfo(Attack attack) {
+        Player currentPlayer = playerHandler.getCurrentPlayer();
+        Player defendingPlayer = playerHandler.getDefendingPlayer();
+        gui.displayAttackMessage(currentPlayer, defendingPlayer, attack);
+    }
+
+    private Attack displayAttackInfo() {
+        gui.removeAllButtons();
+        ArrayList<Attack> attacks = playerHandler.getCurrentPlayerAttacks();
+        gui.displayPossibleAttacks(attacks);
+        gui.displayConfirmButton();
+        gui.waitForAction();
+        return gui.getLastSelectedAttack();
     }
 
     protected void handleBenchAction() {
@@ -147,18 +181,7 @@ public class Game {
         gui.removeAllButtons();
         gui.displayCards(pokemon);
         gui.displayConfirmButton();
-        gui.waitForPokemonSelected();
+        gui.waitForAction();
         return (Pokemon) gui.getLastSelectedCard();
-    }
-
-
-    public static void main(String[] args) {
-        GUI gui = new GameGUI();
-        Random random = new Random();
-        SetupGame gameSetup = new SetupGame(random);
-        PlayerHandler playerHandler = new PlayerHandler();
-        Game game = new Game(gui, random, gameSetup, playerHandler);
-        gui.createGUI();
-        game.setupGame();
     }
 }

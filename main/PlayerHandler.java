@@ -81,4 +81,29 @@ public class PlayerHandler {
         Deck bench = currentPlayer.bench;
         return bench.getOnlyPokemon();
     }
+
+    public boolean playerCanAttack() {
+        return currentPlayer.canAttack() && defendingPlayer.hasActive();
+    }
+
+    public ArrayList<Attack> getCurrentPlayerAttacks() {
+        Pokemon currentPlayerActive = (Pokemon) currentPlayer.getActivePokemon();
+        return currentPlayerActive.getAttacks();
+    }
+
+    public boolean attackOpponent(Attack selectedAttack) {
+        if(!currentPlayer.canAttack(selectedAttack)) {
+            return false;
+        }
+        int damage = selectedAttack.getDamage();
+        int dmgCounters = damage/10;
+        Pokemon activePokemon = (Pokemon) currentPlayer.getActivePokemon();
+        String damageType = activePokemon.getType();
+        defendingPlayer.takeDamage(dmgCounters, damageType);
+        return true;
+    }
+
+    public Player getDefendingPlayer() {
+        return defendingPlayer;
+    }
 }

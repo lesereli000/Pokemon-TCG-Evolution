@@ -6,8 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static org.easymock.EasyMock.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class PlayerHandlerTest {
     @Test
@@ -171,5 +170,120 @@ public class PlayerHandlerTest {
         assertEquals(player1, handler.defendingPlayer);
         assertEquals(2, handler.playerTurn);
     }
+
+    @Test
+    public void testPlayerCanAttack() {
+        Player player1 = createMock(Player.class);
+        Player player2 = createMock(Player.class);
+
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = player1;
+        handler.defendingPlayer = player2;
+
+        expect(player1.canAttack()).andReturn(true);
+        expect(player2.hasActive()).andReturn(true);
+
+        replay(player1, player2);
+
+        assertTrue(handler.playerCanAttack());
+
+        verify(player1, player2);
+    }
+
+    @Test
+    public void testPlayerCanAttackFalse1() {
+        Player player1 = createMock(Player.class);
+        Player player2 = createMock(Player.class);
+
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = player1;
+        handler.defendingPlayer = player2;
+
+        expect(player1.canAttack()).andReturn(false);
+        //expect(player2.hasActive()).andReturn(true);  //First if will return false, not even check
+
+        replay(player1, player2);
+
+        assertFalse(handler.playerCanAttack());
+
+        verify(player1, player2);
+    }
+
+    @Test
+    public void testPlayerCanAttackFalse2() {
+        Player player1 = createMock(Player.class);
+        Player player2 = createMock(Player.class);
+
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = player1;
+        handler.defendingPlayer = player2;
+
+        expect(player1.canAttack()).andReturn(true);
+        expect(player2.hasActive()).andReturn(false);
+
+        replay(player1, player2);
+
+        assertFalse(handler.playerCanAttack());
+
+        verify(player1, player2);
+    }
+
+    @Test
+    public void testGetCurrentPlayerAttacks() {
+        Player player = createMock(Player.class);
+        Pokemon p = createMock(Pokemon.class);
+        ArrayList<Attack> hand = createMock(ArrayList.class);
+
+        expect(player.getActivePokemon()).andReturn(p);
+        expect(p.getAttacks()).andReturn(hand);
+
+        replay(p, player);
+
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = player;
+
+        assertEquals(hand, handler.getCurrentPlayerAttacks());
+        verify(p, player);
+    }
+
+    @Test
+    public void testAttackOpponent() {
+        Player player1 = createMock(Player.class);
+        Player player2 = createMock(Player.class);
+        Attack attack = createMock(Attack.class);
+        Pokemon p = createMock(Pokemon.class);
+
+        expect(attack.getDamage()).andReturn(20);
+        expect(player1.getActivePokemon()).andReturn(p);
+        expect(player1.canAttack(attack)).andReturn(true);
+        expect(p.getType()).andReturn("ABC");
+        player2.takeDamage(2, "ABC");
+
+        replay(player1, player2, p, attack);
+
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = player1;
+        handler.defendingPlayer = player2;
+        assertTrue(handler.attackOpponent(attack));
+
+        verify(player1, player2, p, attack);
+    }
+
+    @Test
+    public void testCantAttackOpponent() {
+        Player player1 = createMock(Player.class);
+        Attack attack = createMock(Attack.class);
+
+        expect(player1.canAttack(attack)).andReturn(false);
+
+        replay(player1);
+
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = player1;
+        assertFalse(handler.attackOpponent(attack));
+
+        verify(player1);
+    }
+
 
 }

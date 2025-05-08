@@ -329,6 +329,44 @@ public class GameGUI implements GUI {
 	}
 
 	@Override
+	public void displayPossibleAttacks(ArrayList<Attack> attacks) {
+		String attackReport = generateAttackReport(attacks);
+		JOptionPane.showMessageDialog(frame, attackReport);
+		for (Attack attack : attacks) {
+			createLinkedButtonAttack(attack);
+		}
+	}
+
+	@Override
+	public void displayAttackMessage(Player currentPlayer, Player defendingPlayer, Attack attack) {
+		StringBuilder attackReport = new StringBuilder();
+		String currentName = currentPlayer.getName();
+		String defendingName = defendingPlayer.getName();
+		Pokemon currentPokemon = currentPlayer.activePokemon;
+		Pokemon defendingPokemon = defendingPlayer.activePokemon;
+		attackReport.append("Attack Report:\n");
+		attackReport.append(currentName).append("'s active Pokemon: ").append(currentPokemon.getName()).append("\n");
+		attackReport.append("attacked ").append(defendingName).append("'s active Pokemon: ").append(defendingPokemon.getName()).append("\n\n");
+		attackReport.append(defendingName).append("'s active Pokemon took ").append(attack.getDamage()).append(" damage\n");
+		attackReport.append(defendingName).append("'s active Pokemon: ").append(defendingPokemon.getName())
+				.append(" is now at: ").append(defendingPokemon.getCurHP()).append(" hp");
+		displayMessage(attackReport.toString());
+
+	}
+
+	public String generateAttackReport(ArrayList<Attack> attacks) {
+		StringBuilder report = new StringBuilder();
+		for (Attack attack : attacks) {
+			report.append(attack.name).append(":\nCosts:\n");
+			for (Energy energy : attack.costs) {
+				report.append("• ").append(energy.getName()).append("\n");
+			}
+			report.append("Damage: ").append(attack.damage).append("\n");
+		}
+		return report.toString();
+	}
+
+	@Override
 	public void displayPokemonReport(Pokemon pokemon) {
 		StringBuilder report = new StringBuilder();
 		//General info
@@ -351,19 +389,13 @@ public class GameGUI implements GUI {
 
 		//Attacks
 		report.append("\nAttacks:\n");
-		for (Attack attack : pokemon.attacks) {
-			report.append(attack.name).append(":\nCosts:\n");
-			for (Energy energy : attack.costs) {
-				report.append("• ").append(energy.getName()).append("\n");
-			}
-			report.append("Damage: ").append(attack.damage);
-		}
+		report.append(generateAttackReport(pokemon.attacks));
 
-		JOptionPane.showMessageDialog(frame, report.toString());
+		displayMessage(report.toString());
 	}
 
 	@Override
-	public void waitForPokemonSelected() {
+	public void waitForAction() {
 		//TODO: Wait for any Pokemon to be pressed
 		while (!waitForAction) {
 			Thread.onSpinWait();
@@ -376,14 +408,6 @@ public class GameGUI implements GUI {
         for (Card currCard:playerCards){
             createLinkedButtonCard(currCard.getName(), currCard);
         }
-	}
-
-	@Override
-	public void displayAttacks(ArrayList<Attack> attacks, String submitMessage) {
-		for(Attack currAttack: attacks) {
-			createLinkedButtonAttack(currAttack.name, currAttack);
-		}
-		createButton(submitMessage);
 	}
 
 	@Override
@@ -422,6 +446,7 @@ public class GameGUI implements GUI {
 		createLinkedButtonAction("Add Pokemon Bench", "AddToBench");
 		createLinkedButtonAction("Add An Energy", "AddEnergy");
 		createLinkedButtonAction("Pass Turn", "PassTurn");
+		createLinkedButtonAction("Attack Opponent", "Attack");
 	}
 
 
@@ -454,8 +479,8 @@ public class GameGUI implements GUI {
 		return btn;
 	}
 
-	private JButton createLinkedButtonAttack(String name, Attack currAttack) {
-		JButton btn = new JButton(name);
+	private JButton createLinkedButtonAttack(Attack currAttack) {
+		JButton btn = new JButton(currAttack.name);
 		btn.addActionListener(e -> {
 			setLastSelectedAttack(currAttack);
 		});

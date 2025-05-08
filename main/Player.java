@@ -9,7 +9,6 @@ public class Player {
     protected Deck deck;
     protected Deck hand;
     protected Deck bench;
-    private Deck discard;
     protected Pokemon activePokemon;
     protected Deck prizeCards;
     private String name;
@@ -61,20 +60,9 @@ public class Player {
 
     public void checkForBasics(Random rand) {
         while(this.deck.numberBasicPokemon() == 0) {
-            System.out.println(this.name + " does not have any basic cards!");
             this.deck = new Deck();
             createFullRandomDeck(rand);
         }
-    }
-
-    public String handAsString() {
-        String msg = this.name + " has cards:\n";
-        for (Card newCard : hand.getCards()) {
-            String card1Class = newCard.getClass().toString();
-            String justClass1 = card1Class.substring(11); //Just the class of the card
-            msg += newCard.getName() + " which is a " + justClass1 + "\n";
-        }
-        return msg;
     }
 
     public ArrayList<Card> handAsList() {
@@ -83,6 +71,7 @@ public class Player {
 
     public void setActivePokemon(Pokemon activePokemon) {
         this.activePokemon = activePokemon;
+        hasActive = true;
         removeFromHand(this.activePokemon);
     }
 
@@ -135,17 +124,17 @@ public class Player {
         return this.bench.size() != 0 && activePokemon.canRetreat();
     }
 
-    public ArrayList<Card> benchAsList() {
-        return this.bench.getCards();
-    }
+//    public ArrayList<Card> benchAsList() {
+//        return this.bench.getCards();
+//    }
 
-    public void retreat(Pokemon lastSelectedCard) {
-        int retreatCost = activePokemon.retreatCost;
-        activePokemon.removeColorless(retreatCost);
-        bench.removeCard(lastSelectedCard);
-        bench.addCard(activePokemon);
-        this.activePokemon = lastSelectedCard;
-    }
+//    public void retreat(Pokemon lastSelectedCard) {
+//        int retreatCost = activePokemon.retreatCost;
+//        activePokemon.removeColorless(retreatCost);
+//        bench.removeCard(lastSelectedCard);
+//        bench.addCard(activePokemon);
+//        this.activePokemon = lastSelectedCard;
+//    }
 
     public boolean canAttack(){
         return activePokemon.canAttack();
@@ -173,19 +162,12 @@ public class Player {
         selectedPokemon.addEnergy(selectedEnergy);
     }
 
-    public void removeEnergyForAttack(Attack attack) {
-        ArrayList<Energy> costs = attack.allCosts();
-        for (Energy cost : costs) {
-            activePokemon.removeEnergy(cost);
-        }
-    }
-
-    public void drawPrizeCards() {
-        for(int i = 0; i < PRIZE_CARD_SIZE; i++) {
-            Card cardToAdd = deck.removeTopCard();
-            prizeCards.addCard(cardToAdd);
-        }
-    }
+//    public void drawPrizeCards() {
+//        for(int i = 0; i < PRIZE_CARD_SIZE; i++) {
+//            Card cardToAdd = deck.removeTopCard();
+//            prizeCards.addCard(cardToAdd);
+//        }
+//    }
 
     public boolean benchIsEmpty() {
         return bench.size() <= 0;

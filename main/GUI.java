@@ -29,8 +29,6 @@ public interface GUI {
 
     void updateTurn(int playerTurn);
 
-    void displayAttacks(ArrayList<Attack> attacks, String submitMessage);
-
     void closeWindow();
 
     void removePrizeCard(int playerNum);
@@ -41,11 +39,15 @@ public interface GUI {
 
     void setupActivePokemon();
 
-    void waitForPokemonSelected();
+    void waitForAction();
 
     void displayConfirmButton();
 
     void displayPokemonReport(Pokemon pokemon);
 
     void displayCardReport(Card card);
+
+    void displayPossibleAttacks(ArrayList<Attack> attacks);
+
+    void displayAttackMessage(Player currentPlayer, Player defendingPlayer, Attack attack);
 }

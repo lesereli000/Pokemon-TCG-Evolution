@@ -192,4 +192,12 @@ public class Pokemon extends Card{
     public String getEvolvesFrom() {
         return evolvesFrom;
     }
+
+    public ArrayList<Attack> getAttacks() {
+        return attacks;
+    }
+
+    public String getType() {
+        return type;
+    }
 }
