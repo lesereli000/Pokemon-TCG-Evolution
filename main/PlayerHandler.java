@@ -76,4 +76,9 @@ public class PlayerHandler {
         defendingPlayer = currentPlayer;
         currentPlayer = tempPlayer;
     }
+
+    protected ArrayList<Card> getOnlyPokemonFromBench() {
+        Deck bench = currentPlayer.bench;
+        return bench.getOnlyPokemon();
+    }
 }

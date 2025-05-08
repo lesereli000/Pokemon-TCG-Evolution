@@ -311,6 +311,19 @@ public class GameGUI implements GUI {
 	}
 
 	@Override
+	public void displayConfirmButton() {
+		JButton btn = new JButton("Confirm Pokemon Selection");
+		btn.addActionListener(e -> {
+			this.waitForAction = true;
+		});
+		buttons.add(btn);
+		panel.add(btn);
+		panel.repaint();
+		frame.revalidate();
+		frame.repaint();
+	}
+
+	@Override
 	public void waitForPokemonSelected() {
 		//TODO: Wait for any Pokemon to be pressed
 		while (!waitForAction) {

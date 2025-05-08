@@ -202,6 +202,7 @@ public class GameTest {
 
     @Test
     public void testSuccessAddingEnergy() {
+        // Create mocks
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
@@ -214,25 +215,27 @@ public class GameTest {
         expect(gui.getLastSelectedCard()).andReturn(e);
         expect(handler.activeCanAddEnergy()).andReturn(true);
         expect(handler.getCurrentPlayer()).andReturn(player);
-        expect(player.getOnlyPokemonFromHand()).andReturn(pokemon);
+        expect(handler.getOnlyPokemonFromBench()).andReturn(pokemon);
         expect(player.getActivePokemon()).andReturn(p);
-
         pokemon.add(p);
 
+        //display add energy info
         gui.displayMessage("Select Pokemon to add Energy to");
         gui.removeAllButtons();
         gui.displayCards(pokemon);
+        gui.displayConfirmButton();
         gui.waitForPokemonSelected();
+
         expect(gui.getLastSelectedCard()).andReturn(p);
         handler.addEnergyToPokemon(e, p);
-
-
-        replay(gui,player, handler);
+        replay(gui, player, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
         game.handleEnergyAction();
+
         verify(gui, player, handler);
     }
+
 
     @Test
     public void testSelectActiveLoopBasic() {
@@ -454,11 +457,11 @@ public class GameTest {
         //handleAddEnergy()
         expect(handler.activeCanAddEnergy()).andReturn(true);
         expect(handler.getCurrentPlayer()).andReturn(player);
-        expect(player.getOnlyPokemonFromHand()).andReturn(hand);
+        expect(handler.getOnlyPokemonFromBench()).andReturn(hand);
         expect(player.getActivePokemon()).andReturn(p);
 
-
         gui.displayMessage("Select Pokemon to add Energy to");
+        gui.displayConfirmButton();
         gui.removeAllButtons();
         hand.add(p);
         gui.displayCards(hand);

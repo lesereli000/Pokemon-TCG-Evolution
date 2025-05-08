@@ -56,12 +56,10 @@ public class Game {
         gui.displayCards(playerHand);
         gui.displayActionButtons();
         String action = gui.waitForButtonPressed();
-        if(action.equals("AddToBench")) {
-            handleBenchAction();
-        } else if (action.equals("AddEnergy")) {
-            handleEnergyAction();
-        } else if (action.equals("PassTurn")) {
-            handlePassTurnAction();
+        switch (action) {
+            case "AddToBench" -> handleBenchAction();
+            case "AddEnergy" -> handleEnergyAction();
+            case "PassTurn" -> handlePassTurnAction();
         }
 
     }
@@ -134,17 +132,22 @@ public class Game {
             gui.displayMessage("Unable to add energy!");
         } else {
             Player currentPlayer = playerHandler.getCurrentPlayer();
-            ArrayList<Card> onlyPokemon = currentPlayer.getOnlyPokemonFromHand();
+            ArrayList<Card> onlyPokemon = playerHandler.getOnlyPokemonFromBench();
             Card activePokemon = currentPlayer.getActivePokemon();
             onlyPokemon.add(activePokemon);
 
-            gui.displayMessage("Select Pokemon to add Energy to");
-            gui.removeAllButtons();
-            gui.displayCards(onlyPokemon);
-            gui.waitForPokemonSelected();
-            Pokemon selectedPokemon = (Pokemon) gui.getLastSelectedCard();
+            Pokemon selectedPokemon = displayAddEnergyInfo(onlyPokemon);
             playerHandler.addEnergyToPokemon(energy, selectedPokemon);
         }
+    }
+
+    protected Pokemon displayAddEnergyInfo(ArrayList<Card> pokemon) {
+        gui.displayMessage("Select Pokemon to add Energy to");
+        gui.removeAllButtons();
+        gui.displayCards(pokemon);
+        gui.displayConfirmButton();
+        gui.waitForPokemonSelected();
+        return (Pokemon) gui.getLastSelectedCard();
     }
 
 

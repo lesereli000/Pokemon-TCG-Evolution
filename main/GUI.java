@@ -42,4 +42,6 @@ public interface GUI {
     void setupActivePokemon();
 
     void waitForPokemonSelected();
+
+    void displayConfirmButton();
 }
