@@ -44,4 +44,8 @@ public interface GUI {
     void waitForPokemonSelected();
 
     void displayConfirmButton();
+
+    void displayPokemonReport(Pokemon pokemon);
+
+    void displayCardReport(Card card);
 }

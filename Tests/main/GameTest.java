@@ -228,6 +228,7 @@ public class GameTest {
 
         expect(gui.getLastSelectedCard()).andReturn(p);
         handler.addEnergyToPokemon(e, p);
+        gui.displayCardReport(p);
         replay(gui, player, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
@@ -468,6 +469,7 @@ public class GameTest {
         gui.waitForPokemonSelected();
         expect(gui.getLastSelectedCard()).andReturn(p);
         handler.addEnergyToPokemon(e, p);
+        gui.displayCardReport(p);
 
         replay(gui, player, handler);
 

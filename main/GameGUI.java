@@ -324,6 +324,45 @@ public class GameGUI implements GUI {
 	}
 
 	@Override
+	public void displayCardReport(Card card) {
+		if(card instanceof Pokemon) displayPokemonReport((Pokemon) card);
+	}
+
+	@Override
+	public void displayPokemonReport(Pokemon pokemon) {
+		StringBuilder report = new StringBuilder();
+		//General info
+		report.append("Pokemon Report:\n\n");
+		report.append("Name: ").append(pokemon.getName()).append("\n");
+		report.append("Stage: ").append(pokemon.getStage()).append("\n");
+		report.append("Type: ").append(pokemon.type).append("\n");
+		report.append("HP: ").append(pokemon.getCurHP()).append("\n");
+		report.append("Retreat Cost: ").append(pokemon.retreatCost).append(" Colorless Energy\n");
+
+		//Energies
+		report.append("\nAttached Energies:\n");
+		if(pokemon.energies.isEmpty()){
+			report.append("None\n");
+		} else {
+			for (Energy energy : pokemon.energies) {
+				report.append("• ").append(energy.getName()).append("\n");
+			}
+		}
+
+		//Attacks
+		report.append("\nAttacks:\n");
+		for (Attack attack : pokemon.attacks) {
+			report.append(attack.name).append(":\nCosts:\n");
+			for (Energy energy : attack.costs) {
+				report.append("• ").append(energy.getName()).append("\n");
+			}
+			report.append("Damage: ").append(attack.damage);
+		}
+
+		JOptionPane.showMessageDialog(frame, report.toString());
+	}
+
+	@Override
 	public void waitForPokemonSelected() {
 		//TODO: Wait for any Pokemon to be pressed
 		while (!waitForAction) {

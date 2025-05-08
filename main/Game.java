@@ -138,6 +138,7 @@ public class Game {
 
             Pokemon selectedPokemon = displayAddEnergyInfo(onlyPokemon);
             playerHandler.addEnergyToPokemon(energy, selectedPokemon);
+            gui.displayCardReport(selectedPokemon);
         }
     }
 
