@@ -63,4 +63,6 @@ public class PlayerHandler {
     public void addEnergyToPokemon(Energy energy, Pokemon pokemon) {
         currentPlayer.addEnergyToPokemon(pokemon, energy);
     }
+
+
 }

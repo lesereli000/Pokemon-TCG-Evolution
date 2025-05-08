@@ -61,7 +61,6 @@ public class Game {
         } else if (action.equals("AddEnergy")) {
             handleEnergyAction();
         }
-
     }
 
     protected void handleBenchAction() {

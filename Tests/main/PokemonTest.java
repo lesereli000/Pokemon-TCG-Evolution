@@ -144,6 +144,20 @@ public class PokemonTest {
     }
 
     @Test
+    public void testHeal() {
+        Pokemon p = new Pokemon("Beedrill", "Grass", 1, 40);
+        assertEquals(0, p.damageCounters);
+        p.takeDamage(3, "F");
+        assertEquals(3, p.damageCounters);
+        p.heal(2);
+        assertEquals(1, p.damageCounters);
+        p.heal(2);
+        assertEquals(0, p.damageCounters);
+        p.heal(2);
+        assertEquals(0, p.damageCounters);
+    }
+
+    @Test
     public void testTypeWeakness() {
         CardGenerator cg = new CardGenerator();
         Pokemon attackingMachop = (Pokemon) cg.generateCard("Machop");

@@ -157,6 +157,10 @@ public class Player {
         activePokemon.takeDamage(damageCounters, damageType);
     }
 
+    public void healActivePokemon(int damageCounters) {
+        activePokemon.heal(damageCounters);
+    }
+
     public int getActiveHP() {
         return activePokemon.getCurHP();
     }
@@ -171,9 +175,16 @@ public class Player {
         selectedPokemon.addEnergy(selectedEnergy);
     }
 
-    public void removeEnergyForAttack(Attack attack) {
-        ArrayList<Energy> costs = attack.costs;
-        for (Energy cost : costs) {
+//    public void removeEnergyForAttack(Attack attack) {
+//        ArrayList<Energy> costs = attack.costs;
+//        for (Energy cost : costs) {
+//            activePokemon.removeEnergy(cost);
+//        }
+//    }
+
+    //new version changed for trainer implementation
+    public void removeEnergy(ArrayList<Energy> energyList) {
+        for (Energy cost : energyList) {
             activePokemon.removeEnergy(cost);
         }
     }

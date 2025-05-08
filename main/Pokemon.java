@@ -77,6 +77,14 @@ public class Pokemon extends Card{
         damageCounters += damageCountersTaken;
     }
 
+    public void heal(int damageCountersTaken) {
+        damageCounters -= damageCountersTaken;
+
+        if(damageCounters < 0) {
+            damageCounters = 0;
+        }
+    }
+
     public int getMaxHP(){
         return hp;
     }
@@ -192,4 +200,6 @@ public class Pokemon extends Card{
     public String getEvolvesFrom() {
         return evolvesFrom;
     }
+
+
 }

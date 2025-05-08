@@ -223,4 +223,20 @@ public class PlayerTest {
         player.getOnlyPokemonFromHand();
         verify(hand);
     }
+
+    @Test
+    public void testRemoveEnergy() {
+        Player player = new Player();
+        ArrayList<Energy> energyList = new ArrayList<>();
+        Energy e = new Energy("Grass Energy");
+        energyList.add(e);
+        Pokemon activePokemon = new Pokemon("Beedrill", "Grass", 2, 80, "Fire", "Fighting", null, 0);
+        player.hand.addCard(activePokemon);
+        player.setActivePokemon(activePokemon);
+        activePokemon.addEnergy(e);
+        assertEquals(activePokemon.energies, energyList);
+        player.removeEnergy(energyList);
+        energyList.remove(0);
+        assertEquals(activePokemon.energies, energyList);
+    }
 }
