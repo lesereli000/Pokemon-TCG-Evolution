@@ -21,4 +21,8 @@ public class Attack {
         }
         return outputString;
     }
+
+    public ArrayList<Energy> allCosts() {
+        return costs;
+    }
 }

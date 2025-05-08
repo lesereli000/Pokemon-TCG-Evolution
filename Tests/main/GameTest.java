@@ -531,5 +531,66 @@ public class GameTest {
 
         verify(gui, handler);
     }
+
+    @Test
+    public void testPassTurnActionNotFirstTurn() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+
+        expect(handler.passTurn()).andReturn(true);
+        replay(handler);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.handlePassTurnAction();
+        verify(handler);
+    }
+
+    @Test
+    public void testPassTurnActionFirstTurn() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Pokemon p = createMock(Pokemon.class);
+        ArrayList<Card> hand = createMock(ArrayList.class);
+        Player player = createMock(Player.class);
+
+        expect(handler.passTurn()).andReturn(false);
+
+        //display hand
+        gui.removeAllButtons();
+        expect(handler.getCurrentPlayerHand()).andReturn(hand);
+        gui.displayCards(hand);
+        //display directions
+        gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
+
+        gui.setupActivePokemon();
+        expect(gui.waitForButtonPressed()).andReturn("");
+
+        expect(gui.getLastSelectedCard()).andReturn(p);
+
+        //check basic
+        expect(p.getStage()).andReturn(0);
+
+        //make new active
+        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(handler.getPlayerTurn()).andReturn(1);
+        player.setActivePokemon(p);
+        gui.makeActiveCard(p,1);
+
+        //display hand
+        gui.removeAllButtons();
+        expect(handler.getCurrentPlayerHand()).andReturn(hand);
+        gui.displayCards(hand);
+
+        replay(gui, handler);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.handlePassTurnAction();
+        verify(gui, handler);
+    }
+
 }
 

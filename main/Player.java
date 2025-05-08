@@ -15,6 +15,7 @@ public class Player {
     private String name;
     private int numPokemonDied;
     private boolean canAddEnergy;
+    protected boolean hasActive;
 
 
 
@@ -31,6 +32,7 @@ public class Player {
         this.prizeCards = new Deck();
         this.numPokemonDied = 0;
         this.canAddEnergy = true;
+        this.hasActive = false;
 
     }
 
@@ -172,7 +174,7 @@ public class Player {
     }
 
     public void removeEnergyForAttack(Attack attack) {
-        ArrayList<Energy> costs = attack.costs;
+        ArrayList<Energy> costs = attack.allCosts();
         for (Energy cost : costs) {
             activePokemon.removeEnergy(cost);
         }
@@ -219,6 +221,10 @@ public class Player {
             return true;
         }
         return false;
+    }
+
+    protected boolean hasActive() {
+        return hasActive;
     }
 
     protected void replacePokemon(Pokemon oldPokemon, Pokemon evolvedPokemon) {

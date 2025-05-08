@@ -369,6 +369,7 @@ public class GameGUI implements GUI {
 	public void displayActionButtons() {
 		createLinkedButtonAction("Add Pokemon Bench", "AddToBench");
 		createLinkedButtonAction("Add An Energy", "AddEnergy");
+		createLinkedButtonAction("Pass Turn", "PassTurn");
 	}
 
 

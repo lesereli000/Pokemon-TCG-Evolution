@@ -63,4 +63,17 @@ public class PlayerHandler {
     public void addEnergyToPokemon(Energy energy, Pokemon pokemon) {
         currentPlayer.addEnergyToPokemon(pokemon, energy);
     }
+
+    public boolean passTurn() {
+        currentPlayer.passTurn();
+        swapPlayerTurns();
+        return currentPlayer.hasActive();
+    }
+
+    public void swapPlayerTurns() {
+        playerTurn = playerTurn == 1 ? 2 : 1;
+        Player tempPlayer = defendingPlayer;
+        defendingPlayer = currentPlayer;
+        currentPlayer = tempPlayer;
+    }
 }

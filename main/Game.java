@@ -35,8 +35,8 @@ public class Game {
     }
 
     protected void selectActiveLoop() {
-        displayActiveDirections();
         displayCurrentPlayerHand();
+        displayActiveDirections();
         gui.setupActivePokemon();
         gui.waitForButtonPressed();
         Card selectedCard = gui.getLastSelectedCard();
@@ -60,6 +60,8 @@ public class Game {
             handleBenchAction();
         } else if (action.equals("AddEnergy")) {
             handleEnergyAction();
+        } else if (action.equals("PassTurn")) {
+            handlePassTurnAction();
         }
 
     }
@@ -79,6 +81,13 @@ public class Game {
             gui.displayMessage("Energy has not been selected!");
         } else {
             handleAddEnergy((Energy)lastSelectedCard);
+        }
+    }
+
+    public void handlePassTurnAction() {
+        boolean hasActiveAlready = playerHandler.passTurn();
+        if(!hasActiveAlready) {
+            selectActiveLoop();
         }
     }
 

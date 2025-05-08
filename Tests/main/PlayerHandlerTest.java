@@ -7,6 +7,7 @@ import java.util.Random;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class PlayerHandlerTest {
     @Test
@@ -129,7 +130,46 @@ public class PlayerHandlerTest {
         assertEquals(hand, actual);
 
         verify(player1);
+    }
 
+    @Test
+    public void testSwapPlayerTurn() {
+        PlayerHandler handler = new PlayerHandler();
+        Player player1 = createMock(Player.class);
+        Player player2 = createMock(Player.class);
+
+        handler.player1 = player1;
+        handler.player2 = player2;
+        handler.playerTurn = 1;
+        handler.currentPlayer = player1;
+        handler.defendingPlayer = player2;
+
+        handler.swapPlayerTurns();
+
+        assertEquals(player2, handler.currentPlayer);
+        assertEquals(player1, handler.defendingPlayer);
+        assertEquals(2, handler.playerTurn);
+    }
+
+    @Test
+    public void testPassTurn() {
+        PlayerHandler handler = new PlayerHandler();
+        Player player1 = createMock(Player.class);
+        Player player2 = createMock(Player.class);
+
+        handler.player1 = player1;
+        handler.player2 = player2;
+        handler.playerTurn = 1;
+        handler.currentPlayer = player1;
+        handler.defendingPlayer = player2;
+        expect(player2.hasActive()).andReturn(true);
+        replay(player2);
+        assertTrue(handler.passTurn());
+        verify(player2);
+
+        assertEquals(player2, handler.currentPlayer);
+        assertEquals(player1, handler.defendingPlayer);
+        assertEquals(2, handler.playerTurn);
     }
 
 }

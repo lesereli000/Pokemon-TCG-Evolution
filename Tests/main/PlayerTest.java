@@ -223,4 +223,116 @@ public class PlayerTest {
         player.getOnlyPokemonFromHand();
         verify(hand);
     }
+
+    @Test
+    public void testRemoveEnergyForAttack() {
+        Player player = new Player();
+        Pokemon active = createMock(Pokemon.class);
+        Energy energy1 = createMock(Energy.class);
+        Energy energy2 = createMock(Energy.class);
+        Attack attack = createMock(Attack.class);
+
+        player.activePokemon = active;
+        ArrayList<Energy> costs = new ArrayList<>();
+        costs.add(energy1);
+        costs.add(energy2);
+
+        expect(attack.allCosts()).andReturn(costs);
+        active.removeEnergy(energy1);
+        active.removeEnergy(energy2);
+
+        replay(active, attack);
+        player.removeEnergyForAttack(attack);
+        verify(active, attack);
+    }
+
+    @Test
+    public void testTakeDamage() {
+        Player player = new Player();
+        Pokemon active = createMock(Pokemon.class);
+        active.takeDamage(30, "Fire");
+        player.activePokemon = active;
+
+        replay(active);
+        player.takeDamage(30, "Fire");
+        verify(active);
+    }
+
+    @Test
+    public void testAddEnergyToPokemon() {
+        Player player = new Player();
+        Deck hand = createMock(Deck.class);
+        Energy energy = createMock(Energy.class);
+        Pokemon pokemon = createMock(Pokemon.class);
+
+        expect(hand.removeCard(energy)).andReturn(true);
+        pokemon.addEnergy(energy);
+
+        player.hand = hand;
+
+        replay(hand, pokemon);
+        player.addEnergyToPokemon(pokemon, energy);
+        assertFalse(player.canAddEnergy());
+        verify(hand, pokemon);
+    }
+
+    @Test
+    public void testSetNewActive() {
+        Player player = new Player();
+        Deck bench = createMock(Deck.class);
+        Pokemon newActive = createMock(Pokemon.class);
+
+        expect(bench.removeTopCard()).andReturn(newActive);
+        player.bench = bench;
+
+        replay(bench);
+        Card result = player.setNewActive();
+        assertEquals(newActive, result);
+        verify(bench);
+    }
+
+    @Test
+    public void testGetActiveHP() {
+        Player player = new Player();
+        Pokemon active = createMock(Pokemon.class);
+
+        expect(active.getCurHP()).andReturn(40);
+        player.activePokemon = active;
+
+        replay(active);
+        assertEquals(40, player.getActiveHP());
+        verify(active);
+    }
+
+    @Test
+    public void testCanAttackNoArgs() {
+        Player player = new Player();
+        Pokemon active = createMock(Pokemon.class);
+        expect(active.canAttack()).andReturn(true);
+        player.activePokemon = active;
+
+        replay(active);
+        assertTrue(player.canAttack());
+        verify(active);
+    }
+
+    @Test
+    public void testCanAttackWithArgs() {
+        Player player = new Player();
+        Pokemon active = createMock(Pokemon.class);
+        Attack attack = createMock(Attack.class);
+
+        expect(active.canAttack(attack)).andReturn(false);
+        player.activePokemon = active;
+
+        replay(active);
+        assertFalse(player.canAttack(attack));
+        verify(active);
+    }
+
+
+
+
+
+
 }
