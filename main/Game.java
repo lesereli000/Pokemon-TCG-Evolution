@@ -80,7 +80,7 @@ public class Game {
     protected Card retreatPokemon() {
         gui.removeAllButtons();
         gui.displayMessage("Select new active Pokemon");
-        gui.displayCards(playerHandler.getOnlyPokemonFromBench());
+        gui.displayCards(playerHandler.getOnlyPokemonFromBench(1));
         gui.displayConfirmButton();
         gui.waitForAction();
         Card selectedCard = gui.getLastSelectedCard();
@@ -101,15 +101,40 @@ public class Game {
         if(!playerHandler.attackOpponent(selectedAttack)) {
             gui.displayMessage("Do not have the energy for that attack!");
         } else {
-            displayPostAttackInfo(selectedAttack);
+            boolean defendingIsDead = playerHandler.isDefendingDead();
+            displayPostAttackInfo(selectedAttack, defendingIsDead);
+            if(defendingIsDead) {
+                handleDeadActive();
+            }
             playerHandler.swapPlayerTurns();
         }
     }
 
-    protected void displayPostAttackInfo(Attack attack) {
+    protected void displayPostAttackInfo(Attack attack, boolean isDead) {
         Player currentPlayer = playerHandler.getCurrentPlayer();
         Player defendingPlayer = playerHandler.getDefendingPlayer();
         gui.displayAttackMessage(currentPlayer, defendingPlayer, attack);
+        if(isDead) {
+            gui.displayDeadActiveInfo(defendingPlayer);
+        }
+    }
+
+    protected void handleDeadActive() {
+        gui.removeAllButtons();
+        ArrayList<Card> playerPokemon = playerHandler.getOnlyPokemonFromBench(2);
+        gui.displayCards(playerPokemon);
+        gui.displayConfirmButton();
+        gui.waitForAction();
+        Card lastSelectedCard = gui.getLastSelectedCard();
+        int playerTurn = playerHandler.getPlayerTurn();
+        int defendingNum = playerTurn % 2 + 1;
+        gui.makeActiveCard(lastSelectedCard, defendingNum);
+        gui.removeBenchCard(lastSelectedCard, defendingNum);
+        if(!checkBasicPokemon(lastSelectedCard)) {
+            gui.displayMessage("Not a basic Pokemon!");
+        } else {
+            playerHandler.killDefenderActive((Pokemon)lastSelectedCard);
+        }
     }
 
     private Attack displayAttackInfo() {
@@ -141,6 +166,7 @@ public class Game {
 
     public void handlePassTurnAction() {
         boolean hasActiveAlready = playerHandler.passTurn();
+        playerHandler.drawCardFromDeck();
         if(!hasActiveAlready) {
             selectActiveLoop();
         }
@@ -189,7 +215,7 @@ public class Game {
             gui.displayMessage("Unable to add energy!");
         } else {
             Player currentPlayer = playerHandler.getCurrentPlayer();
-            ArrayList<Card> onlyPokemon = playerHandler.getOnlyPokemonFromBench();
+            ArrayList<Card> onlyPokemon = playerHandler.getOnlyPokemonFromBench(1);
             Card activePokemon = currentPlayer.getActivePokemon();
             onlyPokemon.add(activePokemon);
 

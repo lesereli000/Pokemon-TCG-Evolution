@@ -199,7 +199,16 @@ public class Player {
         return hasActive;
     }
 
-    protected void replacePokemon(Pokemon oldPokemon, Pokemon evolvedPokemon) {
+    protected void replacePokemon(Pokemon oldPokemon, Pokemon newPokemon) {
 
+    }
+
+    protected void setNewActivePokemon(Pokemon newActive) {
+        this.activePokemon = newActive;
+        bench.removeCard(newActive);
+    }
+
+    public Deck getBench() {
+        return bench;
     }
 }

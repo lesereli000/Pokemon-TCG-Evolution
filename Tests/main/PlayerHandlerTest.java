@@ -354,4 +354,112 @@ public class PlayerHandlerTest {
         handler.setNewActive(newActive);
         verify(player);
     }
+
+    @Test
+    public void testDefendingPokemonDead() {
+        Player player = createMock(Player.class);
+        Pokemon p = createMock(Pokemon.class);
+        expect(player.getActivePokemon()).andReturn(p);
+        expect(p.getCurHP()).andReturn(0);
+
+        replay(player, p);
+
+        PlayerHandler handler = new PlayerHandler();
+        handler.defendingPlayer = player;
+        assertTrue(handler.isDefendingDead());
+
+        verify(player, p);
+    }
+
+    @Test
+    public void testDefendingPokemonNotDead() {
+        Player player = createMock(Player.class);
+        Pokemon p = createMock(Pokemon.class);
+        expect(player.getActivePokemon()).andReturn(p);
+        expect(p.getCurHP()).andReturn(10);
+
+        replay(player, p);
+
+        PlayerHandler handler = new PlayerHandler();
+        handler.defendingPlayer = player;
+        assertFalse(handler.isDefendingDead());
+
+        verify(player, p);
+    }
+
+    @Test
+    public void testGetOnlyPokemonFromBenchCurrentPlayer() {
+        Player currentPlayer = createMock(Player.class);
+        Deck bench = createMock(Deck.class);
+        ArrayList<Card> pokemonCards = new ArrayList<>();
+        expect(currentPlayer.getBench()).andReturn(bench);
+        expect(bench.getOnlyPokemon()).andReturn(pokemonCards);
+
+        replay(currentPlayer, bench);
+
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = currentPlayer;
+
+        assertEquals(pokemonCards, handler.getOnlyPokemonFromBench(1));
+        verify(currentPlayer, bench);
+    }
+
+    @Test
+    public void testGetOnlyPokemonFromBenchDefendingPlayer() {
+        Player defendingPlayer = createMock(Player.class);
+        Deck bench = createMock(Deck.class);
+        ArrayList<Card> pokemonCards = new ArrayList<>();
+        expect(defendingPlayer.getBench()).andReturn(bench);
+        expect(bench.getOnlyPokemon()).andReturn(pokemonCards);
+
+        replay(defendingPlayer, bench);
+
+        PlayerHandler handler = new PlayerHandler();
+        handler.defendingPlayer = defendingPlayer;
+
+        assertEquals(pokemonCards, handler.getOnlyPokemonFromBench(2));
+        verify(defendingPlayer, bench);
+    }
+
+    @Test
+    public void testGetDefendingPlayer() {
+        Player defending = createMock(Player.class);
+        PlayerHandler handler = new PlayerHandler();
+        handler.defendingPlayer = defending;
+
+        assertEquals(defending, handler.getDefendingPlayer());
+    }
+
+    @Test
+    public void testKillDefenderActive() {
+        Player defending = createMock(Player.class);
+        Pokemon newActive = createMock(Pokemon.class);
+
+        defending.setNewActivePokemon(newActive);
+        replay(defending);
+
+        PlayerHandler handler = new PlayerHandler();
+        handler.defendingPlayer = defending;
+
+        handler.killDefenderActive(newActive);
+        verify(defending);
+    }
+
+    @Test
+    public void testDrawCardFromDeck() {
+        Player current = createMock(Player.class);
+
+        expect(current.drawCard()).andReturn(true);
+        replay(current);
+
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = current;
+
+        handler.drawCardFromDeck();
+        verify(current);
+    }
+
+
+
+
 }

@@ -1,12 +1,9 @@
 -------------------------------------------------------------------------------
 Test set: main.CardGeneratorTest
 -------------------------------------------------------------------------------
-Tests run: 3, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.456 s <<< FAILURE! -- in main.CardGeneratorTest
-main.CardGeneratorTest.testManyPokemon -- Time elapsed: 0.184 s <<< ERROR!
-org.json.JSONException: JSONObject["rules"] not found.
-	at org.json.JSONObject.get(JSONObject.java:652)
-	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
-	at main.CardGenerator.generateCard(CardGenerator.java:118)
+Tests run: 3, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.393 s <<< FAILURE! -- in main.CardGeneratorTest
+main.CardGeneratorTest.testManyPokemon -- Time elapsed: 0.111 s <<< ERROR!
+java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
 	at main.CardGeneratorTest.testManyPokemon(CardGeneratorTest.java:37)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
@@ -37,11 +34,8 @@ org.json.JSONException: JSONObject["rules"] not found.
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 
-main.CardGeneratorTest.testPokemonGen -- Time elapsed: 0.021 s <<< ERROR!
-org.json.JSONException: JSONObject["rules"] not found.
-	at org.json.JSONObject.get(JSONObject.java:652)
-	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
-	at main.CardGenerator.generateCard(CardGenerator.java:118)
+main.CardGeneratorTest.testPokemonGen -- Time elapsed: 0.032 s <<< ERROR!
+java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
 	at main.CardGeneratorTest.testPokemonGen(CardGeneratorTest.java:29)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)

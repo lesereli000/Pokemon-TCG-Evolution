@@ -77,8 +77,13 @@ public class PlayerHandler {
         currentPlayer = tempPlayer;
     }
 
-    protected ArrayList<Card> getOnlyPokemonFromBench() {
-        Deck bench = currentPlayer.bench;
+    protected ArrayList<Card> getOnlyPokemonFromBench(int isCurrentPlayer) {
+        Deck bench;
+        if(isCurrentPlayer == 1) {
+            bench = currentPlayer.getBench();
+        } else {
+            bench = defendingPlayer.getBench();
+        }
         return bench.getOnlyPokemon();
     }
 
@@ -113,5 +118,18 @@ public class PlayerHandler {
 
     public void setNewActive(Card newActive) {
         currentPlayer.retreat((Pokemon)newActive);
+    }
+
+    public boolean isDefendingDead() {
+        Pokemon defendingPokemon = (Pokemon) defendingPlayer.getActivePokemon();
+        return defendingPokemon.getCurHP() <= 0;
+    }
+
+    public void killDefenderActive(Pokemon newActive) {
+        defendingPlayer.setNewActivePokemon(newActive);
+    }
+
+    public void drawCardFromDeck() {
+        currentPlayer.drawCard();
     }
 }

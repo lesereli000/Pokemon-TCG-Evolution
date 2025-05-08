@@ -54,7 +54,7 @@ public class GameGUI implements GUI {
 
 
     private ArrayList<JButton> buttons = new ArrayList<>();
-    private volatile ArrayList<JButton> selectedCardActionButtons = new ArrayList<>();
+    private ArrayList<JButton> selectedCardActionButtons = new ArrayList<>();
 
     private Font boldFont = new Font("Arial", Font.BOLD, 16);
     private Font plainFont = new Font("Arial", Font.PLAIN, 12);
@@ -378,17 +378,26 @@ public class GameGUI implements GUI {
         makeActiveCard(selectedCard, playerTurn);
     }
 
-    public String generateAttackReport(ArrayList<Attack> attacks) {
-        StringBuilder report = new StringBuilder();
-        for (Attack attack : attacks) {
-            report.append(attack.name).append(":\nCosts:\n");
-            for (Energy energy : attack.costs) {
-                report.append("• ").append(energy.getName()).append("\n");
-            }
-            report.append("Damage: ").append(attack.damage).append("\n");
-        }
-        return report.toString();
-    }
+	@Override
+	public void displayDeadActiveInfo(Player defendingPlayer) {
+		StringBuilder deadPokemonReport = new StringBuilder();
+		Pokemon deadPokemon = (Pokemon) defendingPlayer.getActivePokemon();
+		deadPokemonReport.append(defendingPlayer.getName()).append("'s active Pokemon: ").append(deadPokemon.getName()).append(" has died!\n");
+		deadPokemonReport.append("Select a new basic Pokemon to be your new active Pokemon");
+		displayMessage(deadPokemonReport.toString());
+	}
+
+	public String generateAttackReport(ArrayList<Attack> attacks) {
+		StringBuilder report = new StringBuilder();
+		for (Attack attack : attacks) {
+			report.append(attack.name).append(":\nCosts:\n");
+			for (Energy energy : attack.costs) {
+				report.append("• ").append(energy.getName()).append("\n");
+			}
+			report.append("Damage: ").append(attack.damage).append("\n");
+		}
+		return report.toString();
+	}
 
     @Override
     public void displayPokemonReport(Pokemon pokemon) {
