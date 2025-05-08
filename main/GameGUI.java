@@ -46,7 +46,6 @@ public class GameGUI implements GUI {
 	private Color deckColor = Color.WHITE;
 	private Color player1ActiveColor = Color.WHITE;
 	private Color player2ActiveColor = Color.WHITE;
-	private String lastSelectedButton;
 
 	private Color[] player1PrizeCards = new Color[origNumPrizeCards];
 	private Color[] player2PrizeCards = new Color[origNumPrizeCards];
@@ -61,6 +60,7 @@ public class GameGUI implements GUI {
 
 	private volatile boolean waitForAction = false;
 	private volatile Card lastSelectedCard = null;
+	private JButton lastSelectedButton = null;
 	private Attack lastSelectedAttack;
 	private volatile String lastActionButtonPressed;
 	private int playerTurn = 0;
@@ -491,7 +491,15 @@ public class GameGUI implements GUI {
 	public JButton createLinkedButtonCard(String message, Card currCard) {
 		JButton btn = new JButton(message);
 		btn.addActionListener(e -> {
+			if(lastSelectedButton != null) {
+				lastSelectedButton.setBackground(Color.WHITE);
+			}
+			btn.setBackground(Color.GREEN);
+			lastSelectedButton = btn;
 			setLastSelectedCard(currCard);
+			if(currCard instanceof Pokemon) {
+				displayPokemonActionButtons((Pokemon) currCard);
+			}
 		});
 		buttons.add(btn);
 		panel.add(btn);
@@ -500,6 +508,10 @@ public class GameGUI implements GUI {
 		frame.repaint();
 
 		return btn;
+	}
+
+	private void displayPokemonActionButtons(Pokemon card) {
+
 	}
 
 	private JButton createLinkedButtonAttack(Attack currAttack) {
