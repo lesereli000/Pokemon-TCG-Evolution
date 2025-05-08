@@ -54,4 +54,6 @@ public interface GUI {
     void displayRetreatEnergy(Pokemon pokemon, boolean canRetreat);
 
     void replaceActiveCard(Card selectedCard, int playerTurn);
+
+    void displayDeadActiveInfo(Player defendingPlayer);
 }

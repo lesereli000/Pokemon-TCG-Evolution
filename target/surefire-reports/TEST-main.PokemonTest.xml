@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="main.PokemonTest" time="0.137" tests="26" errors="18" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="main.PokemonTest" time="0.042" tests="32" errors="19" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-17\bin"/>
-    <property name="sun.java.command" value="C:\Users\heddenaj\AppData\Local\Temp\surefire8225076701668803232\surefirebooter-20250505192140559_3.jar C:\Users\heddenaj\AppData\Local\Temp\surefire8225076701668803232 2025-05-05T19-21-40_134-jvmRun1 surefire-20250505192140559_1tmp surefire_0-20250505192140559_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\heddenaj\AppData\Local\Temp\surefire10025703178030612004\surefirebooter-20250508184446878_3.jar C:\Users\heddenaj\AppData\Local\Temp\surefire10025703178030612004 2025-05-08T18-44-46_464-jvmRun1 surefire-20250508184446878_1tmp surefire_0-20250508184446878_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Users\heddenaj\SQAProj\NewGameProj\target\test-classes;C:\Users\heddenaj\SQAProj\NewGameProj\target\classes;C:\Users\heddenaj\.m2\repository\org\json\json\20250107\json-20250107.jar;C:\Users\heddenaj\.m2\repository\org\apache\maven\plugins\maven-compiler-plugin\3.8.1\maven-compiler-plugin-3.8.1.jar;C:\Users\heddenaj\.m2\repository\org\apache\maven\maven-plugin-api\3.0\maven-plugin-api-3.0.jar;C:\Users\heddenaj\.m2\repository\org\apache\maven\maven-model\3.0\maven-model-3.0.jar;C:\Users\heddenaj\.m2\repository\org\sonatype\sisu\sisu-inject-plexus\1.4.2\sisu-inject-plexus-1.4.2.jar;C:\Users\heddenaj\.m2\repository\org\sonatype\sisu\sisu-inject-bean\1.4.2\sisu-inject-bean-1.4.2.jar;C:\Users\heddenaj\.m2\repository\org\sonatype\sisu\sisu-guice\2.1.7\sisu-guice-2.1.7-noaop.jar;C:\Users\heddenaj\.m2\repository\org\apache\maven\maven-artifact\3.0\maven-artifact-3.0.jar;C:\Users\heddenaj\.m2\repository\org\codehaus\plexus\plexus-utils\2.0.4\plexus-utils-2.0.4.jar;C:\Users\heddenaj\.m2\repository\org\apache\maven\maven-core\3.0\maven-core-3.0.jar;C:\Users\heddenaj\.m2\repository\org\apache\maven\maven-settings\3.0\maven-settings-3.0.jar;C:\Users\heddenaj\.m2\repository\org\apache\maven\maven-settings-builder\3.0\maven-settings-builder-3.0.jar;C:\Users\heddenaj\.m2\repository\org\apache\maven\maven-repository-metadata\3.0\maven-repository-metadata-3.0.jar;C:\Users\heddenaj\.m2\repository\org\apache\maven\maven-model-builder\3.0\maven-model-builder-3.0.jar;C:\Users\heddenaj\.m2\repository\org\apache\maven\maven-aether-provider\3.0\maven-aether-provider-3.0.jar;C:\Users\heddenaj\.m2\repository\org\sonatype\aether\aether-impl\1.7\aether-impl-1.7.jar;C:\Users\heddenaj\.m2\repository\org\sonatype\aether\aether-spi\1.7\aether-spi-1.7.jar;C:\Users\heddenaj\.m2\repository\org\sonatype\aether\aether-api\1.7\aether-api-1.7.jar;C:\Users\heddenaj\.m2\repository\org\sonatype\aether\aether-util\1.7\aether-util-1.7.jar;C:\Users\heddenaj\.m2\repository\org\codehaus\plexus\plexus-interpolation\1.14\plexus-interpolation-1.14.jar;C:\Users\heddenaj\.m2\repository\org\codehaus\plexus\plexus-classworlds\2.2.3\plexus-classworlds-2.2.3.jar;C:\Users\heddenaj\.m2\repository\org\codehaus\plexus\plexus-component-annotations\1.5.5\plexus-component-annotations-1.5.5.jar;C:\Users\heddenaj\.m2\repository\org\sonatype\plexus\plexus-sec-dispatcher\1.3\plexus-sec-dispatcher-1.3.jar;C:\Users\heddenaj\.m2\repository\org\sonatype\plexus\plexus-cipher\1.4\plexus-cipher-1.4.jar;C:\Users\heddenaj\.m2\repository\org\apache\maven\shared\maven-shared-utils\3.2.1\maven-shared-utils-3.2.1.jar;C:\Users\heddenaj\.m2\repository\commons-io\commons-io\2.5\commons-io-2.5.jar;C:\Users\heddenaj\.m2\repository\org\apache\maven\shared\maven-shared-incremental\1.1\maven-shared-incremental-1.1.jar;C:\Users\heddenaj\.m2\repository\org\codehaus\plexus\plexus-java\0.9.10\plexus-java-0.9.10.jar;C:\Users\heddenaj\.m2\repository\org\ow2\asm\asm\6.2\asm-6.2.jar;C:\Users\heddenaj\.m2\repository\com\thoughtworks\qdox\qdox\2.0-M8\qdox-2.0-M8.jar;C:\Users\heddenaj\.m2\repository\org\codehaus\plexus\plexus-compiler-api\2.8.4\plexus-compiler-api-2.8.4.jar;C:\Users\heddenaj\.m2\repository\org\codehaus\plexus\plexus-compiler-manager\2.8.4\plexus-compiler-manager-2.8.4.jar;C:\Users\heddenaj\.m2\repository\org\codehaus\plexus\plexus-compiler-javac\2.8.4\plexus-compiler-javac-2.8.4.jar;C:\Users\heddenaj\.m2\repository\junit\junit\4.13.2\junit-4.13.2.jar;C:\Users\heddenaj\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;C:\Users\heddenaj\.m2\repository\org\easymock\easymock\5.2.0\easymock-5.2.0.jar;C:\Users\heddenaj\.m2\repository\org\objenesis\objenesis\3.3\objenesis-3.3.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\heddenaj\AppData\Local\Temp\surefire8225076701668803232\surefirebooter-20250505192140559_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\heddenaj\AppData\Local\Temp\surefire10025703178030612004\surefirebooter-20250508184446878_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="17.0.9+11-LTS-201"/>
@@ -59,12 +59,10 @@
   </properties>
   <testcase name="testTooHighStage" classname="main.PokemonTest" time="0.0"/>
   <testcase name="testBaseDamage" classname="main.PokemonTest" time="0.0"/>
+  <testcase name="testEnergyMapIncludesColorless" classname="main.PokemonTest" time="0.0"/>
   <testcase name="testHealthGetters" classname="main.PokemonTest" time="0.0">
-    <error message="JSONObject[&quot;rules&quot;] not found." type="org.json.JSONException"><![CDATA[org.json.JSONException: JSONObject["rules"] not found.
-	at org.json.JSONObject.get(JSONObject.java:652)
-	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
-	at main.CardGenerator.generateCard(CardGenerator.java:118)
-	at main.PokemonTest.testHealthGetters(PokemonTest.java:181)
+    <error message="class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader &apos;app&apos;)" type="java.lang.ClassCastException"><![CDATA[java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
+	at main.PokemonTest.testHealthGetters(PokemonTest.java:182)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -96,12 +94,9 @@
 ]]></error>
   </testcase>
   <testcase name="testInvalidType" classname="main.PokemonTest" time="0.0"/>
-  <testcase name="testNoColorless" classname="main.PokemonTest" time="0.007">
-    <error message="JSONObject[&quot;rules&quot;] not found." type="org.json.JSONException"><![CDATA[org.json.JSONException: JSONObject["rules"] not found.
-	at org.json.JSONObject.get(JSONObject.java:652)
-	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
-	at main.CardGenerator.generateCard(CardGenerator.java:118)
-	at main.PokemonTest.testNoColorless(PokemonTest.java:337)
+  <testcase name="testNoColorless" classname="main.PokemonTest" time="0.0">
+    <error message="class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader &apos;app&apos;)" type="java.lang.ClassCastException"><![CDATA[java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
+	at main.PokemonTest.testNoColorless(PokemonTest.java:361)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -132,12 +127,9 @@
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 ]]></error>
   </testcase>
-  <testcase name="testCanAttackMultiple" classname="main.PokemonTest" time="0.009">
-    <error message="JSONObject[&quot;rules&quot;] not found." type="org.json.JSONException"><![CDATA[org.json.JSONException: JSONObject["rules"] not found.
-	at org.json.JSONObject.get(JSONObject.java:652)
-	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
-	at main.CardGenerator.generateCard(CardGenerator.java:118)
-	at main.PokemonTest.testCanAttackMultiple(PokemonTest.java:215)
+  <testcase name="testCanAttackMultiple" classname="main.PokemonTest" time="0.0">
+    <error message="class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader &apos;app&apos;)" type="java.lang.ClassCastException"><![CDATA[java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
+	at main.PokemonTest.testCanAttackMultiple(PokemonTest.java:216)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -168,12 +160,9 @@
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 ]]></error>
   </testcase>
-  <testcase name="testCanRetreat" classname="main.PokemonTest" time="0.008">
-    <error message="JSONObject[&quot;rules&quot;] not found." type="org.json.JSONException"><![CDATA[org.json.JSONException: JSONObject["rules"] not found.
-	at org.json.JSONObject.get(JSONObject.java:652)
-	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
-	at main.CardGenerator.generateCard(CardGenerator.java:118)
-	at main.PokemonTest.testCanRetreat(PokemonTest.java:363)
+  <testcase name="testCanRetreat" classname="main.PokemonTest" time="0.0">
+    <error message="class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader &apos;app&apos;)" type="java.lang.ClassCastException"><![CDATA[java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
+	at main.PokemonTest.testCanRetreat(PokemonTest.java:387)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -204,12 +193,10 @@
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 ]]></error>
   </testcase>
-  <testcase name="testTypeResistance" classname="main.PokemonTest" time="0.007">
-    <error message="JSONObject[&quot;rules&quot;] not found." type="org.json.JSONException"><![CDATA[org.json.JSONException: JSONObject["rules"] not found.
-	at org.json.JSONObject.get(JSONObject.java:652)
-	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
-	at main.CardGenerator.generateCard(CardGenerator.java:118)
-	at main.PokemonTest.testTypeResistance(PokemonTest.java:165)
+  <testcase name="testGetEnergiesString" classname="main.PokemonTest" time="0.0"/>
+  <testcase name="testTypeResistance" classname="main.PokemonTest" time="0.0">
+    <error message="class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader &apos;app&apos;)" type="java.lang.ClassCastException"><![CDATA[java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
+	at main.PokemonTest.testTypeResistance(PokemonTest.java:166)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -242,13 +229,10 @@
   </testcase>
   <testcase name="testEmptyName" classname="main.PokemonTest" time="0.0"/>
   <testcase name="testEmptyType" classname="main.PokemonTest" time="0.0"/>
-  <testcase name="testCreatePokemon" classname="main.PokemonTest" time="0.001"/>
-  <testcase name="testRemoveColorless" classname="main.PokemonTest" time="0.008">
-    <error message="JSONObject[&quot;rules&quot;] not found." type="org.json.JSONException"><![CDATA[org.json.JSONException: JSONObject["rules"] not found.
-	at org.json.JSONObject.get(JSONObject.java:652)
-	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
-	at main.CardGenerator.generateCard(CardGenerator.java:118)
-	at main.PokemonTest.testRemoveColorless(PokemonTest.java:390)
+  <testcase name="testCreatePokemon" classname="main.PokemonTest" time="0.0"/>
+  <testcase name="testRemoveColorless" classname="main.PokemonTest" time="0.0">
+    <error message="class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader &apos;app&apos;)" type="java.lang.ClassCastException"><![CDATA[java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
+	at main.PokemonTest.testRemoveColorless(PokemonTest.java:456)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -279,12 +263,9 @@
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 ]]></error>
   </testcase>
-  <testcase name="testRemoveEnergy" classname="main.PokemonTest" time="0.011">
-    <error message="JSONObject[&quot;rules&quot;] not found." type="org.json.JSONException"><![CDATA[org.json.JSONException: JSONObject["rules"] not found.
-	at org.json.JSONObject.get(JSONObject.java:652)
-	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
-	at main.CardGenerator.generateCard(CardGenerator.java:118)
-	at main.PokemonTest.testRemoveEnergy(PokemonTest.java:257)
+  <testcase name="testRemoveEnergy" classname="main.PokemonTest" time="0.0">
+    <error message="class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader &apos;app&apos;)" type="java.lang.ClassCastException"><![CDATA[java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
+	at main.PokemonTest.testRemoveEnergy(PokemonTest.java:281)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -315,12 +296,9 @@
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 ]]></error>
   </testcase>
-  <testcase name="testCanRetreatManyEnergy" classname="main.PokemonTest" time="0.009">
-    <error message="JSONObject[&quot;rules&quot;] not found." type="org.json.JSONException"><![CDATA[org.json.JSONException: JSONObject["rules"] not found.
-	at org.json.JSONObject.get(JSONObject.java:652)
-	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
-	at main.CardGenerator.generateCard(CardGenerator.java:118)
-	at main.PokemonTest.testCanRetreatManyEnergy(PokemonTest.java:374)
+  <testcase name="testCanRetreatManyEnergy" classname="main.PokemonTest" time="0.0">
+    <error message="class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader &apos;app&apos;)" type="java.lang.ClassCastException"><![CDATA[java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
+	at main.PokemonTest.testCanRetreatManyEnergy(PokemonTest.java:440)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -351,12 +329,10 @@
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 ]]></error>
   </testcase>
-  <testcase name="testCanAttack" classname="main.PokemonTest" time="0.009">
-    <error message="JSONObject[&quot;rules&quot;] not found." type="org.json.JSONException"><![CDATA[org.json.JSONException: JSONObject["rules"] not found.
-	at org.json.JSONObject.get(JSONObject.java:652)
-	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
-	at main.CardGenerator.generateCard(CardGenerator.java:118)
-	at main.PokemonTest.testCanAttack(PokemonTest.java:197)
+  <testcase name="testRemoveTooManyColorless" classname="main.PokemonTest" time="0.0"/>
+  <testcase name="testCanAttack" classname="main.PokemonTest" time="0.0">
+    <error message="class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader &apos;app&apos;)" type="java.lang.ClassCastException"><![CDATA[java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
+	at main.PokemonTest.testCanAttack(PokemonTest.java:198)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -387,13 +363,44 @@
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 ]]></error>
   </testcase>
-  <testcase name="testTooLowStage" classname="main.PokemonTest" time="0.002"/>
-  <testcase name="testRemoveNonExistentEnergy" classname="main.PokemonTest" time="0.011">
-    <error message="JSONObject[&quot;rules&quot;] not found." type="org.json.JSONException"><![CDATA[org.json.JSONException: JSONObject["rules"] not found.
-	at org.json.JSONObject.get(JSONObject.java:652)
-	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
-	at main.CardGenerator.generateCard(CardGenerator.java:118)
-	at main.PokemonTest.testRemoveNonExistentEnergy(PokemonTest.java:328)
+  <testcase name="testCanRetreatExactCost" classname="main.PokemonTest" time="0.0">
+    <error message="class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader &apos;app&apos;)" type="java.lang.ClassCastException"><![CDATA[java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
+	at main.PokemonTest.testCanRetreatExactCost(PokemonTest.java:398)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:316)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeWithRerun(JUnit4Provider.java:240)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:214)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:155)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385)
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162)
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
+]]></error>
+  </testcase>
+  <testcase name="testTooLowStage" classname="main.PokemonTest" time="0.0"/>
+  <testcase name="testRemoveColorlessValid" classname="main.PokemonTest" time="0.0"/>
+  <testcase name="testRemoveNonExistentEnergy" classname="main.PokemonTest" time="0.0">
+    <error message="class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader &apos;app&apos;)" type="java.lang.ClassCastException"><![CDATA[java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
+	at main.PokemonTest.testRemoveNonExistentEnergy(PokemonTest.java:352)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -425,11 +432,8 @@
 ]]></error>
   </testcase>
   <testcase name="testManyColorless" classname="main.PokemonTest" time="0.01">
-    <error message="JSONObject[&quot;rules&quot;] not found." type="org.json.JSONException"><![CDATA[org.json.JSONException: JSONObject["rules"] not found.
-	at org.json.JSONObject.get(JSONObject.java:652)
-	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
-	at main.CardGenerator.generateCard(CardGenerator.java:118)
-	at main.PokemonTest.testManyColorless(PokemonTest.java:345)
+    <error message="class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader &apos;app&apos;)" type="java.lang.ClassCastException"><![CDATA[java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
+	at main.PokemonTest.testManyColorless(PokemonTest.java:369)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -460,12 +464,9 @@
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 ]]></error>
   </testcase>
-  <testcase name="testTypeWeakness" classname="main.PokemonTest" time="0.009">
-    <error message="JSONObject[&quot;rules&quot;] not found." type="org.json.JSONException"><![CDATA[org.json.JSONException: JSONObject["rules"] not found.
-	at org.json.JSONObject.get(JSONObject.java:652)
-	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
-	at main.CardGenerator.generateCard(CardGenerator.java:118)
-	at main.PokemonTest.testTypeWeakness(PokemonTest.java:149)
+  <testcase name="testTypeWeakness" classname="main.PokemonTest" time="0.002">
+    <error message="class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader &apos;app&apos;)" type="java.lang.ClassCastException"><![CDATA[java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
+	at main.PokemonTest.testTypeWeakness(PokemonTest.java:150)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -496,12 +497,9 @@
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 ]]></error>
   </testcase>
-  <testcase name="testColorlessAttack" classname="main.PokemonTest" time="0.006">
-    <error message="JSONObject[&quot;rules&quot;] not found." type="org.json.JSONException"><![CDATA[org.json.JSONException: JSONObject["rules"] not found.
-	at org.json.JSONObject.get(JSONObject.java:652)
-	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
-	at main.CardGenerator.generateCard(CardGenerator.java:118)
-	at main.PokemonTest.testColorlessAttack(PokemonTest.java:227)
+  <testcase name="testColorlessAttack" classname="main.PokemonTest" time="0.0">
+    <error message="class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader &apos;app&apos;)" type="java.lang.ClassCastException"><![CDATA[java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
+	at main.PokemonTest.testColorlessAttack(PokemonTest.java:228)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -532,12 +530,10 @@
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 ]]></error>
   </testcase>
-  <testcase name="testRemoveManyEnergies" classname="main.PokemonTest" time="0.005">
-    <error message="JSONObject[&quot;rules&quot;] not found." type="org.json.JSONException"><![CDATA[org.json.JSONException: JSONObject["rules"] not found.
-	at org.json.JSONObject.get(JSONObject.java:652)
-	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
-	at main.CardGenerator.generateCard(CardGenerator.java:118)
-	at main.PokemonTest.testRemoveManyEnergies(PokemonTest.java:274)
+  <testcase name="testEvolvesFromSetterGetter" classname="main.PokemonTest" time="0.0"/>
+  <testcase name="testRemoveManyEnergies" classname="main.PokemonTest" time="0.014">
+    <error message="class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader &apos;app&apos;)" type="java.lang.ClassCastException"><![CDATA[java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
+	at main.PokemonTest.testRemoveManyEnergies(PokemonTest.java:298)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -568,12 +564,9 @@
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 ]]></error>
   </testcase>
-  <testcase name="testEvolvesFrom" classname="main.PokemonTest" time="0.006">
-    <error message="JSONObject[&quot;rules&quot;] not found." type="org.json.JSONException"><![CDATA[org.json.JSONException: JSONObject["rules"] not found.
-	at org.json.JSONObject.get(JSONObject.java:652)
-	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
-	at main.CardGenerator.generateCard(CardGenerator.java:118)
-	at main.PokemonTest.testEvolvesFrom(PokemonTest.java:432)
+  <testcase name="testEvolvesFrom" classname="main.PokemonTest" time="0.0">
+    <error message="class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader &apos;app&apos;)" type="java.lang.ClassCastException"><![CDATA[java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
+	at main.PokemonTest.testEvolvesFrom(PokemonTest.java:518)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -604,12 +597,9 @@
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 ]]></error>
   </testcase>
-  <testcase name="testIsAlive" classname="main.PokemonTest" time="0.006">
-    <error message="JSONObject[&quot;rules&quot;] not found." type="org.json.JSONException"><![CDATA[org.json.JSONException: JSONObject["rules"] not found.
-	at org.json.JSONObject.get(JSONObject.java:652)
-	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
-	at main.CardGenerator.generateCard(CardGenerator.java:118)
-	at main.PokemonTest.testIsAlive(PokemonTest.java:244)
+  <testcase name="testIsAlive" classname="main.PokemonTest" time="0.0">
+    <error message="class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader &apos;app&apos;)" type="java.lang.ClassCastException"><![CDATA[java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
+	at main.PokemonTest.testIsAlive(PokemonTest.java:268)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -640,12 +630,9 @@
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 ]]></error>
   </testcase>
-  <testcase name="testRemoveNoEnergy" classname="main.PokemonTest" time="0.005">
-    <error message="JSONObject[&quot;rules&quot;] not found." type="org.json.JSONException"><![CDATA[org.json.JSONException: JSONObject["rules"] not found.
-	at org.json.JSONObject.get(JSONObject.java:652)
-	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
-	at main.CardGenerator.generateCard(CardGenerator.java:118)
-	at main.PokemonTest.testRemoveNoEnergy(PokemonTest.java:424)
+  <testcase name="testRemoveNoEnergy" classname="main.PokemonTest" time="0.0">
+    <error message="class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader &apos;app&apos;)" type="java.lang.ClassCastException"><![CDATA[java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
+	at main.PokemonTest.testRemoveNoEnergy(PokemonTest.java:490)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -676,12 +663,9 @@
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
 ]]></error>
   </testcase>
-  <testcase name="testRemoveManyColorless" classname="main.PokemonTest" time="0.005">
-    <error message="JSONObject[&quot;rules&quot;] not found." type="org.json.JSONException"><![CDATA[org.json.JSONException: JSONObject["rules"] not found.
-	at org.json.JSONObject.get(JSONObject.java:652)
-	at org.json.JSONObject.getJSONArray(JSONObject.java:845)
-	at main.CardGenerator.generateCard(CardGenerator.java:118)
-	at main.PokemonTest.testRemoveManyColorless(PokemonTest.java:402)
+  <testcase name="testRemoveManyColorless" classname="main.PokemonTest" time="0.016">
+    <error message="class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader &apos;app&apos;)" type="java.lang.ClassCastException"><![CDATA[java.lang.ClassCastException: class main.Trainer cannot be cast to class main.Pokemon (main.Trainer and main.Pokemon are in unnamed module of loader 'app')
+	at main.PokemonTest.testRemoveManyColorless(PokemonTest.java:468)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)

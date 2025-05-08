@@ -376,6 +376,15 @@ public class GameGUI implements GUI {
 		makeActiveCard(selectedCard, playerTurn);
 	}
 
+	@Override
+	public void displayDeadActiveInfo(Player defendingPlayer) {
+		StringBuilder deadPokemonReport = new StringBuilder();
+		Pokemon deadPokemon = (Pokemon) defendingPlayer.getActivePokemon();
+		deadPokemonReport.append(defendingPlayer.getName()).append("'s active Pokemon: ").append(deadPokemon.getName()).append(" has died!\n");
+		deadPokemonReport.append("Select a new basic Pokemon to be your new active Pokemon");
+		displayMessage(deadPokemonReport.toString());
+	}
+
 	public String generateAttackReport(ArrayList<Attack> attacks) {
 		StringBuilder report = new StringBuilder();
 		for (Attack attack : attacks) {
