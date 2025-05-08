@@ -14,11 +14,11 @@ public class Attack {
         this.damage = damage;
     }
 
-    public String getCosts() {
-        String outputString = "";
-        for (Energy e : costs) {
-            outputString += e.name + "\n";
-        }
-        return outputString;
+    public ArrayList<Energy> allCosts() {
+        return costs;
+    }
+
+    public int getDamage() {
+        return damage;
     }
 }

@@ -3,6 +3,7 @@ package main;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
@@ -253,6 +254,29 @@ public class PokemonTest {
     }
 
     @Test
+    public void testEnergyMapIncludesColorless() {
+        Pokemon p = new Pokemon("Pikachu", "Lightning", 1, 40);
+        Energy e = createMock(Energy.class);
+        expect(e.getName()).andReturn("Lightning Energy").anyTimes();
+        replay(e);
+
+        p.addEnergy(e);
+        HashMap<String, Integer> map = p.getEnergyMap();
+        assertTrue(map.containsKey("Colorless Energy"));
+        assertEquals(1, (int) map.get("Colorless Energy"));
+        assertEquals(1, (int) map.get("Lightning Energy"));
+    }
+
+    @Test
+    public void testEvolvesFromSetterGetter() {
+        Pokemon p = new Pokemon("Raichu", "Lightning", 2, 90);
+        p.setEvolvesFrom("Pikachu");
+        assertEquals("Pikachu", p.getEvolvesFrom());
+    }
+
+
+
+    @Test
     public void testIsAlive() {
         CardGenerator pg = new CardGenerator();
         Pokemon pikachu = (Pokemon) pg.generateCard("Pikachu");
@@ -383,6 +407,48 @@ public class PokemonTest {
     }
 
     @Test
+    public void testCanRetreatExactCost() {
+        CardGenerator pg = new CardGenerator();
+        Pokemon p = (Pokemon) pg.generateCard("Tangela");
+
+        Energy e = createMock(Energy.class);
+        replay(e);
+        p.addEnergy(e);
+        p.addEnergy(e);
+
+        assertTrue(p.canRetreat());
+    }
+
+    @Test
+    public void testRemoveColorlessValid() {
+        Pokemon p = new Pokemon("Pikachu", "Lightning", 1, 40);
+        Energy e = createMock(Energy.class);
+        p.addEnergy(e);
+        p.addEnergy(e);
+        p.addEnergy(e);
+        assertEquals(3, p.numColorless());
+
+        p.removeColorless(2);
+        assertEquals(1, p.numColorless());
+    }
+
+    @Test
+    public void testRemoveTooManyColorless() {
+        Pokemon p = new Pokemon("Pikachu", "Lightning", 1, 40);
+        boolean pass = false;
+        try {
+            p.removeColorless(1);
+        } catch (IllegalArgumentException e) {
+            pass = true;
+            assertEquals("Can not remove this many energies!", e.getMessage());
+        }
+        assertTrue(pass);
+
+    }
+
+
+
+    @Test
     public void testCanRetreatManyEnergy() {
         CardGenerator pg = new CardGenerator();
         Pokemon p = (Pokemon) pg.generateCard("Charizard");
@@ -439,6 +505,26 @@ public class PokemonTest {
 
         assertThrows(IllegalArgumentException.class, () -> p.removeColorless(1));
     }
+
+    @Test
+    public void testGetEnergiesString() {
+        Pokemon p = new Pokemon("Pikachu", "Lightning", 1, 40);
+        Energy e1 = createMock(Energy.class);
+        Energy e2 = createMock(Energy.class);
+        e1.name = "Fire";
+        e2.name = "Water";
+        replay(e1, e2);
+
+        p.addEnergy(e1);
+        p.addEnergy(e2);
+
+        String expected = """
+                Fire
+                Water
+                """;
+        assertEquals(expected, p.getEnergiesString());
+    }
+
 
     @Test
     public void testEvolvesFrom() {

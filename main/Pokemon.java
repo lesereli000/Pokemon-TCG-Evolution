@@ -201,5 +201,11 @@ public class Pokemon extends Card{
         return evolvesFrom;
     }
 
+    public ArrayList<Attack> getAttacks() {
+        return attacks;
+    }
 
+    public String getType() {
+        return type;
+    }
 }

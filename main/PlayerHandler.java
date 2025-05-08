@@ -64,5 +64,72 @@ public class PlayerHandler {
         currentPlayer.addEnergyToPokemon(pokemon, energy);
     }
 
+    public boolean passTurn() {
+        currentPlayer.passTurn();
+        swapPlayerTurns();
+        return currentPlayer.hasActive();
+    }
 
+    public void swapPlayerTurns() {
+        playerTurn = playerTurn == 1 ? 2 : 1;
+        Player tempPlayer = defendingPlayer;
+        defendingPlayer = currentPlayer;
+        currentPlayer = tempPlayer;
+    }
+
+    protected ArrayList<Card> getOnlyPokemonFromBench(int isCurrentPlayer) {
+        Deck bench;
+        if(isCurrentPlayer == 1) {
+            bench = currentPlayer.getBench();
+        } else {
+            bench = defendingPlayer.getBench();
+        }
+        return bench.getOnlyPokemon();
+    }
+
+    public boolean playerCanAttack() {
+        return currentPlayer.canAttack() && defendingPlayer.hasActive();
+    }
+
+    public ArrayList<Attack> getCurrentPlayerAttacks() {
+        Pokemon currentPlayerActive = (Pokemon) currentPlayer.getActivePokemon();
+        return currentPlayerActive.getAttacks();
+    }
+
+    public boolean attackOpponent(Attack selectedAttack) {
+        if(!currentPlayer.canAttack(selectedAttack)) {
+            return false;
+        }
+        int damage = selectedAttack.getDamage();
+        int dmgCounters = damage/10;
+        Pokemon activePokemon = (Pokemon) currentPlayer.getActivePokemon();
+        String damageType = activePokemon.getType();
+        defendingPlayer.takeDamage(dmgCounters, damageType);
+        return true;
+    }
+
+    public Player getDefendingPlayer() {
+        return defendingPlayer;
+    }
+
+    public boolean canRetreat() {
+        return !currentPlayer.benchIsEmpty();
+    }
+
+    public void setNewActive(Card newActive) {
+        currentPlayer.retreat((Pokemon)newActive);
+    }
+
+    public boolean isDefendingDead() {
+        Pokemon defendingPokemon = (Pokemon) defendingPlayer.getActivePokemon();
+        return defendingPokemon.getCurHP() <= 0;
+    }
+
+    public void killDefenderActive(Pokemon newActive) {
+        defendingPlayer.setNewActivePokemon(newActive);
+    }
+
+    public void drawCardFromDeck() {
+        currentPlayer.drawCard();
+    }
 }

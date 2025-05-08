@@ -202,6 +202,7 @@ public class GameTest {
 
     @Test
     public void testSuccessAddingEnergy() {
+        // Create mocks
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
@@ -214,25 +215,28 @@ public class GameTest {
         expect(gui.getLastSelectedCard()).andReturn(e);
         expect(handler.activeCanAddEnergy()).andReturn(true);
         expect(handler.getCurrentPlayer()).andReturn(player);
-        expect(player.getOnlyPokemonFromHand()).andReturn(pokemon);
+        expect(handler.getOnlyPokemonFromBench(1)).andReturn(pokemon);
         expect(player.getActivePokemon()).andReturn(p);
-
         pokemon.add(p);
 
+        //display add energy info
         gui.displayMessage("Select Pokemon to add Energy to");
         gui.removeAllButtons();
         gui.displayCards(pokemon);
-        gui.waitForPokemonSelected();
+        gui.displayConfirmButton();
+        gui.waitForAction();
+
         expect(gui.getLastSelectedCard()).andReturn(p);
         handler.addEnergyToPokemon(e, p);
-
-
-        replay(gui,player, handler);
+        gui.displayCardReport(p);
+        replay(gui, player, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
         game.handleEnergyAction();
+
         verify(gui, player, handler);
     }
+
 
     @Test
     public void testSelectActiveLoopBasic() {
@@ -454,17 +458,18 @@ public class GameTest {
         //handleAddEnergy()
         expect(handler.activeCanAddEnergy()).andReturn(true);
         expect(handler.getCurrentPlayer()).andReturn(player);
-        expect(player.getOnlyPokemonFromHand()).andReturn(hand);
+        expect(handler.getOnlyPokemonFromBench(1)).andReturn(hand);
         expect(player.getActivePokemon()).andReturn(p);
 
-
         gui.displayMessage("Select Pokemon to add Energy to");
+        gui.displayConfirmButton();
         gui.removeAllButtons();
         hand.add(p);
         gui.displayCards(hand);
-        gui.waitForPokemonSelected();
+        gui.waitForAction();
         expect(gui.getLastSelectedCard()).andReturn(p);
         handler.addEnergyToPokemon(e, p);
+        gui.displayCardReport(p);
 
         replay(gui, player, handler);
 
@@ -531,5 +536,296 @@ public class GameTest {
 
         verify(gui, handler);
     }
+
+    @Test
+    public void testPassTurnActionNotFirstTurn() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+
+        expect(handler.passTurn()).andReturn(true);
+        handler.drawCardFromDeck();
+        replay(handler);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.handlePassTurnAction();
+        verify(handler);
+    }
+
+    @Test
+    public void testPassTurnActionFirstTurn() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Pokemon p = createMock(Pokemon.class);
+        ArrayList<Card> hand = createMock(ArrayList.class);
+        Player player = createMock(Player.class);
+
+        expect(handler.passTurn()).andReturn(false);
+
+        //display hand
+        gui.removeAllButtons();
+        expect(handler.getCurrentPlayerHand()).andReturn(hand);
+        gui.displayCards(hand);
+        //display directions
+        gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
+
+        gui.setupActivePokemon();
+        expect(gui.waitForButtonPressed()).andReturn("");
+
+        expect(gui.getLastSelectedCard()).andReturn(p);
+
+        //check basic
+        expect(p.getStage()).andReturn(0);
+
+        //make new active
+        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(handler.getPlayerTurn()).andReturn(1);
+        handler.drawCardFromDeck();
+        player.setActivePokemon(p);
+        gui.makeActiveCard(p,1);
+
+        //display hand
+        gui.removeAllButtons();
+        expect(handler.getCurrentPlayerHand()).andReturn(hand);
+        gui.displayCards(hand);
+
+        replay(gui, handler);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.handlePassTurnAction();
+        verify(gui, handler);
+    }
+
+    @Test
+    public void testHandleAttackActionPlayerCannotAttack() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        ArrayList<Card> hand = createMock(ArrayList.class);
+
+        expect(handler.getCurrentPlayerHand()).andReturn(hand);
+        gui.removeAllButtons();
+        gui.displayCards(hand);
+        gui.displayActionButtons();
+        expect(gui.waitForButtonPressed()).andReturn("Attack");
+
+        expect(handler.playerCanAttack()).andReturn(false);
+        gui.displayMessage("You are unable to attack right now!");
+
+        replay(gui, handler);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.mainGameLoop();
+
+        verify(gui, handler);
+    }
+
+    @Test
+    public void testHandleAttackActionPlayerCanAttack() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Attack attack = createMock(Attack.class);
+        Player player1 = createMock(Player.class);
+        Player player2 = createMock(Player.class);
+        ArrayList<Attack> attacks = new ArrayList<>();
+        attacks.add(attack);
+
+        expect(handler.getCurrentPlayerHand()).andReturn(new ArrayList<>());
+        gui.removeAllButtons();
+        gui.displayCards(new ArrayList<>());
+        gui.displayActionButtons();
+        expect(gui.waitForButtonPressed()).andReturn("Attack");
+
+        expect(handler.playerCanAttack()).andReturn(true);
+
+        // displayAttackInfo()
+        gui.removeAllButtons();
+        expect(handler.getCurrentPlayerAttacks()).andReturn(attacks);
+        gui.displayPossibleAttacks(attacks);
+        gui.displayConfirmButton();
+        gui.waitForAction();
+        expect(gui.getLastSelectedAttack()).andReturn(attack);
+
+        expect(handler.getCurrentPlayer()).andReturn(player1);
+        expect(handler.getDefendingPlayer()).andReturn(player2);
+        gui.displayAttackMessage(player1, player2, attack);
+
+        expect(handler.attackOpponent(attack)).andReturn(true);
+        expect(handler.isDefendingDead()).andReturn(false);
+        handler.swapPlayerTurns();
+
+        replay(gui, handler);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.mainGameLoop();
+
+        verify(gui, handler);
+    }
+
+    @Test
+    public void testHandleRetreatActionSuccess() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Player player = createMock(Player.class);
+        Pokemon activePokemon = createMock(Pokemon.class);
+        Card newActive = createMock(Card.class);
+        ArrayList<Card> bench = new ArrayList<>();
+        bench.add(newActive);
+
+        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(player.getActivePokemon()).andReturn(activePokemon);
+        expect(activePokemon.canRetreat()).andReturn(true);
+        expect(handler.canRetreat()).andReturn(true);
+
+        gui.displayRetreatEnergy(activePokemon, true);
+
+        // Retreat process
+        gui.removeAllButtons();
+        gui.displayMessage("Select new active Pokemon");
+        expect(handler.getOnlyPokemonFromBench(1)).andReturn(bench);
+        gui.displayCards(bench);
+        gui.displayConfirmButton();
+        gui.waitForAction();
+        expect(gui.getLastSelectedCard()).andReturn(newActive);
+        gui.replaceActiveCard(newActive, 1);
+        expect(handler.getPlayerTurn()).andReturn(1);
+        handler.setNewActive(newActive);
+
+        replay(gui, handler, player, activePokemon);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.handleRetreatAction();
+
+        verify(gui, handler, player, activePokemon);
+    }
+
+    @Test
+    public void testHandleRetreatActionFailed() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Player player = createMock(Player.class);
+        Pokemon activePokemon = createMock(Pokemon.class);
+
+        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(player.getActivePokemon()).andReturn(activePokemon);
+        expect(activePokemon.canRetreat()).andReturn(false);
+        //expect(handler.canRetreat()).andReturn(false); Only called once because previous statement
+
+        gui.displayRetreatEnergy(activePokemon, false);
+
+        replay(gui, handler, player, activePokemon);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.handleRetreatAction();
+
+        verify(gui, handler, player, activePokemon);
+    }
+
+    @Test
+    public void testRetreatPokemonSelectNewActive() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Card newActive = createMock(Card.class);
+        ArrayList<Card> bench = new ArrayList<>();
+        bench.add(newActive);
+
+        expect(handler.getOnlyPokemonFromBench(1)).andReturn(bench);
+        gui.removeAllButtons();
+        gui.displayMessage("Select new active Pokemon");
+        gui.displayCards(bench);
+        gui.displayConfirmButton();
+        gui.waitForAction();
+        expect(gui.getLastSelectedCard()).andReturn(newActive);
+        expect(handler.getPlayerTurn()).andReturn(1);
+        gui.replaceActiveCard(newActive, 1);
+
+        replay(gui, handler);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        Card result = game.retreatPokemon();
+
+        assertEquals(newActive, result);
+        verify(gui, handler);
+    }
+
+    @Test
+    public void testHandleDeadActiveWithBasicPokemon() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Pokemon selectedPokemon = createMock(Pokemon.class);
+
+        ArrayList<Card> bench = new ArrayList<>();
+        bench.add(selectedPokemon);
+
+        gui.removeAllButtons();
+        expect(handler.getOnlyPokemonFromBench(2)).andReturn(bench);
+        gui.displayCards(bench);
+        gui.displayConfirmButton();
+        gui.waitForAction();
+        expect(gui.getLastSelectedCard()).andReturn(selectedPokemon);
+
+        expect(handler.getPlayerTurn()).andReturn(1);
+        gui.makeActiveCard(selectedPokemon, 2);
+        gui.removeBenchCard(selectedPokemon, 2);
+
+        expect(selectedPokemon.getStage()).andReturn(0);
+        handler.killDefenderActive(selectedPokemon);
+
+        replay(gui, handler, selectedPokemon);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.handleDeadActive();
+
+        verify(gui, handler, selectedPokemon);
+    }
+
+    @Test
+    public void testHandleDeadActiveWithNonBasicPokemon() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Pokemon selectedPokemon = createMock(Pokemon.class);
+
+        ArrayList<Card> bench = new ArrayList<>();
+        bench.add(selectedPokemon);
+
+        gui.removeAllButtons();
+        expect(handler.getOnlyPokemonFromBench(2)).andReturn(bench);
+        gui.displayCards(bench);
+        gui.displayConfirmButton();
+        gui.waitForAction();
+        expect(gui.getLastSelectedCard()).andReturn(selectedPokemon);
+
+        expect(handler.getPlayerTurn()).andReturn(0);
+        gui.makeActiveCard(selectedPokemon, 1);
+        gui.removeBenchCard(selectedPokemon, 1);
+
+        // Not a basic Pokémon
+        expect(selectedPokemon.getStage()).andReturn(1);
+        gui.displayMessage("Not a basic Pokemon!");
+
+        replay(gui, handler, selectedPokemon);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.handleDeadActive();
+
+        verify(gui, handler, selectedPokemon);
+    }
+
 }
 

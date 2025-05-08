@@ -57,9 +57,10 @@ public class Trainer extends Card{
                 //TODO: Change to allow player to choose which pokemon to apply super potion to
                 //TODO: Change to let player choose which energy to discard
 
-                ArrayList<Energy> removalEnergy = new ArrayList<>();
-                removalEnergy.add(activePlayer.activePokemon.energies.get(0));
-                activePlayer.removeEnergy(removalEnergy);
+
+                Energy e = activePlayer.activePokemon.energies.get(0);
+                Pokemon activePokemon = (Pokemon) activePlayer.getActivePokemon();
+                activePokemon.removeEnergy(e);
                 activePlayer.healActivePokemon(4);
         }
     }

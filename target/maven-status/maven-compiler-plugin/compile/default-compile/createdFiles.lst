@@ -1,9 +1,13 @@
 main\CardGenerator$PokemonNotFoundException.class
+main\Game.class
 main\CardGenerator.class
 main\Card.class
 main\TrainerTest.class
+main\SetupGame.class
 main\PokemonTest.class
 main\Deck$EmptyDeckException.class
+main\Main.class
+main\GameTest.class
 main\PlayerTest.class
 main\Deck$DeckInIncorrectFormatException.class
 main\GameGUI$GamePanel.class
@@ -17,8 +21,11 @@ main\Player.class
 main\Attack.class
 main\DeckTest.class
 main\EnergyTest.class
+main\PlayerHandler.class
 main\CardGeneratorTest.class
 main\Pokemon.class
+main\GameSetupTest.class
 main\Deck.class
+main\PlayerHandlerTest.class
 main\Deck$CardDoesNotExist.class
 main\CardCreationException.class

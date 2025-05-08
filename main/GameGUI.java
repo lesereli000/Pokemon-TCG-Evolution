@@ -272,11 +272,11 @@ public class GameGUI implements GUI {
 	}
 
 	@Override
-	public void removeBenchCard(Card newBench, int playerTurn) {
+	public void removeBenchCard(Card card, int playerTurn) {
 		if(playerTurn == 1 && !this.player1benchCards.isEmpty()) {
-			this.player1benchCards.remove(newBench);
+			this.player1benchCards.remove(card);
 		} else if (playerTurn == 2 && !this.player2benchCards.isEmpty()) {
-			this.player2benchCards.remove(newBench);
+			this.player2benchCards.remove(card);
 		}
 		frame.repaint();
 	}
@@ -311,7 +311,122 @@ public class GameGUI implements GUI {
 	}
 
 	@Override
-	public void waitForPokemonSelected() {
+	public void displayConfirmButton() {
+		JButton btn = new JButton("Confirm Pokemon Selection");
+		btn.addActionListener(e -> {
+			this.waitForAction = true;
+		});
+		buttons.add(btn);
+		panel.add(btn);
+		panel.repaint();
+		frame.revalidate();
+		frame.repaint();
+	}
+
+	@Override
+	public void displayCardReport(Card card) {
+		if(card instanceof Pokemon) displayPokemonReport((Pokemon) card);
+	}
+
+	@Override
+	public void displayPossibleAttacks(ArrayList<Attack> attacks) {
+		String attackReport = generateAttackReport(attacks);
+		JOptionPane.showMessageDialog(frame, attackReport);
+		for (Attack attack : attacks) {
+			createLinkedButtonAttack(attack);
+		}
+	}
+
+	@Override
+	public void displayAttackMessage(Player currentPlayer, Player defendingPlayer, Attack attack) {
+		StringBuilder attackReport = new StringBuilder();
+		String currentName = currentPlayer.getName();
+		String defendingName = defendingPlayer.getName();
+		Pokemon currentPokemon = currentPlayer.activePokemon;
+		Pokemon defendingPokemon = defendingPlayer.activePokemon;
+		attackReport.append("Attack Report:\n");
+		attackReport.append(currentName).append("'s active Pokemon: ").append(currentPokemon.getName()).append("\n");
+		attackReport.append("attacked ").append(defendingName).append("'s active Pokemon: ").append(defendingPokemon.getName()).append("\n\n");
+		attackReport.append(defendingName).append("'s active Pokemon took ").append(attack.getDamage()).append(" damage\n");
+		attackReport.append(defendingName).append("'s active Pokemon: ").append(defendingPokemon.getName())
+				.append(" is now at: ").append(defendingPokemon.getCurHP()).append(" hp");
+		displayMessage(attackReport.toString());
+
+	}
+
+	@Override
+	public void displayRetreatEnergy(Pokemon pokemon, boolean canRetreat) {
+        String retreatMessage = "Requires " + pokemon.retreatCost + " Colorless Energy\n" +
+                " for " + pokemon.getName() + " to retreat";
+		if(!canRetreat) {
+			displayMessage(retreatMessage + "\nYou are currently unable to retreat!");
+		} else {
+			displayMessage(retreatMessage);
+		}
+	}
+
+	@Override
+	public void replaceActiveCard(Card selectedCard, int playerTurn) {
+		if(playerTurn == 1) {
+			addBenchCard(player1activeCard, playerTurn);
+		} else {
+			addBenchCard(player2activeCard, playerTurn);
+		}
+		removeBenchCard(selectedCard, playerTurn);
+		makeActiveCard(selectedCard, playerTurn);
+	}
+
+	@Override
+	public void displayDeadActiveInfo(Player defendingPlayer) {
+		StringBuilder deadPokemonReport = new StringBuilder();
+		Pokemon deadPokemon = (Pokemon) defendingPlayer.getActivePokemon();
+		deadPokemonReport.append(defendingPlayer.getName()).append("'s active Pokemon: ").append(deadPokemon.getName()).append(" has died!\n");
+		deadPokemonReport.append("Select a new basic Pokemon to be your new active Pokemon");
+		displayMessage(deadPokemonReport.toString());
+	}
+
+	public String generateAttackReport(ArrayList<Attack> attacks) {
+		StringBuilder report = new StringBuilder();
+		for (Attack attack : attacks) {
+			report.append(attack.name).append(":\nCosts:\n");
+			for (Energy energy : attack.costs) {
+				report.append("• ").append(energy.getName()).append("\n");
+			}
+			report.append("Damage: ").append(attack.damage).append("\n");
+		}
+		return report.toString();
+	}
+
+	@Override
+	public void displayPokemonReport(Pokemon pokemon) {
+		StringBuilder report = new StringBuilder();
+		//General info
+		report.append("Pokemon Report:\n\n");
+		report.append("Name: ").append(pokemon.getName()).append("\n");
+		report.append("Stage: ").append(pokemon.getStage()).append("\n");
+		report.append("Type: ").append(pokemon.type).append("\n");
+		report.append("HP: ").append(pokemon.getCurHP()).append("\n");
+		report.append("Retreat Cost: ").append(pokemon.retreatCost).append(" Colorless Energy\n");
+
+		//Energies
+		report.append("\nAttached Energies:\n");
+		if(pokemon.energies.isEmpty()){
+			report.append("None\n");
+		} else {
+			for (Energy energy : pokemon.energies) {
+				report.append("• ").append(energy.getName()).append("\n");
+			}
+		}
+
+		//Attacks
+		report.append("\nAttacks:\n");
+		report.append(generateAttackReport(pokemon.attacks));
+
+		displayMessage(report.toString());
+	}
+
+	@Override
+	public void waitForAction() {
 		//TODO: Wait for any Pokemon to be pressed
 		while (!waitForAction) {
 			Thread.onSpinWait();
@@ -324,14 +439,6 @@ public class GameGUI implements GUI {
         for (Card currCard:playerCards){
             createLinkedButtonCard(currCard.getName(), currCard);
         }
-	}
-
-	@Override
-	public void displayAttacks(ArrayList<Attack> attacks, String submitMessage) {
-		for(Attack currAttack: attacks) {
-			createLinkedButtonAttack(currAttack.name, currAttack);
-		}
-		createButton(submitMessage);
 	}
 
 	@Override
@@ -369,6 +476,9 @@ public class GameGUI implements GUI {
 	public void displayActionButtons() {
 		createLinkedButtonAction("Add Pokemon Bench", "AddToBench");
 		createLinkedButtonAction("Add An Energy", "AddEnergy");
+		createLinkedButtonAction("Pass Turn", "PassTurn");
+		createLinkedButtonAction("Attack Opponent", "Attack");
+		createLinkedButtonAction("Retreat Pokemon", "Retreat");
 	}
 
 
@@ -401,8 +511,8 @@ public class GameGUI implements GUI {
 		return btn;
 	}
 
-	private JButton createLinkedButtonAttack(String name, Attack currAttack) {
-		JButton btn = new JButton(name);
+	private JButton createLinkedButtonAttack(Attack currAttack) {
+		JButton btn = new JButton(currAttack.name);
 		btn.addActionListener(e -> {
 			setLastSelectedAttack(currAttack);
 		});

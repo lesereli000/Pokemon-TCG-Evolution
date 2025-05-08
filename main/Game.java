@@ -35,8 +35,8 @@ public class Game {
     }
 
     protected void selectActiveLoop() {
-        displayActiveDirections();
         displayCurrentPlayerHand();
+        displayActiveDirections();
         gui.setupActivePokemon();
         gui.waitForButtonPressed();
         Card selectedCard = gui.getLastSelectedCard();
@@ -56,11 +56,93 @@ public class Game {
         gui.displayCards(playerHand);
         gui.displayActionButtons();
         String action = gui.waitForButtonPressed();
-        if(action.equals("AddToBench")) {
-            handleBenchAction();
-        } else if (action.equals("AddEnergy")) {
-            handleEnergyAction();
+        switch (action) {
+            case "AddToBench" -> handleBenchAction();
+            case "AddEnergy" -> handleEnergyAction();
+            case "PassTurn" -> handlePassTurnAction();
+            case "Attack" -> handleAttackAction();
+            case "Retreat" -> handleRetreatAction();
         }
+    }
+
+    protected void handleRetreatAction() {
+        Player activePlayer = playerHandler.getCurrentPlayer();
+        Pokemon activePokemon = (Pokemon) activePlayer.getActivePokemon();
+        boolean canRetreat = activePokemon.canRetreat() && playerHandler.canRetreat();
+        gui.displayRetreatEnergy(activePokemon, canRetreat);
+        if(canRetreat) {
+            Card newActive = retreatPokemon();
+            playerHandler.setNewActive(newActive);
+        }
+    }
+
+    protected Card retreatPokemon() {
+        gui.removeAllButtons();
+        gui.displayMessage("Select new active Pokemon");
+        gui.displayCards(playerHandler.getOnlyPokemonFromBench(1));
+        gui.displayConfirmButton();
+        gui.waitForAction();
+        Card selectedCard = gui.getLastSelectedCard();
+        gui.replaceActiveCard(selectedCard, playerHandler.getPlayerTurn());
+        return selectedCard;
+    }
+
+    protected void handleAttackAction() {
+        if(!playerHandler.playerCanAttack()) {
+            gui.displayMessage("You are unable to attack right now!");
+        } else {
+            handleAttackOpponent();
+        }
+    }
+
+    protected void handleAttackOpponent() {
+        Attack selectedAttack = displayAttackInfo();
+        if(!playerHandler.attackOpponent(selectedAttack)) {
+            gui.displayMessage("Do not have the energy for that attack!");
+        } else {
+            boolean defendingIsDead = playerHandler.isDefendingDead();
+            displayPostAttackInfo(selectedAttack, defendingIsDead);
+            if(defendingIsDead) {
+                handleDeadActive();
+            }
+            playerHandler.swapPlayerTurns();
+        }
+    }
+
+    protected void displayPostAttackInfo(Attack attack, boolean isDead) {
+        Player currentPlayer = playerHandler.getCurrentPlayer();
+        Player defendingPlayer = playerHandler.getDefendingPlayer();
+        gui.displayAttackMessage(currentPlayer, defendingPlayer, attack);
+        if(isDead) {
+            gui.displayDeadActiveInfo(defendingPlayer);
+        }
+    }
+
+    protected void handleDeadActive() {
+        gui.removeAllButtons();
+        ArrayList<Card> playerPokemon = playerHandler.getOnlyPokemonFromBench(2);
+        gui.displayCards(playerPokemon);
+        gui.displayConfirmButton();
+        gui.waitForAction();
+        Card lastSelectedCard = gui.getLastSelectedCard();
+        int playerTurn = playerHandler.getPlayerTurn();
+        int defendingNum = playerTurn % 2 + 1;
+        gui.makeActiveCard(lastSelectedCard, defendingNum);
+        gui.removeBenchCard(lastSelectedCard, defendingNum);
+        if(!checkBasicPokemon(lastSelectedCard)) {
+            gui.displayMessage("Not a basic Pokemon!");
+        } else {
+            playerHandler.killDefenderActive((Pokemon)lastSelectedCard);
+        }
+    }
+
+    private Attack displayAttackInfo() {
+        gui.removeAllButtons();
+        ArrayList<Attack> attacks = playerHandler.getCurrentPlayerAttacks();
+        gui.displayPossibleAttacks(attacks);
+        gui.displayConfirmButton();
+        gui.waitForAction();
+        return gui.getLastSelectedAttack();
     }
 
     protected void handleBenchAction() {
@@ -78,6 +160,14 @@ public class Game {
             gui.displayMessage("Energy has not been selected!");
         } else {
             handleAddEnergy((Energy)lastSelectedCard);
+        }
+    }
+
+    public void handlePassTurnAction() {
+        boolean hasActiveAlready = playerHandler.passTurn();
+        playerHandler.drawCardFromDeck();
+        if(!hasActiveAlready) {
+            selectActiveLoop();
         }
     }
 
@@ -124,27 +214,22 @@ public class Game {
             gui.displayMessage("Unable to add energy!");
         } else {
             Player currentPlayer = playerHandler.getCurrentPlayer();
-            ArrayList<Card> onlyPokemon = currentPlayer.getOnlyPokemonFromHand();
+            ArrayList<Card> onlyPokemon = playerHandler.getOnlyPokemonFromBench(1);
             Card activePokemon = currentPlayer.getActivePokemon();
             onlyPokemon.add(activePokemon);
 
-            gui.displayMessage("Select Pokemon to add Energy to");
-            gui.removeAllButtons();
-            gui.displayCards(onlyPokemon);
-            gui.waitForPokemonSelected();
-            Pokemon selectedPokemon = (Pokemon) gui.getLastSelectedCard();
+            Pokemon selectedPokemon = displayAddEnergyInfo(onlyPokemon);
             playerHandler.addEnergyToPokemon(energy, selectedPokemon);
+            gui.displayCardReport(selectedPokemon);
         }
     }
 
-
-    public static void main(String[] args) {
-        GUI gui = new GameGUI();
-        Random random = new Random();
-        SetupGame gameSetup = new SetupGame(random);
-        PlayerHandler playerHandler = new PlayerHandler();
-        Game game = new Game(gui, random, gameSetup, playerHandler);
-        gui.createGUI();
-        game.setupGame();
+    protected Pokemon displayAddEnergyInfo(ArrayList<Card> pokemon) {
+        gui.displayMessage("Select Pokemon to add Energy to");
+        gui.removeAllButtons();
+        gui.displayCards(pokemon);
+        gui.displayConfirmButton();
+        gui.waitForAction();
+        return (Pokemon) gui.getLastSelectedCard();
     }
 }
