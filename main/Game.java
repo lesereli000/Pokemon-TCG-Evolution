@@ -61,8 +61,31 @@ public class Game {
             case "AddEnergy" -> handleEnergyAction();
             case "PassTurn" -> handlePassTurnAction();
             case "Attack" -> handleAttackAction();
+            case "Retreat" -> handleRetreatAction();
         }
 
+    }
+
+    protected void handleRetreatAction() {
+        Player activePlayer = playerHandler.getCurrentPlayer();
+        Pokemon activePokemon = (Pokemon) activePlayer.getActivePokemon();
+        boolean canRetreat = activePokemon.canRetreat() && playerHandler.canRetreat();
+        gui.displayRetreatEnergy(activePokemon, canRetreat);
+        if(canRetreat) {
+            Card newActive = retreatPokemon();
+            playerHandler.setNewActive(newActive);
+        }
+    }
+
+    protected Card retreatPokemon() {
+        gui.removeAllButtons();
+        gui.displayMessage("Select new active Pokemon");
+        gui.displayCards(playerHandler.getOnlyPokemonFromBench());
+        gui.displayConfirmButton();
+        gui.waitForAction();
+        Card selectedCard = gui.getLastSelectedCard();
+        gui.replaceActiveCard(selectedCard, playerHandler.getPlayerTurn());
+        return selectedCard;
     }
 
     protected void handleAttackAction() {

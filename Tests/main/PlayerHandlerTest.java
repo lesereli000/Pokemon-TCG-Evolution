@@ -285,5 +285,73 @@ public class PlayerHandlerTest {
         verify(player1);
     }
 
+    @Test
+    public void testActiveCanAddEnergy() {
+        Player player = createMock(Player.class);
+        expect(player.canAddEnergy()).andReturn(true);
+        replay(player);
 
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = player;
+
+        assertTrue(handler.activeCanAddEnergy());
+        verify(player);
+    }
+
+    @Test
+    public void testAddEnergyToPokemon() {
+        Player player = createMock(Player.class);
+        Energy energy = createMock(Energy.class);
+        Pokemon pokemon = createMock(Pokemon.class);
+
+        player.addEnergyToPokemon(pokemon, energy);
+        replay(player);
+
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = player;
+
+        handler.addEnergyToPokemon(energy, pokemon);
+        verify(player);
+    }
+
+    @Test
+    public void testCanRetreatTrue() {
+        Player player = createMock(Player.class);
+        expect(player.benchIsEmpty()).andReturn(false);
+        replay(player);
+
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = player;
+
+        assertTrue(handler.canRetreat());
+        verify(player);
+    }
+
+    @Test
+    public void testCanRetreatFalse() {
+        Player player = createMock(Player.class);
+        expect(player.benchIsEmpty()).andReturn(true);
+        replay(player);
+
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = player;
+
+        assertFalse(handler.canRetreat());
+        verify(player);
+    }
+
+    @Test
+    public void testSetNewActive() {
+        Player player = createMock(Player.class);
+        Pokemon newActive = createMock(Pokemon.class);
+
+        player.retreat(newActive);
+        replay(player);
+
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = player;
+
+        handler.setNewActive(newActive);
+        verify(player);
+    }
 }

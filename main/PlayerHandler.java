@@ -106,4 +106,12 @@ public class PlayerHandler {
     public Player getDefendingPlayer() {
         return defendingPlayer;
     }
+
+    public boolean canRetreat() {
+        return !currentPlayer.benchIsEmpty();
+    }
+
+    public void setNewActive(Card newActive) {
+        currentPlayer.retreat((Pokemon)newActive);
+    }
 }

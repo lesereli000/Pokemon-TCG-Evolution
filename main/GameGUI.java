@@ -272,11 +272,11 @@ public class GameGUI implements GUI {
 	}
 
 	@Override
-	public void removeBenchCard(Card newBench, int playerTurn) {
+	public void removeBenchCard(Card card, int playerTurn) {
 		if(playerTurn == 1 && !this.player1benchCards.isEmpty()) {
-			this.player1benchCards.remove(newBench);
+			this.player1benchCards.remove(card);
 		} else if (playerTurn == 2 && !this.player2benchCards.isEmpty()) {
-			this.player2benchCards.remove(newBench);
+			this.player2benchCards.remove(card);
 		}
 		frame.repaint();
 	}
@@ -352,6 +352,28 @@ public class GameGUI implements GUI {
 				.append(" is now at: ").append(defendingPokemon.getCurHP()).append(" hp");
 		displayMessage(attackReport.toString());
 
+	}
+
+	@Override
+	public void displayRetreatEnergy(Pokemon pokemon, boolean canRetreat) {
+        String retreatMessage = "Requires " + pokemon.retreatCost + " Colorless Energy\n" +
+                " for " + pokemon.getName() + " to retreat";
+		if(!canRetreat) {
+			displayMessage(retreatMessage + "\nYou are currently unable to retreat!");
+		} else {
+			displayMessage(retreatMessage);
+		}
+	}
+
+	@Override
+	public void replaceActiveCard(Card selectedCard, int playerTurn) {
+		if(playerTurn == 1) {
+			addBenchCard(player1activeCard, playerTurn);
+		} else {
+			addBenchCard(player2activeCard, playerTurn);
+		}
+		removeBenchCard(selectedCard, playerTurn);
+		makeActiveCard(selectedCard, playerTurn);
 	}
 
 	public String generateAttackReport(ArrayList<Attack> attacks) {
@@ -447,6 +469,7 @@ public class GameGUI implements GUI {
 		createLinkedButtonAction("Add An Energy", "AddEnergy");
 		createLinkedButtonAction("Pass Turn", "PassTurn");
 		createLinkedButtonAction("Attack Opponent", "Attack");
+		createLinkedButtonAction("Retreat Pokemon", "Retreat");
 	}
 
 

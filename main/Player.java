@@ -124,17 +124,11 @@ public class Player {
         return this.bench.size() != 0 && activePokemon.canRetreat();
     }
 
-//    public ArrayList<Card> benchAsList() {
-//        return this.bench.getCards();
-//    }
-
-//    public void retreat(Pokemon lastSelectedCard) {
-//        int retreatCost = activePokemon.retreatCost;
-//        activePokemon.removeColorless(retreatCost);
-//        bench.removeCard(lastSelectedCard);
-//        bench.addCard(activePokemon);
-//        this.activePokemon = lastSelectedCard;
-//    }
+    public void retreat(Pokemon lastSelectedCard) {
+        bench.removeCard(lastSelectedCard);
+        bench.addCard(activePokemon);
+        this.activePokemon = lastSelectedCard;
+    }
 
     public boolean canAttack(){
         return activePokemon.canAttack();
@@ -171,10 +165,6 @@ public class Player {
 
     public boolean benchIsEmpty() {
         return bench.size() <= 0;
-    }
-
-    public Card setNewActive() {
-        return this.activePokemon = (Pokemon) bench.removeTopCard();
     }
 
     public void pickupPrizeCard() {

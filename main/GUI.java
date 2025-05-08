@@ -50,4 +50,8 @@ public interface GUI {
     void displayPossibleAttacks(ArrayList<Attack> attacks);
 
     void displayAttackMessage(Player currentPlayer, Player defendingPlayer, Attack attack);
+
+    void displayRetreatEnergy(Pokemon pokemon, boolean canRetreat);
+
+    void replaceActiveCard(Card selectedCard, int playerTurn);
 }

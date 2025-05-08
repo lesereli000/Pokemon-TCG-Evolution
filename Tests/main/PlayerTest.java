@@ -255,20 +255,6 @@ public class PlayerTest {
         verify(hand, pokemon);
     }
 
-    @Test
-    public void testSetNewActive() {
-        Player player = new Player();
-        Deck bench = createMock(Deck.class);
-        Pokemon newActive = createMock(Pokemon.class);
-
-        expect(bench.removeTopCard()).andReturn(newActive);
-        player.bench = bench;
-
-        replay(bench);
-        Card result = player.setNewActive();
-        assertEquals(newActive, result);
-        verify(bench);
-    }
 
     @Test
     public void testGetActiveHP() {
