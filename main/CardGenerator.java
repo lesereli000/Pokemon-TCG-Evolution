@@ -42,7 +42,7 @@ public class CardGenerator {
 
                 if (pokemonArray.getJSONObject(i).getString("name").equals(name)) {
                     String supertype = pokemonArray.getJSONObject(i).getString("supertype");
-                    if (supertype.equals("Pokémon")) {
+                    if (supertype.equals("Pokemon")) {
                         //Normal Pokemon
                         this.type = pokemonArray.getJSONObject(i).getJSONArray("types").getString(0);
                         if(this.type.equals("Grass")){

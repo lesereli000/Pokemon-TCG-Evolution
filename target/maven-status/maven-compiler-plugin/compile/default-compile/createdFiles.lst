@@ -4,6 +4,7 @@ main\CardGenerator.class
 main\Card.class
 main\TrainerTest.class
 main\SetupGame.class
+main\AttackTest.class
 main\PokemonTest.class
 main\Deck$EmptyDeckException.class
 main\Main.class
