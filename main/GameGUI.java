@@ -16,22 +16,22 @@ public class GameGUI implements GUI {
     static final int origNumPrizeCards = 6;
 
     private JFrame frame;
-    private GamePanel panel;
+    private GamePanel handPanel;
+    private GamePanel decisionPanel;
     private JPanel actionPanel;
-
 
     static final int backgroundLineThickness = 4;
 
-    static final int cardWidth = frameWidth / 12;
+    static final int cardWidth = (frameWidth*2) / 25;
     static final int cardHeight = cardWidth * 7 / 5;
 
     static final int marginSide = 40;
     static final int marginTop = 80;
     static final int marginBottom = 75;
 
-    static final int marginPrizeCardVertical = 20;
+    static final int marginPrizeCardVertical = 15;
     static final int prizeCardsOffset = cardWidth / 2;
-    static final int pcVerticalOffset = cardHeight / 10;
+    static final int pcVerticalOffset = cardHeight / 15;
     static final int benchHorizontalOffset = frameWidth / 19;
     static final int benchHorizontalIncrement = cardHeight / 6;
     static final int benchVerticalOffset = frameHeight / 8;
@@ -51,7 +51,6 @@ public class GameGUI implements GUI {
 
     private Color[] player1PrizeCards = new Color[origNumPrizeCards];
     private Color[] player2PrizeCards = new Color[origNumPrizeCards];
-
 
     private ArrayList<JButton> buttons = new ArrayList<>();
     private ArrayList<JButton> selectedCardActionButtons = new ArrayList<>();
@@ -201,8 +200,12 @@ public class GameGUI implements GUI {
         frame.setSize(frameWidth, frameHeight);
         frame.setLocation(frameXLoc, frameYLoc);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.panel = new GamePanel();
-        frame.add(panel);
+
+        frame.setLayout(new BorderLayout());
+        this.handPanel = new GamePanel();
+        frame.add(handPanel, BorderLayout.CENTER);
+        this.decisionPanel = new GamePanel();
+        frame.add(decisionPanel, BorderLayout.SOUTH);
 
         frame.setVisible(true);
         setDeckColor(Color.RED);
@@ -234,10 +237,18 @@ public class GameGUI implements GUI {
     }
 
     public void removeButton(JButton button) {
+        if(decisionPanel.isAncestorOf(button)) {
+            decisionPanel.remove(button);
+            decisionPanel.revalidate();
+            decisionPanel.repaint();
+        }
+        else if(handPanel.isAncestorOf(button)) {
+            handPanel.remove(button);
+            handPanel.revalidate();
+            handPanel.repaint();
+        }
+
         buttons.remove(button);
-        panel.remove(button);
-        panel.revalidate();
-        panel.repaint();
     }
 
     public void setDeckColor(Color deckColor) {
@@ -322,8 +333,8 @@ public class GameGUI implements GUI {
             this.confirmPokemonState = false;
         });
         buttons.add(btn);
-        panel.add(btn);
-        panel.repaint();
+        decisionPanel.add(btn);
+        decisionPanel.repaint();
         frame.revalidate();
         frame.repaint();
     }
@@ -531,8 +542,8 @@ public class GameGUI implements GUI {
         btn.addActionListener(e -> {
         });
         buttons.add(btn);
-        panel.add(btn);
-        panel.repaint();
+        decisionPanel.add(btn);
+        decisionPanel.repaint();
         frame.revalidate();
         frame.repaint();
 
@@ -572,8 +583,8 @@ public class GameGUI implements GUI {
             }
         });
         buttons.add(btn);
-        panel.add(btn);
-        panel.repaint();
+        handPanel.add(btn);
+        handPanel.repaint();
         frame.revalidate();
         frame.repaint();
 
@@ -589,8 +600,8 @@ public class GameGUI implements GUI {
             setLastSelectedAttack(currAttack);
         });
         buttons.add(btn);
-        panel.add(btn);
-        panel.repaint();
+        handPanel.add(btn);
+        handPanel.repaint();
         frame.revalidate();
         frame.repaint();
 
@@ -604,8 +615,8 @@ public class GameGUI implements GUI {
             waitForAction = true;
         });
         buttons.add(btn);
-        panel.add(btn);
-        panel.repaint();
+        decisionPanel.add(btn);
+        decisionPanel.repaint();
         frame.revalidate();
         frame.repaint();
 
@@ -620,8 +631,8 @@ public class GameGUI implements GUI {
             removeButton(btn);
         });
         buttons.add(btn);
-        panel.add(btn);
-        panel.repaint();
+        handPanel.add(btn);
+        handPanel.repaint();
         frame.revalidate();
         frame.repaint();
 
@@ -638,7 +649,7 @@ public class GameGUI implements GUI {
         buttons.add(btn);
         actionPanel.add(btn);
         actionPanel.repaint();
-        panel.repaint();
+        handPanel.repaint();
         frame.revalidate();
         frame.repaint();
 
@@ -649,9 +660,12 @@ public class GameGUI implements GUI {
     @Override
     public void removeAllButtons() {
         for (JButton btn : buttons) {
-            panel.remove(btn);
-            panel.revalidate();
-            panel.repaint();
+            handPanel.remove(btn);
+            handPanel.revalidate();
+            handPanel.repaint();
+            decisionPanel.remove(btn);
+            decisionPanel.revalidate();
+            decisionPanel.repaint();
         }
         buttons = new ArrayList<>();
     }
