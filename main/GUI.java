@@ -58,4 +58,6 @@ public interface GUI {
     void displayDeadActiveInfo(Player defendingPlayer);
 
     void displayWinningMessage(Player winner, Player loser);
+
+    boolean hasCardSelected();
 }

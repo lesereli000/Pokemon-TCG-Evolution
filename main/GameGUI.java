@@ -408,7 +408,12 @@ public class GameGUI implements GUI {
 		displayMessage(winnerName + " has won the game! " + "\nSorry " + loserName + ", better luck next time!");
 	}
 
-	public String generateAttackReport(ArrayList<Attack> attacks) {
+    @Override
+    public boolean hasCardSelected() {
+        return lastSelectedCard != null;
+    }
+
+    public String generateAttackReport(ArrayList<Attack> attacks) {
 		StringBuilder report = new StringBuilder();
 		for (Attack attack : attacks) {
 			report.append(attack.name).append(":\nCosts:\n");
@@ -533,6 +538,7 @@ public class GameGUI implements GUI {
         createLinkedButtonAction("Pass Turn", "PassTurn");
         createLinkedButtonAction("Attack Opponent", "Attack");
         createLinkedButtonAction("Retreat Pokemon", "Retreat");
+        createLinkedButtonAction("See Card Info", "CardInfo");
     }
 
 

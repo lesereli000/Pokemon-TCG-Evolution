@@ -228,7 +228,6 @@ public class GameTest {
 
         expect(gui.getLastSelectedCard()).andReturn(p);
         handler.addEnergyToPokemon(e, p);
-        gui.displayCardReport(p);
         replay(gui, player, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
@@ -469,7 +468,6 @@ public class GameTest {
         gui.waitForAction();
         expect(gui.getLastSelectedCard()).andReturn(p);
         handler.addEnergyToPokemon(e, p);
-        gui.displayCardReport(p);
 
         replay(gui, player, handler);
 
@@ -1023,6 +1021,53 @@ public class GameTest {
         game.handleDeadActive();
 
         verify(gui, handler, cards);
+    }
+
+    @Test
+    public void testMainLoopCardInfo() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        ArrayList<Card> cards = createMock(ArrayList.class);
+        Pokemon p = createMock(Pokemon.class);
+
+        expect(handler.getCurrentPlayerHand()).andReturn(cards);
+        gui.removeAllButtons();
+        gui.displayCards(cards);
+        gui.displayActionButtons();
+        expect(gui.waitForButtonPressed()).andReturn("CardInfo");
+        expect(gui.hasCardSelected()).andReturn(true);
+        expect(gui.getLastSelectedCard()).andReturn(p);
+        gui.displayCardReport(p);
+
+        replay(gui, handler);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.mainGameLoop();
+
+        verify(gui, handler);
+    }
+
+    @Test
+    public void testCardInfoNull() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Pokemon p = createMock(Pokemon.class);
+        Player player = createMock(Player.class);
+
+        expect(gui.hasCardSelected()).andReturn(false);
+        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(player.getActivePokemon()).andReturn(p);
+        gui.displayCardReport(p);
+
+        replay(gui, player, handler);
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.displayCardInfo();
+
+        verify(gui, player, handler);
     }
 
 }

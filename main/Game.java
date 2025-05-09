@@ -62,6 +62,20 @@ public class Game {
             case "PassTurn" -> handlePassTurnAction();
             case "Attack" -> handleAttackAction();
             case "Retreat" -> handleRetreatAction();
+            case "CardInfo" -> displayCardInfo();
+        }
+    }
+
+    protected void displayCardInfo() {
+        boolean hasCardSelected = gui.hasCardSelected();
+        if(hasCardSelected) {
+            Card lastSelectedCard = gui.getLastSelectedCard();
+            gui.displayCardReport(lastSelectedCard);
+        } else {
+            //display Active Pokemon Info
+            Player activePlayer = playerHandler.getCurrentPlayer();
+            Pokemon currentActive = (Pokemon) activePlayer.getActivePokemon();
+            gui.displayCardReport(currentActive);
         }
     }
 
@@ -240,7 +254,6 @@ public class Game {
 
             Pokemon selectedPokemon = displayAddEnergyInfo(onlyPokemon);
             playerHandler.addEnergyToPokemon(energy, selectedPokemon);
-            gui.displayCardReport(selectedPokemon);
         }
     }
 
