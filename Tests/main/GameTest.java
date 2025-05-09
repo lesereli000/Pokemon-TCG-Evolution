@@ -384,6 +384,8 @@ public class GameTest {
         //displayHand()
         gui.removeAllButtons();
         expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
+        expect(handler.getPlayerTurn()).andReturn(1);
+        gui.updateTurn(1);
         expect(handler.getCurrentPlayerHand()).andReturn(hand).anyTimes();
         gui.displayCards(hand);
         gui.setupActivePokemon();
@@ -541,10 +543,13 @@ public class GameTest {
     public void testPassTurnActionNotFirstTurn() {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
+        PlayerHandler playerHandler = createMock(PlayerHandler.class);
         SetupGame setupGame = createMock(SetupGame.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
 
         expect(handler.passTurn()).andReturn(true);
+        expect(handler.getPlayerTurn()).andReturn(1);
+        gui.updateTurn(1);
         handler.drawCardFromDeck();
         replay(handler);
 
@@ -564,6 +569,8 @@ public class GameTest {
         Player player = createMock(Player.class);
 
         expect(handler.passTurn()).andReturn(false);
+        expect(handler.getPlayerTurn()).andReturn(1);
+        gui.updateTurn(1);
 
         //display hand
         gui.removeAllButtons();
@@ -880,6 +887,8 @@ public class GameTest {
         expect(gui.waitForButtonPressed()).andReturn("PassTurn");
 
         expect(handler.passTurn()).andReturn(true);
+        expect(handler.getPlayerTurn()).andReturn(1);
+        gui.updateTurn(1);
         handler.drawCardFromDeck();
 
         replay(gui, setupGame, handler, p, player);

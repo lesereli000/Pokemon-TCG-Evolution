@@ -23,6 +23,7 @@ public class Game {
         String coinFlipResult = gameSetup.completeGameSetup();
         playerHandler.completePlayerSetup(coinFlipResult);
         Player currentPlayer = playerHandler.getCurrentPlayer();
+        gui.updateTurn(playerHandler.getPlayerTurn());
         displaySetupResults(coinFlipResult, currentPlayer);
         selectActiveLoop();
         while(!gameOver) {
@@ -185,6 +186,7 @@ public class Game {
 
     public void handlePassTurnAction() {
         boolean hasActiveAlready = playerHandler.passTurn();
+        gui.updateTurn(playerHandler.getPlayerTurn());
         playerHandler.drawCardFromDeck();
         if(!hasActiveAlready) {
             selectActiveLoop();

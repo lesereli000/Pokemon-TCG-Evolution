@@ -190,6 +190,14 @@ public class GameGUI implements GUI {
             //Deck
             g2d.setColor(deckColor);
             g2d.drawRect(marginSide, marginTop + (cardHeight) + deckOffset, cardWidth, cardHeight);
+
+            //display current player turn
+            g2d.setColor(Color.WHITE);
+            g2d.setFont(boldFont);
+            String turnText = "Player Turn: " + playerTurn;
+            FontMetrics metrics = g2d.getFontMetrics(boldFont);
+            int textWidth = metrics.stringWidth(turnText);
+            g2d.drawString(turnText, (frameWidth*5)/7 - textWidth, frameHeight/2 - (marginTop*2)/3);
         }
     }
 
@@ -690,6 +698,9 @@ public class GameGUI implements GUI {
         this.playerTurn = playerTurn;
         this.lastSelectedCard = null;
         this.lastSelectedAttack = null;
+
+        handPanel.repaint();
+        decisionPanel.repaint();
         frame.repaint();
     }
 
