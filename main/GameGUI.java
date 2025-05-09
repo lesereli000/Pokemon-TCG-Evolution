@@ -62,6 +62,7 @@ public class GameGUI implements GUI {
 
     private volatile boolean waitForAction = false;
     private boolean activeTurn = false;
+    private boolean confirmPokemonState = false;
     private volatile Card lastSelectedCard = null;
     private JButton lastSelectedButton = null;
     private Attack lastSelectedAttack;
@@ -315,8 +316,10 @@ public class GameGUI implements GUI {
     @Override
     public void displayConfirmButton() {
         JButton btn = new JButton("Confirm Pokemon Selection");
+        this.confirmPokemonState = true;
         btn.addActionListener(e -> {
             this.waitForAction = true;
+            this.confirmPokemonState = false;
         });
         buttons.add(btn);
         panel.add(btn);
@@ -540,21 +543,23 @@ public class GameGUI implements GUI {
             lastSelectedButton = btn;
             if(!getLastSelectedCard().equals(currCard)) {
                 setLastSelectedCard(currCard);
-                if (activeTurn) {
-                    if (currCard instanceof Pokemon) {
-                        displayPokemonActionButtons((Pokemon) currCard);
-                    }
-                    if (currCard instanceof Energy) {
-                        displayEnergyActionButtons((Energy) currCard);
-                    }
-                    if (currCard instanceof Trainer) {
-                        displayTrainerActionButtons((Trainer) currCard);
-                    }
-                } else {
-                    if (currCard instanceof Pokemon && ((Pokemon) currCard).stage == 0) {
-                        displayActiveActionButton();
+                if (!confirmPokemonState) {
+                    if (activeTurn) {
+                        if (currCard instanceof Pokemon) {
+                            displayPokemonActionButtons((Pokemon) currCard);
+                        }
+                        if (currCard instanceof Energy) {
+                            displayEnergyActionButtons((Energy) currCard);
+                        }
+                        if (currCard instanceof Trainer) {
+                            displayTrainerActionButtons((Trainer) currCard);
+                        }
                     } else {
-                        removeSelectedCardActionButtons();
+                        if (currCard instanceof Pokemon && ((Pokemon) currCard).stage == 0) {
+                            displayActiveActionButton();
+                        } else {
+                            removeSelectedCardActionButtons();
+                        }
                     }
                 }
             }
