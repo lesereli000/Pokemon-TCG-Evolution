@@ -14,9 +14,6 @@ public class Attack {
         this.damage = damage;
     }
 
-    public ArrayList<Energy> allCosts() {
-        return costs;
-    }
 
     public int getDamage() {
         return damage;

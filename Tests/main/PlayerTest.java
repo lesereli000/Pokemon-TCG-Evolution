@@ -385,6 +385,24 @@ public class PlayerTest {
         verify(deck);
     }
 
+    @Test
+    public void testRetreat() {
+        Player player = new Player();
+        Deck bench = new Deck();
+        Pokemon active = createMock(Pokemon.class);
+        Pokemon retreatTarget = createMock(Pokemon.class);
+
+        bench.addCard(retreatTarget);
+        player.activePokemon = active;
+        player.bench = bench;
+
+        player.retreat(retreatTarget);
+
+        assertEquals(retreatTarget, player.getActivePokemon());
+        assertTrue(player.getBench().getCards().contains(active));
+        assertFalse(player.getBench().getCards().contains(retreatTarget));
+    }
+
 
 
 }
