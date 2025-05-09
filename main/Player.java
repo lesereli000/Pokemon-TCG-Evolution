@@ -142,6 +142,10 @@ public class Player {
         activePokemon.takeDamage(damageCounters, damageType);
     }
 
+    public void healActivePokemon(int damageCounters) {
+        activePokemon.heal(damageCounters);
+    }
+
     public int getActiveHP() {
         return activePokemon.getCurHP();
     }

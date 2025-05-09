@@ -77,6 +77,7 @@ public class CardGenerator {
                             this.weakness = "";
                             this.resistance = "";
                         }
+
                         this.hp = pokemonArray.getJSONObject(i).getInt("hp");
                         try {
                             this.retreatCost = pokemonArray.getJSONObject(i).getInt("convertedRetreatCost");

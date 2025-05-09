@@ -2,11 +2,11 @@ package main;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import static org.easymock.EasyMock.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class TrainerTest {
 
@@ -111,6 +111,59 @@ public class TrainerTest {
         replay(p1,p2);
         c.doEffects(p1,p2);
         verify(p1,p2);
+    }
+
+    @Test
+    public void testPotion() {
+        Player p1 = new Player();
+        Player p2 = createMock(Player.class);
+        CardGenerator pg = new CardGenerator();
+        Pokemon activePokemon = new Pokemon("Beedrill", "Grass", 2, 80, "Fire", "Fighting", null, 0);
+        p1.hand.addCard(activePokemon);
+        p1.setActivePokemon(activePokemon);
+        Trainer c1 = (Trainer) pg.generateCard("Potion");
+        Trainer c2 = (Trainer) pg.generateCard("Potion");
+        replay(p2);
+        assertEquals(activePokemon.damageCounters, 0);
+        activePokemon.takeDamage(3, "Water");
+        assertEquals(activePokemon.damageCounters, 3);
+        c1.doEffects(p1,p2);
+        assertEquals(activePokemon.damageCounters, 1);
+        c2.doEffects(p1,p2);
+        assertEquals(activePokemon.damageCounters, 0);
+        verify(p2);
+    }
+
+    @Test
+    public void testSuperPotion() {
+        Player p1 = new Player();
+        Player p2 = createMock(Player.class);
+        CardGenerator pg = new CardGenerator();
+        Pokemon activePokemon = new Pokemon("Beedrill", "Grass", 2, 80, "Fire", "Fighting", null, 0);
+        Energy e1 = new Energy("Grass Energy");
+        Energy e2 = new Energy("Grass Energy");
+        ArrayList<Energy> expectedEnergy = new ArrayList<>();
+
+        p1.hand.addCard(activePokemon);
+        p1.setActivePokemon(activePokemon);
+        Trainer c1 = (Trainer) pg.generateCard("Super Potion");
+        Trainer c2 = (Trainer) pg.generateCard("Super Potion");
+        replay(p2);
+
+        activePokemon.takeDamage(6, "Water");
+        assertThrows(CardCreationException.class, () -> c1.doEffects(p1,p2));
+        assertEquals(activePokemon.damageCounters, 6);
+
+        activePokemon.addEnergy(e1);
+        c1.doEffects(p1,p2);
+        assertEquals(activePokemon.energies, expectedEnergy);
+        assertEquals(activePokemon.damageCounters, 2);
+
+        activePokemon.addEnergy(e2);
+        c2.doEffects(p1,p2);
+        assertEquals(activePokemon.energies, expectedEnergy);
+        assertEquals(activePokemon.damageCounters, 0);
+        verify(p2);
     }
 
 

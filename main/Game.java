@@ -63,7 +63,6 @@ public class Game {
             case "Attack" -> handleAttackAction();
             case "Retreat" -> handleRetreatAction();
         }
-
     }
 
     protected void handleRetreatAction() {

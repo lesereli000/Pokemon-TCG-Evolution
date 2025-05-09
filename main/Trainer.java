@@ -1,5 +1,7 @@
 package main;
 
+import java.util.ArrayList;
+
 public class Trainer extends Card{
     private String effects;
     private String subtype;
@@ -41,6 +43,25 @@ public class Trainer extends Card{
             case "Draw 2 cards.":
                 activePlayer.drawCard();
                 activePlayer.drawCard();
+            break;
+
+            case "Remove up to 2 damage counters from 1 of your Pokémon.":
+                //TODO: Change to allow player to pick which pokemon to heal
+                activePlayer.healActivePokemon(2);
+            break;
+
+            case "Discard 1 Energy card attached to your own Pokémon in order to remove up to 4 damage counters from that Pokémon.":
+                if(activePlayer.activePokemon.energies.isEmpty()){
+                    throw new CardCreationException("Active pokemon energies cannot be empty");
+                }
+                //TODO: Change to allow player to choose which pokemon to apply super potion to
+                //TODO: Change to let player choose which energy to discard
+
+
+                Energy e = activePlayer.activePokemon.energies.get(0);
+                Pokemon activePokemon = (Pokemon) activePlayer.getActivePokemon();
+                activePokemon.removeEnergy(e);
+                activePlayer.healActivePokemon(4);
         }
     }
 }
