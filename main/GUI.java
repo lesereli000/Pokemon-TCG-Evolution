@@ -56,4 +56,6 @@ public interface GUI {
     void replaceActiveCard(Card selectedCard, int playerTurn);
 
     void displayDeadActiveInfo(Player defendingPlayer);
+
+    void displayWinningMessage(Player winner, Player loser);
 }

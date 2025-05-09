@@ -132,4 +132,8 @@ public class PlayerHandler {
     public void drawCardFromDeck() {
         currentPlayer.drawCard();
     }
+
+    public boolean defendingHasBenchPokemon() {
+        return !defendingHasBenchPokemon();
+    }
 }

@@ -979,7 +979,51 @@ public class GameTest {
         verify(gui, handler);
     }
 
+    @Test
+    public void testGameOver() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Player winner = createMock(Player.class);
+        Player loser = createMock(Player.class);
 
+        gui.displayWinningMessage(winner, loser);
+        gui.closeWindow();
+
+        replay(gui);
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.gameIsOver(winner, loser);
+
+        verify(gui);
+    }
+
+    @Test
+    public void testHandleDeadActiveGameOver() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Player winner = createMock(Player.class);
+        Player loser = createMock(Player.class);
+        ArrayList<Card> cards = createMock(ArrayList.class);
+
+        expect(handler.getOnlyPokemonFromBench(2)).andReturn(cards);
+        expect(cards.isEmpty()).andReturn(true);
+        expect(handler.getCurrentPlayer()).andReturn(winner);
+        expect(handler.getDefendingPlayer()).andReturn(loser);
+
+        gui.displayWinningMessage(winner, loser);
+        gui.closeWindow();
+
+
+        replay(gui, handler, cards);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.handleDeadActive();
+
+        verify(gui, handler, cards);
+    }
 
 }
 

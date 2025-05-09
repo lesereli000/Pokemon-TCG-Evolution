@@ -390,6 +390,13 @@ public class GameGUI implements GUI {
 		displayMessage(deadPokemonReport.toString());
 	}
 
+	@Override
+	public void displayWinningMessage(Player winner, Player loser) {
+		String winnerName = winner.getName();
+		String loserName = loser.getName();
+		displayMessage(winnerName + " has won the game! " + "\nSorry " + loserName + ", better luck next time!");
+	}
+
 	public String generateAttackReport(ArrayList<Attack> attacks) {
 		StringBuilder report = new StringBuilder();
 		for (Attack attack : attacks) {

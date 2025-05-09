@@ -119,21 +119,41 @@ public class Game {
     }
 
     protected void handleDeadActive() {
-        gui.removeAllButtons();
-        ArrayList<Card> playerPokemon = playerHandler.getOnlyPokemonFromBench(2);
-        gui.displayCards(playerPokemon);
-        gui.displayConfirmButton();
-        gui.waitForAction();
-        Card lastSelectedCard = gui.getLastSelectedCard();
-        int playerTurn = playerHandler.getPlayerTurn();
-        int defendingNum = playerTurn % 2 + 1;
-        gui.makeActiveCard(lastSelectedCard, defendingNum);
-        gui.removeBenchCard(lastSelectedCard, defendingNum);
-        if(!checkBasicPokemon(lastSelectedCard)) {
-            gui.displayMessage("Not a basic Pokemon!");
-        } else {
-            playerHandler.killDefenderActive((Pokemon)lastSelectedCard);
+        displayDeadActiveGUI();
+        if(!gameOver) {
+            Card lastSelectedCard = gui.getLastSelectedCard();
+            int playerTurn = playerHandler.getPlayerTurn();
+            int defendingNum = playerTurn % 2 + 1;
+
+            gui.makeActiveCard(lastSelectedCard, defendingNum);
+            gui.removeBenchCard(lastSelectedCard, defendingNum);
+            if(!checkBasicPokemon(lastSelectedCard)) {
+                gui.displayMessage("Not a basic Pokemon!");
+            } else {
+                playerHandler.killDefenderActive((Pokemon)lastSelectedCard);
+            }
         }
+    }
+
+    private void displayDeadActiveGUI() {
+        ArrayList<Card> playerPokemon = playerHandler.getOnlyPokemonFromBench(2);
+        if(playerPokemon.isEmpty()) {
+            Player winner = playerHandler.getCurrentPlayer();
+            Player loser = playerHandler.getDefendingPlayer();
+            gameIsOver(winner, loser);
+        } else {
+            gui.removeAllButtons();
+            gui.displayCards(playerPokemon);
+            gui.displayConfirmButton();
+            gui.waitForAction();
+        }
+
+    }
+
+    protected void gameIsOver(Player winner, Player loser) {
+        gameOver = true;
+        gui.displayWinningMessage(winner, loser);
+        gui.closeWindow();
     }
 
     private Attack displayAttackInfo() {
