@@ -35,12 +35,12 @@ public class Player {
 
     }
 
-    public void createFullRandomDeck(Random rand) {
-        this.deck.addEnergies(15, rand);
-        this.deck.addRandomCards(45, rand);
-        this.deck.shuffle();
-        checkForBasics(rand);
-    }
+//    public void createFullRandomDeck(Random rand) {
+//        this.deck.addEnergies(15, rand);
+//        this.deck.addRandomCards(45, rand);
+//        this.deck.shuffle();
+//        checkForBasics(rand);
+//    }
 
     public void createCustomDeck() {
         this.deck.createDeckFromFile("PokemonAndEnergy.txt");
@@ -58,12 +58,12 @@ public class Player {
 
     }
 
-    public void checkForBasics(Random rand) {
-        while(this.deck.numberBasicPokemon() == 0) {
-            this.deck = new Deck();
-            createFullRandomDeck(rand);
-        }
-    }
+//    public void checkForBasics(Random rand) {
+//        while(this.deck.numberBasicPokemon() == 0) {
+//            this.deck = new Deck();
+//            createFullRandomDeck(rand);
+//        }
+//    }
 
     public ArrayList<Card> handAsList() {
         return hand.getCards();
@@ -120,9 +120,9 @@ public class Player {
         this.hand.removeCard(lastSelectedCard);
     }
 
-    public boolean canRetreat() {
-        return this.bench.size() != 0 && activePokemon.canRetreat();
-    }
+//    public boolean canRetreat() {
+//        return this.bench.size() != 0 && activePokemon.canRetreat();
+//    }
 
     public void retreat(Pokemon lastSelectedCard) {
         bench.removeCard(lastSelectedCard);

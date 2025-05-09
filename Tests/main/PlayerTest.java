@@ -59,22 +59,22 @@ public class PlayerTest {
         verify(prizeCards, hand);
     }
 
-    @Test
-    public void testCreateRandomDeck() {
-        Player player = new Player();
-
-        Random rand = createMock(Random.class);
-        Deck deck = createMock(Deck.class);
-        expect(deck.addEnergies(15, rand)).andReturn(true).anyTimes();
-        expect(deck.addRandomCards(45, rand)).andReturn(true).anyTimes();
-        expect(deck.shuffle()).andReturn(true).andReturn(true).anyTimes();
-        expect(deck.numberBasicPokemon()).andReturn(1);
-        replay(deck);
-
-        player.deck = deck;
-        player.createFullRandomDeck(rand);
-        verify(deck);
-    }
+//    @Test
+//    public void testCreateRandomDeck() {
+//        Player player = new Player();
+//
+//        Random rand = createMock(Random.class);
+//        Deck deck = createMock(Deck.class);
+//        expect(deck.addEnergies(15, rand)).andReturn(true).anyTimes();
+//        expect(deck.addRandomCards(45, rand)).andReturn(true).anyTimes();
+//        expect(deck.shuffle()).andReturn(true).andReturn(true).anyTimes();
+//        expect(deck.numberBasicPokemon()).andReturn(1);
+//        replay(deck);
+//
+//        player.deck = deck;
+//        player.createFullRandomDeck(rand);
+//        verify(deck);
+//    }
 
     @Test
     public void testDrawCard() {
@@ -176,22 +176,22 @@ public class PlayerTest {
         verify(bench);
     }
 
-    @Test
-    public void testCanRetreat() {
-        Player player = new Player();
-        Deck bench = createMock(Deck.class);
-        Pokemon active = createMock(Pokemon.class);
-
-        expect(bench.size()).andReturn(2);
-        expect(active.canRetreat()).andReturn(true);
-
-        player.bench = bench;
-        player.activePokemon = active;
-
-        replay(bench, active);
-        assertTrue(player.canRetreat());
-        verify(bench, active);
-    }
+//    @Test
+//    public void testCanRetreat() {
+//        Player player = new Player();
+//        Deck bench = createMock(Deck.class);
+//        Pokemon active = createMock(Pokemon.class);
+//
+//        expect(bench.size()).andReturn(2);
+//        expect(active.canRetreat()).andReturn(true);
+//
+//        player.bench = bench;
+//        player.activePokemon = active;
+//
+//        replay(bench, active);
+//        assertTrue(player.canRetreat());
+//        verify(bench, active);
+//    }
 
     @Test
     public void testEvolvePokemonSuccess() {
@@ -403,6 +403,17 @@ public class PlayerTest {
         assertFalse(player.getBench().getCards().contains(retreatTarget));
     }
 
+    @Test
+    public void testHandAsList() {
+        Player player = new Player();
+        Deck hand = new Deck();
+        ArrayList<Card> cards = new ArrayList<>();
+        Pokemon p = new Pokemon("Beedrill", "Grass", 2, 80, "Fire", "Fighting", null, 0);
 
+        player.hand.addCard(p);
+        cards.add(p);
+
+        assertEquals(player.handAsList(), cards);
+    }
 
 }
