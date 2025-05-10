@@ -38,6 +38,7 @@ public class GameGUI implements GUI {
     static final int activeVerticalOffset = frameHeight / 16;
     static final int activeVerticalMargin = cardHeight / 16;
     static final int deckOffset = 15;
+    static final int numBenchCards = 5;
 
     private Card player1activeCard;
     private Card player2activeCard;
@@ -86,9 +87,12 @@ public class GameGUI implements GUI {
             g2d.setColor(backgroundBlue);
             g2d.fillRect(0, 0, frameWidth, frameHeight);
 
-            // ----- USER SIDE (NEAR/BOTTOM SIDE) --------
             g2d.setColor(Color.WHITE);
             g2d.setFont(boldFont);
+            g2d.drawString("Player 1", (marginSide*7)/4 + (cardWidth * 2) + benchHorizontalOffset + (2 * (benchHorizontalIncrement + cardWidth)), frameHeight -  (cardHeight*8)/7 - marginBottom - benchVerticalOffset);
+            g2d.drawString("Player 2", frameWidth - (marginSide * 5) / 4 - (cardWidth * 3) - benchHorizontalOffset - (2 * (benchHorizontalIncrement + cardWidth)), marginTop + (cardHeight*17)/14);
+
+            // ----- USER SIDE (NEAR/BOTTOM SIDE) --------
             if (playerTurn != 0) {
                 g2d.drawString("Player turn: " + playerTurn, marginSide / 2, frameHeight - marginTop);
             }
@@ -116,8 +120,8 @@ public class GameGUI implements GUI {
 
             //Bench Cards
             g2d.setColor(Color.WHITE);
-            for (int i = 0; i < 5; i++) {
-                g2d.drawRect(marginSide + (cardWidth * 2) + benchHorizontalOffset + (i * (benchHorizontalIncrement + cardWidth)), frameHeight - cardHeight - marginBottom - benchVerticalOffset, cardWidth, cardHeight);
+            for (int i = 0; i < numBenchCards; i++) {
+                g2d.drawRect((marginSide*3)/2 + (cardWidth * 2) + benchHorizontalOffset + (i * (benchHorizontalIncrement + cardWidth)), frameHeight - cardHeight - marginBottom - benchVerticalOffset, cardWidth, cardHeight);
                 if (player1benchCards.size() > i) {
                     Card currentCard = player1benchCards.get(i);
                     g2d.drawString(currentCard.name, marginSide + (cardWidth * 2) + benchHorizontalOffset + (i * (benchHorizontalIncrement + cardWidth)) + (cardWidth / 3), frameHeight - cardHeight - marginBottom - benchVerticalOffset + (cardHeight / 2));
@@ -136,7 +140,7 @@ public class GameGUI implements GUI {
             //Discard
             g2d.drawRect(frameWidth - marginSide - cardWidth, frameHeight - marginBottom - cardHeight, cardWidth, cardHeight);
 
-            //Bench
+            //Deck
             g2d.setColor(deckColor);
             g2d.drawRect(frameWidth - marginSide - cardWidth, frameHeight - marginBottom - (cardHeight * 2) - deckOffset, cardWidth, cardHeight);
             g2d.setColor(Color.WHITE);
@@ -166,8 +170,8 @@ public class GameGUI implements GUI {
             }
             g2d.setColor(Color.WHITE);
             //Bench Cards
-            for (int i = 0; i < 5; i++) {
-                g2d.drawRect(frameWidth - marginSide - (cardWidth * 3) - benchHorizontalOffset - (i * (benchHorizontalIncrement + cardWidth)), marginTop, cardWidth, cardHeight);
+            for (int i = 0; i < numBenchCards; i++) {
+                g2d.drawRect(frameWidth - (marginSide * 3) / 2 - (cardWidth * 3) - benchHorizontalOffset - (i * (benchHorizontalIncrement + cardWidth)), marginTop, cardWidth, cardHeight);
                 if (player2benchCards.size() > i) {
                     Card currentCard = player2benchCards.get(i);
                     g2d.drawString(currentCard.name, frameWidth - marginSide - (cardWidth * 3) - benchHorizontalOffset - (i * (benchHorizontalIncrement + cardWidth)) + (cardWidth / 3), marginTop + (cardHeight / 2));
