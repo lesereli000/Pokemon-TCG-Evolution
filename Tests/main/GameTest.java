@@ -640,8 +640,9 @@ public class GameTest {
         Player player2 = createMock(Player.class);
         ArrayList<Attack> attacks = new ArrayList<>();
         attacks.add(attack);
-        ArrayList<Card> cards = createMock(ArrayList.class);
+        ArrayList<Card> cards = new ArrayList<>();
         Pokemon p = createMock(Pokemon.class);
+        cards.add(p);
 
         expect(handler.getCurrentPlayerHand()).andReturn(cards);
         gui.removeAllButtons();
@@ -668,24 +669,35 @@ public class GameTest {
         gui.displayDeadActiveInfo(player2);
 
         //handleDeadActive
-        gui.removeAllButtons();
         expect(handler.getOnlyPokemonFromBench(2)).andReturn(cards);
+
+        //display dead active GUI
+        gui.removeAllButtons();
         gui.displayCards(cards);
         gui.displayConfirmButton();
         gui.waitForAction();
-        expect(gui.getLastSelectedCard()).andReturn(p);
+
+        //handleDeadActive
+        expect(gui.getLastSelectedCard()).andReturn(p).times(2);
+        expect(p.getStage()).andReturn(1).andReturn(0);
+        gui.displayMessage("Invalid Pokemon entry!");
+
+        //run it back
+        expect(handler.getOnlyPokemonFromBench(2)).andReturn(cards);
+        gui.removeAllButtons();
+        gui.displayCards(cards);
+        gui.displayConfirmButton();
+        gui.waitForAction();
         expect(handler.getPlayerTurn()).andReturn(1);
-        gui.makeActiveCard(p,2);
+        handler.killDefenderActive(p);
+        gui.makeActiveCard(p, 2);
         gui.removeBenchCard(p, 2);
 
-        expect(p.getStage()).andReturn(1);
-        gui.displayMessage("Not a basic Pokemon!");
-
+        //pass turn
         expect(handler.passTurn()).andReturn(true);
         expect(handler.getPlayerTurn()).andReturn(1);
-        gui.updateTurn(1);
         handler.drawCardFromDeck();
-
+        gui.updateTurn(1);
 
         replay(gui, handler, p);
 
@@ -849,20 +861,70 @@ public class GameTest {
         ArrayList<Card> bench = new ArrayList<>();
         bench.add(selectedPokemon);
 
+        expect(handler.getOnlyPokemonFromBench(2)).andReturn(bench).times(2);
+
         gui.removeAllButtons();
-        expect(handler.getOnlyPokemonFromBench(2)).andReturn(bench);
         gui.displayCards(bench);
         gui.displayConfirmButton();
         gui.waitForAction();
         expect(gui.getLastSelectedCard()).andReturn(selectedPokemon);
 
-        expect(handler.getPlayerTurn()).andReturn(0);
-        gui.makeActiveCard(selectedPokemon, 1);
-        gui.removeBenchCard(selectedPokemon, 1);
+        // Not a basic Pokémon
+        expect(selectedPokemon.getStage()).andReturn(1).andReturn(0);
+        gui.displayMessage("Invalid Pokemon entry!");
+
+        gui.removeAllButtons();
+        gui.displayCards(bench);
+        gui.displayConfirmButton();
+        gui.waitForAction();
+        expect(gui.getLastSelectedCard()).andReturn(selectedPokemon);
+
+        expect(handler.getPlayerTurn()).andReturn(1);
+        handler.killDefenderActive(selectedPokemon);
+        gui.makeActiveCard(selectedPokemon, 2);
+        gui.removeBenchCard(selectedPokemon, 2);
+
+        replay(gui, handler, selectedPokemon);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.handleDeadActive();
+
+        verify(gui, handler, selectedPokemon);
+    }
+
+    @Test
+    public void testHandleDeadActiveWithNullPokemon() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Pokemon selectedPokemon = createMock(Pokemon.class);
+
+        ArrayList<Card> bench = new ArrayList<>();
+        bench.add(selectedPokemon);
+
+        expect(handler.getOnlyPokemonFromBench(2)).andReturn(bench).times(2);
+
+        gui.removeAllButtons();
+        gui.displayCards(bench);
+        gui.displayConfirmButton();
+        gui.waitForAction();
+        expect(gui.getLastSelectedCard()).andReturn(null);
 
         // Not a basic Pokémon
-        expect(selectedPokemon.getStage()).andReturn(1);
-        gui.displayMessage("Not a basic Pokemon!");
+        expect(selectedPokemon.getStage()).andReturn(0);
+        gui.displayMessage("Invalid Pokemon entry!");
+
+        gui.removeAllButtons();
+        gui.displayCards(bench);
+        gui.displayConfirmButton();
+        gui.waitForAction();
+        expect(gui.getLastSelectedCard()).andReturn(selectedPokemon);
+
+        expect(handler.getPlayerTurn()).andReturn(1);
+        handler.killDefenderActive(selectedPokemon);
+        gui.makeActiveCard(selectedPokemon, 2);
+        gui.removeBenchCard(selectedPokemon, 2);
 
         replay(gui, handler, selectedPokemon);
 
@@ -1199,6 +1261,19 @@ public class GameTest {
 
         verify(gui, handler);
     }
+
+    @Test
+    public void testNullPokemonBasic() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        assertFalse(game.checkBasicPokemon(null));
+    }
+
+
 
 }
 

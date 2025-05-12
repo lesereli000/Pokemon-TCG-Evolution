@@ -141,24 +141,25 @@ public class Game {
     }
 
     protected void handleDeadActive() {
-        displayDeadActiveGUI();
+        ArrayList<Card> activeBench = playerHandler.getOnlyPokemonFromBench(2);
+        displayDeadActiveGUI(activeBench);
         if(!gameOver) {
             Card lastSelectedCard = gui.getLastSelectedCard();
-            int playerTurn = playerHandler.getPlayerTurn();
-            int defendingNum = playerTurn % 2 + 1;
 
-            gui.makeActiveCard(lastSelectedCard, defendingNum);
-            gui.removeBenchCard(lastSelectedCard, defendingNum);
-            if(!checkBasicPokemon(lastSelectedCard)) {
-                gui.displayMessage("Not a basic Pokemon!");
+            if(!activeBench.contains(lastSelectedCard) || !checkBasicPokemon(lastSelectedCard)) {
+                gui.displayMessage("Invalid Pokemon entry!");
+                handleDeadActive();
             } else {
+                int playerTurn = playerHandler.getPlayerTurn();
+                int defendingNum = playerTurn % 2 + 1;
                 playerHandler.killDefenderActive((Pokemon)lastSelectedCard);
+                gui.makeActiveCard(lastSelectedCard, defendingNum);
+                gui.removeBenchCard(lastSelectedCard, defendingNum);
             }
         }
     }
 
-    private void displayDeadActiveGUI() {
-        ArrayList<Card> playerPokemon = playerHandler.getOnlyPokemonFromBench(2);
+    private void displayDeadActiveGUI(ArrayList<Card> playerPokemon) {
         if(playerPokemon.isEmpty()) {
             Player winner = playerHandler.getCurrentPlayer();
             Player loser = playerHandler.getDefendingPlayer();
@@ -242,7 +243,9 @@ public class Game {
     }
 
     public boolean checkBasicPokemon(Card card) {
-        if(!(card instanceof Pokemon pokemon)) return false;
+        if(!(card instanceof Pokemon pokemon)) {
+            return false;
+        }
         int stage = pokemon.getStage();
         return stage == 0;
     }
