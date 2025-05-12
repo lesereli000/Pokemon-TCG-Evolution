@@ -1079,5 +1079,50 @@ public class GameTest {
         verify(gui, player, handler);
     }
 
+    @Test
+    public void testNullRetreat() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Pokemon p = createMock(Pokemon.class);
+        Player player = createMock(Player.class);
+        ArrayList<Card> cards = new ArrayList<>();
+        cards.add(p);
+
+        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(player.getActivePokemon()).andReturn(p);
+        expect(p.canRetreat()).andReturn(true);
+        expect(handler.canRetreat()).andReturn(true);
+        gui.displayRetreatEnergy(p, true);
+
+        //retreat
+        gui.removeAllButtons();
+        gui.displayMessage("Select new active Pokemon");
+        expect(handler.getOnlyPokemonFromBench(1)).andReturn(cards);
+        gui.displayCards(cards);
+        gui.displayConfirmButton();
+        gui.waitForAction();
+
+        expect(gui.getLastSelectedCard()).andReturn(null).andReturn(p);
+        gui.displayMessage("No card selected!");
+
+        //retreat again
+        gui.removeAllButtons();
+        gui.displayMessage("Select new active Pokemon");
+        expect(handler.getOnlyPokemonFromBench(1)).andReturn(cards);
+        gui.displayCards(cards);
+        gui.displayConfirmButton();
+        gui.waitForAction();
+        expect(handler.getPlayerTurn()).andReturn(1);
+        gui.replaceActiveCard(p, 1);
+        handler.setNewActive(p);
+
+        replay(handler, gui, p, player);
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.handleRetreatAction();
+        verify(handler, gui, p, player);
+    }
+
 }
 

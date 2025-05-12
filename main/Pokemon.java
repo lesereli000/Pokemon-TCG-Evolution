@@ -208,4 +208,7 @@ public class Pokemon extends Card{
     public String getType() {
         return type;
     }
+
+
+
 }

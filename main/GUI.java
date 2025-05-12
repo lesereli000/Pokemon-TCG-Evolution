@@ -60,4 +60,5 @@ public interface GUI {
     void displayWinningMessage(Player winner, Player loser);
 
     boolean hasCardSelected();
+
 }

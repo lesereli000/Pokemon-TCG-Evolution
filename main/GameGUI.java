@@ -93,9 +93,6 @@ public class GameGUI implements GUI {
             g2d.drawString("Player 2", frameWidth - (marginSide * 5) / 4 - (cardWidth * 3) - benchHorizontalOffset - (2 * (benchHorizontalIncrement + cardWidth)), marginTop + (cardHeight*17)/14);
 
             // ----- USER SIDE (NEAR/BOTTOM SIDE) --------
-            if (playerTurn != 0) {
-                g2d.drawString("Player turn: " + playerTurn, marginSide / 2, frameHeight - marginTop);
-            }
             g2d.setFont(plainFont);
 
             //Prize Cards

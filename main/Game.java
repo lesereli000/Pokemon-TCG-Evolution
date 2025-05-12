@@ -94,12 +94,19 @@ public class Game {
     protected Card retreatPokemon() {
         gui.removeAllButtons();
         gui.displayMessage("Select new active Pokemon");
-        gui.displayCards(playerHandler.getOnlyPokemonFromBench(1));
+        ArrayList<Card> playerCards = playerHandler.getOnlyPokemonFromBench(1);
+        gui.displayCards(playerCards);
         gui.displayConfirmButton();
         gui.waitForAction();
         Card selectedCard = gui.getLastSelectedCard();
-        gui.replaceActiveCard(selectedCard, playerHandler.getPlayerTurn());
-        return selectedCard;
+        if(!playerCards.contains(selectedCard)) {
+            gui.displayMessage("No card selected!");
+            return retreatPokemon();
+
+        } else {
+            gui.replaceActiveCard(selectedCard, playerHandler.getPlayerTurn());
+            return selectedCard;
+        }
     }
 
     protected void handleAttackAction() {
