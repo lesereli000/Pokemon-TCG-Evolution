@@ -223,11 +223,12 @@ public class GameTest {
         gui.displayMessage("Select Pokemon to add Energy to");
         gui.removeAllButtons();
         gui.displayCards(pokemon);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
 
         expect(gui.getLastSelectedCard()).andReturn(p);
         handler.addEnergyToPokemon(e, p);
+        expect(gui.isCancelled()).andReturn(false);
         replay(gui, player, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
@@ -463,13 +464,14 @@ public class GameTest {
         expect(player.getActivePokemon()).andReturn(p);
 
         gui.displayMessage("Select Pokemon to add Energy to");
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.removeAllButtons();
         hand.add(p);
         gui.displayCards(hand);
         gui.waitForAction();
         expect(gui.getLastSelectedCard()).andReturn(p);
         handler.addEnergyToPokemon(e, p);
+        expect(gui.isCancelled()).andReturn(false);
 
         replay(gui, player, handler);
 
@@ -656,7 +658,7 @@ public class GameTest {
         gui.removeAllButtons();
         expect(handler.getCurrentPlayerAttacks()).andReturn(attacks);
         gui.displayPossibleAttacks(attacks);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
         expect(gui.getLastSelectedAttack()).andReturn(attack);
 
@@ -674,7 +676,7 @@ public class GameTest {
         //display dead active GUI
         gui.removeAllButtons();
         gui.displayCards(cards);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
 
         //handleDeadActive
@@ -686,7 +688,7 @@ public class GameTest {
         expect(handler.getOnlyPokemonFromBench(2)).andReturn(cards);
         gui.removeAllButtons();
         gui.displayCards(cards);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
         expect(handler.getPlayerTurn()).andReturn(1);
         handler.killDefenderActive(p);
@@ -700,6 +702,7 @@ public class GameTest {
         expect(handler.getPlayerTurn()).andReturn(1);
         handler.drawCardFromDeck();
         gui.updateTurn(1);
+        expect(gui.isCancelled()).andReturn(false);
 
         replay(gui, handler, p);
 
@@ -751,12 +754,13 @@ public class GameTest {
         gui.displayMessage("Select new active Pokemon");
         expect(handler.getOnlyPokemonFromBench(1)).andReturn(bench);
         gui.displayCards(bench);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
         expect(gui.getLastSelectedCard()).andReturn(newActive);
         gui.replaceActiveCard(newActive, 1);
         expect(handler.getPlayerTurn()).andReturn(1);
         handler.setNewActive(newActive);
+        expect(gui.isCancelled()).andReturn(false);
 
         replay(gui, handler, player, activePokemon);
 
@@ -804,11 +808,12 @@ public class GameTest {
         gui.removeAllButtons();
         gui.displayMessage("Select new active Pokemon");
         gui.displayCards(bench);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
         expect(gui.getLastSelectedCard()).andReturn(newActive);
         expect(handler.getPlayerTurn()).andReturn(1);
         gui.replaceActiveCard(newActive, 1);
+        expect(gui.isCancelled()).andReturn(false);
 
         replay(gui, handler);
 
@@ -833,7 +838,7 @@ public class GameTest {
         gui.removeAllButtons();
         expect(handler.getOnlyPokemonFromBench(2)).andReturn(bench);
         gui.displayCards(bench);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
         expect(gui.getLastSelectedCard()).andReturn(selectedPokemon);
 
@@ -869,7 +874,7 @@ public class GameTest {
 
         gui.removeAllButtons();
         gui.displayCards(bench);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
         expect(gui.getLastSelectedCard()).andReturn(selectedPokemon);
 
@@ -879,7 +884,7 @@ public class GameTest {
 
         gui.removeAllButtons();
         gui.displayCards(bench);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
         expect(gui.getLastSelectedCard()).andReturn(selectedPokemon);
 
@@ -913,7 +918,7 @@ public class GameTest {
 
         gui.removeAllButtons();
         gui.displayCards(bench);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
         expect(gui.getLastSelectedCard()).andReturn(null);
 
@@ -923,7 +928,7 @@ public class GameTest {
 
         gui.removeAllButtons();
         gui.displayCards(bench);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
         expect(gui.getLastSelectedCard()).andReturn(selectedPokemon);
 
@@ -1016,11 +1021,12 @@ public class GameTest {
         gui.removeAllButtons();
         expect(handler.getCurrentPlayerAttacks()).andReturn(attacks);
         gui.displayPossibleAttacks(attacks);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
         expect(gui.getLastSelectedAttack()).andReturn(attack);
         expect(handler.attackOpponent(attack)).andReturn(false);
         gui.displayMessage("Do not have the energy for that attack!");
+        expect(gui.isCancelled()).andReturn(false);
         replay(gui, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
@@ -1043,7 +1049,7 @@ public class GameTest {
         gui.removeAllButtons();
         expect(handler.getCurrentPlayerAttacks()).andReturn(attacks);
         gui.displayPossibleAttacks(attacks);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
         expect(gui.getLastSelectedAttack()).andReturn(attack);
         expect(handler.attackOpponent(attack)).andReturn(true);
@@ -1057,6 +1063,7 @@ public class GameTest {
         expect(handler.getPlayerTurn()).andReturn(1);
         gui.updateTurn(1);
         handler.drawCardFromDeck();
+        expect(gui.isCancelled()).andReturn(false);
 
         replay(gui, handler);
 
@@ -1180,7 +1187,7 @@ public class GameTest {
         gui.displayMessage("Select new active Pokemon");
         expect(handler.getOnlyPokemonFromBench(1)).andReturn(cards);
         gui.displayCards(cards);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
 
         expect(gui.getLastSelectedCard()).andReturn(null).andReturn(p);
@@ -1191,11 +1198,12 @@ public class GameTest {
         gui.displayMessage("Select new active Pokemon");
         expect(handler.getOnlyPokemonFromBench(1)).andReturn(cards);
         gui.displayCards(cards);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
         expect(handler.getPlayerTurn()).andReturn(1);
         gui.replaceActiveCard(p, 1);
         handler.setNewActive(p);
+        expect(gui.isCancelled()).andReturn(false).times(2);
 
         replay(handler, gui, p, player);
         Game game = new Game(gui, rand, setupGame, handler);
@@ -1216,7 +1224,7 @@ public class GameTest {
         gui.displayMessage("Select Pokemon to add Energy to");
         gui.removeAllButtons();
         gui.displayCards(cards);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
 
         expect(gui.getLastSelectedCard()).andReturn(null).andReturn(p);
@@ -1225,8 +1233,9 @@ public class GameTest {
         gui.displayMessage("Select Pokemon to add Energy to");
         gui.removeAllButtons();
         gui.displayCards(cards);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
+        expect(gui.isCancelled()).andReturn(false).times(2);
 
         replay(gui);
 
@@ -1249,7 +1258,7 @@ public class GameTest {
         gui.removeAllButtons();
         expect(handler.getCurrentPlayerAttacks()).andReturn(attacks);
         gui.displayPossibleAttacks(attacks);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
 
         expect(gui.getLastSelectedAttack()).andReturn(null).andReturn(atk);
@@ -1259,8 +1268,9 @@ public class GameTest {
         gui.removeAllButtons();
         expect(handler.getCurrentPlayerAttacks()).andReturn(attacks);
         gui.displayPossibleAttacks(attacks);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
+        expect(gui.isCancelled()).andReturn(false).times(2);
 
         replay(gui, handler);
 
@@ -1304,6 +1314,94 @@ public class GameTest {
 
         verify(gui, handler);
     }
+
+    @Test
+    public void testAddEnergyCancelled() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Energy e = createMock(Energy.class);
+        Player p = createMock(Player.class);
+        ArrayList<Card> cards = createMock(ArrayList.class);
+        Pokemon poke = createMock(Pokemon.class);
+
+        expect(handler.activeCanAddEnergy()).andReturn(true);
+        expect(handler.getCurrentPlayer()).andReturn(p);
+        expect(handler.getOnlyPokemonFromBench(1)).andReturn(cards);
+        expect(p.getActivePokemon()).andReturn(poke);
+
+        //displayAddEnergy()
+        gui.displayMessage("Select Pokemon to add Energy to");
+        gui.removeAllButtons();
+        gui.displayCards(cards);
+        gui.displayConfirmAndCancelButton();
+        gui.waitForAction();
+        expect(gui.isCancelled()).andReturn(true);
+
+        replay(gui, handler, p);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.handleAddEnergy(e);
+        verify(gui, handler, p);
+    }
+
+    @Test
+    public void testRetreatCancelled() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Player p = createMock(Player.class);
+        Pokemon poke = createMock(Pokemon.class);
+        ArrayList<Card> cards = createMock(ArrayList.class);
+
+        expect(handler.getCurrentPlayer()).andReturn(p);
+        expect(p.getActivePokemon()).andReturn(poke);
+        expect(poke.canRetreat()).andReturn(true);
+        expect(handler.canRetreat()).andReturn(true);
+        gui.displayRetreatEnergy(poke, true);
+
+        //retreatPokemon()
+        gui.removeAllButtons();
+        gui.displayMessage("Select new active Pokemon");
+        expect(handler.getOnlyPokemonFromBench(1)).andReturn(cards);
+        gui.displayCards(cards);
+        gui.displayConfirmAndCancelButton();
+        gui.waitForAction();
+        expect(gui.isCancelled()).andReturn(true);
+
+        replay(gui, handler, poke, p);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.handleRetreatAction();
+
+        verify(gui, handler, poke, p);
+    }
+
+    @Test
+    public void testCancelAttack() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        ArrayList<Attack> attacks = createMock(ArrayList.class);
+
+        gui.removeAllButtons();
+        expect(handler.getCurrentPlayerAttacks()).andReturn(attacks);
+        gui.displayPossibleAttacks(attacks);
+        gui.displayConfirmAndCancelButton();
+        gui.waitForAction();
+        expect(gui.isCancelled()).andReturn(true);
+
+        replay(gui, handler);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.handleAttackOpponent();
+
+        verify(gui, handler);
+    }
+
 
 }
 

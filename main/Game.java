@@ -87,7 +87,9 @@ public class Game {
         gui.displayRetreatEnergy(activePokemon, canRetreat);
         if(canRetreat) {
             Card newActive = retreatPokemon();
-            playerHandler.setNewActive(newActive);
+            if(newActive != null) {
+                playerHandler.setNewActive(newActive);
+            }
         }
     }
 
@@ -96,16 +98,20 @@ public class Game {
         gui.displayMessage("Select new active Pokemon");
         ArrayList<Card> playerCards = playerHandler.getOnlyPokemonFromBench(1);
         gui.displayCards(playerCards);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
-        Card selectedCard = gui.getLastSelectedCard();
-        if(!playerCards.contains(selectedCard)) {
-            gui.displayMessage("No card selected!");
-            return retreatPokemon();
+        if(!gui.isCancelled()) {
+            Card selectedCard = gui.getLastSelectedCard();
+            if(!playerCards.contains(selectedCard)) {
+                gui.displayMessage("No card selected!");
+                return retreatPokemon();
 
+            } else {
+                gui.replaceActiveCard(selectedCard, playerHandler.getPlayerTurn());
+                return selectedCard;
+            }
         } else {
-            gui.replaceActiveCard(selectedCard, playerHandler.getPlayerTurn());
-            return selectedCard;
+            return null;
         }
     }
 
@@ -119,16 +125,19 @@ public class Game {
 
     protected void handleAttackOpponent() {
         Attack selectedAttack = displayAttackInfo();
-        if(!playerHandler.attackOpponent(selectedAttack)) {
-            gui.displayMessage("Do not have the energy for that attack!");
-        } else {
-            boolean defendingIsDead = playerHandler.isDefendingDead();
-            displayPostAttackInfo(selectedAttack, defendingIsDead);
-            if(defendingIsDead) {
-                handleDeadActive();
+        if(selectedAttack != null) {
+            if(!playerHandler.attackOpponent(selectedAttack)) {
+                gui.displayMessage("Do not have the energy for that attack!");
+            } else {
+                boolean defendingIsDead = playerHandler.isDefendingDead();
+                displayPostAttackInfo(selectedAttack, defendingIsDead);
+                if(defendingIsDead) {
+                    handleDeadActive();
+                }
+                handlePassTurnAction();
             }
-            handlePassTurnAction();
         }
+
     }
 
     protected void displayPostAttackInfo(Attack attack, boolean isDead) {
@@ -178,7 +187,7 @@ public class Game {
         } else {
             gui.removeAllButtons();
             gui.displayCards(playerPokemon);
-            gui.displayConfirmButton();
+            gui.displayConfirmAndCancelButton();
             gui.waitForAction();
         }
 
@@ -194,8 +203,9 @@ public class Game {
         gui.removeAllButtons();
         ArrayList<Attack> attacks = playerHandler.getCurrentPlayerAttacks();
         gui.displayPossibleAttacks(attacks);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
+        if(gui.isCancelled()) return null;
         Attack attack = gui.getLastSelectedAttack();
         if(!attacks.contains(attack)) {
             gui.displayMessage("Attack not selected!");
@@ -282,7 +292,9 @@ public class Game {
             onlyPokemon.add(activePokemon);
 
             Pokemon selectedPokemon = displayAddEnergyInfo(onlyPokemon);
-            playerHandler.addEnergyToPokemon(energy, selectedPokemon);
+            if(selectedPokemon != null) {
+                playerHandler.addEnergyToPokemon(energy, selectedPokemon);
+            }
         }
     }
 
@@ -290,8 +302,9 @@ public class Game {
         gui.displayMessage("Select Pokemon to add Energy to");
         gui.removeAllButtons();
         gui.displayCards(pokemon);
-        gui.displayConfirmButton();
+        gui.displayConfirmAndCancelButton();
         gui.waitForAction();
+        if(gui.isCancelled()) return null;
         Pokemon selectedPokemon = (Pokemon) gui.getLastSelectedCard();
         if(!pokemon.contains(selectedPokemon)) {
             gui.displayMessage("No Pokemon selected!");

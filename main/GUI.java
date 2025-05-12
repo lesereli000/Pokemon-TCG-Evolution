@@ -23,6 +23,7 @@ public interface GUI {
     void addBenchCard(Card newBench, int playerTurn);
     void removeBenchCard(Card newBench, int playerTurn);
     JButton createPassTurnButton();
+    boolean cancelled = false;
 
     void removeAllButtons();
     void retreat(Card newCard, int playerTurn);
@@ -41,7 +42,7 @@ public interface GUI {
 
     void waitForAction();
 
-    void displayConfirmButton();
+    void displayConfirmAndCancelButton();
 
     void displayPokemonReport(Pokemon pokemon);
 
@@ -61,4 +62,5 @@ public interface GUI {
 
     boolean hasCardSelected();
 
+    boolean isCancelled();
 }

@@ -1,7 +1,5 @@
 package main;
 
-import com.sun.source.doctree.EndElementTree;
-
 import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
@@ -18,7 +16,6 @@ public class GameGUI implements GUI {
     private JFrame frame;
     private GamePanel handPanel;
     private GamePanel decisionPanel;
-    private JPanel actionPanel;
 
     static final int backgroundLineThickness = 4;
 
@@ -56,8 +53,8 @@ public class GameGUI implements GUI {
     private ArrayList<JButton> buttons = new ArrayList<>();
     private ArrayList<JButton> selectedCardActionButtons = new ArrayList<>();
 
-    private Font boldFont = new Font("Arial", Font.BOLD, 16);
-    private Font plainFont = new Font("Arial", Font.PLAIN, 12);
+    private final Font boldFont = new Font("Arial", Font.BOLD, 16);
+    private final Font plainFont = new Font("Arial", Font.PLAIN, 12);
 
 
     private volatile boolean waitForAction = false;
@@ -68,6 +65,7 @@ public class GameGUI implements GUI {
     private Attack lastSelectedAttack;
     private volatile String lastActionButtonPressed;
     private int playerTurn = 0;
+    private boolean cancelled;
 
 
     private class GamePanel extends JPanel {
@@ -334,15 +332,25 @@ public class GameGUI implements GUI {
     }
 
     @Override
-    public void displayConfirmButton() {
-        JButton btn = new JButton("Confirm Pokemon Selection");
+    public void displayConfirmAndCancelButton() {
+        JButton btn = new JButton("Confirm Selection");
         this.confirmPokemonState = true;
         btn.addActionListener(e -> {
+            cancelled = false;
             this.waitForAction = true;
             this.confirmPokemonState = false;
         });
+
+        JButton cancel = new JButton("Cancel");
+        cancel.addActionListener(e -> {
+            this.waitForAction = true;
+            this.confirmPokemonState = false;
+            cancelled = true;
+        });
         buttons.add(btn);
+        buttons.add(cancel);
         decisionPanel.add(btn);
+        decisionPanel.add(cancel);
         decisionPanel.repaint();
         frame.revalidate();
         frame.repaint();
@@ -422,10 +430,15 @@ public class GameGUI implements GUI {
         return lastSelectedCard != null;
     }
 
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
     public String generateAttackReport(ArrayList<Attack> attacks) {
 		StringBuilder report = new StringBuilder();
 		for (Attack attack : attacks) {
-			report.append(attack.name).append(":\nCosts:\n");
+			report.append("\n").append(attack.name).append(":\nCosts:\n");
 			for (Energy energy : attack.costs) {
 				report.append("• ").append(energy.getName()).append("\n");
 			}
@@ -662,8 +675,6 @@ public class GameGUI implements GUI {
             removeButton(btn);
         });
         buttons.add(btn);
-        actionPanel.add(btn);
-        actionPanel.repaint();
         handPanel.repaint();
         frame.revalidate();
         frame.repaint();
@@ -710,6 +721,4 @@ public class GameGUI implements GUI {
         decisionPanel.repaint();
         frame.repaint();
     }
-
-
 }
