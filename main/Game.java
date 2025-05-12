@@ -127,7 +127,7 @@ public class Game {
             if(defendingIsDead) {
                 handleDeadActive();
             }
-            playerHandler.swapPlayerTurns();
+            handlePassTurnAction();
         }
     }
 
@@ -178,13 +178,19 @@ public class Game {
         gui.closeWindow();
     }
 
-    private Attack displayAttackInfo() {
+    protected Attack displayAttackInfo() {
         gui.removeAllButtons();
         ArrayList<Attack> attacks = playerHandler.getCurrentPlayerAttacks();
         gui.displayPossibleAttacks(attacks);
         gui.displayConfirmButton();
         gui.waitForAction();
-        return gui.getLastSelectedAttack();
+        Attack attack = gui.getLastSelectedAttack();
+        if(!attacks.contains(attack)) {
+            gui.displayMessage("Attack not selected!");
+            return displayAttackInfo();
+        } else {
+            return attack;
+        }
     }
 
     protected void handleBenchAction() {

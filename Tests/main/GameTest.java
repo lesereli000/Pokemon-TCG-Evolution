@@ -638,7 +638,7 @@ public class GameTest {
         Attack attack = createMock(Attack.class);
         Player player1 = createMock(Player.class);
         Player player2 = createMock(Player.class);
-        ArrayList<Attack> attacks = createMock(ArrayList.class);
+        ArrayList<Attack> attacks = new ArrayList<>();
         attacks.add(attack);
         ArrayList<Card> cards = createMock(ArrayList.class);
         Pokemon p = createMock(Pokemon.class);
@@ -681,7 +681,11 @@ public class GameTest {
         expect(p.getStage()).andReturn(1);
         gui.displayMessage("Not a basic Pokemon!");
 
-        handler.swapPlayerTurns();
+        expect(handler.passTurn()).andReturn(true);
+        expect(handler.getPlayerTurn()).andReturn(1);
+        gui.updateTurn(1);
+        handler.drawCardFromDeck();
+
 
         replay(gui, handler, p);
 
@@ -936,7 +940,8 @@ public class GameTest {
         SetupGame setupGame = createMock(SetupGame.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
         Attack attack = createMock(Attack.class);
-        ArrayList<Attack> attacks = createMock(ArrayList.class);
+        ArrayList<Attack> attacks = new ArrayList<>();
+        attacks.add(attack);
 
         gui.removeAllButtons();
         expect(handler.getCurrentPlayerAttacks()).andReturn(attacks);
@@ -960,7 +965,8 @@ public class GameTest {
         SetupGame setupGame = createMock(SetupGame.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
         Attack attack = createMock(Attack.class);
-        ArrayList<Attack> attacks = createMock(ArrayList.class);
+        ArrayList<Attack> attacks = new ArrayList<>();
+        attacks.add(attack);
         Player player1 = createMock(Player.class);
         Player player2 = createMock(Player.class);
 
@@ -977,7 +983,10 @@ public class GameTest {
         expect(handler.getDefendingPlayer()).andReturn(player2);
 
         gui.displayAttackMessage(player1, player2, attack);
-        handler.swapPlayerTurns();
+        expect(handler.passTurn()).andReturn(true);
+        expect(handler.getPlayerTurn()).andReturn(1);
+        gui.updateTurn(1);
+        handler.drawCardFromDeck();
 
         replay(gui, handler);
 
@@ -1155,7 +1164,40 @@ public class GameTest {
         game.displayAddEnergyInfo(cards);
 
         verify(gui);
+    }
 
+    @Test
+    public void testSelectedAttackNull() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        ArrayList<Attack> attacks = new ArrayList<>();
+        Attack atk = createMock(Attack.class);
+        attacks.add(atk);
+
+        gui.removeAllButtons();
+        expect(handler.getCurrentPlayerAttacks()).andReturn(attacks);
+        gui.displayPossibleAttacks(attacks);
+        gui.displayConfirmButton();
+        gui.waitForAction();
+
+        expect(gui.getLastSelectedAttack()).andReturn(null).andReturn(atk);
+
+        gui.displayMessage("Attack not selected!");
+
+        gui.removeAllButtons();
+        expect(handler.getCurrentPlayerAttacks()).andReturn(attacks);
+        gui.displayPossibleAttacks(attacks);
+        gui.displayConfirmButton();
+        gui.waitForAction();
+
+        replay(gui, handler);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.displayAttackInfo();
+
+        verify(gui, handler);
     }
 
 }
