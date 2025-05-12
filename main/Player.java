@@ -160,12 +160,12 @@ public class Player {
         selectedPokemon.addEnergy(selectedEnergy);
     }
 
-//    public void drawPrizeCards() {
-//        for(int i = 0; i < PRIZE_CARD_SIZE; i++) {
-//            Card cardToAdd = deck.removeTopCard();
-//            prizeCards.addCard(cardToAdd);
-//        }
-//    }
+    public void drawPrizeCards() {
+        for(int i = 0; i < PRIZE_CARD_SIZE; i++) {
+            Card cardToAdd = deck.removeTopCard();
+            prizeCards.addCard(cardToAdd);
+        }
+    }
 
     public boolean benchIsEmpty() {
         return bench.size() <= 0;

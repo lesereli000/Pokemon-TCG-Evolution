@@ -459,7 +459,36 @@ public class PlayerHandlerTest {
         verify(current);
     }
 
+    @Test
+    public void testSetupPrizeCards() {
+        Player p1 = createMock(Player.class);
+        Player p2 = createMock(Player.class);
 
+        p1.drawPrizeCards();
+        p2.drawPrizeCards();
+
+        replay(p1, p2);
+
+        PlayerHandler handler = new PlayerHandler();
+        handler.player1 = p1;
+        handler.player2 = p2;
+        handler.setupPrizeCards();
+
+        verify(p1, p2);
+    }
+
+    @Test
+    public void testActivePickupPrizeCard() {
+        Player p1 = createMock(Player.class);
+
+        p1.pickupPrizeCard();
+        replay(p1);
+
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = p1;
+        handler.activePickupPrizeCard();
+        verify(p1);
+    }
 
 
 }

@@ -692,6 +692,8 @@ public class GameTest {
         handler.killDefenderActive(p);
         gui.makeActiveCard(p, 2);
         gui.removeBenchCard(p, 2);
+        handler.activePickupPrizeCard();
+        gui.removePrizeCard(1);
 
         //pass turn
         expect(handler.passTurn()).andReturn(true);
@@ -841,6 +843,8 @@ public class GameTest {
 
         expect(selectedPokemon.getStage()).andReturn(0);
         handler.killDefenderActive(selectedPokemon);
+        handler.activePickupPrizeCard();
+        gui.removePrizeCard(1);
 
         replay(gui, handler, selectedPokemon);
 
@@ -883,6 +887,8 @@ public class GameTest {
         handler.killDefenderActive(selectedPokemon);
         gui.makeActiveCard(selectedPokemon, 2);
         gui.removeBenchCard(selectedPokemon, 2);
+        handler.activePickupPrizeCard();
+        gui.removePrizeCard(1);
 
         replay(gui, handler, selectedPokemon);
 
@@ -925,6 +931,8 @@ public class GameTest {
         handler.killDefenderActive(selectedPokemon);
         gui.makeActiveCard(selectedPokemon, 2);
         gui.removeBenchCard(selectedPokemon, 2);
+        handler.activePickupPrizeCard();
+        gui.removePrizeCard(1);
 
         replay(gui, handler, selectedPokemon);
 

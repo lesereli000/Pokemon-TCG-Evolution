@@ -15,6 +15,12 @@ public class PlayerHandler {
         setPlayerTurns(coinFlipResult);
         setupBothDecks();
         setupBothHands();
+        setupPrizeCards();
+    }
+
+    protected void setupPrizeCards() {
+        player1.drawPrizeCards();
+        player2.drawPrizeCards();
     }
 
     protected void createPlayers() {
@@ -133,7 +139,7 @@ public class PlayerHandler {
         currentPlayer.drawCard();
     }
 
-    public boolean defendingHasBenchPokemon() {
-        return !defendingHasBenchPokemon();
+    public void activePickupPrizeCard() {
+        currentPlayer.pickupPrizeCard();
     }
 }

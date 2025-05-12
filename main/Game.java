@@ -151,12 +151,18 @@ public class Game {
                 handleDeadActive();
             } else {
                 int playerTurn = playerHandler.getPlayerTurn();
+                handlePickupPrizeCard(playerTurn);
                 int defendingNum = playerTurn % 2 + 1;
                 playerHandler.killDefenderActive((Pokemon)lastSelectedCard);
                 gui.makeActiveCard(lastSelectedCard, defendingNum);
                 gui.removeBenchCard(lastSelectedCard, defendingNum);
             }
         }
+    }
+
+    private void handlePickupPrizeCard(int turn) {
+        playerHandler.activePickupPrizeCard();
+        gui.removePrizeCard(turn);
     }
 
     private void displayDeadActiveGUI(ArrayList<Card> playerPokemon) {
