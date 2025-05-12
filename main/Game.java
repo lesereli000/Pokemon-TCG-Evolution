@@ -272,6 +272,12 @@ public class Game {
         gui.displayCards(pokemon);
         gui.displayConfirmButton();
         gui.waitForAction();
-        return (Pokemon) gui.getLastSelectedCard();
+        Pokemon selectedPokemon = (Pokemon) gui.getLastSelectedCard();
+        if(!pokemon.contains(selectedPokemon)) {
+            gui.displayMessage("No Pokemon selected!");
+            return displayAddEnergyInfo(pokemon);
+        } else {
+            return selectedPokemon;
+        }
     }
 }

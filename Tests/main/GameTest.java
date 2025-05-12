@@ -1124,5 +1124,39 @@ public class GameTest {
         verify(handler, gui, p, player);
     }
 
+    @Test
+    public void testAddNullEnergy() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        ArrayList<Card> cards = new ArrayList<>();
+        Pokemon p = createMock(Pokemon.class);
+        cards.add(p);
+
+        gui.displayMessage("Select Pokemon to add Energy to");
+        gui.removeAllButtons();
+        gui.displayCards(cards);
+        gui.displayConfirmButton();
+        gui.waitForAction();
+
+        expect(gui.getLastSelectedCard()).andReturn(null).andReturn(p);
+        gui.displayMessage("No Pokemon selected!");
+
+        gui.displayMessage("Select Pokemon to add Energy to");
+        gui.removeAllButtons();
+        gui.displayCards(cards);
+        gui.displayConfirmButton();
+        gui.waitForAction();
+
+        replay(gui);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.displayAddEnergyInfo(cards);
+
+        verify(gui);
+
+    }
+
 }
 
