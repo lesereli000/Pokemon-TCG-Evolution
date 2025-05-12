@@ -139,7 +139,8 @@ public class PlayerHandler {
         currentPlayer.drawCard();
     }
 
-    public void activePickupPrizeCard() {
+    public int activePickupPrizeCard() {
         currentPlayer.pickupPrizeCard();
+        return currentPlayer.getNumPrizeCards();
     }
 }

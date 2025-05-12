@@ -692,7 +692,7 @@ public class GameTest {
         handler.killDefenderActive(p);
         gui.makeActiveCard(p, 2);
         gui.removeBenchCard(p, 2);
-        handler.activePickupPrizeCard();
+        expect(handler.activePickupPrizeCard()).andReturn(6);
         gui.removePrizeCard(1);
 
         //pass turn
@@ -843,7 +843,7 @@ public class GameTest {
 
         expect(selectedPokemon.getStage()).andReturn(0);
         handler.killDefenderActive(selectedPokemon);
-        handler.activePickupPrizeCard();
+        expect(handler.activePickupPrizeCard()).andReturn(6);
         gui.removePrizeCard(1);
 
         replay(gui, handler, selectedPokemon);
@@ -887,7 +887,7 @@ public class GameTest {
         handler.killDefenderActive(selectedPokemon);
         gui.makeActiveCard(selectedPokemon, 2);
         gui.removeBenchCard(selectedPokemon, 2);
-        handler.activePickupPrizeCard();
+        expect(handler.activePickupPrizeCard()).andReturn(6);
         gui.removePrizeCard(1);
 
         replay(gui, handler, selectedPokemon);
@@ -931,7 +931,7 @@ public class GameTest {
         handler.killDefenderActive(selectedPokemon);
         gui.makeActiveCard(selectedPokemon, 2);
         gui.removeBenchCard(selectedPokemon, 2);
-        handler.activePickupPrizeCard();
+        expect(handler.activePickupPrizeCard()).andReturn(6);
         gui.removePrizeCard(1);
 
         replay(gui, handler, selectedPokemon);
@@ -1281,7 +1281,29 @@ public class GameTest {
         assertFalse(game.checkBasicPokemon(null));
     }
 
+    @Test
+    public void testPickupPrizeCardEndGame() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Player winner = createMock(Player.class);
+        Player loser = createMock(Player.class);
 
+        expect(handler.activePickupPrizeCard()).andReturn(0);
+        gui.removePrizeCard(1);
+        expect(handler.getCurrentPlayer()).andReturn(winner);
+        expect(handler.getDefendingPlayer()).andReturn(loser);
+        gui.displayWinningMessage(winner, loser);
+        gui.closeWindow();
+
+        replay(gui, handler);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.handlePickupPrizeCard(1);
+
+        verify(gui, handler);
+    }
 
 }
 

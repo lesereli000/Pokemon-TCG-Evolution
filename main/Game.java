@@ -160,9 +160,14 @@ public class Game {
         }
     }
 
-    private void handlePickupPrizeCard(int turn) {
-        playerHandler.activePickupPrizeCard();
+    protected void handlePickupPrizeCard(int turn) {
+        int prizeCardsLeft = playerHandler.activePickupPrizeCard();
         gui.removePrizeCard(turn);
+        if(prizeCardsLeft == 0) {
+            Player winner = playerHandler.getCurrentPlayer();
+            Player loser = playerHandler.getDefendingPlayer();
+            gameIsOver(winner, loser);
+        }
     }
 
     private void displayDeadActiveGUI(ArrayList<Card> playerPokemon) {

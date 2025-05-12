@@ -157,14 +157,6 @@ public class PlayerTest {
     }
 
     @Test
-    public void testPokemonDiedIncrementsCounter() {
-        Player player = new Player();
-        assertEquals(0, player.getNumPokemonDied());
-        player.pokemonDied();
-        assertEquals(1, player.getNumPokemonDied());
-    }
-
-    @Test
     public void testBenchIsEmptyTrue() {
         Player player = new Player();
         Deck bench = createMock(Deck.class);
@@ -416,4 +408,49 @@ public class PlayerTest {
         assertEquals(player.handAsList(), cards);
     }
 
+    @Test
+    public void testDrawPrizeCards() {
+        Deck deck = createMock(Deck.class);
+        Deck prizeCards = createMock(Deck.class);
+        Card card = createMock(Card.class);
+
+        expect(deck.removeTopCard()).andReturn(card).times(6);
+        expect(prizeCards.addCard(card)).andReturn(true).times(6);
+
+        replay(deck, prizeCards);
+
+        Player p = new Player();
+        p.prizeCards = prizeCards;
+        p.deck = deck;
+        p.drawPrizeCards();
+
+        verify(deck, prizeCards);
+    }
+
+    @Test
+    public void testGetNumPrizeCards() {
+        Player player = new Player();
+        Deck prizeDeck = createMock(Deck.class);
+        expect(prizeDeck.size()).andReturn(3).once();
+
+        player.prizeCards = prizeDeck;
+
+        replay(prizeDeck);
+        assertEquals(3, player.getNumPrizeCards());
+        verify(prizeDeck);
+    }
+
+
+    @Test
+    public void testHealActivePokemon() {
+        Player player = new Player();
+        Pokemon active = createMock(Pokemon.class);
+        active.heal(20);
+
+        player.activePokemon = active;
+
+        replay(active);
+        player.healActivePokemon(20);
+        verify(active);
+    }
 }

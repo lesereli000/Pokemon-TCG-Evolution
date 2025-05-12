@@ -12,7 +12,6 @@ public class Player {
     protected Pokemon activePokemon;
     protected Deck prizeCards;
     private String name;
-    private int numPokemonDied;
     private boolean canAddEnergy;
     protected boolean hasActive;
 
@@ -29,18 +28,10 @@ public class Player {
         this.activePokemon = null;
         this.name = name;
         this.prizeCards = new Deck();
-        this.numPokemonDied = 0;
         this.canAddEnergy = true;
         this.hasActive = false;
 
     }
-
-//    public void createFullRandomDeck(Random rand) {
-//        this.deck.addEnergies(15, rand);
-//        this.deck.addRandomCards(45, rand);
-//        this.deck.shuffle();
-//        checkForBasics(rand);
-//    }
 
     public void createCustomDeck() {
         this.deck.createDeckFromFile("PokemonAndEnergy.txt");
@@ -57,13 +48,6 @@ public class Player {
         }
 
     }
-
-//    public void checkForBasics(Random rand) {
-//        while(this.deck.numberBasicPokemon() == 0) {
-//            this.deck = new Deck();
-//            createFullRandomDeck(rand);
-//        }
-//    }
 
     public ArrayList<Card> handAsList() {
         return hand.getCards();
@@ -83,11 +67,6 @@ public class Player {
         return name;
     }
 
-    public int getNumPokemonDied() { return numPokemonDied; }
-
-    public void pokemonDied() {
-        this.numPokemonDied = this.numPokemonDied + 1;
-    }
 
     public void drawStartingHand() {
         for (int i = 0; i < HAND_SIZE; i++) {
@@ -214,5 +193,9 @@ public class Player {
 
     public Deck getBench() {
         return bench;
+    }
+
+    public int getNumPrizeCards() {
+        return prizeCards.size();
     }
 }

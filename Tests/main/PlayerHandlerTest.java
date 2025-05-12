@@ -482,13 +482,12 @@ public class PlayerHandlerTest {
         Player p1 = createMock(Player.class);
 
         p1.pickupPrizeCard();
+        expect(p1.getNumPrizeCards()).andReturn(5);
         replay(p1);
 
         PlayerHandler handler = new PlayerHandler();
         handler.currentPlayer = p1;
-        handler.activePickupPrizeCard();
+        assertEquals(5, handler.activePickupPrizeCard());
         verify(p1);
     }
-
-
 }
