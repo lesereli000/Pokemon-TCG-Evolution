@@ -257,16 +257,33 @@ public class Game {
         int pokemonStage = evolution.getStage();
         if(pokemonStage != 0) {
             Player currentPlayer = playerHandler.getCurrentPlayer();
-            ArrayList<Card> onlyPokemon = playerHandler.getOnlyPokemonFromBench(1);
-            Card activePokemon = currentPlayer.getActivePokemon();
-            onlyPokemon.add(activePokemon);
+            ArrayList<Card> onlyPreEvolutions = playerHandler.getOnlyPreEvolutionsFromActivePlayer(evolution);
 
-            Pokemon basePokemon = displayEvolveInfo(onlyPokemon);
-            if(basePokemon != null) {
-                playerHandler.evolve(evolution, basePokemon);
+            if(onlyPreEvolutions.isEmpty()) {
+                gui.displayMessage("You have no Pokemon that can evolve into " + evolution.getName());
+            } else {
+                Pokemon basePokemon = displayEvolveInfo(onlyPreEvolutions);
+
+                if (basePokemon != null) {
+                    switch(playerHandler.evolve(evolution, basePokemon)){
+
+                        case "Error":
+                            gui.displayMessage("Evolution could not be completed");
+                            break;
+
+                        case "Active":
+                            gui.makeActiveCard(evolution, playerHandler.getPlayerTurn());
+                            break;
+
+                        case "Bench":
+                            gui.removeBenchCard(basePokemon, playerHandler.getPlayerTurn());
+                            gui.addBenchCard(evolution, playerHandler.getPlayerTurn());
+                            break;
+                    }
+                }
             }
         } else {
-            gui.displayMessage("This is a basic Pokemon and cannot evolve. Try adding this card to the bench if you have room!");
+            gui.displayMessage("This is a basic Pokemon, not an evolution. Try adding " + evolution.getName() + "to the bench if you have room!");
         }
     }
 

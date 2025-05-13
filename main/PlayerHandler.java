@@ -143,4 +143,14 @@ public class PlayerHandler {
         currentPlayer.pickupPrizeCard();
         return currentPlayer.getNumPrizeCards();
     }
+
+    public String evolve(Pokemon evolution, Pokemon evolvesFrom){
+        // TODO: make sure pokemon can only evolve once per turn
+        return currentPlayer.evolvePokemon(evolution, evolvesFrom);
+    }
+
+    public ArrayList<Card> getOnlyPreEvolutionsFromActivePlayer(Pokemon evolution) {
+        // TODO: remove pokemon that have already evolved this turn
+        return currentPlayer.getPreEvolutions(evolution);
+    }
 }

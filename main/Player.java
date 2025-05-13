@@ -1,7 +1,6 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Player {
     private static final int PRIZE_CARD_SIZE = 6;
@@ -167,15 +166,24 @@ public class Player {
         return deck.size();
     }
 
-    public boolean evolvePokemon(Card lastSelectedCard) {
-        Pokemon evolvedPokemon = (Pokemon) lastSelectedCard;
-        String evolvesFrom = evolvedPokemon.getEvolvesFrom();
-        if(bench.containsCardNamed(evolvesFrom)) {
-            Pokemon oldPokemon = (Pokemon) bench.getCardFromName(evolvesFrom);
-            replacePokemon(oldPokemon, evolvedPokemon);
-            return true;
+    public String evolvePokemon(Pokemon evolution, Pokemon evolvesFrom) {
+        // TODO: Prepare "evolution" to be inserted (damage, energies, conditions, attached cards, etc.)
+
+
+        hand.removeCard(evolution);
+
+        if(evolvesFrom == activePokemon) {
+            activePokemon = evolution;
+            return "Active";
         }
-        return false;
+
+        try{
+            bench.removeCard(evolvesFrom);
+            bench.addCard(evolution);
+            return "Bench";
+        } catch (InvalidMoveException e) {
+            return "Error";
+        }
     }
 
     protected boolean hasActive() {
@@ -197,5 +205,20 @@ public class Player {
 
     public int getNumPrizeCards() {
         return prizeCards.size();
+    }
+
+    public ArrayList<Card> getPreEvolutions(Pokemon evolution) {
+        ArrayList<Card> preEvs = new ArrayList<>();
+        if(activePokemon.getName().equals(evolution.getEvolvesFrom())) {
+            preEvs.add(activePokemon);
+        }
+
+        for(Card pokemon : bench.getOnlyPokemon()){
+            if(pokemon.getName().equals(evolution.getEvolvesFrom())) {
+                preEvs.add(pokemon);
+            }
+        }
+
+        return preEvs;
     }
 }
