@@ -515,6 +515,8 @@ public class GameGUI implements GUI {
         removeSelectedCardActionButtons();
         if (card.stage == 0) {
             selectedCardActionButtons.add(createLinkedButtonAction("Add Pokemon Bench", "AddToBench"));
+        } else {
+            selectedCardActionButtons.add(createLinkedButtonAction("Evolve to Pokemon", "Evolve"));
         }
     }
 
@@ -541,7 +543,6 @@ public class GameGUI implements GUI {
                 removeButton(btn);
                 selectedCardActionButtons.remove(btn);
             }
-
         }
     }
 
@@ -618,9 +619,6 @@ public class GameGUI implements GUI {
 
         return btn;
     }
-
-
-
 
     private JButton createLinkedButtonAttack(Attack currAttack) {
         JButton btn = new JButton(currAttack.name);

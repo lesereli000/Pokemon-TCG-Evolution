@@ -64,6 +64,7 @@ public class Game {
             case "Attack" -> handleAttackAction();
             case "Retreat" -> handleRetreatAction();
             case "CardInfo" -> displayCardInfo();
+            case "Evolve" -> handleEvolveAction();
         }
     }
 
@@ -233,12 +234,55 @@ public class Game {
         }
     }
 
-    public void handlePassTurnAction() {
+
+    protected void handlePassTurnAction() {
         boolean hasActiveAlready = playerHandler.passTurn();
         gui.updateTurn(playerHandler.getPlayerTurn());
         playerHandler.drawCardFromDeck();
         if(!hasActiveAlready) {
             selectActiveLoop();
+        }
+    }
+
+    protected void handleEvolveAction() {
+        Card lastSelectedCard = gui.getLastSelectedCard();
+        if(!(lastSelectedCard instanceof Pokemon)) {
+            gui.displayMessage("Pokemon has not been selected!");
+        } else {
+            handleEvolve((Pokemon)lastSelectedCard);
+        }
+    }
+
+    private void handleEvolve(Pokemon evolution) {
+        int pokemonStage = evolution.getStage();
+        if(pokemonStage != 0) {
+            Player currentPlayer = playerHandler.getCurrentPlayer();
+            ArrayList<Card> onlyPokemon = playerHandler.getOnlyPokemonFromBench(1);
+            Card activePokemon = currentPlayer.getActivePokemon();
+            onlyPokemon.add(activePokemon);
+
+            Pokemon basePokemon = displayEvolveInfo(onlyPokemon);
+            if(basePokemon != null) {
+                playerHandler.evolve(evolution, basePokemon);
+            }
+        } else {
+            gui.displayMessage("This is a basic Pokemon and cannot evolve. Try adding this card to the bench if you have room!");
+        }
+    }
+
+    protected Pokemon displayEvolveInfo(ArrayList<Card> pokemon) {
+        gui.displayMessage("Select Pokemon to evolve from");
+        gui.removeAllButtons();
+        gui.displayCards(pokemon);
+        gui.displayConfirmAndCancelButton();
+        gui.waitForAction();
+        if(gui.isCancelled()) return null;
+        Pokemon selectedPokemon = (Pokemon) gui.getLastSelectedCard();
+        if(!pokemon.contains(selectedPokemon)) {
+            gui.displayMessage("No Pokemon selected!");
+            return displayAddEnergyInfo(pokemon);
+        } else {
+            return selectedPokemon;
         }
     }
 
