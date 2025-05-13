@@ -98,10 +98,6 @@ public class Player {
         this.hand.removeCard(lastSelectedCard);
     }
 
-//    public boolean canRetreat() {
-//        return this.bench.size() != 0 && activePokemon.canRetreat();
-//    }
-
     public void retreat(Pokemon lastSelectedCard) {
         bench.removeCard(lastSelectedCard);
         bench.addCard(activePokemon);
@@ -169,7 +165,6 @@ public class Player {
     public String evolvePokemon(Pokemon evolution, Pokemon evolvesFrom) {
         // TODO: Prepare "evolution" to be inserted (damage, energies, conditions, attached cards, etc.)
 
-
         hand.removeCard(evolution);
 
         if(evolvesFrom == activePokemon) {
@@ -190,10 +185,6 @@ public class Player {
         return hasActive;
     }
 
-    protected void replacePokemon(Pokemon oldPokemon, Pokemon newPokemon) {
-
-    }
-
     protected void setNewActivePokemon(Pokemon newActive) {
         this.activePokemon = newActive;
         bench.removeCard(newActive);
@@ -209,12 +200,13 @@ public class Player {
 
     public ArrayList<Card> getPreEvolutions(Pokemon evolution) {
         ArrayList<Card> preEvs = new ArrayList<>();
-        if(activePokemon.getName().equals(evolution.getEvolvesFrom())) {
+        String evolvesFrom = evolution.getEvolvesFrom();
+        if(activePokemon.getName().equals(evolvesFrom)) {
             preEvs.add(activePokemon);
         }
 
         for(Card pokemon : bench.getOnlyPokemon()){
-            if(pokemon.getName().equals(evolution.getEvolvesFrom())) {
+            if(pokemon.getName().equals(evolvesFrom)) {
                 preEvs.add(pokemon);
             }
         }

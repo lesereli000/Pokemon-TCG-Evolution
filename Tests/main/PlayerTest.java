@@ -167,42 +167,6 @@ public class PlayerTest {
         verify(bench);
     }
 
-//    @Test
-//    public void testCanRetreat() {
-//        Player player = new Player();
-//        Deck bench = createMock(Deck.class);
-//        Pokemon active = createMock(Pokemon.class);
-//
-//        expect(bench.size()).andReturn(2);
-//        expect(active.canRetreat()).andReturn(true);
-//
-//        player.bench = bench;
-//        player.activePokemon = active;
-//
-//        replay(bench, active);
-//        assertTrue(player.canRetreat());
-//        verify(bench, active);
-//    }
-
-    @Test
-    public void testEvolvePokemonSuccess() {
-        Player player = new Player();
-        Deck bench = createMock(Deck.class);
-        Pokemon oldPokemon = createMock(Pokemon.class);
-        Pokemon evolvedPokemon = createMock(Pokemon.class);
-
-        expect(evolvedPokemon.getEvolvesFrom()).andReturn("Charmander");
-        expect(bench.containsCardNamed("Charmander")).andReturn(true);
-        expect(bench.getCardFromName("Charmander")).andReturn(oldPokemon);
-
-        player.bench = bench;
-
-        replay(bench, evolvedPokemon);
-
-        //assertTrue(player.evolvePokemon(evolvedPokemon, evolvesFrom));
-        verify(bench, evolvedPokemon);
-    }
-
     @Test
     public void testGetOnlyPokemonFromHand() {
         Player player = new Player();
@@ -346,23 +310,6 @@ public class PlayerTest {
         assertEquals(bench, player.getBench());
     }
 
-    //TODO: rewrite evolve tests
-    @Test
-    public void testEvolvePokemonFail() {
-        Player player = new Player();
-        Deck bench = createMock(Deck.class);
-        Pokemon evolved = createMock(Pokemon.class);
-
-        expect(evolved.getEvolvesFrom()).andReturn("Pikachu");
-        expect(bench.containsCardNamed("Pikachu")).andReturn(false);
-
-        player.bench = bench;
-
-        replay(bench, evolved);
-        //assertFalse(player.evolvePokemon(evolved, evolvesFrom));
-        verify(bench, evolved);
-    }
-
     @Test
     public void testDrawCardFailsWhenDeckEmpty() {
         Player player = new Player();
@@ -452,5 +399,117 @@ public class PlayerTest {
         replay(active);
         player.healActivePokemon(20);
         verify(active);
+    }
+
+    @Test
+    public void testEvolvePokemonActive() {
+        Pokemon p1 = createMock(Pokemon.class);
+        Pokemon p2 = createMock(Pokemon.class);
+        Deck hand = createMock(Deck.class);
+
+        expect(hand.removeCard(p1)).andReturn(true);
+
+        replay(hand);
+        Player player = new Player();
+        player.activePokemon = p2;
+        player.hand = hand;
+        player.evolvePokemon(p1, p2);
+        verify(hand);
+    }
+
+    @Test
+    public void testEvolvePokemonBench() {
+        Pokemon p1 = createMock(Pokemon.class);
+        Pokemon p2 = createMock(Pokemon.class);
+        Pokemon active = createMock(Pokemon.class);
+        Deck hand = createMock(Deck.class);
+        Deck bench = createMock(Deck.class);
+
+        expect(hand.removeCard(p1)).andReturn(true);
+        expect(bench.removeCard(p2)).andReturn(true);
+        expect(bench.addCard(p1)).andReturn(true);
+
+        replay(hand, bench);
+        Player player = new Player();
+        player.activePokemon = active;
+        player.hand = hand;
+        player.bench = bench;
+        player.evolvePokemon(p1, p2);
+        verify(hand);
+    }
+
+    @Test
+    public void testPreEvsEmpty() {
+        Pokemon p = createMock(Pokemon.class);
+        Pokemon active = createMock(Pokemon.class);
+        Deck bench = createMock(Deck.class);
+        ArrayList<Card> cards = new ArrayList<>();
+
+        expect(active.getName()).andReturn("Charizard");
+        expect(p.getEvolvesFrom()).andReturn("Pikachu");
+        expect(bench.getOnlyPokemon()).andReturn(cards);
+
+        replay(active, p, bench);
+
+        Player player = new Player();
+        player.activePokemon = active;
+        player.bench = bench;
+        player.getPreEvolutions(p);
+
+        verify(active, p, bench);
+    }
+
+    @Test
+    public void testPreEvsActive() {
+        Pokemon p = createMock(Pokemon.class);
+        Pokemon active = createMock(Pokemon.class);
+        Deck bench = createMock(Deck.class);
+        ArrayList<Card> cards = new ArrayList<>();
+
+        expect(active.getName()).andReturn("Pikachu");
+        expect(p.getEvolvesFrom()).andReturn("Pikachu");
+        expect(bench.getOnlyPokemon()).andReturn(cards);
+
+        replay(active, p, bench);
+
+        Player player = new Player();
+        player.activePokemon = active;
+        player.bench = bench;
+        player.getPreEvolutions(p);
+
+        verify(active, p, bench);
+    }
+
+    @Test
+    public void testPreEvsManyPokemon() {
+        Pokemon p = createMock(Pokemon.class);
+        Pokemon p2 = createMock(Pokemon.class);
+        Pokemon p3 = createMock(Pokemon.class);
+        Pokemon p4 = createMock(Pokemon.class);
+        Pokemon p5 = createMock(Pokemon.class);
+        Pokemon active = createMock(Pokemon.class);
+        Deck bench = createMock(Deck.class);
+        ArrayList<Card> cards = new ArrayList<>();
+        cards.add(p2);
+        cards.add(p3);
+        cards.add(p4);
+        cards.add(p5);
+
+        expect(active.getName()).andReturn("Charizard");
+        expect(p.getEvolvesFrom()).andReturn("Pikachu");
+        expect(bench.getOnlyPokemon()).andReturn(cards);
+        expect(p2.getName()).andReturn("Pikachu");
+        expect(p3.getName()).andReturn("Pikachu");
+        expect(p4.getName()).andReturn("Pikachu");
+        expect(p5.getName()).andReturn("Pikachu");
+
+        replay(active, p, p2, p3, p4, p5, bench);
+
+        Player player = new Player();
+        player.activePokemon = active;
+        player.bench = bench;
+        player.getPreEvolutions(p);
+
+        verify(active, p, p2, p3, p4, p5, bench);
     }
 }

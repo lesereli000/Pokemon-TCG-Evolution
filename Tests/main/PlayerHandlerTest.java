@@ -490,4 +490,36 @@ public class PlayerHandlerTest {
         assertEquals(5, handler.activePickupPrizeCard());
         verify(p1);
     }
+
+    @Test
+    public void testEvolve() {
+        Player p = createMock(Player.class);
+        Pokemon p1 = createMock(Pokemon.class);
+        Pokemon p2 = createMock(Pokemon.class);
+
+        expect(p.evolvePokemon(p1, p2)).andReturn("");
+
+        replay(p, p1, p2);
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = p;
+        handler.evolve(p1, p2);
+
+        verify(p, p1, p2);
+    }
+
+    @Test
+    public void testGetOnlyPreEvolutionsFromActivePlayer() {
+        Player p = createMock(Player.class);
+        Pokemon p1 = createMock(Pokemon.class);
+        ArrayList<Card> cards = createMock(ArrayList.class);
+
+        expect(p.getPreEvolutions(p1)).andReturn(cards);
+
+        replay(p, p1);
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = p;
+        handler.getOnlyPreEvolutionsFromActivePlayer(p1);
+
+        verify(p, p1);
+    }
 }

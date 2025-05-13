@@ -256,17 +256,14 @@ public class Game {
     private void handleEvolve(Pokemon evolution) {
         int pokemonStage = evolution.getStage();
         if(pokemonStage != 0) {
-            Player currentPlayer = playerHandler.getCurrentPlayer();
             ArrayList<Card> onlyPreEvolutions = playerHandler.getOnlyPreEvolutionsFromActivePlayer(evolution);
 
             if(onlyPreEvolutions.isEmpty()) {
                 gui.displayMessage("You have no Pokemon that can evolve into " + evolution.getName());
             } else {
                 Pokemon basePokemon = displayEvolveInfo(onlyPreEvolutions);
-
                 if (basePokemon != null) {
                     switch(playerHandler.evolve(evolution, basePokemon)){
-
                         case "Error":
                             gui.displayMessage("Evolution could not be completed");
                             break;
@@ -276,14 +273,15 @@ public class Game {
                             break;
 
                         case "Bench":
-                            gui.removeBenchCard(basePokemon, playerHandler.getPlayerTurn());
-                            gui.addBenchCard(evolution, playerHandler.getPlayerTurn());
+                            int playerTurn = playerHandler.getPlayerTurn();
+                            gui.removeBenchCard(basePokemon, playerTurn);
+                            gui.addBenchCard(evolution, playerTurn);
                             break;
                     }
                 }
             }
         } else {
-            gui.displayMessage("This is a basic Pokemon, not an evolution. Try adding " + evolution.getName() + "to the bench if you have room!");
+            gui.displayMessage("This is a basic Pokemon, not an evolution. Try adding " + evolution.getName() + " to the bench if you have room!");
         }
     }
 
@@ -297,7 +295,7 @@ public class Game {
         Pokemon selectedPokemon = (Pokemon) gui.getLastSelectedCard();
         if(!pokemon.contains(selectedPokemon)) {
             gui.displayMessage("No Pokemon selected!");
-            return displayAddEnergyInfo(pokemon);
+            return displayEvolveInfo(pokemon);
         } else {
             return selectedPokemon;
         }

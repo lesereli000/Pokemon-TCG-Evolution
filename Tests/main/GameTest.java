@@ -1402,6 +1402,224 @@ public class GameTest {
         verify(gui, handler);
     }
 
+    @Test
+    public void testMainGameLoopEvolveNotPokemon() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame gameSetup = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        ArrayList<Card> cards = createMock(ArrayList.class);
+        Trainer t = createMock(Trainer.class);
+
+        expect(handler.getCurrentPlayerHand()).andReturn(cards);
+        gui.removeAllButtons();
+        gui.displayCards(cards);
+        gui.displayActionButtons();
+        expect(gui.waitForButtonPressed()).andReturn("Evolve");
+        expect(gui.getLastSelectedCard()).andReturn(t);
+        gui.displayMessage("Pokemon has not been selected!");
+
+        replay(gui, handler);
+
+        Game game = new Game(gui, rand, gameSetup, handler);
+        game.mainGameLoop();
+
+        verify(gui, handler);
+    }
+
+    @Test
+    public void testEvolveActionBasic() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame gameSetup = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Pokemon p = createMock(Pokemon.class);
+
+        expect(gui.getLastSelectedCard()).andReturn(p);
+        expect(p.getStage()).andReturn(0);
+        expect(p.getName()).andReturn("Pikachu");
+        gui.displayMessage("This is a basic Pokemon, not an evolution. Try adding Pikachu to the bench if you have room!");
+
+        replay(gui, p);
+
+        Game game = new Game(gui, rand, gameSetup, handler);
+        game.handleEvolveAction();
+
+        verify(gui, p);
+    }
+
+    @Test
+    public void testEvolveActionNoPreEvols() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame gameSetup = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Pokemon p = createMock(Pokemon.class);
+        ArrayList<Card> cards = createMock(ArrayList.class);
+
+        expect(gui.getLastSelectedCard()).andReturn(p);
+        expect(p.getStage()).andReturn(1);
+        expect(handler.getOnlyPreEvolutionsFromActivePlayer(p)).andReturn(cards);
+        expect(cards.isEmpty()).andReturn(true);
+        expect(p.getName()).andReturn("Pikachu");
+        gui.displayMessage("You have no Pokemon that can evolve into Pikachu");
+
+        replay(gui, p, handler, cards);
+
+        Game game = new Game(gui, rand, gameSetup, handler);
+        game.handleEvolveAction();
+
+        verify(gui, p, handler, cards);
+    }
+
+    @Test
+    public void testEvolveActionCancelled() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame gameSetup = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Pokemon p = createMock(Pokemon.class);
+        ArrayList<Card> cards = createMock(ArrayList.class);
+
+        expect(gui.getLastSelectedCard()).andReturn(p);
+        expect(p.getStage()).andReturn(1);
+        expect(handler.getOnlyPreEvolutionsFromActivePlayer(p)).andReturn(cards);
+        expect(cards.isEmpty()).andReturn(false);
+
+        //displayEvolveInfo
+        gui.displayMessage("Select Pokemon to evolve from");
+        gui.removeAllButtons();
+        gui.displayCards(cards);
+        gui.displayConfirmAndCancelButton();
+        gui.waitForAction();
+        expect(gui.isCancelled()).andReturn(true);
+
+        replay(gui, p, handler, cards);
+
+        Game game = new Game(gui, rand, gameSetup, handler);
+        game.handleEvolveAction();
+
+        verify(gui, p, handler, cards);
+    }
+
+    @Test
+    public void testEvolveActionNoPokemonSelectedFirstError() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame gameSetup = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Pokemon p = createMock(Pokemon.class);
+        Pokemon p2 = createMock(Pokemon.class);
+        ArrayList<Card> cards = createMock(ArrayList.class);
+
+        expect(gui.getLastSelectedCard()).andReturn(p);
+        expect(p.getStage()).andReturn(1);
+        expect(handler.getOnlyPreEvolutionsFromActivePlayer(p)).andReturn(cards);
+        expect(cards.isEmpty()).andReturn(false);
+
+        //displayEvolveInfo
+        gui.displayMessage("Select Pokemon to evolve from");
+        gui.removeAllButtons();
+        gui.displayCards(cards);
+        gui.displayConfirmAndCancelButton();
+        gui.waitForAction();
+        expect(gui.isCancelled()).andReturn(false);
+        expect(gui.getLastSelectedCard()).andReturn(p2);
+        expect(cards.contains(p2)).andReturn(false);
+        gui.displayMessage("No Pokemon selected!");
+
+        //displayEvolveInfo again
+        gui.displayMessage("Select Pokemon to evolve from");
+        gui.removeAllButtons();
+        gui.displayCards(cards);
+        gui.displayConfirmAndCancelButton();
+        gui.waitForAction();
+        expect(gui.isCancelled()).andReturn(false);
+        expect(gui.getLastSelectedCard()).andReturn(p2);
+        expect(cards.contains(p2)).andReturn(true);
+        expect(handler.evolve(p, p2)).andReturn("Error");
+        gui.displayMessage("Evolution could not be completed");
+
+        replay(gui, p, handler, cards);
+
+        Game game = new Game(gui, rand, gameSetup, handler);
+        game.handleEvolveAction();
+
+        verify(gui, p, handler, cards);
+    }
+
+    @Test
+    public void testEvolveActionActivePokemon() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame gameSetup = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Pokemon p = createMock(Pokemon.class);
+        Pokemon p2 = createMock(Pokemon.class);
+        ArrayList<Card> cards = createMock(ArrayList.class);
+
+        expect(gui.getLastSelectedCard()).andReturn(p);
+        expect(p.getStage()).andReturn(1);
+        expect(handler.getOnlyPreEvolutionsFromActivePlayer(p)).andReturn(cards);
+        expect(cards.isEmpty()).andReturn(false);
+
+        //displayEvolveInfo again
+        gui.displayMessage("Select Pokemon to evolve from");
+        gui.removeAllButtons();
+        gui.displayCards(cards);
+        gui.displayConfirmAndCancelButton();
+        gui.waitForAction();
+        expect(gui.isCancelled()).andReturn(false);
+        expect(gui.getLastSelectedCard()).andReturn(p2);
+        expect(cards.contains(p2)).andReturn(true);
+        expect(handler.evolve(p, p2)).andReturn("Active");
+        expect(handler.getPlayerTurn()).andReturn(1);
+        gui.makeActiveCard(p, 1);
+
+        replay(gui, p, handler, cards);
+
+        Game game = new Game(gui, rand, gameSetup, handler);
+        game.handleEvolveAction();
+
+        verify(gui, p, handler, cards);
+    }
+
+    @Test
+    public void testEvolveActionBenchPokemon() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame gameSetup = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Pokemon p = createMock(Pokemon.class);
+        Pokemon p2 = createMock(Pokemon.class);
+        ArrayList<Card> cards = createMock(ArrayList.class);
+
+        expect(gui.getLastSelectedCard()).andReturn(p);
+        expect(p.getStage()).andReturn(1);
+        expect(handler.getOnlyPreEvolutionsFromActivePlayer(p)).andReturn(cards);
+        expect(cards.isEmpty()).andReturn(false);
+
+        //displayEvolveInfo again
+        gui.displayMessage("Select Pokemon to evolve from");
+        gui.removeAllButtons();
+        gui.displayCards(cards);
+        gui.displayConfirmAndCancelButton();
+        gui.waitForAction();
+        expect(gui.isCancelled()).andReturn(false);
+        expect(gui.getLastSelectedCard()).andReturn(p2);
+        expect(cards.contains(p2)).andReturn(true);
+        expect(handler.evolve(p, p2)).andReturn("Bench");
+        expect(handler.getPlayerTurn()).andReturn(1);
+        gui.removeBenchCard(p2, 1);
+        gui.addBenchCard(p, 1);
+
+        replay(gui, p, handler, cards);
+
+        Game game = new Game(gui, rand, gameSetup, handler);
+        game.handleEvolveAction();
+
+        verify(gui, p, handler, cards);
+    }
 
 }
 
