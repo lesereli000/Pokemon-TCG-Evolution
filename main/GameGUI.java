@@ -450,13 +450,18 @@ public class GameGUI implements GUI {
     @Override
     public void displayPokemonReport(Pokemon pokemon) {
         StringBuilder report = new StringBuilder();
+        int stage = pokemon.getStage();
         //General info
         report.append("Pokemon Report:\n\n");
         report.append("Name: ").append(pokemon.getName()).append("\n");
-        report.append("Stage: ").append(pokemon.getStage()).append("\n");
+        report.append("Stage: ").append(stage).append("\n");
         report.append("Type: ").append(pokemon.type).append("\n");
         report.append("HP: ").append(pokemon.getCurHP()).append("\n");
         report.append("Retreat Cost: ").append(pokemon.retreatCost).append(" Colorless Energy\n");
+        if(stage > 0) {
+            report.append("Evolves From: ").append(pokemon.getEvolvesFrom()).append("\n");
+        }
+
 
         //Energies
         report.append("\nAttached Energies:\n");
