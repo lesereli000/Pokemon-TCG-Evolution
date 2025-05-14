@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Random;
 
 public class Game {
@@ -9,6 +10,7 @@ public class Game {
     protected SetupGame gameSetup;
     protected PlayerHandler playerHandler;
     protected boolean gameOver;
+    protected Locale locale;
 
     public Game(GUI gui, Random random, SetupGame gameSetup, PlayerHandler playerHandler) {
         this.gui = gui;
@@ -19,6 +21,7 @@ public class Game {
     }
 
     protected void setupGame() {
+        decideLocale();
         setupFlipButton();
         String coinFlipResult = gameSetup.completeGameSetup();
         playerHandler.completePlayerSetup(coinFlipResult);
@@ -29,6 +32,11 @@ public class Game {
         while(!gameOver) {
             mainGameLoop();
         }
+    }
+
+    private void decideLocale() {
+        locale = gui.displayLocaleOptions();
+        gui.displayMessage("You have chosen: " + locale.getLanguage());
     }
 
     protected void displaySetupResults(String coinFlipResult, Player currentPlayer) {
@@ -156,7 +164,7 @@ public class Game {
         if(!gameOver) {
             Card lastSelectedCard = gui.getLastSelectedCard();
 
-            if(!activeBench.contains(lastSelectedCard) || !checkBasicPokemon(lastSelectedCard)) {
+            if(!activeBench.contains(lastSelectedCard)) {
                 gui.displayMessage("Invalid Pokemon entry!");
                 handleDeadActive();
             } else {

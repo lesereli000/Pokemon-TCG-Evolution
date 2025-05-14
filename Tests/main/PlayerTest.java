@@ -210,6 +210,31 @@ public class PlayerTest {
         verify(hand, pokemon);
     }
 
+    @Test
+    public void testEmptyStartingHand() {
+        Deck hand = createMock(Deck.class);
+        Deck deck = createMock(Deck.class);
+        Card card = createMock(Card.class);
+
+        expect(hand.removeTopCard()).andReturn(card).times(7);
+        expect(deck.addCard(card)).andReturn(true).times(7);
+
+        expect(deck.size()).andReturn(0).anyTimes();
+        expect(hand.numberBasicPokemon()).andReturn(0);
+
+        expect(deck.shuffle()).andReturn(true);
+
+        //draw again
+        expect(hand.numberBasicPokemon()).andReturn(1);
+
+        replay(deck, hand);
+        Player p = new Player();
+        p.hand = hand;
+        p.deck = deck;
+        p.drawStartingHand();
+        verify(deck, hand);
+    }
+
 
     @Test
     public void testGetActiveHP() {
@@ -413,7 +438,7 @@ public class PlayerTest {
         Player player = new Player();
         player.activePokemon = p2;
         player.hand = hand;
-        player.evolvePokemon(p1, p2);
+        assertEquals("Active", player.evolvePokemon(p1, p2));
         verify(hand);
     }
 
@@ -434,7 +459,7 @@ public class PlayerTest {
         player.activePokemon = active;
         player.hand = hand;
         player.bench = bench;
-        player.evolvePokemon(p1, p2);
+        assertEquals("Bench", player.evolvePokemon(p1, p2));
         verify(hand);
     }
 
@@ -511,5 +536,27 @@ public class PlayerTest {
         player.getPreEvolutions(p);
 
         verify(active, p, p2, p3, p4, p5, bench);
+    }
+
+    @Test
+    public void testEvolveError() {
+
+        Pokemon p1 = createMock(Pokemon.class);
+        Pokemon p2 = createMock(Pokemon.class);
+        Deck hand = createMock(Deck.class);
+        Deck bench = createMock(Deck.class);
+        InvalidMoveException e = createMock(InvalidMoveException.class);
+
+        expect(hand.removeCard(p1)).andReturn(true);
+        expect(bench.removeCard(p2)).andThrow(e);
+
+        replay(hand, bench);
+
+        Player p = new Player();
+        p.hand = hand;
+        p.bench = bench;
+        assertEquals("Error", p.evolvePokemon(p1, p2));
+
+        verify(hand, bench);
     }
 }

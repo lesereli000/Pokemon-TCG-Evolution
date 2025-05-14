@@ -2,6 +2,7 @@ package main;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Locale;
 import javax.swing.*;
 
 
@@ -66,6 +67,7 @@ public class GameGUI implements GUI {
     private volatile String lastActionButtonPressed;
     private int playerTurn = 0;
     private boolean cancelled;
+    public Locale locale;
 
 
     private class GamePanel extends JPanel {
@@ -433,6 +435,38 @@ public class GameGUI implements GUI {
     @Override
     public boolean isCancelled() {
         return cancelled;
+    }
+
+    @Override
+    public Locale displayLocaleOptions() {
+        displayMessage("Select a language!\n\nWählen Sie eine Sprache aus!");
+        JButton engBtn = new JButton("English");
+        JButton germanBtn = new JButton("German");
+
+        buttons.add(engBtn);
+        handPanel.add(engBtn);
+        buttons.add(germanBtn);
+        handPanel.add(germanBtn);
+        handPanel.repaint();
+        frame.revalidate();
+        frame.repaint();
+
+        engBtn.addActionListener(e -> {
+            this.waitForAction = true;
+            locale = Locale.US;
+            removeButton(engBtn);
+            removeButton(germanBtn);
+        });
+
+        germanBtn.addActionListener(e -> {
+            this.waitForAction = true;
+            locale = Locale.GERMANY;
+            removeButton(engBtn);
+            removeButton(germanBtn);
+        });
+
+        waitForButtonPressed();
+        return locale;
     }
 
     public String generateAttackReport(ArrayList<Attack> attacks) {

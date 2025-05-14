@@ -3,6 +3,7 @@ package main;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public interface GUI {
     void createGUI();
@@ -63,4 +64,6 @@ public interface GUI {
     boolean hasCardSelected();
 
     boolean isCancelled();
+
+    Locale displayLocaleOptions();
 }

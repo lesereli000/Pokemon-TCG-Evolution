@@ -33,7 +33,7 @@ public class Player {
     }
 
     public void createCustomDeck() {
-        this.deck.createDeckFromFile("PokemonAndEnergy.txt");
+        this.deck.createDeckFromFile("Overgrowth.txt");
         this.deck.shuffle();
     }
 
@@ -88,8 +88,10 @@ public class Player {
 
     public void addBenchPokemon(Card newPokemon) {
         if(this.bench.size() < 5){
+            System.out.println("4");
             this.bench.addCard(newPokemon);
         } else {
+            System.out.println("5");
             throw new InvalidMoveException(this.name +"'s Bench is Full");
         }
     }
@@ -202,11 +204,13 @@ public class Player {
         ArrayList<Card> preEvs = new ArrayList<>();
         String evolvesFrom = evolution.getEvolvesFrom();
         if(activePokemon.getName().equals(evolvesFrom)) {
+            System.out.println("9");
             preEvs.add(activePokemon);
         }
 
         for(Card pokemon : bench.getOnlyPokemon()){
             if(pokemon.getName().equals(evolvesFrom)) {
+                System.out.println("10");
                 preEvs.add(pokemon);
             }
         }

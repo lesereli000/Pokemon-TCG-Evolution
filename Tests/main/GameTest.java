@@ -3,6 +3,7 @@ package main;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Random;
 
 import static org.easymock.EasyMock.*;
@@ -399,6 +400,9 @@ public class GameTest {
         gui.removeAllButtons();
         gui.displayCards(hand);
 
+        expect(gui.displayLocaleOptions()).andReturn(Locale.US);
+        gui.displayMessage("You have chosen: en");
+
         replay(gui, rand, setupGame, handler, player, p);
 
         Game game = new Game(gui, rand, setupGame, handler);
@@ -680,26 +684,19 @@ public class GameTest {
         gui.waitForAction();
 
         //handleDeadActive
-        expect(gui.getLastSelectedCard()).andReturn(p).times(2);
-        expect(p.getStage()).andReturn(1).andReturn(0);
-        gui.displayMessage("Invalid Pokemon entry!");
+        expect(gui.getLastSelectedCard()).andReturn(p);
 
-        //run it back
-        expect(handler.getOnlyPokemonFromBench(2)).andReturn(cards);
-        gui.removeAllButtons();
-        gui.displayCards(cards);
-        gui.displayConfirmAndCancelButton();
-        gui.waitForAction();
-        expect(handler.getPlayerTurn()).andReturn(1);
+
+        //pickup prize card
+        expect(handler.activePickupPrizeCard()).andReturn(5);
+        gui.removePrizeCard(1);
         handler.killDefenderActive(p);
         gui.makeActiveCard(p, 2);
         gui.removeBenchCard(p, 2);
-        expect(handler.activePickupPrizeCard()).andReturn(6);
-        gui.removePrizeCard(1);
 
         //pass turn
         expect(handler.passTurn()).andReturn(true);
-        expect(handler.getPlayerTurn()).andReturn(1);
+        expect(handler.getPlayerTurn()).andReturn(1).times(2);
         handler.drawCardFromDeck();
         gui.updateTurn(1);
         expect(gui.isCancelled()).andReturn(false);
@@ -846,52 +843,7 @@ public class GameTest {
         gui.makeActiveCard(selectedPokemon, 2);
         gui.removeBenchCard(selectedPokemon, 2);
 
-        expect(selectedPokemon.getStage()).andReturn(0);
         handler.killDefenderActive(selectedPokemon);
-        expect(handler.activePickupPrizeCard()).andReturn(6);
-        gui.removePrizeCard(1);
-
-        replay(gui, handler, selectedPokemon);
-
-        Game game = new Game(gui, rand, setupGame, handler);
-        game.handleDeadActive();
-
-        verify(gui, handler, selectedPokemon);
-    }
-
-    @Test
-    public void testHandleDeadActiveWithNonBasicPokemon() {
-        GameGUI gui = createMock(GameGUI.class);
-        Random rand = createMock(Random.class);
-        SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
-        Pokemon selectedPokemon = createMock(Pokemon.class);
-
-        ArrayList<Card> bench = new ArrayList<>();
-        bench.add(selectedPokemon);
-
-        expect(handler.getOnlyPokemonFromBench(2)).andReturn(bench).times(2);
-
-        gui.removeAllButtons();
-        gui.displayCards(bench);
-        gui.displayConfirmAndCancelButton();
-        gui.waitForAction();
-        expect(gui.getLastSelectedCard()).andReturn(selectedPokemon);
-
-        // Not a basic Pokémon
-        expect(selectedPokemon.getStage()).andReturn(1).andReturn(0);
-        gui.displayMessage("Invalid Pokemon entry!");
-
-        gui.removeAllButtons();
-        gui.displayCards(bench);
-        gui.displayConfirmAndCancelButton();
-        gui.waitForAction();
-        expect(gui.getLastSelectedCard()).andReturn(selectedPokemon);
-
-        expect(handler.getPlayerTurn()).andReturn(1);
-        handler.killDefenderActive(selectedPokemon);
-        gui.makeActiveCard(selectedPokemon, 2);
-        gui.removeBenchCard(selectedPokemon, 2);
         expect(handler.activePickupPrizeCard()).andReturn(6);
         gui.removePrizeCard(1);
 
@@ -923,7 +875,6 @@ public class GameTest {
         expect(gui.getLastSelectedCard()).andReturn(null);
 
         // Not a basic Pokémon
-        expect(selectedPokemon.getStage()).andReturn(0);
         gui.displayMessage("Invalid Pokemon entry!");
 
         gui.removeAllButtons();
