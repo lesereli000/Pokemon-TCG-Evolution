@@ -11,7 +11,6 @@ import static org.junit.Assert.*;
 
 public class GameTest {
 
-
     @Test
     public void testMakeFlipCoinButton() {
         GameGUI gui = createMock(GameGUI.class);
@@ -237,7 +236,6 @@ public class GameTest {
 
         verify(gui, player, handler);
     }
-
 
     @Test
     public void testSelectActiveLoopBasic() {
@@ -1567,6 +1565,48 @@ public class GameTest {
         replay(gui, p, handler, cards);
 
         Game game = new Game(gui, rand, gameSetup, handler);
+        game.handleEvolveAction();
+
+        verify(gui, p, handler, cards);
+    }
+
+    @Test
+    public void testEvolveActionJustPlayedPokemon() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame gameSetup = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Pokemon p = createMock(Pokemon.class);
+        Pokemon p2 = createMock(Pokemon.class);
+        ArrayList<Card> cards = createMock(ArrayList.class);
+
+        expect(gui.getLastSelectedCard()).andReturn(p2);
+        expect(p2.getStage()).andReturn(0);
+        handler.addToBench(p2);
+        expect(handler.getPlayerTurn()).andReturn(1);
+        gui.addBenchCard(p2, 1);
+
+        expect(gui.getLastSelectedCard()).andReturn(p);
+        expect(p.getStage()).andReturn(1);
+        expect(handler.getOnlyPreEvolutionsFromActivePlayer(p)).andReturn(cards);
+        expect(cards.isEmpty()).andReturn(false);
+
+        //displayEvolveInfo again
+        gui.displayMessage("Select Pokemon to evolve from");
+        gui.removeAllButtons();
+        gui.displayCards(cards);
+        gui.displayConfirmAndCancelButton();
+        gui.waitForAction();
+        expect(gui.isCancelled()).andReturn(false);
+        expect(gui.getLastSelectedCard()).andReturn(p2);
+        expect(cards.contains(p2)).andReturn(true);
+        expect(handler.evolve(p, p2)).andReturn("JustPlayed");
+        gui.displayMessage("Base Pokemon was just played");
+
+        replay(gui, p, handler, cards);
+
+        Game game = new Game(gui, rand, gameSetup, handler);
+        game.handleBenchAction();
         game.handleEvolveAction();
 
         verify(gui, p, handler, cards);
