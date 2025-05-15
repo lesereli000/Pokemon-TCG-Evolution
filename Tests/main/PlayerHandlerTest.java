@@ -544,19 +544,20 @@ public class PlayerHandlerTest {
 
     @Test
     public void testPlayTrainer(){
-        Player p1 = createMock(Player.class);
+        Player p1 = new Player();
         Player p2 = createMock(Player.class);
         Trainer trainer = createMock(Trainer.class);
-
+        Deck hand = createMock(Deck.class);
+        p1.hand = hand;
         trainer.doEffects(p1, p2);
-
-        replay(trainer);
+        expect(hand.removeCard(trainer)).andReturn(true);
+        replay(trainer,hand);
 
         PlayerHandler ph = new PlayerHandler();
         ph.currentPlayer = p1;
         ph.defendingPlayer = p2;
         ph.playTrainerCard(trainer);
 
-        verify(trainer);
+        verify(trainer, hand);
     }
 }

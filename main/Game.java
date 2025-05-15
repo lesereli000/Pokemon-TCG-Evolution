@@ -265,6 +265,7 @@ public class Game {
         }
     }
     private void handlePlayTrainer(Trainer trainer) {
+
         playerHandler.playTrainerCard(trainer);
     }
 

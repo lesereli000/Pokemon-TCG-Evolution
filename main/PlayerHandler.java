@@ -157,6 +157,7 @@ public class PlayerHandler {
 
     public void playTrainerCard(Trainer trainer) {
         trainer.doEffects(currentPlayer,defendingPlayer);
+        currentPlayer.hand.removeCard(trainer);
     }
 
     public ArrayList<Card> getOnlyPreEvolutionsFromActivePlayer(Pokemon evolution) {
