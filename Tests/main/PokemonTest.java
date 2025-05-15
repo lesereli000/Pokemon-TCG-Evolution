@@ -532,4 +532,46 @@ public class PokemonTest {
         Pokemon p = (Pokemon) pg.generateCard("Kakuna");
         assertEquals("Weedle", p.evolvesFrom);
     }
+
+    @Test
+    public void testGetDamageCounters(){
+        Pokemon p = new Pokemon("Pikachu", "Lightning", 1, 40);
+
+        p.takeDamage(2, "");
+        assertEquals(2, p.getDamageCounters());
+
+        p.takeDamage(1, "");
+        assertEquals(3, p.getDamageCounters());
+
+    }
+
+    @Test
+    public void testGetEnergies(){
+        Pokemon p = new Pokemon("Pikachu", "Lightning", 1, 40);
+
+        p.addEnergy(createMock(Energy.class));
+        p.addEnergy(createMock(Energy.class));
+        assertEquals(2, p.getEnergies().size());
+
+        p.addEnergy(createMock(Energy.class));
+        assertEquals(3, p.getEnergies().size());
+
+        p.addEnergy(createMock(Energy.class));
+        assertEquals(4, p.getEnergies().size());
+    }
+
+    @Test
+    public void testAddEnergies(){
+        Pokemon p = new Pokemon("Pikachu", "Lightning", 1, 40);
+        ArrayList<Energy> energies = new ArrayList<>();
+        energies.add(createMock(Energy.class));
+        energies.add(createMock(Energy.class));
+
+        p.addEnergies(energies);
+        assertEquals(2, p.getEnergies().size());
+
+        p.addEnergies(energies);
+        assertEquals(4, p.getEnergies().size());
+
+    }
 }
