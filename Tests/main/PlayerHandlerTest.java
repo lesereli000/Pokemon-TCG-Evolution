@@ -539,6 +539,6 @@ public class PlayerHandlerTest {
         String result = handler.evolve(p1, p2);
 
         assertEquals("JustPlayed", result);
-        verify(p, p1, p2);
+        verify(p, p1, p2, justPlayed);
     }
 }
