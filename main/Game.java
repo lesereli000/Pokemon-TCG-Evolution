@@ -73,8 +73,11 @@ public class Game {
             case "Retreat" -> handleRetreatAction();
             case "CardInfo" -> displayCardInfo();
             case "Evolve" -> handleEvolveAction();
+            case "PlayTrainer" -> handleTrainerAction();
         }
     }
+
+
 
     protected void displayCardInfo() {
         boolean hasCardSelected = gui.hasCardSelected();
@@ -188,6 +191,7 @@ public class Game {
         }
     }
 
+
     private void displayDeadActiveGUI(ArrayList<Card> playerPokemon) {
         if(playerPokemon.isEmpty()) {
             Player winner = playerHandler.getCurrentPlayer();
@@ -250,6 +254,18 @@ public class Game {
         if(!hasActiveAlready) {
             selectActiveLoop();
         }
+    }
+
+    protected void handleTrainerAction() {
+        Card lastSelectedCard = gui.getLastSelectedCard();
+        if(!(lastSelectedCard instanceof Trainer)) {
+            gui.displayMessage("Trainer has not been selected!");
+        } else {
+            handlePlayTrainer((Trainer)lastSelectedCard);
+        }
+    }
+    private void handlePlayTrainer(Trainer trainer) {
+        playerHandler.playTrainerCard(trainer);
     }
 
     protected void handleEvolveAction() {

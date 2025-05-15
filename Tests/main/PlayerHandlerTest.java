@@ -541,4 +541,22 @@ public class PlayerHandlerTest {
         assertEquals("JustPlayed", result);
         verify(p, p1, p2, justPlayed);
     }
+
+    @Test
+    public void testPlayTrainer(){
+        Player p1 = createMock(Player.class);
+        Player p2 = createMock(Player.class);
+        Trainer trainer = createMock(Trainer.class);
+
+        trainer.doEffects(p1, p2);
+
+        replay(trainer);
+
+        PlayerHandler ph = new PlayerHandler();
+        ph.currentPlayer = p1;
+        ph.defendingPlayer = p2;
+        ph.playTrainerCard(trainer);
+
+        verify(trainer);
+    }
 }

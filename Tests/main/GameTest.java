@@ -70,7 +70,7 @@ public class GameTest {
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
         player.setActivePokemon(p);
-        gui.makeActiveCard(p,1);
+        gui.makeActiveCard(p, 1);
         expect(handler.getPlayerTurn()).andReturn(1);
         expect(handler.getCurrentPlayer()).andReturn(player);
         replay(gui, player, handler);
@@ -594,7 +594,7 @@ public class GameTest {
         expect(handler.getPlayerTurn()).andReturn(1);
         handler.drawCardFromDeck();
         player.setActivePokemon(p);
-        gui.makeActiveCard(p,1);
+        gui.makeActiveCard(p, 1);
 
         //display hand
         gui.removeAllButtons();
@@ -1260,6 +1260,29 @@ public class GameTest {
 
         Game game = new Game(gui, rand, setupGame, handler);
         game.handlePickupPrizeCard(1);
+
+        verify(gui, handler);
+    }
+
+    @Test
+    public void testHandleTrainerCard() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Trainer trainerCard = createMock(Trainer.class);
+        Energy notTrainerCard = createMock(Energy.class);
+
+        expect(gui.getLastSelectedCard()).andReturn(notTrainerCard);
+        gui.displayMessage("Trainer has not been selected!");
+        expect(gui.getLastSelectedCard()).andReturn(trainerCard);
+        handler.playTrainerCard(trainerCard);
+
+        replay(gui, handler);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.handleTrainerAction();
+        game.handleTrainerAction();
 
         verify(gui, handler);
     }

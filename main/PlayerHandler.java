@@ -155,6 +155,10 @@ public class PlayerHandler {
         return currentPlayer.evolvePokemon(evolution, evolvesFrom);
     }
 
+    public void playTrainerCard(Trainer trainer) {
+        trainer.doEffects(currentPlayer,defendingPlayer);
+    }
+
     public ArrayList<Card> getOnlyPreEvolutionsFromActivePlayer(Pokemon evolution) {
 //        ArrayList<Card> preEvs = currentPlayer.getPreEvolutions(evolution);
 //        if(!preEvs.isEmpty()) {
@@ -163,4 +167,6 @@ public class PlayerHandler {
 //        return preEvs;
         return currentPlayer.getPreEvolutions(evolution);
     }
+
+
 }
