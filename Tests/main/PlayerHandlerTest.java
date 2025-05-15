@@ -502,7 +502,7 @@ public class PlayerHandlerTest {
         replay(p, p1, p2);
         PlayerHandler handler = new PlayerHandler();
         handler.currentPlayer = p;
-        handler.evolve(p1, p2);
+        String result = handler.evolve(p1, p2);
 
         verify(p, p1, p2);
     }
@@ -521,5 +521,43 @@ public class PlayerHandlerTest {
         handler.getOnlyPreEvolutionsFromActivePlayer(p1);
 
         verify(p, p1);
+    }
+
+    @Test
+    public void testEvolveJustPlayed() {
+        Player p = createMock(Player.class);
+        Pokemon p1 = createMock(Pokemon.class);
+        Pokemon p2 = createMock(Pokemon.class);
+        ArrayList<Pokemon> justPlayed = createMock(ArrayList.class);
+
+        expect(justPlayed.contains(p2)).andReturn(true);
+
+        replay(p, p1, p2, justPlayed);
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = p;
+        handler.playedThisTurn = justPlayed;
+        String result = handler.evolve(p1, p2);
+
+        assertEquals("JustPlayed", result);
+        verify(p, p1, p2, justPlayed);
+    }
+
+    @Test
+    public void testPlayTrainer(){
+        Player p1 = new Player();
+        Player p2 = createMock(Player.class);
+        Trainer trainer = createMock(Trainer.class);
+        Deck hand = createMock(Deck.class);
+        p1.hand = hand;
+        trainer.doEffects(p1, p2);
+        expect(hand.removeCard(trainer)).andReturn(true);
+        replay(trainer,hand);
+
+        PlayerHandler ph = new PlayerHandler();
+        ph.currentPlayer = p1;
+        ph.defendingPlayer = p2;
+        ph.playTrainerCard(trainer);
+
+        verify(trainer, hand);
     }
 }

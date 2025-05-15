@@ -77,6 +77,8 @@ public class Game {
         }
     }
 
+
+
     protected void displayCardInfo() {
         boolean hasCardSelected = gui.hasCardSelected();
         if(hasCardSelected) {
@@ -188,6 +190,7 @@ public class Game {
             gameIsOver(winner, loser);
         }
     }
+
 
     private void displayDeadActiveGUI(ArrayList<Card> playerPokemon) {
         if(playerPokemon.isEmpty()) {
@@ -313,6 +316,19 @@ public class Game {
         }
     }
 
+    protected void handleTrainerAction() {
+        Card lastSelectedCard = gui.getLastSelectedCard();
+        if(!(lastSelectedCard instanceof Trainer)) {
+            gui.displayMessage("Trainer has not been selected!");
+        } else {
+            handlePlayTrainer((Trainer)lastSelectedCard);
+        }
+    }
+    private void handlePlayTrainer(Trainer trainer) {
+
+        playerHandler.playTrainerCard(trainer);
+    }
+
     protected void handleEvolveAction() {
         Card lastSelectedCard = gui.getLastSelectedCard();
         if(!(lastSelectedCard instanceof Pokemon)) {
@@ -335,6 +351,10 @@ public class Game {
                     switch(playerHandler.evolve(evolution, basePokemon)){
                         case "Error":
                             gui.displayMessage("Evolution could not be completed");
+                            break;
+
+                        case "JustPlayed":
+                            gui.displayMessage("Base Pokemon was just played");
                             break;
 
                         case "Active":

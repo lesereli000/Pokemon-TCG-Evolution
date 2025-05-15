@@ -166,7 +166,8 @@ public class Player {
     }
 
     public String evolvePokemon(Pokemon evolution, Pokemon evolvesFrom) {
-        // TODO: Prepare "evolution" to be inserted (damage, energies, conditions, attached cards, etc.)
+        evolution.takeDamage(evolvesFrom.getDamageCounters(), "");
+        evolution.addEnergies(evolvesFrom.getEnergies());
 
         hand.removeCard(evolution);
 

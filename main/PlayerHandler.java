@@ -9,6 +9,7 @@ public class PlayerHandler {
     protected int playerTurn;
     protected Player currentPlayer;
     protected Player defendingPlayer;
+    protected ArrayList<Pokemon> playedThisTurn = new ArrayList<>();
 
     public void completePlayerSetup(String coinFlipResult) {
         createPlayers();
@@ -56,6 +57,7 @@ public class PlayerHandler {
     public void addToBench(Pokemon lastSelectedCard) {
         currentPlayer.addBenchPokemon(lastSelectedCard);
         currentPlayer.removeFromHand(lastSelectedCard);
+        playedThisTurn.add(lastSelectedCard);
     }
 
     public ArrayList<Card> getCurrentPlayerHand() {
@@ -73,6 +75,7 @@ public class PlayerHandler {
     public boolean passTurn() {
         currentPlayer.passTurn();
         swapPlayerTurns();
+        playedThisTurn.clear();
         return currentPlayer.hasActive();
     }
 
@@ -145,24 +148,26 @@ public class PlayerHandler {
     }
 
     public String evolve(Pokemon evolution, Pokemon evolvesFrom){
-        // TODO: make sure pokemon can only evolve once per turn
+        if(playedThisTurn.contains(evolvesFrom)) {
+            return "JustPlayed";
+        }
+
         return currentPlayer.evolvePokemon(evolution, evolvesFrom);
     }
 
+    public void playTrainerCard(Trainer trainer) {
+        trainer.doEffects(currentPlayer,defendingPlayer);
+        currentPlayer.hand.removeCard(trainer);
+    }
+
     public ArrayList<Card> getOnlyPreEvolutionsFromActivePlayer(Pokemon evolution) {
-        // TODO: remove pokemon that have already evolved this turn
+//        ArrayList<Card> preEvs = currentPlayer.getPreEvolutions(evolution);
+//        if(!preEvs.isEmpty()) {
+//            preEvs.removeAll(playedThisTurn);
+//        }
+//        return preEvs;
         return currentPlayer.getPreEvolutions(evolution);
     }
 
-    public ArrayList<Card> getAllPlayerPokemon() {
-        ArrayList<Card> playerPokemon = currentPlayer.getOnlyPokemonFromHand();
-        playerPokemon.add((Card) currentPlayer.activePokemon);
-        ArrayList<Card> benchPokemon = currentPlayer.getPokemonOnBench();
-        playerPokemon.addAll(benchPokemon);
-        return playerPokemon;
-    }
 
-    public ArrayList<Card> getAllPlayerEnergy() {
-        return currentPlayer.getAllEnergyFromHand();
-    }
 }

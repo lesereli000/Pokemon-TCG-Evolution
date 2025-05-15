@@ -11,7 +11,6 @@ import static org.junit.Assert.*;
 
 public class GameTest {
 
-
     @Test
     public void testMakeFlipCoinButton() {
         GameGUI gui = createMock(GameGUI.class);
@@ -71,7 +70,7 @@ public class GameTest {
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
         player.setActivePokemon(p);
-        gui.makeActiveCard(p,1);
+        gui.makeActiveCard(p, 1);
         expect(handler.getPlayerTurn()).andReturn(1);
         expect(handler.getCurrentPlayer()).andReturn(player);
         replay(gui, player, handler);
@@ -237,7 +236,6 @@ public class GameTest {
 
         verify(gui, player, handler);
     }
-
 
     @Test
     public void testSelectActiveLoopBasic() {
@@ -486,51 +484,6 @@ public class GameTest {
     }
 
     @Test
-    public void testMainGameLoopPlayTrainerBill() {
-        GameGUI gui = createMock(GameGUI.class);
-        Random rand = createMock(Random.class);
-        SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
-        Trainer trainer = createMock(Trainer.class);
-        Pokemon p = createMock(Pokemon.class);
-        Player player = createMock(Player.class);
-        ArrayList<Card> hand = new ArrayList<>();
-
-        expect(handler.getCurrentPlayerHand()).andReturn(hand);
-        gui.removeAllButtons();
-        gui.displayCards(hand);
-        gui.displayActionButtons();
-        expect(gui.waitForButtonPressed()).andReturn("PlayTrainer");
-
-        //handleTrainerAction()
-        expect(gui.getLastSelectedCard()).andReturn(trainer);
-
-        //handleUseTrainer()
-        expect(handler.getCurrentPlayer()).andReturn(player);
-        expect(handler.getAllPlayerPokemon()).andReturn(hand);
-        expect(handler.getAllPlayerEnergy()).andReturn(hand);
-        player.removeFromHand(trainer);
-        expectLastCall();
-
-        //displayTrainerPokemonSelection
-        expect(trainer.getName()).andReturn("Bill");
-
-        //displayTrainerEnergySelection
-        expect(trainer.getName()).andReturn("Bill");
-
-        //doEffects
-        trainer.doEffects(player, null, null);
-        expectLastCall();
-
-        replay(gui, player, handler, trainer, p);
-
-        Game game = new Game(gui, rand, setupGame, handler);
-        game.mainGameLoop();
-
-        verify(gui, player, handler, trainer, p);
-    }
-
-    @Test
     public void testMainGameLoopAddEnergyWrongType() {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
@@ -641,7 +594,7 @@ public class GameTest {
         expect(handler.getPlayerTurn()).andReturn(1);
         handler.drawCardFromDeck();
         player.setActivePokemon(p);
-        gui.makeActiveCard(p,1);
+        gui.makeActiveCard(p, 1);
 
         //display hand
         gui.removeAllButtons();
@@ -1312,6 +1265,29 @@ public class GameTest {
     }
 
     @Test
+    public void testHandleTrainerCard() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Trainer trainerCard = createMock(Trainer.class);
+        Energy notTrainerCard = createMock(Energy.class);
+
+        expect(gui.getLastSelectedCard()).andReturn(notTrainerCard);
+        gui.displayMessage("Trainer has not been selected!");
+        expect(gui.getLastSelectedCard()).andReturn(trainerCard);
+        handler.playTrainerCard(trainerCard);
+
+        replay(gui, handler);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.handleTrainerAction();
+        game.handleTrainerAction();
+
+        verify(gui, handler);
+    }
+
+    @Test
     public void testAddEnergyCancelled() {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
@@ -1618,157 +1594,46 @@ public class GameTest {
     }
 
     @Test
-    public void testPotionTrainer() {
+    public void testEvolveActionJustPlayedPokemon() {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
-        SetupGame setupGame = createMock(SetupGame.class);
+        SetupGame gameSetup = createMock(SetupGame.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
-        Trainer trainer = createMock(Trainer.class);
-        Pokemon p1 = createMock(Pokemon.class);
-        Pokemon p2 = createMock(Pokemon.class);
-        Player player = createMock(Player.class);
-        ArrayList<Card> hand = new ArrayList<>();
-        ArrayList<Card> pokemon = new ArrayList<>();
-        pokemon.add(p2);
-
-        expect(handler.getCurrentPlayerHand()).andReturn(hand);
-        gui.removeAllButtons();
-        gui.displayCards(hand);
-        gui.displayActionButtons();
-        expect(gui.waitForButtonPressed()).andReturn("PlayTrainer");
-
-        //handleTrainerAction()
-        expect(gui.getLastSelectedCard()).andReturn(trainer);
-
-        //handleUseTrainer()
-        expect(handler.getCurrentPlayer()).andReturn(player);
-        expect(handler.getAllPlayerPokemon()).andReturn(pokemon);
-        expect(handler.getAllPlayerEnergy()).andReturn(hand);
-        player.removeFromHand(trainer);
-        expectLastCall();
-
-        //displayTrainerPokemonSelection
-        expect(trainer.getName()).andStubReturn("Potion");
-        gui.displayMessage("Select Pokemon to use Potion on");
-        expectLastCall().anyTimes();
-        gui.removeAllButtons();
-        expectLastCall().anyTimes();
-        gui.displayCards(pokemon);
-        expectLastCall().anyTimes();
-        gui.displayConfirmAndCancelButton();
-        expectLastCall().anyTimes();
-        gui.waitForAction();
-        expectLastCall().anyTimes();
-        expect(gui.isCancelled()).andStubReturn(false);
-
-        expect(gui.getLastSelectedCard()).andReturn(p1).times(1);
-        gui.displayMessage("No Pokemon selected!");
-        expectLastCall().once();
-        expect(gui.getLastSelectedCard()).andReturn(p2).times(1);
-
-        //doEffects
-        trainer.doEffects(player, p2, null);
-        expectLastCall();
-
-        replay(gui, player, handler, trainer, p1, p2);
-
-        Game game = new Game(gui, rand, setupGame, handler);
-        game.mainGameLoop();
-
-        verify(gui, player, handler, trainer, p1, p2);
-    }
-
-    @Test
-    public void testSuperPotionTrainer() {
-        GameGUI gui = createMock(GameGUI.class);
-        Random rand = createMock(Random.class);
-        SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
-        Trainer trainer = createMock(Trainer.class);
         Pokemon p = createMock(Pokemon.class);
-        Player player = createMock(Player.class);
-        Energy e1 = new Energy("Grass Energy");
-        Energy e2 = new Energy("Fire Energy");
+        Pokemon p2 = createMock(Pokemon.class);
+        ArrayList<Card> cards = createMock(ArrayList.class);
 
-        ArrayList<Card> hand = new ArrayList<>();
-        ArrayList<Card> pokemon = new ArrayList<>();
-        ArrayList<Card> energy = new ArrayList<>();
-        pokemon.add(p);
-        energy.add(e1);
+        expect(gui.getLastSelectedCard()).andReturn(p2);
+        expect(p2.getStage()).andReturn(0);
+        handler.addToBench(p2);
+        expect(handler.getPlayerTurn()).andReturn(1);
+        gui.addBenchCard(p2, 1);
 
-        expect(handler.getCurrentPlayerHand()).andReturn(hand);
+        expect(gui.getLastSelectedCard()).andReturn(p);
+        expect(p.getStage()).andReturn(1);
+        expect(handler.getOnlyPreEvolutionsFromActivePlayer(p)).andReturn(cards);
+        expect(cards.isEmpty()).andReturn(false);
+
+        //displayEvolveInfo again
+        gui.displayMessage("Select Pokemon to evolve from");
         gui.removeAllButtons();
-        gui.displayCards(hand);
-        expectLastCall().anyTimes();
-        gui.displayActionButtons();
-        expect(gui.waitForButtonPressed()).andReturn("PlayTrainer");
-
-        // handleTrainerAction()
-        expect(gui.getLastSelectedCard()).andReturn(trainer);
-
-        // handleUseTrainer()
-        expect(handler.getCurrentPlayer()).andReturn(player);
-        expect(handler.getAllPlayerPokemon()).andReturn(pokemon);
-        expect(handler.getAllPlayerEnergy()).andReturn(energy);
-        player.removeFromHand(trainer);
-        expectLastCall();
-
-        // displayTrainerPokemonSelection
-        expect(trainer.getName()).andStubReturn("Super Potion");
-        gui.displayMessage("Select Pokemon to use Potion on");
-        expectLastCall().anyTimes();
-        gui.removeAllButtons();
-        expectLastCall().anyTimes();
-        gui.displayCards(pokemon);
-        expectLastCall().times(1);
+        gui.displayCards(cards);
         gui.displayConfirmAndCancelButton();
-        expectLastCall().anyTimes();
         gui.waitForAction();
-        expectLastCall().anyTimes();
         expect(gui.isCancelled()).andReturn(false);
-        expect(gui.getLastSelectedCard()).andReturn(p).times(1);
+        expect(gui.getLastSelectedCard()).andReturn(p2);
+        expect(cards.contains(p2)).andReturn(true);
+        expect(handler.evolve(p, p2)).andReturn("JustPlayed");
+        gui.displayMessage("Base Pokemon was just played");
 
-        gui.displayMessage("Select Energy to discard for Super Potion");
-        expectLastCall().times(2); // called twice due to recursion
-        gui.displayCards(energy);
-        expectLastCall().times(2);
-        expect(gui.isCancelled()).andReturn(false).times(2);
+        replay(gui, p, handler, cards);
 
-        expect(gui.getLastSelectedCard()).andReturn(e2).times(1);
-        gui.displayMessage("No Energy selected!"); // recursive trigger
-        expectLastCall().once();
-        expect(gui.getLastSelectedCard()).andReturn(e1).times(1);
+        Game game = new Game(gui, rand, gameSetup, handler);
+        game.handleBenchAction();
+        game.handleEvolveAction();
 
-        // doEffects
-        trainer.doEffects(player, p, e1);
-        expectLastCall();
-
-        replay(gui, player, handler, trainer, p);
-
-        Game game = new Game(gui, rand, setupGame, handler);
-        game.mainGameLoop();
-
-        verify(gui, player, handler, trainer, p);
+        verify(gui, p, handler, cards);
     }
 
-    @Test
-    public void testHandleTrainerActionWhenNoTrainerSelected() {
-        GameGUI gui = createMock(GameGUI.class);
-        Random rand = createMock(Random.class);
-        SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
-        Pokemon notTrainerCard = createMock(Pokemon.class);
-
-        expect(gui.getLastSelectedCard()).andReturn(notTrainerCard);
-        gui.displayMessage("Trainer has not been selected!");
-        expectLastCall().once();
-
-        replay(gui, rand, setupGame, handler, notTrainerCard);
-
-        Game game = new Game(gui, rand, setupGame, handler);
-        game.handleTrainerAction();
-
-        verify(gui, rand, setupGame, handler, notTrainerCard);
-    }
 }
 

@@ -209,6 +209,15 @@ public class Pokemon extends Card{
         return type;
     }
 
+    public int getDamageCounters(){
+        return damageCounters;
+    }
 
+    public ArrayList<Energy> getEnergies() {
+        return energies;
+    }
 
+    public void addEnergies(ArrayList<Energy> energies) {
+        this.energies.addAll(energies);
+    }
 }

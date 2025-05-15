@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 
 public class DeckTest {
 
-    //TODO: Tests moved from main.PokemonTest.java
+    //Tests moved from main.PokemonTest.java
 
     @Test
     public void testEmptyDeck() {
