@@ -73,6 +73,7 @@ public class Game {
             case "Retreat" -> handleRetreatAction();
             case "CardInfo" -> displayCardInfo();
             case "Evolve" -> handleEvolveAction();
+            case "PlayTrainer" -> handleTrainerAction();
         }
     }
 
@@ -242,6 +243,66 @@ public class Game {
         }
     }
 
+    protected void handleTrainerAction() {
+        Card lastSelectedCard = gui.getLastSelectedCard();
+        if(!(lastSelectedCard instanceof Trainer)) {
+            gui.displayMessage("Trainer has not been selected!");
+        } else {
+            handleUseTrainer((Trainer)lastSelectedCard);
+        }
+    }
+
+    protected void handleUseTrainer(Trainer trainer) {
+        Player currentPlayer = playerHandler.getCurrentPlayer();
+        ArrayList<Card> playerPokemon = playerHandler.getAllPlayerPokemon();
+        ArrayList<Card> playerEnergy = playerHandler.getAllPlayerEnergy();
+        currentPlayer.removeFromHand(trainer);
+
+        Pokemon selectedPokemon = displayTrainerPokemonSelection(trainer, playerPokemon);
+        Energy selectedEnergy = displayTrainerEnergySelection(trainer, playerEnergy);
+        trainer.doEffects(currentPlayer, selectedPokemon, selectedEnergy);
+    }
+
+    protected Pokemon displayTrainerPokemonSelection(Trainer trainer, ArrayList<Card> pokemon) {
+        String trainerName = trainer.getName();
+        if(trainerName.equals("Potion") || trainerName.equals("Super Potion")) {
+            gui.displayMessage("Select Pokemon to use Potion on");
+            gui.removeAllButtons();
+            gui.displayCards(pokemon);
+            gui.displayConfirmAndCancelButton();
+            gui.waitForAction();
+            if(gui.isCancelled()) return null;
+            Pokemon selectedPokemon = (Pokemon) gui.getLastSelectedCard();
+            if(!pokemon.contains(selectedPokemon)) {
+                gui.displayMessage("No Pokemon selected!");
+                return displayTrainerPokemonSelection(trainer, pokemon);
+            } else {
+                return selectedPokemon;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    protected Energy displayTrainerEnergySelection(Trainer trainer, ArrayList<Card> energy) {
+        if(trainer.getName().equals("Super Potion")) {
+            gui.displayMessage("Select Energy to discard for Super Potion");
+            gui.removeAllButtons();
+            gui.displayCards(energy);
+            gui.displayConfirmAndCancelButton();
+            gui.waitForAction();
+            if(gui.isCancelled()) return null;
+            Energy selectedEnergy = (Energy) gui.getLastSelectedCard();
+            if(!energy.contains(selectedEnergy)) {
+                gui.displayMessage("No Energy selected!");
+                return displayTrainerEnergySelection(trainer, energy);
+            } else {
+                return selectedEnergy;
+            }
+        } else {
+            return null;
+        }
+    }
 
     protected void handlePassTurnAction() {
         boolean hasActiveAlready = playerHandler.passTurn();

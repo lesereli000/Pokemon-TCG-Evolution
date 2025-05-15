@@ -153,4 +153,16 @@ public class PlayerHandler {
         // TODO: remove pokemon that have already evolved this turn
         return currentPlayer.getPreEvolutions(evolution);
     }
+
+    public ArrayList<Card> getAllPlayerPokemon() {
+        ArrayList<Card> playerPokemon = currentPlayer.getOnlyPokemonFromHand();
+        playerPokemon.add((Card) currentPlayer.activePokemon);
+        ArrayList<Card> benchPokemon = currentPlayer.getPokemonOnBench();
+        playerPokemon.addAll(benchPokemon);
+        return playerPokemon;
+    }
+
+    public ArrayList<Card> getAllPlayerEnergy() {
+        return currentPlayer.getAllEnergyFromHand();
+    }
 }

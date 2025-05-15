@@ -412,20 +412,6 @@ public class PlayerTest {
         verify(prizeDeck);
     }
 
-
-    @Test
-    public void testHealActivePokemon() {
-        Player player = new Player();
-        Pokemon active = createMock(Pokemon.class);
-        active.heal(20);
-
-        player.activePokemon = active;
-
-        replay(active);
-        player.healActivePokemon(20);
-        verify(active);
-    }
-
     @Test
     public void testEvolvePokemonActive() {
         Pokemon p1 = createMock(Pokemon.class);
@@ -559,4 +545,53 @@ public class PlayerTest {
 
         verify(hand, bench);
     }
+
+    @Test
+    public void testGetPokemonOnBench() {
+        Player player = new Player("Test Player");
+        Pokemon benchPokemon1 = createMock(Pokemon.class);
+        Pokemon benchPokemon2 = createMock(Pokemon.class);
+        Deck bench = createMock(Deck.class);
+        ArrayList<Card> benchCards = new ArrayList<>();
+        benchCards.add(benchPokemon1);
+        benchCards.add(benchPokemon2);
+
+        expect(bench.getCards()).andReturn(benchCards);
+
+        replay(bench);
+
+        player.bench = bench;
+        ArrayList<Card> result = player.getPokemonOnBench();
+
+        assertEquals(2, result.size());
+        assertTrue(result.contains(benchPokemon1));
+        assertTrue(result.contains(benchPokemon2));
+
+        verify(bench);
+    }
+
+    @Test
+    public void testGetAllEnergyFromHand() {
+        Player player = new Player("Test Player");
+        Energy energyCard1 = createMock(Energy.class);
+        Energy energyCard2 = createMock(Energy.class);
+        Deck hand = createMock(Deck.class);
+        ArrayList<Card> energy = new ArrayList<>();
+        energy.add(energyCard1);
+        energy.add(energyCard2);
+
+        expect(hand.getOnlyEnergy()).andReturn(energy);
+
+        replay(hand);
+
+        player.hand = hand;
+        ArrayList<Card> result = player.getAllEnergyFromHand();
+
+        assertEquals(2, result.size());
+        assertTrue(result.contains(energyCard1));
+        assertTrue(result.contains(energyCard2));
+
+        verify(hand);
+    }
+
 }

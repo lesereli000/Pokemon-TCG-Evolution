@@ -105,6 +105,16 @@ public class Deck {
         return allPokemon;
     }
 
+    public ArrayList<Card> getOnlyEnergy() {
+        ArrayList<Card> allEnergy = new ArrayList<>();
+        for (Card card : cards) {
+            if (card instanceof Energy) {
+                allEnergy.add(card);
+            }
+        }
+        return allEnergy;
+    }
+
     public boolean addEnergies(int numberEnergies, Random rand) {
         try(FileReader reader = new FileReader("src/main/resources/base1.json")) {
             String content = new String(Files.readAllBytes(Paths.get("src/main/resources/base1.json")));

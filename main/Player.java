@@ -14,8 +14,6 @@ public class Player {
     private boolean canAddEnergy;
     protected boolean hasActive;
 
-
-
     public Player() {
         this("Unnamed Player");
     }
@@ -45,7 +43,6 @@ public class Player {
         }else{
             return false;
         }
-
     }
 
     public ArrayList<Card> handAsList() {
@@ -60,6 +57,14 @@ public class Player {
 
     public ArrayList<Card> getOnlyPokemonFromHand() {
         return hand.getOnlyPokemon();
+    }
+
+    public ArrayList<Card> getPokemonOnBench() {
+        return bench.getCards();
+    }
+
+    public ArrayList<Card> getAllEnergyFromHand() {
+        return hand.getOnlyEnergy();
     }
 
     public String getName() {
@@ -116,10 +121,6 @@ public class Player {
 
     public void takeDamage(int damageCounters, String damageType) {
         activePokemon.takeDamage(damageCounters, damageType);
-    }
-
-    public void healActivePokemon(int damageCounters) {
-        activePokemon.heal(damageCounters);
     }
 
     public int getActiveHP() {

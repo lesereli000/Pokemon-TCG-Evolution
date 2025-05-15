@@ -893,6 +893,90 @@ public class DeckTest {
         assertEquals(expected, output);
     }
 
+    @Test
+    public void testGetAllPlayerPokemon() {
+        PlayerHandler ph = new PlayerHandler();
+        Player mockPlayer = createMock(Player.class);
+        Pokemon handPokemon = createMock(Pokemon.class);
+        Pokemon activePokemon = createMock(Pokemon.class);
+        Pokemon benchPokemon = createMock(Pokemon.class);
+        ArrayList<Card> handPokemonList = new ArrayList<>();
+        handPokemonList.add(handPokemon);
+        ArrayList<Card> benchPokemonList = new ArrayList<>();
+        benchPokemonList.add(benchPokemon);
+
+        expect(mockPlayer.getOnlyPokemonFromHand()).andReturn(handPokemonList);
+        expect(mockPlayer.getPokemonOnBench()).andReturn(benchPokemonList);
+
+        mockPlayer.activePokemon = activePokemon;
+
+        replay(mockPlayer);
+
+        ph.currentPlayer = mockPlayer;
+        ArrayList<Card> result = ph.getAllPlayerPokemon();
+
+        assertEquals(3, result.size());
+        assertTrue(result.contains(handPokemon));
+        assertTrue(result.contains(activePokemon));
+        assertTrue(result.contains(benchPokemon));
+
+        verify(mockPlayer);
+    }
+
+
+    @Test
+    public void testGetAllPlayerEnergy() {
+        PlayerHandler ph = new PlayerHandler();
+        Player mockPlayer = createMock(Player.class);
+        Energy e1 = createMock(Energy.class);
+        Energy e2 = createMock(Energy.class);
+        ArrayList<Card> energyList = new ArrayList<>();
+        energyList.add(e1);
+        energyList.add(e2);
+
+        expect(mockPlayer.getAllEnergyFromHand()).andReturn(energyList);
+
+        replay(mockPlayer);
+
+        ph.currentPlayer = mockPlayer;
+
+        ArrayList<Card> result = ph.getAllPlayerEnergy();
+
+        assertEquals(2, result.size());
+        assertTrue(result.contains(e1));
+        assertTrue(result.contains(e2));
+
+        verify(mockPlayer);
+    }
+
+    @Test
+    public void testGetOnlyEnergy() {
+        Deck deck = new Deck();
+        Energy e1 = createMock(Energy.class);
+        Energy e2 = createMock(Energy.class);
+        Trainer nonEnergyCard = createMock(Trainer.class);
+
+        expect(e1.getName()).andReturn("Grass Energy").anyTimes();
+        expect(e2.getName()).andReturn("Fire Energy").anyTimes();
+        expect(nonEnergyCard.getName()).andReturn("Bill").anyTimes();
+
+        replay(e1, e2, nonEnergyCard);
+
+        deck.addCard(e1);
+        deck.addCard(e2);
+        deck.addCard(nonEnergyCard);
+
+        ArrayList<Card> result = deck.getOnlyEnergy();
+
+        assertEquals(2, result.size());
+        assertTrue(result.contains(e1));
+        assertTrue(result.contains(e2));
+        assertFalse(result.contains(nonEnergyCard));
+
+        verify(e1, e2, nonEnergyCard);
+    }
+
+
     // TODO implement error catching for adding cards that dont exist.
 //    @Test
 //    public void testAddDeckFromFileWithWrongFormatCard(){

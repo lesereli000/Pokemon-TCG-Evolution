@@ -104,65 +104,78 @@ public class TrainerTest {
         Player p1 = createMock(Player.class);
         Player p2 = createMock(Player.class);
         CardGenerator pg = new CardGenerator();
+        Pokemon p = null;
+        Energy e = null;
         Trainer c = (Trainer) pg.generateCard("Bill");
         assertEquals("Bill", c.getName());
         expect(p1.drawCard()).andReturn(true);
         expect(p1.drawCard()).andReturn(true);
         replay(p1,p2);
-        c.doEffects(p1,p2);
+        c.doEffects(p1,p,e);
         verify(p1,p2);
     }
 
-//    @Test
-//    public void testPotion() {
-//        Player p1 = new Player();
-//        Player p2 = createMock(Player.class);
-//        CardGenerator pg = new CardGenerator();
-//        Pokemon activePokemon = new Pokemon("Squirtle", "Water", 2, 80, "Grass", "Fighting", null, 0);
-//        p1.hand.addCard(activePokemon);
-//        p1.setActivePokemon(activePokemon);
-//        Trainer c1 = (Trainer) pg.generateCard("Potion");
-//        Trainer c2 = (Trainer) pg.generateCard("Potion");
-//        replay(p2);
-//        assertEquals(activePokemon.damageCounters, 0);
-//        activePokemon.takeDamage(3, "Water");
-//        assertEquals(3,activePokemon.damageCounters);
-//        c1.doEffects(p1,p2);
-//        assertEquals(1, activePokemon.damageCounters);
-//        c2.doEffects(p1,p2);
-//        assertEquals(activePokemon.damageCounters, 0);
-//        verify(p2);
-//    }
+    @Test
+    public void testPotion() {
+        Player p1 = new Player();
+        Player p2 = createMock(Player.class);
+        CardGenerator pg = new CardGenerator();
+        Pokemon activePokemon = new Pokemon("Squirtle", "Water", 2, 80, "Grass", "Fighting", null, 0);
+        ArrayList<Card> pokemon = new ArrayList<>();
+        pokemon.add(activePokemon);
 
-//    @Test
-//    public void testSuperPotion() {
-//        Player p1 = new Player();
-//        Player p2 = createMock(Player.class);
-//        CardGenerator pg = new CardGenerator();
-//        Pokemon activePokemon = new Pokemon("Beedrill", "Grass", 2, 80, "Fire", "Fighting", null, 0);
-//        Energy e1 = new Energy("Grass Energy");
-//        Energy e2 = new Energy("Grass Energy");
-//        ArrayList<Energy> expectedEnergy = new ArrayList<>();
-//
-//        p1.hand.addCard(activePokemon);
-//        p1.setActivePokemon(activePokemon);
-//        Trainer c1 = (Trainer) pg.generateCard("Super Potion");
-//        Trainer c2 = (Trainer) pg.generateCard("Super Potion");
-//        replay(p2);
-//
-//        activePokemon.takeDamage(6, "Water");
-//        assertThrows(CardCreationException.class, () -> c1.doEffects(p1,p2));
-//        assertEquals(activePokemon.damageCounters, 6);
-//
-//        activePokemon.addEnergy(e1);
-//        c1.doEffects(p1,p2);
-//        assertEquals(activePokemon.energies, expectedEnergy);
-//        assertEquals(activePokemon.damageCounters, 2);
-//
-//        activePokemon.addEnergy(e2);
-//        c2.doEffects(p1,p2);
-//        assertEquals(activePokemon.energies, expectedEnergy);
-//        assertEquals(activePokemon.damageCounters, 0);
-//        verify(p2);
-//    }
+        p1.hand.addCard(activePokemon);
+        p1.setActivePokemon(activePokemon);
+        Trainer c1 = (Trainer) pg.generateCard("Potion");
+        Trainer c2 = (Trainer) pg.generateCard("Potion");
+        replay(p2);
+        assertEquals(activePokemon.damageCounters, 0);
+        activePokemon.takeDamage(3, "Water");
+        assertEquals(3,activePokemon.damageCounters);
+        c1.doEffects(p1, activePokemon, null);
+        assertEquals(1, activePokemon.damageCounters);
+        c2.doEffects(p1, activePokemon, null);
+        assertEquals(activePokemon.damageCounters, 0);
+        verify(p2);
+    }
+
+    @Test
+    public void testSuperPotion() {
+        Player p1 = new Player();
+        CardGenerator pg = new CardGenerator();
+        Pokemon activePokemon = new Pokemon("Beedrill", "Grass", 2, 80, "Fire", "Fighting", null, 0);
+        ArrayList<Card> pokemon = new ArrayList<>();
+        pokemon.add(activePokemon);
+        Energy e1 = new Energy("Grass Energy");
+        Energy e2 = new Energy("Fire Energy");
+        ArrayList<Energy> expectedEnergy = new ArrayList<>();
+
+        p1.hand.addCard(activePokemon);
+        p1.setActivePokemon(activePokemon);
+        Trainer c1 = (Trainer) pg.generateCard("Super Potion");
+        Trainer c2 = (Trainer) pg.generateCard("Super Potion");
+
+        activePokemon.takeDamage(6, "Water");
+        assertEquals(activePokemon.damageCounters, 6);
+
+        p1.hand.addCard(e1);
+        c1.doEffects(p1, activePokemon, e1);
+        assertEquals(activePokemon.energies, expectedEnergy);
+        assertEquals(activePokemon.damageCounters, 2);
+
+        p1.hand.addCard(e2);
+        c2.doEffects(p1, activePokemon, e2);
+        assertEquals(activePokemon.energies, expectedEnergy);
+        assertEquals(activePokemon.damageCounters, 0);
+    }
+
+    @Test
+    public void testTrainerConstructorEmptyEffectsThrowsException() {
+        try {
+            new Trainer("Potion", "Item", "");
+            fail("CardCreationException is not thrown");
+        } catch (CardCreationException e) {
+            assertEquals("Trainer effects cannot be empty", e.getMessage());
+        }
+    }
 }
