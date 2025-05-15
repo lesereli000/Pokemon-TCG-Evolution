@@ -9,7 +9,7 @@ public class PlayerHandler {
     protected int playerTurn;
     protected Player currentPlayer;
     protected Player defendingPlayer;
-    protected ArrayList<Pokemon> playedThisTurn;
+    protected ArrayList<Pokemon> playedThisTurn = new ArrayList<>();
 
     public void completePlayerSetup(String coinFlipResult) {
         createPlayers();
@@ -33,7 +33,6 @@ public class PlayerHandler {
         currentPlayer = coinFlipResult.equals("Heads") ? player1 : player2;
         defendingPlayer = coinFlipResult.equals("Heads") ? player2 : player1;
         playerTurn = coinFlipResult.equals("Heads") ? 1 : 2;
-        playedThisTurn = new ArrayList<>();
     }
 
     public Player getCurrentPlayer() {
