@@ -9,6 +9,7 @@ public class PlayerHandler {
     protected int playerTurn;
     protected Player currentPlayer;
     protected Player defendingPlayer;
+    protected ArrayList<Pokemon> playedThisTurn;
 
     public void completePlayerSetup(String coinFlipResult) {
         createPlayers();
@@ -56,6 +57,7 @@ public class PlayerHandler {
     public void addToBench(Pokemon lastSelectedCard) {
         currentPlayer.addBenchPokemon(lastSelectedCard);
         currentPlayer.removeFromHand(lastSelectedCard);
+        playedThisTurn.add(lastSelectedCard);
     }
 
     public ArrayList<Card> getCurrentPlayerHand() {
@@ -73,6 +75,7 @@ public class PlayerHandler {
     public boolean passTurn() {
         currentPlayer.passTurn();
         swapPlayerTurns();
+        playedThisTurn.clear();
         return currentPlayer.hasActive();
     }
 
@@ -146,6 +149,10 @@ public class PlayerHandler {
 
     public String evolve(Pokemon evolution, Pokemon evolvesFrom){
         // TODO: make sure pokemon can only evolve once per turn
+        if(playedThisTurn.contains(evolvesFrom)) {
+            return "JustPlayed";
+        }
+
         return currentPlayer.evolvePokemon(evolution, evolvesFrom);
     }
 
