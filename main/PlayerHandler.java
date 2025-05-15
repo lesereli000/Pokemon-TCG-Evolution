@@ -33,6 +33,7 @@ public class PlayerHandler {
         currentPlayer = coinFlipResult.equals("Heads") ? player1 : player2;
         defendingPlayer = coinFlipResult.equals("Heads") ? player2 : player1;
         playerTurn = coinFlipResult.equals("Heads") ? 1 : 2;
+        playedThisTurn = new ArrayList<>();
     }
 
     public Player getCurrentPlayer() {
@@ -148,7 +149,6 @@ public class PlayerHandler {
     }
 
     public String evolve(Pokemon evolution, Pokemon evolvesFrom){
-        // TODO: make sure pokemon can only evolve once per turn
         if(playedThisTurn.contains(evolvesFrom)) {
             return "JustPlayed";
         }
@@ -157,7 +157,11 @@ public class PlayerHandler {
     }
 
     public ArrayList<Card> getOnlyPreEvolutionsFromActivePlayer(Pokemon evolution) {
-        // TODO: remove pokemon that have already evolved this turn
+//        ArrayList<Card> preEvs = currentPlayer.getPreEvolutions(evolution);
+//        if(!preEvs.isEmpty()) {
+//            preEvs.removeAll(playedThisTurn);
+//        }
+//        return preEvs;
         return currentPlayer.getPreEvolutions(evolution);
     }
 }
