@@ -155,10 +155,10 @@ public class PlayerHandler {
         return currentPlayer.evolvePokemon(evolution, evolvesFrom);
     }
 
-    public void playTrainerCard(Trainer trainer) {
-        trainer.doEffects(currentPlayer,defendingPlayer);
-        currentPlayer.hand.removeCard(trainer);
-    }
+//    public void playTrainerCard(Trainer trainer) {
+//        trainer.doEffects(currentPlayer,defendingPlayer);
+//        currentPlayer.hand.removeCard(trainer);
+//    }
 
     public ArrayList<Card> getOnlyPreEvolutionsFromActivePlayer(Pokemon evolution) {
 //        ArrayList<Card> preEvs = currentPlayer.getPreEvolutions(evolution);
@@ -169,5 +169,16 @@ public class PlayerHandler {
         return currentPlayer.getPreEvolutions(evolution);
     }
 
+    public ArrayList<Card> getAllPlayerPokemon() {
+        ArrayList<Card> playerPokemon = currentPlayer.getOnlyPokemonFromHand();
+        playerPokemon.add((Card) currentPlayer.activePokemon);
+        ArrayList<Card> benchPokemon = currentPlayer.getPokemonOnBench();
+        playerPokemon.addAll(benchPokemon);
+        return playerPokemon;
+    }
 
+    public ArrayList<Card> getAllPlayerEnergy() {
+        return currentPlayer.getAllEnergyFromHand();
+    }
 }
+

@@ -316,18 +316,18 @@ public class Game {
         }
     }
 
-    protected void handleTrainerAction() {
-        Card lastSelectedCard = gui.getLastSelectedCard();
-        if(!(lastSelectedCard instanceof Trainer)) {
-            gui.displayMessage("Trainer has not been selected!");
-        } else {
-            handlePlayTrainer((Trainer)lastSelectedCard);
-        }
-    }
-    private void handlePlayTrainer(Trainer trainer) {
-
-        playerHandler.playTrainerCard(trainer);
-    }
+//    protected void handleTrainerAction() {
+//        Card lastSelectedCard = gui.getLastSelectedCard();
+//        if(!(lastSelectedCard instanceof Trainer)) {
+//            gui.displayMessage("Trainer has not been selected!");
+//        } else {
+//            handlePlayTrainer((Trainer)lastSelectedCard);
+//        }
+//    }
+//    private void handlePlayTrainer(Trainer trainer) {
+//
+//        playerHandler.playTrainerCard(trainer);
+//    }
 
     protected void handleEvolveAction() {
         Card lastSelectedCard = gui.getLastSelectedCard();
