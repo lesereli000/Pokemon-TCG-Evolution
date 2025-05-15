@@ -250,8 +250,6 @@ Ending the Game:
         - You take your last Prize card.
         - Your opponent has no more Pokémon in play.
         - Your opponent must draw a card, and their deck is empty.
-    - If a tie occurs, play Sudden Death
-        - You play a new game, but each player only uses 1 Prize Card
 
 
 Additional Rules:

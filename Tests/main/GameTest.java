@@ -545,14 +545,13 @@ public class GameTest {
     public void testPassTurnActionNotFirstTurn() {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
-        PlayerHandler playerHandler = createMock(PlayerHandler.class);
         SetupGame setupGame = createMock(SetupGame.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
 
         expect(handler.passTurn()).andReturn(true);
         expect(handler.getPlayerTurn()).andReturn(1);
         gui.updateTurn(1);
-        handler.drawCardFromDeck();
+        expect(handler.drawCardFromDeck()).andReturn(true);
         replay(handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
@@ -592,7 +591,7 @@ public class GameTest {
         //make new active
         expect(handler.getCurrentPlayer()).andReturn(player);
         expect(handler.getPlayerTurn()).andReturn(1);
-        handler.drawCardFromDeck();
+        expect(handler.drawCardFromDeck()).andReturn(true);
         player.setActivePokemon(p);
         gui.makeActiveCard(p, 1);
 
@@ -695,7 +694,7 @@ public class GameTest {
         //pass turn
         expect(handler.passTurn()).andReturn(true);
         expect(handler.getPlayerTurn()).andReturn(1).times(2);
-        handler.drawCardFromDeck();
+        expect(handler.drawCardFromDeck()).andReturn(true);
         gui.updateTurn(1);
         expect(gui.isCancelled()).andReturn(false);
 
@@ -915,7 +914,7 @@ public class GameTest {
         expect(handler.passTurn()).andReturn(true);
         expect(handler.getPlayerTurn()).andReturn(1);
         gui.updateTurn(1);
-        handler.drawCardFromDeck();
+        expect(handler.drawCardFromDeck()).andReturn(true);
 
         replay(gui, setupGame, handler, p, player);
 
@@ -1011,7 +1010,7 @@ public class GameTest {
         expect(handler.passTurn()).andReturn(true);
         expect(handler.getPlayerTurn()).andReturn(1);
         gui.updateTurn(1);
-        handler.drawCardFromDeck();
+        expect(handler.drawCardFromDeck()).andReturn(true);
         expect(gui.isCancelled()).andReturn(false);
 
         replay(gui, handler);
@@ -1891,6 +1890,34 @@ public class GameTest {
         game.handleTrainerAction();        // Verify interactions
 
         verify(gui, nonTrainerCard);
+    }
+
+    @Test
+    public void testPassTurnOutOfCards() {
+        GUI gui = createMock(GUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame gameSetup = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Player winner = createMock(Player.class);
+        Player loser = createMock(Player.class);
+
+        expect(handler.passTurn()).andReturn(true);
+        expect(handler.getPlayerTurn()).andReturn(1);
+        gui.updateTurn(1);
+        expect(handler.drawCardFromDeck()).andReturn(false);
+        expect(handler.getCurrentPlayer()).andReturn(winner);
+        expect(handler.getDefendingPlayer()).andReturn(loser);
+
+        //game is over
+        gui.displayWinningMessage(winner, loser);
+        gui.closeWindow();
+
+        replay(gui, handler);
+
+        Game game = new Game(gui, rand, gameSetup, handler);
+        game.handlePassTurnAction();
+
+        verify(gui, handler);
     }
 }
 

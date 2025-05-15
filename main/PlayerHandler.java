@@ -138,8 +138,8 @@ public class PlayerHandler {
         defendingPlayer.setNewActivePokemon(newActive);
     }
 
-    public void drawCardFromDeck() {
-        currentPlayer.drawCard();
+    public boolean drawCardFromDeck() {
+        return currentPlayer.drawCard();
     }
 
     public int activePickupPrizeCard() {

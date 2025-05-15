@@ -1,0 +1,3 @@
+2,Pikachu
+13,Lightning Energy
+2,Bill

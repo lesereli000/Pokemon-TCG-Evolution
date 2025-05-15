@@ -310,7 +310,12 @@ public class Game {
     protected void handlePassTurnAction() {
         boolean hasActiveAlready = playerHandler.passTurn();
         gui.updateTurn(playerHandler.getPlayerTurn());
-        playerHandler.drawCardFromDeck();
+        boolean hasCards = playerHandler.drawCardFromDeck();
+        if(!hasCards) {
+            Player winner = playerHandler.getCurrentPlayer();
+            Player loser = playerHandler.getDefendingPlayer();
+            gameIsOver(winner, loser);
+        }
         if(!hasActiveAlready) {
             selectActiveLoop();
         }
