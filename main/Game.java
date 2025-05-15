@@ -276,6 +276,10 @@ public class Game {
                             gui.displayMessage("Evolution could not be completed");
                             break;
 
+                        case "JustPlayed":
+                            gui.displayMessage("Base Pokemon was just played");
+                            break;
+
                         case "Active":
                             gui.makeActiveCard(evolution, playerHandler.getPlayerTurn());
                             break;
