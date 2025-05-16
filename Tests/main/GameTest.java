@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
+import java.util.ResourceBundle;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
@@ -57,6 +58,7 @@ public class GameTest {
         replay(gui);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.displayActiveDirections();
         verify(gui);
     }
@@ -272,6 +274,7 @@ public class GameTest {
         replay(gui, player, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.selectActiveLoop();
         verify(gui, player, handler);
     }
@@ -329,6 +332,7 @@ public class GameTest {
         replay(gui, player, p, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.selectActiveLoop();
         verify(gui, player, p, handler);
     }
@@ -341,12 +345,12 @@ public class GameTest {
         PlayerHandler handler = createMock(PlayerHandler.class);
 
         Player player = createMock(Player.class);
-        expect(player.getName()).andReturn("Ash");
-        gui.displayMessage("The result was Heads Ash goes first!");
+        gui.displayMessage("The result was Heads Player 1 goes first!");
         replay(gui, player);
 
         Game game = new Game(gui, rand, setupGame, handler);
-        game.displaySetupResults("Heads", player);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
+        game.displaySetupResults("Heads", 1);
 
         verify(gui, player);
     }
@@ -374,7 +378,6 @@ public class GameTest {
         expect(handler.getCurrentPlayer()).andReturn(player);
 
         //displaySetupResults
-        expect(player.getName()).andReturn("Player 1");
         gui.displayMessage("The result was Heads Player 1 goes first!");
 
         //selectActiveLoop()
@@ -399,7 +402,7 @@ public class GameTest {
         gui.displayCards(hand);
 
         expect(gui.displayLocaleOptions()).andReturn(Locale.US);
-        gui.displayMessage("You have chosen: en");
+        gui.displayMessage("You have chosen: English");
 
         replay(gui, rand, setupGame, handler, player, p);
 
@@ -603,6 +606,7 @@ public class GameTest {
         replay(gui, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handlePassTurnAction();
         verify(gui, handler);
     }
@@ -627,6 +631,7 @@ public class GameTest {
         replay(gui, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.mainGameLoop();
 
         verify(gui, handler);
@@ -759,6 +764,7 @@ public class GameTest {
         replay(gui, handler, player, activePokemon);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleRetreatAction();
 
         verify(gui, handler, player, activePokemon);
@@ -812,6 +818,7 @@ public class GameTest {
         replay(gui, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         Card result = game.retreatPokemon();
 
         assertEquals(newActive, result);
@@ -1155,6 +1162,7 @@ public class GameTest {
 
         replay(handler, gui, p, player);
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleRetreatAction();
         verify(handler, gui, p, player);
     }
@@ -1347,6 +1355,7 @@ public class GameTest {
         replay(gui, handler, poke, p);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleRetreatAction();
 
         verify(gui, handler, poke, p);

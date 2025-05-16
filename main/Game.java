@@ -1,8 +1,10 @@
 package main;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
+import java.util.ResourceBundle;
 
 public class Game {
     protected GUI gui;
@@ -11,6 +13,7 @@ public class Game {
     protected PlayerHandler playerHandler;
     protected boolean gameOver;
     protected Locale locale;
+    protected ResourceBundle messages;
 
     public Game(GUI gui, Random random, SetupGame gameSetup, PlayerHandler playerHandler) {
         this.gui = gui;
@@ -25,9 +28,9 @@ public class Game {
         setupFlipButton();
         String coinFlipResult = gameSetup.completeGameSetup();
         playerHandler.completePlayerSetup(coinFlipResult);
-        Player currentPlayer = playerHandler.getCurrentPlayer();
-        gui.updateTurn(playerHandler.getPlayerTurn());
-        displaySetupResults(coinFlipResult, currentPlayer);
+        int playerTurn = playerHandler.getPlayerTurn();
+        gui.updateTurn(playerTurn);
+        displaySetupResults(coinFlipResult, playerTurn);
         selectActiveLoop();
         while(!gameOver) {
             mainGameLoop();
@@ -36,11 +39,19 @@ public class Game {
 
     private void decideLocale() {
         locale = gui.displayLocaleOptions();
-        gui.displayMessage("You have chosen: " + locale.getLanguage());
+        messages = ResourceBundle.getBundle("MessagesBundle", locale);
+
+        String message = messages.getString("language");
+        message = MessageFormat.format(message, locale.getDisplayLanguage());
+        gui.displayMessage(message);
     }
 
-    protected void displaySetupResults(String coinFlipResult, Player currentPlayer) {
-        gui.displayMessage("The result was " + coinFlipResult + " " + currentPlayer.getName() + " goes first!");
+    protected void displaySetupResults(String coinFlipResult, int turn) {
+        String message = messages.getString("coinflip");
+        String result = messages.getString(coinFlipResult);
+        String player = messages.getString("player");
+        message = MessageFormat.format(message, result, player, turn);
+        gui.displayMessage(message);
     }
 
     protected void selectActiveLoop() {
@@ -53,7 +64,8 @@ public class Game {
             makeNewActivePokemon((Pokemon) selectedCard);
             displayCurrentPlayerHand();
         } else {
-            gui.displayMessage("Not a basic Pokemon!");
+            String message = messages.getString("notBasic");
+            gui.displayMessage(message);
             gui.removeAllButtons();
             selectActiveLoop();
         }
@@ -107,7 +119,8 @@ public class Game {
 
     protected Card retreatPokemon() {
         gui.removeAllButtons();
-        gui.displayMessage("Select new active Pokemon");
+        String message = messages.getString("newActive");
+        gui.displayMessage(message);
         ArrayList<Card> playerCards = playerHandler.getOnlyPokemonFromBench(1);
         gui.displayCards(playerCards);
         gui.displayConfirmAndCancelButton();
@@ -115,7 +128,8 @@ public class Game {
         if(!gui.isCancelled()) {
             Card selectedCard = gui.getLastSelectedCard();
             if(!playerCards.contains(selectedCard)) {
-                gui.displayMessage("No card selected!");
+                message = messages.getString("noSelected");
+                gui.displayMessage(message);
                 return retreatPokemon();
 
             } else {
@@ -129,7 +143,8 @@ public class Game {
 
     protected void handleAttackAction() {
         if(!playerHandler.playerCanAttack()) {
-            gui.displayMessage("You are unable to attack right now!");
+            String message = messages.getString("noAttack");
+            gui.displayMessage(message);
         } else {
             handleAttackOpponent();
         }
@@ -406,7 +421,8 @@ public class Game {
     }
 
     public void displayActiveDirections() {
-        gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
+        String message = messages.getString("activeDir");
+        gui.displayMessage(message);
     }
 
     public void makeNewActivePokemon(Pokemon p) {

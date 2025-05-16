@@ -3,6 +3,7 @@ package main;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import javax.swing.*;
 
 
@@ -67,7 +68,8 @@ public class GameGUI implements GUI {
     private volatile String lastActionButtonPressed;
     private int playerTurn = 0;
     private boolean cancelled;
-    public Locale locale;
+    private Locale locale;
+    private ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
 
 
     private class GamePanel extends JPanel {
@@ -89,8 +91,11 @@ public class GameGUI implements GUI {
 
             g2d.setColor(Color.WHITE);
             g2d.setFont(boldFont);
-            g2d.drawString("Player 1", (marginSide*7)/4 + (cardWidth * 2) + benchHorizontalOffset + (2 * (benchHorizontalIncrement + cardWidth)), frameHeight -  (cardHeight*8)/7 - marginBottom - benchVerticalOffset);
-            g2d.drawString("Player 2", frameWidth - (marginSide * 5) / 4 - (cardWidth * 3) - benchHorizontalOffset - (2 * (benchHorizontalIncrement + cardWidth)), marginTop + (cardHeight*17)/14);
+
+            String message = messages.getString("player");
+            g2d.drawString(message +  " 1", (marginSide*7)/4 + (cardWidth * 2) + benchHorizontalOffset + (2 * (benchHorizontalIncrement + cardWidth)), frameHeight -  (cardHeight*8)/7 - marginBottom - benchVerticalOffset);
+            g2d.drawString(message + " 2", frameWidth - (marginSide * 5) / 4 - (cardWidth * 3) - benchHorizontalOffset - (2 * (benchHorizontalIncrement + cardWidth)), marginTop + (cardHeight*17)/14);
+
 
             // ----- USER SIDE (NEAR/BOTTOM SIDE) --------
             g2d.setFont(plainFont);
@@ -441,7 +446,7 @@ public class GameGUI implements GUI {
     public Locale displayLocaleOptions() {
         displayMessage("Select a language!\n\nWählen Sie eine Sprache aus!");
         JButton engBtn = new JButton("English");
-        JButton germanBtn = new JButton("German");
+        JButton germanBtn = new JButton("Deutsch");
 
         buttons.add(engBtn);
         handPanel.add(engBtn);
@@ -454,6 +459,7 @@ public class GameGUI implements GUI {
         engBtn.addActionListener(e -> {
             this.waitForAction = true;
             locale = Locale.US;
+            messages = ResourceBundle.getBundle("MessagesBundle", locale);
             removeButton(engBtn);
             removeButton(germanBtn);
         });
@@ -466,6 +472,7 @@ public class GameGUI implements GUI {
         });
 
         waitForButtonPressed();
+        frame.repaint();
         return locale;
     }
 
