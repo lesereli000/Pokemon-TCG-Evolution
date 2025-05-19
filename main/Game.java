@@ -154,7 +154,8 @@ public class Game {
         Attack selectedAttack = displayAttackInfo();
         if(selectedAttack != null) {
             if(!playerHandler.attackOpponent(selectedAttack)) {
-                gui.displayMessage("Do not have the energy for that attack!");
+                String message = messages.getString("notEnergy");
+                gui.displayMessage(message);
             } else {
                 boolean defendingIsDead = playerHandler.isDefendingDead();
                 displayPostAttackInfo(selectedAttack, defendingIsDead);
@@ -183,7 +184,8 @@ public class Game {
             Card lastSelectedCard = gui.getLastSelectedCard();
 
             if(!activeBench.contains(lastSelectedCard)) {
-                gui.displayMessage("Invalid Pokemon entry!");
+                String message = messages.getString("invalidPokemon");
+                gui.displayMessage(message);
                 handleDeadActive();
             } else {
                 int playerTurn = playerHandler.getPlayerTurn();
@@ -236,7 +238,8 @@ public class Game {
         if(gui.isCancelled()) return null;
         Attack attack = gui.getLastSelectedAttack();
         if(!attacks.contains(attack)) {
-            gui.displayMessage("Attack not selected!");
+            String message = messages.getString("atkNotSelect");
+            gui.displayMessage(message);
             return displayAttackInfo();
         } else {
             return attack;
@@ -246,7 +249,8 @@ public class Game {
     protected void handleBenchAction() {
         Card lastSelectedCard = gui.getLastSelectedCard();
         if(!(lastSelectedCard instanceof Pokemon)) {
-            gui.displayMessage("Pokemon has not been selected!");
+            String message = messages.getString("noPokemon");
+            gui.displayMessage(message);
         } else {
             handleAddToBench((Pokemon)lastSelectedCard);
         }
@@ -255,7 +259,8 @@ public class Game {
     protected void handleEnergyAction() {
         Card lastSelectedCard = gui.getLastSelectedCard();
         if(!(lastSelectedCard instanceof Energy)) {
-            gui.displayMessage("Energy has not been selected!");
+            String message = messages.getString("noEnergy");
+            gui.displayMessage(message);
         } else {
             handleAddEnergy((Energy)lastSelectedCard);
         }
@@ -264,7 +269,8 @@ public class Game {
     protected void handleTrainerAction() {
         Card lastSelectedCard = gui.getLastSelectedCard();
         if(!(lastSelectedCard instanceof Trainer)) {
-            gui.displayMessage("Trainer has not been selected!");
+            String message = messages.getString("noTrainer");
+            gui.displayMessage(message);
         } else {
             handleUseTrainer((Trainer)lastSelectedCard);
         }
@@ -284,7 +290,8 @@ public class Game {
     protected Pokemon displayTrainerPokemonSelection(Trainer trainer, ArrayList<Card> pokemon) {
         String trainerName = trainer.getName();
         if(trainerName.equals("Potion") || trainerName.equals("Super Potion")) {
-            gui.displayMessage("Select Pokemon to use Potion on");
+            String message = messages.getString("selectPokPot");
+            gui.displayMessage(message);
             gui.removeAllButtons();
             gui.displayCards(pokemon);
             gui.displayConfirmAndCancelButton();
@@ -292,7 +299,8 @@ public class Game {
             if(gui.isCancelled()) return null;
             Pokemon selectedPokemon = (Pokemon) gui.getLastSelectedCard();
             if(!pokemon.contains(selectedPokemon)) {
-                gui.displayMessage("No Pokemon selected!");
+                String msg = messages.getString("noPokemon");
+                gui.displayMessage(msg);
                 return displayTrainerPokemonSelection(trainer, pokemon);
             } else {
                 return selectedPokemon;
@@ -304,7 +312,8 @@ public class Game {
 
     protected Energy displayTrainerEnergySelection(Trainer trainer, ArrayList<Card> energy) {
         if(trainer.getName().equals("Super Potion")) {
-            gui.displayMessage("Select Energy to discard for Super Potion");
+            String message = messages.getString("selectEnSuper");
+            gui.displayMessage(message);
             gui.removeAllButtons();
             gui.displayCards(energy);
             gui.displayConfirmAndCancelButton();
@@ -312,7 +321,8 @@ public class Game {
             if(gui.isCancelled()) return null;
             Energy selectedEnergy = (Energy) gui.getLastSelectedCard();
             if(!energy.contains(selectedEnergy)) {
-                gui.displayMessage("No Energy selected!");
+                String msg = messages.getString("noEnergy");
+                gui.displayMessage(msg);
                 return displayTrainerEnergySelection(trainer, energy);
             } else {
                 return selectedEnergy;
@@ -352,7 +362,8 @@ public class Game {
     protected void handleEvolveAction() {
         Card lastSelectedCard = gui.getLastSelectedCard();
         if(!(lastSelectedCard instanceof Pokemon)) {
-            gui.displayMessage("Pokemon has not been selected!");
+            String message = messages.getString("noPokemon");
+            gui.displayMessage(message);
         } else {
             handleEvolve((Pokemon)lastSelectedCard);
         }
@@ -364,17 +375,21 @@ public class Game {
             ArrayList<Card> onlyPreEvolutions = playerHandler.getOnlyPreEvolutionsFromActivePlayer(evolution);
 
             if(onlyPreEvolutions.isEmpty()) {
-                gui.displayMessage("You have no Pokemon that can evolve into " + evolution.getName());
+                String message = messages.getString("cantEvolve");
+                message = MessageFormat.format(message, evolution.getName());
+                gui.displayMessage(message);
             } else {
                 Pokemon basePokemon = displayEvolveInfo(onlyPreEvolutions);
                 if (basePokemon != null) {
                     switch(playerHandler.evolve(evolution, basePokemon)){
                         case "Error":
-                            gui.displayMessage("Evolution could not be completed");
+                            String msg = messages.getString("evolveError");
+                            gui.displayMessage(msg);
                             break;
 
                         case "JustPlayed":
-                            gui.displayMessage("Base Pokemon was just played");
+                            String msg2 = messages.getString("justPlayed");
+                            gui.displayMessage(msg2);
                             break;
 
                         case "Active":
@@ -390,12 +405,15 @@ public class Game {
                 }
             }
         } else {
-            gui.displayMessage("This is a basic Pokemon, not an evolution. Try adding " + evolution.getName() + " to the bench if you have room!");
+            String message = messages.getString("evolveBasic");
+            message = MessageFormat.format(message, evolution.getName());
+            gui.displayMessage(message);
         }
     }
 
     protected Pokemon displayEvolveInfo(ArrayList<Card> pokemon) {
-        gui.displayMessage("Select Pokemon to evolve from");
+        String message = messages.getString("selectEvolve");
+        gui.displayMessage(message);
         gui.removeAllButtons();
         gui.displayCards(pokemon);
         gui.displayConfirmAndCancelButton();
@@ -403,7 +421,8 @@ public class Game {
         if(gui.isCancelled()) return null;
         Pokemon selectedPokemon = (Pokemon) gui.getLastSelectedCard();
         if(!pokemon.contains(selectedPokemon)) {
-            gui.displayMessage("No Pokemon selected!");
+            String msg = messages.getString("noPokemon");
+            gui.displayMessage(msg);
             return displayEvolveInfo(pokemon);
         } else {
             return selectedPokemon;
@@ -447,13 +466,15 @@ public class Game {
             int playerTurn = playerHandler.getPlayerTurn();
             gui.addBenchCard(selectedPokemon, playerTurn);
         } else {
-            gui.displayMessage("This is not a basic Pokemon and can not place card on bench!");
+            String message = messages.getString("noAddBench");
+            gui.displayMessage(message);
         }
     }
 
     protected void handleAddEnergy(Energy energy) {
         if(!playerHandler.activeCanAddEnergy()) {
-            gui.displayMessage("Unable to add energy!");
+            String message = messages.getString("addEnergyErr");
+            gui.displayMessage(message);
         } else {
             Player currentPlayer = playerHandler.getCurrentPlayer();
             ArrayList<Card> onlyPokemon = playerHandler.getOnlyPokemonFromBench(1);
@@ -468,7 +489,8 @@ public class Game {
     }
 
     protected Pokemon displayAddEnergyInfo(ArrayList<Card> pokemon) {
-        gui.displayMessage("Select Pokemon to add Energy to");
+        String message = messages.getString("pokAddEnergy");
+        gui.displayMessage(message);
         gui.removeAllButtons();
         gui.displayCards(pokemon);
         gui.displayConfirmAndCancelButton();
@@ -476,7 +498,8 @@ public class Game {
         if(gui.isCancelled()) return null;
         Pokemon selectedPokemon = (Pokemon) gui.getLastSelectedCard();
         if(!pokemon.contains(selectedPokemon)) {
-            gui.displayMessage("No Pokemon selected!");
+            String msg = messages.getString("noPokemon");
+            gui.displayMessage(msg);
             return displayAddEnergyInfo(pokemon);
         } else {
             return selectedPokemon;

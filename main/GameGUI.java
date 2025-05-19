@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.*;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -210,7 +211,8 @@ public class GameGUI implements GUI {
     public void createGUI() {
         // Creating the JFrame
         frame = new JFrame();
-        frame.setTitle("Pokemon Game");
+        String title = messages.getString("title");
+        frame.setTitle(title);
         frame.setSize(frameWidth, frameHeight);
         frame.setLocation(frameXLoc, frameYLoc);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -234,7 +236,8 @@ public class GameGUI implements GUI {
     }
 
     public void createFlipButton() {
-        createSDHoldingButton("Flip Coin");
+        String message = messages.getString("flipCoin");
+        createSDHoldingButton(message);
         while (!waitForAction) {
             Thread.onSpinWait();
         }
@@ -340,15 +343,16 @@ public class GameGUI implements GUI {
 
     @Override
     public void displayConfirmAndCancelButton() {
-        JButton btn = new JButton("Confirm Selection");
+        String message = messages.getString("confirmSelection");
+        JButton btn = new JButton(message);
         this.confirmPokemonState = true;
         btn.addActionListener(e -> {
             cancelled = false;
             this.waitForAction = true;
             this.confirmPokemonState = false;
         });
-
-        JButton cancel = new JButton("Cancel");
+        String msg = messages.getString("cancel");
+        JButton cancel = new JButton(msg);
         cancel.addActionListener(e -> {
             this.waitForAction = true;
             this.confirmPokemonState = false;
@@ -384,8 +388,11 @@ public class GameGUI implements GUI {
         String defendingName = defendingPlayer.getName();
         Pokemon currentPokemon = currentPlayer.activePokemon;
         Pokemon defendingPokemon = defendingPlayer.activePokemon;
-        attackReport.append("Attack Report:\n");
-        attackReport.append(currentName).append("'s active Pokemon: ").append(currentPokemon.getName()).append("\n");
+        String atkReport = messages.getString("atkReport");
+        attackReport.append(atkReport).append("\n");
+        String pokemonName = messages.getString("pokemonName");
+        pokemonName = MessageFormat.format(currentName, currentPokemon.getName(), pokemonName);
+        attackReport.append(pokemonName).append("\n");
         attackReport.append("attacked ").append(defendingName).append("'s active Pokemon: ").append(defendingPokemon.getName()).append("\n\n");
         attackReport.append(defendingName).append("'s active Pokemon took ").append(attack.getDamage()).append(" damage\n");
         attackReport.append(defendingName).append("'s active Pokemon: ").append(defendingPokemon.getName())
@@ -713,7 +720,8 @@ public class GameGUI implements GUI {
 
     @Override
     public JButton createPassTurnButton() {
-        JButton btn = new JButton("Pass Turn");
+        String message = messages.getString("passTurn");
+        JButton btn = new JButton(message);
         btn.addActionListener(e -> {
             this.waitForAction = true;
             removeButton(btn);

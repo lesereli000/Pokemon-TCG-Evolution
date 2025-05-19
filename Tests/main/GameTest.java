@@ -156,6 +156,7 @@ public class GameTest {
         replay(p, gui);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleBenchAction();
 
         verify(p, gui);
@@ -198,6 +199,7 @@ public class GameTest {
         replay(gui, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleEnergyAction();
         verify(gui, handler);
     }
@@ -234,6 +236,7 @@ public class GameTest {
         replay(gui, player, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleEnergyAction();
 
         verify(gui, player, handler);
@@ -481,6 +484,7 @@ public class GameTest {
         replay(gui, player, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.mainGameLoop();
 
         verify(gui, player, handler);
@@ -509,6 +513,7 @@ public class GameTest {
         replay(gui, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.mainGameLoop();
 
         verify(gui, handler);
@@ -539,6 +544,7 @@ public class GameTest {
         replay(gui, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.mainGameLoop();
 
         verify(gui, handler);
@@ -724,6 +730,7 @@ public class GameTest {
         replay(gui);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleBenchAction();
 
         verify(gui);
@@ -897,6 +904,7 @@ public class GameTest {
         replay(gui, handler, selectedPokemon);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleDeadActive();
 
         verify(gui, handler, selectedPokemon);
@@ -985,6 +993,7 @@ public class GameTest {
         replay(gui, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleAttackOpponent();
         verify(gui, handler);
     }
@@ -1184,7 +1193,7 @@ public class GameTest {
         gui.waitForAction();
 
         expect(gui.getLastSelectedCard()).andReturn(null).andReturn(p);
-        gui.displayMessage("No Pokemon selected!");
+        gui.displayMessage("Pokemon has not been selected!");
 
         gui.displayMessage("Select Pokemon to add Energy to");
         gui.removeAllButtons();
@@ -1196,6 +1205,7 @@ public class GameTest {
         replay(gui);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.displayAddEnergyInfo(cards);
 
         verify(gui);
@@ -1231,6 +1241,7 @@ public class GameTest {
         replay(gui, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.displayAttackInfo();
 
         verify(gui, handler);
@@ -1323,6 +1334,7 @@ public class GameTest {
         replay(gui, handler, p);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleAddEnergy(e);
         verify(gui, handler, p);
     }
@@ -1404,6 +1416,7 @@ public class GameTest {
         replay(gui, handler);
 
         Game game = new Game(gui, rand, gameSetup, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.mainGameLoop();
 
         verify(gui, handler);
@@ -1425,6 +1438,7 @@ public class GameTest {
         replay(gui, p);
 
         Game game = new Game(gui, rand, gameSetup, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleEvolveAction();
 
         verify(gui, p);
@@ -1449,6 +1463,7 @@ public class GameTest {
         replay(gui, p, handler, cards);
 
         Game game = new Game(gui, rand, gameSetup, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleEvolveAction();
 
         verify(gui, p, handler, cards);
@@ -1479,6 +1494,7 @@ public class GameTest {
         replay(gui, p, handler, cards);
 
         Game game = new Game(gui, rand, gameSetup, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleEvolveAction();
 
         verify(gui, p, handler, cards);
@@ -1508,7 +1524,7 @@ public class GameTest {
         expect(gui.isCancelled()).andReturn(false);
         expect(gui.getLastSelectedCard()).andReturn(p2);
         expect(cards.contains(p2)).andReturn(false);
-        gui.displayMessage("No Pokemon selected!");
+        gui.displayMessage("Pokemon has not been selected!");
 
         //displayEvolveInfo again
         gui.displayMessage("Select Pokemon to evolve from");
@@ -1525,6 +1541,7 @@ public class GameTest {
         replay(gui, p, handler, cards);
 
         Game game = new Game(gui, rand, gameSetup, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleEvolveAction();
 
         verify(gui, p, handler, cards);
@@ -1561,6 +1578,7 @@ public class GameTest {
         replay(gui, p, handler, cards);
 
         Game game = new Game(gui, rand, gameSetup, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleEvolveAction();
 
         verify(gui, p, handler, cards);
@@ -1598,6 +1616,7 @@ public class GameTest {
         replay(gui, p, handler, cards);
 
         Game game = new Game(gui, rand, gameSetup, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleEvolveAction();
 
         verify(gui, p, handler, cards);
@@ -1639,6 +1658,7 @@ public class GameTest {
         replay(gui, p, handler, cards);
 
         Game game = new Game(gui, rand, gameSetup, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleBenchAction();
         game.handleEvolveAction();
 
@@ -1700,6 +1720,7 @@ public class GameTest {
         replay(gui, player, handler, trainer, p);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.mainGameLoop();
 
         verify(gui, player, handler, trainer, p);
@@ -1793,7 +1814,7 @@ public class GameTest {
         expect(gui.getLastSelectedCard()).andReturn(p1).times(1);
 
         // Expected message for no selection
-        gui.displayMessage("No Pokemon selected!");
+        gui.displayMessage("Pokemon has not been selected!");
         expectLastCall().times(1);
 
         trainer.doEffects(player, p1, null);
@@ -1802,6 +1823,7 @@ public class GameTest {
         replay(gui, player, handler, trainer, p1);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.mainGameLoop();
 
         verify(gui, player, handler, trainer, p1);
@@ -1864,7 +1886,7 @@ public class GameTest {
 
         // Invalid attempt
         expect(gui.getLastSelectedCard()).andReturn(e2).times(1);
-        gui.displayMessage("No Energy selected!"); // recursive trigger
+        gui.displayMessage("Energy has not been selected!"); // recursive trigger
         expectLastCall().once();
         expect(gui.getLastSelectedCard()).andReturn(e1).times(1);
 
@@ -1875,6 +1897,7 @@ public class GameTest {
         replay(gui, player, handler, trainer, p);
 
         Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.mainGameLoop();
 
         verify(gui, player, handler, trainer, p);
@@ -1896,6 +1919,7 @@ public class GameTest {
         replay(gui, nonTrainerCard);
 
         Game game = new Game(gui, rand, gameSetup, ph);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleTrainerAction();        // Verify interactions
 
         verify(gui, nonTrainerCard);
