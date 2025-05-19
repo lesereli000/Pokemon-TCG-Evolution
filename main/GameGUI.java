@@ -388,18 +388,29 @@ public class GameGUI implements GUI {
         String defendingName = defendingPlayer.getName();
         Pokemon currentPokemon = currentPlayer.activePokemon;
         Pokemon defendingPokemon = defendingPlayer.activePokemon;
+
         String atkReport = messages.getString("atkReport");
         attackReport.append(atkReport).append("\n");
-        String pokemonName = messages.getString("pokemonName");
-        pokemonName = MessageFormat.format(currentName, currentPokemon.getName(), pokemonName);
-        attackReport.append(pokemonName).append("\n");
-        attackReport.append("attacked ").append(defendingName).append("'s active Pokemon: ").append(defendingPokemon.getName()).append("\n\n");
-        attackReport.append(defendingName).append("'s active Pokemon took ").append(attack.getDamage()).append(" damage\n");
-        attackReport.append(defendingName).append("'s active Pokemon: ").append(defendingPokemon.getName())
-                .append(" is now at: ").append(defendingPokemon.getCurHP()).append(" hp");
-        displayMessage(attackReport.toString());
 
+        String pokemonName = messages.getString("pokemonName");
+        pokemonName = MessageFormat.format(pokemonName, currentName, currentPokemon.getName());
+        attackReport.append(pokemonName).append("\n");
+
+        String attacked = messages.getString("attacked");
+        attacked = MessageFormat.format(attacked, defendingName, defendingPokemon.getName());
+        attackReport.append(attacked).append("\n\n");
+
+        String tookDmg = messages.getString("tookDmg");
+        tookDmg = MessageFormat.format(tookDmg, defendingName, attack.getDamage());
+        attackReport.append(tookDmg).append("\n");
+
+        String newHp = messages.getString("newHp");
+        newHp = MessageFormat.format(newHp, defendingName, defendingPokemon.getName(), defendingPokemon.getCurHP());
+        attackReport.append(newHp);
+
+        displayMessage(attackReport.toString());
     }
+
 
     @Override
     public void displayRetreatEnergy(Pokemon pokemon, boolean canRetreat) {
@@ -474,6 +485,7 @@ public class GameGUI implements GUI {
         germanBtn.addActionListener(e -> {
             this.waitForAction = true;
             locale = Locale.GERMANY;
+            messages = ResourceBundle.getBundle("MessagesBundle", locale);
             removeButton(engBtn);
             removeButton(germanBtn);
         });
