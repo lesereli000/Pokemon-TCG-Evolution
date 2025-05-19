@@ -135,7 +135,8 @@ public class GameGUI implements GUI {
             g2d.setColor(player1ActiveColor);
             g2d.drawRect((frameWidth / 2) - (cardWidth / 2), (frameHeight / 2) + activeVerticalMargin - activeVerticalOffset, cardWidth, cardHeight);
             if (player1ActiveColor == Color.GREEN) {
-                g2d.drawString("Active Pokemon:", (frameWidth / 2) - (cardWidth / 2) + marginSide / 8, (frameHeight / 2) - activeVerticalOffset + marginTop / 2);
+                String actvPok = messages.getString("actvPok");
+                g2d.drawString(actvPok, (frameWidth / 2) - (cardWidth / 2) + marginSide / 8, (frameHeight / 2) - activeVerticalOffset + marginTop / 2);
                 g2d.drawString(player1activeCard.getName(), (frameWidth / 2) - (cardWidth / 2) + marginSide / 8, (frameHeight / 2) - activeVerticalOffset + marginTop);
             }
 
@@ -184,7 +185,8 @@ public class GameGUI implements GUI {
             //Active Pokemon
             g2d.setColor(player2ActiveColor);
             if (player2ActiveColor == Color.GREEN) {
-                g2d.drawString("Active Pokemon:", (frameWidth / 2) - (cardWidth / 2) + marginSide / 8, (frameHeight / 2) - activeVerticalMargin - cardHeight - activeVerticalOffset / 4);
+                String actvPok = messages.getString("actvPok");
+                g2d.drawString(actvPok, (frameWidth / 2) - (cardWidth / 2) + marginSide / 8, (frameHeight / 2) - activeVerticalMargin - cardHeight - activeVerticalOffset / 4);
                 g2d.drawString(player2activeCard.getName(), (frameWidth / 2) - (cardWidth / 2) + marginSide / 8, (frameHeight / 2) - activeVerticalMargin - cardHeight - activeVerticalOffset / 8);
             }
             g2d.drawRect((frameWidth / 2) - (cardWidth / 2), (frameHeight / 2) - activeVerticalMargin - cardHeight - activeVerticalOffset, cardWidth, cardHeight);
@@ -201,7 +203,8 @@ public class GameGUI implements GUI {
             //display current player turn
             g2d.setColor(Color.WHITE);
             g2d.setFont(boldFont);
-            String turnText = "Player Turn: " + playerTurn;
+            String turnText = messages.getString("playerTurn");
+            turnText = MessageFormat.format(turnText, playerTurn);
             FontMetrics metrics = g2d.getFontMetrics(boldFont);
             int textWidth = metrics.stringWidth(turnText);
             g2d.drawString(turnText, (frameWidth*5)/7 - textWidth, frameHeight/2 - (marginTop*2)/3);
@@ -414,12 +417,19 @@ public class GameGUI implements GUI {
 
     @Override
     public void displayRetreatEnergy(Pokemon pokemon, boolean canRetreat) {
-        String retreatMessage = "Requires " + pokemon.retreatCost + " Colorless Energy\n" +
-                " for " + pokemon.getName() + " to retreat";
+        StringBuilder retreatReport = new StringBuilder();
+        String retreatMessageTop = messages.getString("retreatMessageTop");
+        retreatMessageTop = MessageFormat.format(retreatMessageTop, pokemon.retreatCost);
+        String retreatMessageBottom = messages.getString("retreatMessageBottom");
+        retreatMessageBottom = MessageFormat.format(retreatMessageBottom, pokemon.getName());
+        retreatReport.append(retreatMessageTop).append("\n").append(retreatMessageBottom).append("\n");
+
         if (!canRetreat) {
-            displayMessage(retreatMessage + "\nYou are currently unable to retreat!");
+            String cantRetreat = messages.getString("cantRetreat");
+            retreatReport.append("\n").append(cantRetreat);
+            displayMessage(retreatReport.toString());
         } else {
-            displayMessage(retreatMessage);
+            displayMessage(retreatReport.toString());
         }
     }
 
@@ -512,21 +522,42 @@ public class GameGUI implements GUI {
         StringBuilder report = new StringBuilder();
         int stage = pokemon.getStage();
         //General info
-        report.append("Pokemon Report:\n\n");
-        report.append("Name: ").append(pokemon.getName()).append("\n");
-        report.append("Stage: ").append(stage).append("\n");
-        report.append("Type: ").append(pokemon.type).append("\n");
-        report.append("HP: ").append(pokemon.getCurHP()).append("\n");
-        report.append("Retreat Cost: ").append(pokemon.retreatCost).append(" Colorless Energy\n");
+        String pokReport = messages.getString("pokReport");
+        report.append(pokReport).append("\n\n");
+
+        String pokName = messages.getString("pokName");
+        pokName = MessageFormat.format(pokName, pokemon.getName());
+        report.append(pokName).append("\n");
+
+        String pokStage = messages.getString("pokStage");
+        pokStage = MessageFormat.format(pokStage, stage);
+        report.append(pokStage).append("\n");
+
+        String pokType = messages.getString("pokType");
+        pokType = MessageFormat.format(pokType, pokemon.getType());
+        report.append(pokType).append("\n");
+
+        String pokHP= messages.getString("pokHP");
+        pokHP = MessageFormat.format(pokHP, pokemon.getCurHP());
+        report.append(pokHP).append("\n");
+
+        String retreatCost = messages.getString("retreatCost");
+        retreatCost = MessageFormat.format(retreatCost, pokemon.retreatCost);
+        report.append(retreatCost).append("\n");
+
         if(stage > 0) {
-            report.append("Evolves From: ").append(pokemon.getEvolvesFrom()).append("\n");
+            String evolvesFrom = messages.getString("evolvesFrom");
+            evolvesFrom = MessageFormat.format(evolvesFrom, pokemon.getEvolvesFrom());
+            report.append(evolvesFrom).append("\n");
         }
 
 
         //Energies
-        report.append("\nAttached Energies:\n");
+        String pokEnergies = messages.getString("pokEnergies");
+        report.append("\n").append(pokEnergies).append("\n");
         if (pokemon.energies.isEmpty()) {
-            report.append("None\n");
+            String none = messages.getString("none");
+            report.append(none).append("\n");
         } else {
             for (Energy energy : pokemon.energies) {
                 report.append("• ").append(energy.getName()).append("\n");
@@ -534,7 +565,8 @@ public class GameGUI implements GUI {
         }
 
         //Attacks
-        report.append("\nAttacks:\n");
+        String atks = messages.getString("atks");
+        report.append("\n").append(atks).append("\n");
         report.append(generateAttackReport(pokemon.attacks));
 
         displayMessage(report.toString());
