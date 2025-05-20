@@ -1,12 +1,16 @@
 package main;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
+//https://stackoverflow.com/questions/601274/how-do-i-properly-load-a-bufferedimage-in-java
 
 public class GameGUI implements GUI {
 
@@ -71,7 +75,7 @@ public class GameGUI implements GUI {
     private boolean cancelled;
     private Locale locale;
     private ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
-
+    private BufferedImage flag = null;
 
     private class GamePanel extends JPanel {
 
@@ -96,6 +100,13 @@ public class GameGUI implements GUI {
             String message = messages.getString("player");
             g2d.drawString(message +  " 1", (marginSide*7)/4 + (cardWidth * 2) + benchHorizontalOffset + (2 * (benchHorizontalIncrement + cardWidth)), frameHeight -  (cardHeight*8)/7 - marginBottom - benchVerticalOffset);
             g2d.drawString(message + " 2", frameWidth - (marginSide * 5) / 4 - (cardWidth * 3) - benchHorizontalOffset - (2 * (benchHorizontalIncrement + cardWidth)), marginTop + (cardHeight*17)/14);
+
+            if(flag != null) {
+                int x = 7*frameWidth/11;
+                int y = frameHeight/2;
+                Image scaledFlag = flag.getScaledInstance(120, 80, Image.SCALE_SMOOTH);
+                g2d.drawImage(scaledFlag, x, y, null);
+            }
 
 
             // ----- USER SIDE (NEAR/BOTTOM SIDE) --------
@@ -495,6 +506,11 @@ public class GameGUI implements GUI {
             this.waitForAction = true;
             locale = Locale.US;
             messages = ResourceBundle.getBundle("MessagesBundle", locale);
+            try {
+                flag = ImageIO.read(getClass().getResource("/USFlag.png"));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
             removeButton(engBtn);
             removeButton(germanBtn);
         });
@@ -503,6 +519,11 @@ public class GameGUI implements GUI {
             this.waitForAction = true;
             locale = Locale.GERMANY;
             messages = ResourceBundle.getBundle("MessagesBundle", locale);
+            try {
+                flag = ImageIO.read(getClass().getResource("/deutschflag.png"));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
             removeButton(engBtn);
             removeButton(germanBtn);
         });
@@ -593,7 +614,8 @@ public class GameGUI implements GUI {
     @Override
     public void displayCards(ArrayList<Card> playerCards) {
         for (Card currCard : playerCards) {
-            createLinkedButtonCard(currCard.getName(), currCard);
+            String cardName = currCard.getName();
+            createLinkedButtonCard(cardName, currCard);
         }
     }
 
