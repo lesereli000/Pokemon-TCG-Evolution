@@ -448,8 +448,11 @@ public class GameGUI implements GUI {
 	public void displayDeadActiveInfo(Player defendingPlayer) {
 		StringBuilder deadPokemonReport = new StringBuilder();
 		Pokemon deadPokemon = (Pokemon) defendingPlayer.getActivePokemon();
-		deadPokemonReport.append(defendingPlayer.getName()).append("'s active Pokemon: ").append(deadPokemon.getName()).append(" has died!\n");
-		deadPokemonReport.append("Select a new basic Pokemon to be your new active Pokemon");
+        String pokemonDied = messages.getString("pokemonDied");
+        pokemonDied = MessageFormat.format(pokemonDied, defendingPlayer.getName(), deadPokemon.getName());
+        deadPokemonReport.append(pokemonDied).append("\n");
+        String selectNewActive = messages.getString("selectNewActive");
+		deadPokemonReport.append(selectNewActive);
 		displayMessage(deadPokemonReport.toString());
 	}
 
@@ -457,7 +460,11 @@ public class GameGUI implements GUI {
 	public void displayWinningMessage(Player winner, Player loser) {
 		String winnerName = winner.getName();
 		String loserName = loser.getName();
-		displayMessage(winnerName + " has won the game! " + "\nSorry " + loserName + ", better luck next time!");
+        String winningMessageTop = messages.getString("winningMessageTop");
+        String winningMessageBottom = messages.getString("winningMessageBottom");
+        winningMessageTop = MessageFormat.format(winningMessageTop, winnerName);
+        winningMessageBottom = MessageFormat.format(winningMessageBottom, loserName);
+        displayMessage(winningMessageTop + "\n" + winningMessageBottom);
 	}
 
     @Override
@@ -508,11 +515,14 @@ public class GameGUI implements GUI {
     public String generateAttackReport(ArrayList<Attack> attacks) {
 		StringBuilder report = new StringBuilder();
 		for (Attack attack : attacks) {
-			report.append("\n").append(attack.name).append(":\nCosts:\n");
+            String costs = messages.getString("costs");
+            report.append("\n").append(attack.name).append(":\n").append(costs).append("\n");
 			for (Energy energy : attack.costs) {
 				report.append("• ").append(energy.getName()).append("\n");
 			}
-			report.append("Damage: ").append(attack.damage).append("\n");
+            String dmg = messages.getString("dmg");
+            dmg = MessageFormat.format(dmg, attack.getDamage());
+            report.append(dmg).append("\n");
 		}
 		return report.toString();
 	}
@@ -611,26 +621,31 @@ public class GameGUI implements GUI {
     private void displayPokemonActionButtons(Pokemon card) {
         removeSelectedCardActionButtons();
         if (card.stage == 0) {
-            selectedCardActionButtons.add(createLinkedButtonAction("Add Pokemon Bench", "AddToBench"));
+            String addPokBench = messages.getString("addPokBench");
+            selectedCardActionButtons.add(createLinkedButtonAction(addPokBench, "AddToBench"));
         } else {
-            selectedCardActionButtons.add(createLinkedButtonAction("Evolve to Pokemon", "Evolve"));
+            String evolveToPok = messages.getString("evolveToPok");
+            selectedCardActionButtons.add(createLinkedButtonAction(evolveToPok, "Evolve"));
         }
     }
 
 
     private void displayEnergyActionButtons(Energy energy) {
         removeSelectedCardActionButtons();
-        selectedCardActionButtons.add(createLinkedButtonAction("Add An Energy", "AddEnergy"));
+        String addEnergy = messages.getString("addEnergy");
+        selectedCardActionButtons.add(createLinkedButtonAction(addEnergy, "AddEnergy"));
     }
 
     private void displayTrainerActionButtons(Trainer trainer) {
         removeSelectedCardActionButtons();
-        selectedCardActionButtons.add(createLinkedButtonAction("Play Trainer", "PlayTrainer"));
+        String playTrainer = messages.getString("playTrainer");
+        selectedCardActionButtons.add(createLinkedButtonAction(playTrainer, "PlayTrainer"));
     }
 
     private void displayActiveActionButton(){
         removeSelectedCardActionButtons();
-        selectedCardActionButtons.add(createLinkedButtonAction("Active Selected Pokemon", "AddToBench"));
+        String actvSelectedPok = messages.getString("actvSelectedPok");
+        selectedCardActionButtons.add(createLinkedButtonAction(actvSelectedPok, "AddToBench"));
     }
 
     private void removeSelectedCardActionButtons() {
@@ -655,10 +670,14 @@ public class GameGUI implements GUI {
     @Override
     public void displayActionButtons() {
         activeTurn = true;
-        createLinkedButtonAction("Pass Turn", "PassTurn");
-        createLinkedButtonAction("Attack Opponent", "Attack");
-        createLinkedButtonAction("Retreat Pokemon", "Retreat");
-        createLinkedButtonAction("See Card Info", "CardInfo");
+        String passTurn = messages.getString("passTurn");
+        String atkOpp = messages.getString("atkOpp");
+        String retreatPok = messages.getString("retreatPok");
+        String seeCardInfo = messages.getString("seeCardInfo");
+        createLinkedButtonAction(passTurn, "PassTurn");
+        createLinkedButtonAction(atkOpp, "Attack");
+        createLinkedButtonAction(retreatPok, "Retreat");
+        createLinkedButtonAction(seeCardInfo, "CardInfo");
     }
 
 
