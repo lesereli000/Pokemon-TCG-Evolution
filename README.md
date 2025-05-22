@@ -1,18 +1,18 @@
 ﻿# S1G2-Project
 
-Our project is done when we have tested each of the BVA cases outline below and ensured proper behavior in each case. (e6f24b89c0808445175e24bb2151ca89d42f92df)
+Our project is done when we have tested each of the BVA cases outline below and ensured proper behavior in each case. (#e6f24b89c0808445175e24bb2151ca89d42f92df)
 
 Constraints of Pokémon Trading Card Game:
 
 Cards:
 
-    - All cards have a Name. (commit e6f24b89c0808445175e24bb2151ca89d42f92df)
+    - All cards have a Name. (commit #e6f24b89c0808445175e24bb2151ca89d42f92df)
         - BVA: Strings
             - The empty string: If a card's name is empty, the program should throw an exception showing that the card could not be found.
 
     - All cards have a Type from among the following:
 
-        - Pokémon (commit e6f24b8)
+        - Pokémon (commit #e6f24b8)
              - All Pokémon cards are one or more of the energy types. (commit e6f24b8)
 
              - All Pokémon cards are either (commit e6f24b8)
