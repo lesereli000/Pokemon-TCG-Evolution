@@ -6,7 +6,7 @@ Constraints of Pokémon Trading Card Game:
 
 Cards:
 
-    - All cards have a Name. (commit e6f24b8)
+    - All cards have a Name. (commit e6f24b89c0808445175e24bb2151ca89d42f92df)
         - BVA: Strings
             - The empty string: If a card's name is empty, the program should throw an exception showing that the card could not be found.
 
