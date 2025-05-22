@@ -6,36 +6,30 @@ Constraints of Pokémon Trading Card Game:
 
 Cards:
 
-    - All cards have a Name. 
+    - All cards have a Name. (commit e6f24b8)
         - BVA: Strings
             - The empty string: If a card's name is empty, the program should throw an exception showing that the card could not be found.
 
-    - Some cards have been made illegal for tournament play 
-        - BVA: boolean
-            - 0: legal
-            - 1: illegal
-            - Any other true value
-
     - All cards have a Type from among the following:
 
-        - Pokémon
-             - All Pokémon cards are one or more of the energy types.
+        - Pokémon (commit e6f24b8)
+             - All Pokémon cards are one or more of the energy types. (commit e6f24b8)
 
-             - All Pokémon cards are either
+             - All Pokémon cards are either (commit e6f24b8)
                   - Basic
                   - Stage 1
                   - Stage 2
 
              - All Pokémon cards have the following attributes:
-                  - HP
-                       - If a Pokémon’s HP is ever less than or equal to the total damage on that Pokémon it is knocked out.
+                  - HP 
+                       - If a Pokémon’s HP is ever less than or equal to the total damage on that Pokémon it is knocked out. (commit db3eee1)
                             - BVA: Interval (0, INT_MAX]
                                  - HP = 0: is knocked out
                                  - HP = 1: not knocked out
                                  - HP = INT_MAX: not knocked out
                                  - HP = INT_MAX + 1: throw an exception. If this ever happens, we should be worried.
 
-                  - Damage Counters (DC)
+                  - Damage Counters (DC) (commit e6f24b8)
                        - Each counter represents 10 damage, so total damage = 10 * DC
                             - BVA: Count
                                  - DC = -1: The program should throw an exception
@@ -44,24 +38,22 @@ Cards:
                                  - DC > 1: Total damage = 10 * DC
                                  - DC > HP/10: The Pokémon should faint.
 
-                  - Attacks
+                  - Attacks 
                        - Each attack the Pokémon can use will have:
-                            - Name
+                            - Name (commit 312d9e4)
                                  - BVA: Strings
                                      - The empty string: If an attack's name is empty, the program should throw an exception showing the card and attack that could not be found.
 
-                            - Energy Requirement
+                            - Energy Requirement (commit 312d9e4)
                                  - Number and color are important here.
-                                 - BVA: String and Stream (We will represent this as a string where each letter represents an energy type. i.e, "FFC" = 2 Fire, 1 Colorless.
-                                     - The empty string: This is a valid attack cost
-                                     - No duplicates in the stream: This is a valid attack cost
-                                     - All elements are duplicates: This is a valid attack cost
-                                     - An element appears at least 3 times: This is a valid attack cost
-                                     - More than one element is duplicated: This is a valid attack cost
-                                     - An element appears immediately after its duplicate: This is a valid attack cost
-                                     - There's at least one other element between two duplicates: The program should reorder the list to have like elements together (i.e. "FCF" becomes "FFC")
+                                 - BVA: Collections
+                                     - An empty collection: This is a valid attack cost
+                                     - Collection contains one energy: This is a valid attack cost
+                                     - Collection contains more than one energy: This is a valid attack cost
+                                     - Collection contains maximum potential energy cost: This is a valid attack cost
+                                     - Collection contains duplicates: This is a valid attack cost
             
-                            - Damage
+                            - Damage (commit 312d9e4)
                                  - Can be a fixed amount or vary based on the effects of the attack
                                  - BVA:
                                      - Normal damage amount: attack should deal an unmodified amount of damage
@@ -70,27 +62,17 @@ Cards:
                                      - An attack that deals fixed damage: attack should deal the correct amount of damage
                                      - Each attack with unique effects: attack should function as described
 
-                            - Effects
-                                 - Any attack may or may not have effects. These effects vary greatly between cards, but often apply conditions
-                                 - Each effect will likely need to be tested individually
-
-                  - Abilities
-                       - Abilities all have a name and an effect.
-                       - Similar to Attack effects, the effects of abilities vary greatly.
-                       - Unless the card says otherwise, an effect may be used multiple times per turn.
-                       - Some effects are passive an should be monitored throughout gameplay.
-
-                  - Weaknesses
+                  - Weaknesses (commit 8817eaf)
                        - A Pokémon card may or may not have a weakness.
                        - If a Pokémon has a weakness, it is weak to a certain energy type.
                        - Attacks from a Pokémon of the weakness type do double damage to this Pokémon (i.e. a Water type does double damage to a Pokémon that is weak to Water).
 
-                  - Resistances
+                  - Resistances (commit 8817eaf)
                        - A Pokémon card may or may not have resistances.
                        - A Pokémon with a resistance takes less damage when attacked by Pokémon of a certain type.
                        - The amount and type(s) of resistance vary.
 
-                  - Retreat Cost (RC)
+                  - Retreat Cost (RC) (commit 6834cfa)
                        - All Retreat Costs are colorless energy, so the color doesn't matter, only the number of energy.
                             - 1 energy short and attempt to retreat (fail)
                             - Exact amount of energy needed (success)
@@ -100,16 +82,16 @@ Cards:
                             - RC = 5: Discard 5 energy from the Pokémon, then retreat.
                             - RC = 6: Higher than any printed RC. Throw an exception
 
-        - Trainer
+        - Trainer (commit eb0b1c0)
              - All Trainer cards have
                   - Trainer Type
                        - Item
                        - Supporter
                        - Stadium
                   - Effects
-                       - These effects vary greatly between cards, but often
+                       - These effects vary greatly between cards, and must be implemented individually
 
-        - Energy
+        - Energy (commit e6f24b8)
              - All energy cards are one of the 11 energy types:
                   • Grass
                   • Fire
@@ -128,13 +110,13 @@ Cards:
 
 Zones:
 
-    - Hand: 
+    - Hand: (commit 85c52d5)
         - Each player should start the game with exactly 7 cards in their hand
         - Players are unable to view their opponents hand (unless otherwise specified)
             - We likely will not enforce this, as we want to run everything on a local machine and it would be difficult to distinguish between who is playing at any time
         - Any cards drawn from deck go into their hand
 
-    - Deck: 
+    - Deck: (commit 4a9b2bf)
         - Each player starts with a full deck of 60 Pokémon cards
         - Maximum of four copies of any card, EXCEPT basic energy cards
             - Test exactly 3 cards and add a 4th: successfully adds the card
@@ -144,7 +126,7 @@ Zones:
             - Test exactly 2 cards and attempt to draw a 3rd (fail)
         - Nobody may view the deck or alter the deck (unless otherwise specified)
 
-    - Prize Cards: 
+    - Prize Cards: (commit 6f54b4c)
         - Each player has their own 6 prize cards at the start of the game
         - Prize cards are face down and can not be viewed by anyone
         - When an opponents Pokémon is knocked out, player picks up a prize card into their hand
@@ -152,10 +134,7 @@ Zones:
             - Test 5 prize cards do not give player a win
             - Test 6 prize cards do give player a win
 
-    - In-Play Pokémon:
-        - In-Play Pokémon consist of both Active and Benched Pokémon
-
-    - Active Pokémon: 
+    - Active Pokémon: (commit 58db1a1)
         - The top row of each players Pokémon in-play section has a single active Pokémon at all times
         - The active Pokémon takes damage when the opponent attacks
         - Are knocked out after their hp is <= 0
@@ -163,40 +142,35 @@ Zones:
             - Test having exactly 1 active Pokémon does not result in a loss
             - Test having 0 active Pokémon does result in a loss
 
-     - Bench:
+    - Bench: (commit e6f24b8)
         - The bottom row of each players Pokémon in-play section has between 0-5 Pokémon
         - Every Pokémon on the bench is in-play
         - On their turn the player can choose to:
                 • Add a Pokémon from their hand onto the bench
                 • Move a Pokémon from the bench to active (if there is not currently an active Pokémon)
-    
-     - Discard Pile:
-        - Each player should have their own discard pile off to the side
-        - All cards taken out of play go into the discard pile and are out of play
-        - All attached cards (i.e energy cards) also go to the discard pile and are out of play
 
 Set-up:
 
-    - 2 separate players are created
-    - Their decks, and the cards in them, are created and assigned
-    - Coin is flipped to decide who gets to play first
+    - Players select language to play in (commit a92f6a2)
+    - 2 players are created (commit 991c2c9)
+    - Their decks, and the cards in them, are created and assigned (commit 991c2c9)
+    - Coin is flipped to decide who gets to play first (commit 37568b4)
          - BVA: Boolean
              - 0: player 1 goes first
              - 1: player 2 goes first
              - any other true value: throw an exception showing that the coin flip has failed
-    - Each player draws 7 cards from their deck to their hand
-    - Basic Pokémon can be assigned as active Pokémon or added to their bench (face down, unable to be viewed by their opponent)
+    - Each player draws 7 cards from their deck to their hand (commit 991c2c9)
+    - Basic Pokémon can be assigned as active Pokémon or added to their bench (face down, unable to be viewed by their opponent) (commit 0fd23cd)
         • If player does not have at least 1 basic Pokémon in their hand, they must reshuffle and their opponent may draw 1 extra card
         • If neither player has at least 1 basic Pokémon, they both reshuffle
         • Reshuffles continue accordingly until both players get at least 1 basic Pokémon and choose a basic Pokémon
         • Player must have at least 1 active Pokémon before the game continues
-    - Top 6 cards of the deck should be placed down as Prize cards
-    - All In-Play cards are flipped face up
-    - Whoever won the coinflip is then able to begin playing first, the other player should not be able to make any changes while it is their opponents turn
+    - Top 6 cards of the deck should be placed down as Prize cards (commit 991c2c9)
+    - Whoever won the coinflip is then able to begin playing first, the other player should not be able to make any changes while it is their opponents turn (commit 991c2c9)
 
 
 
-Players Turn Functionality is Complete When:
+Players Turn Functionality is Complete When: (commit )
 
     - Able to switch turns between player (so that only the person who should play is able to play)
     - Able to draw a card and add it to their hand
@@ -212,15 +186,8 @@ Players Turn Functionality is Complete When:
             - When a trainer card is played, all of the necessary rules and actions should be peroformed, then it should automatically be put in the discard pile
             - Only one Supporter card should be allowed to be played per turn
             - Only one Stadium card should be allowed to be played per turn
-            - Stadium cards rules:
-                • Only one Stadium card can be in play at a time
-                • When a new Stadium card is played, it should replace the old one
-                • Can not play a Stadium card if another Stadium card of the same name is already in play
-        - Retreat your active Pokémon (only once per turn)
+        - Retreat your active Pokémon
             - If you retreat, you can still attack that turn with your new Active Pokémon.
-        - Use abilities (as many as you want as long as conditions are met)
-            - Abilities should be able to be used by active Pokémon
-            - Abilities should be able to be used by benched Pokémon
         - Able to attack
             - Active Pokémon must have the right amount and type of energy cards
                 • If a player has the right amount and types of energy cards, they choose an attack
@@ -230,21 +197,8 @@ Players Turn Functionality is Complete When:
                 • Update the new state of the opponents Pokémon, including HP, and if necessary, knocked out
         - End turn and continue to the next steps
 
-
-In between turns:
-
-    - If a Pokémon ever receives one of these special conditions, mark it with a marker (i.e poison marker, burn marker, etc.). Before the game continues between each turn, apply these special conditions in order.
-        1. Poisoned: Between turns, apply a damage counter to signify 10 hp being depleted.
-            - (Pokémon can only have 1 poison marker at a time, new ones simply replace old ones).
-        2. Burned: Put 2 damage counters on burned Pokémon. Then, flip a coin, if heads, remove the special condition burned.
-            - (Pokémon can only have 1 burn marker at a time, new ones simply replace old ones)
-        3. Asleep: Turn the card counter-clockwise. This Pokémon cannot attack or retreat, between turns flip a coin, if heads, the Pokémon wakes up.
-        4. Paralyzed: Turn the card clockwise. This Pokémon cannot attack or retreat, remove the special condition paralyzed in this step if Pokémon was paralyzed since the beginning of your last turn.
-        5. Confused: Turn the card upside-down. Before attacking with this Pokémon, flip a coin. If heads, attack continues normally. If tails, no attack happens and put 3 damage counters on this Pokémon.
-            - Note: Because Asleep, Paralyzed, and Confused all rotate the card, only the most recently applied effect is active. If a Pokémon is Asleep and it gets Paralyzed, it is no longer Asleep, only Paralyzed. This does not affect Burning or Poisoned, so a Pokémon could be Asleep, Burning, and Poisoned.
-
     
-Ending the Game:
+Ending the Game: (commit )
 
     - You win the game if any of the following occurs:
         - You take your last Prize card.
@@ -252,7 +206,7 @@ Ending the Game:
         - Your opponent must draw a card, and their deck is empty.
 
 
-Additional Rules:
+Additional Rules: (commit )
 
     - Whenever a Pokémon is knocked out, its controller moves that card and all cards attached to it to the discard pile, then chooses a Pokémon from their bench to replace the knocked-out Pokémon. The other player puts one of their Prize cards into their hand without revealing it.
     - Colorless Energy Requirements and costs can be met with any Type of Energy.
