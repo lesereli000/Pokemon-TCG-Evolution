@@ -1,6 +1,6 @@
 ﻿# S1G2-Project
 
-Our project is done when we have tested each of the BVA cases outline below and ensured proper behavior in each case.
+Our project is done when we have tested each of the BVA cases outline below and ensured proper behavior in each case. (e6f24b89c0808445175e24bb2151ca89d42f92df)
 
 Constraints of Pokémon Trading Card Game:
 
