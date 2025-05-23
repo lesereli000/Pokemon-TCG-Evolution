@@ -1953,5 +1953,57 @@ public class GameTest {
 
         verify(gui, handler);
     }
+
+    @Test
+    public void testDisplayTrainerPokemonSelectionCancelled() {
+        GUI gui = createMock(GUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame gameSetup = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Trainer t = createMock(Trainer.class);
+        ArrayList<Card> pokemon = createMock(ArrayList.class);
+
+        expect(t.getName()).andReturn("Potion");
+        gui.displayMessage("Select Pokemon to use Potion on");
+        gui.removeAllButtons();
+        gui.displayConfirmAndCancelButton();
+        gui.waitForAction();
+        gui.displayCards(pokemon);
+        expect(gui.isCancelled()).andReturn(true);
+
+        replay(gui, t);
+
+        Game game = new Game(gui, rand, gameSetup, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
+        assertNull(game.displayTrainerPokemonSelection(t, pokemon));
+
+        verify(gui, t);
+    }
+
+    @Test
+    public void testDisplayTrainerEnergySelectionCancelled() {
+        GUI gui = createMock(GUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame gameSetup = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Trainer t = createMock(Trainer.class);
+        ArrayList<Card> energies = createMock(ArrayList.class);
+
+        expect(t.getName()).andReturn("Super Potion");
+        gui.displayMessage("Select Energy to discard for Super Potion");
+        gui.removeAllButtons();
+        gui.displayCards(energies);
+        gui.displayConfirmAndCancelButton();
+        gui.waitForAction();
+        expect(gui.isCancelled()).andReturn(true);
+
+        replay(gui, t);
+
+        Game game = new Game(gui, rand, gameSetup, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
+        assertNull(game.displayTrainerEnergySelection(t, energies));
+
+        verify(gui, t);
+    }
 }
 
