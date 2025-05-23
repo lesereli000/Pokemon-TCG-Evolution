@@ -532,6 +532,11 @@ public class GameGUI implements GUI {
         return locale;
     }
 
+    @Override
+    public boolean gameIsOver() {
+        return buttons.isEmpty();
+    }
+
     public String generateAttackReport(ArrayList<Attack> attacks) {
 		StringBuilder report = new StringBuilder();
 		for (Attack attack : attacks) {

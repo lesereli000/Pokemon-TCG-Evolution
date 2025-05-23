@@ -66,4 +66,6 @@ public interface GUI {
     boolean isCancelled();
 
     Locale displayLocaleOptions();
+
+    boolean gameIsOver();
 }
