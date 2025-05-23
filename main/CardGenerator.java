@@ -22,6 +22,7 @@ public class CardGenerator {
     private int retreatCost;
     private Card card;
     private ArrayList<Attack> attacks;
+    protected String filePath = "src/main/resources/base1.json";
 
     // When given the name of a card, should be able to create a card object with all desired information
     public Card generateCard(String name) {
@@ -32,8 +33,8 @@ public class CardGenerator {
             throw new PokemonNotFoundException("Invalid Name");
         }
 
-        try (FileReader reader = new FileReader("src/main/resources/base1.json")) {
-            String content = new String(Files.readAllBytes(Paths.get("src/main/resources/base1.json")));
+        try (FileReader reader = new FileReader(filePath)) {
+            String content = new String(Files.readAllBytes(Paths.get(filePath)));
             JSONArray pokemonArray = new JSONArray(content);
             for (int i = 0; i < pokemonArray.length(); i++) {
 
@@ -45,37 +46,31 @@ public class CardGenerator {
                     if (supertype.equals("Pokemon")) {
                         //Normal Pokemon
                         this.type = pokemonArray.getJSONObject(i).getJSONArray("types").getString(0);
-                        if(this.type.equals("Grass")){
-                            this.weakness = "Fire";
-                            this.resistance = "Water";
-                        }
-                        else if(this.type.equals("Fire")){
-                            this.weakness = "Water";
-                            this.resistance = "";
-                        }
-                        else if(this.type.equals("Water")){
-                            this.weakness = "Lightning";
-                            this.resistance = "";
-                        }
-                        else if(this.type.equals("Lightning")){
-                            this.weakness = "Fighting";
-                            this.resistance = "Metal";
-                        }
-                        else if(this.type.equals("Fighting")){
-                            this.weakness = "Psychic";
-                            this.resistance = "";
-                        }
-                        else if(this.type.equals("Psychic") || this.type.equals("Darkness")){
-                            this.weakness = "Darkness";
-                            this.resistance = "Fighting";
-                        }
-                        else if(this.type.equals("Metal")){
-                            this.weakness = "Fire";
-                            this.resistance = "Grass";
-                        }
-                        else if(this.type.equals("Dragon")){
-                            this.weakness = "";
-                            this.resistance = "";
+                        switch (this.type) {
+                            case "Grass" -> {
+                                this.weakness = "Fire";
+                                this.resistance = "Water";
+                            }
+                            case "Fire" -> {
+                                this.weakness = "Water";
+                                this.resistance = "";
+                            }
+                            case "Water" -> {
+                                this.weakness = "Lightning";
+                                this.resistance = "";
+                            }
+                            case "Lightning" -> {
+                                this.weakness = "Fighting";
+                                this.resistance = "Metal";
+                            }
+                            case "Fighting" -> {
+                                this.weakness = "Psychic";
+                                this.resistance = "";
+                            }
+                            case "Psychic" -> {
+                                this.weakness = "Darkness";
+                                this.resistance = "Fighting";
+                            }
                         }
 
                         this.hp = pokemonArray.getJSONObject(i).getInt("hp");
@@ -123,7 +118,6 @@ public class CardGenerator {
                 }
             }
         } catch (IOException e) {
-            System.out.println("File not found in PokemonGenerator" + e);
             throw new RuntimeException("File not found in directory!", e);
         }
 

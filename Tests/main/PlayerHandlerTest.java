@@ -155,16 +155,52 @@ public class PlayerHandlerTest {
         PlayerHandler handler = new PlayerHandler();
         Player player1 = createMock(Player.class);
         Player player2 = createMock(Player.class);
+        Pokemon p = createMock(Pokemon.class);
 
         handler.player1 = player1;
         handler.player2 = player2;
         handler.playerTurn = 1;
         handler.currentPlayer = player1;
         handler.defendingPlayer = player2;
+        handler.playedThisTurn.add(p);
+
+        player1.passTurn();
         expect(player2.hasActive()).andReturn(true);
-        replay(player2);
+
+        replay(player1, player2);
+
         assertTrue(handler.passTurn());
-        verify(player2);
+
+        verify(player1, player2);
+        assertEquals(0, handler.playedThisTurn.size());
+
+        assertEquals(player2, handler.currentPlayer);
+        assertEquals(player1, handler.defendingPlayer);
+        assertEquals(2, handler.playerTurn);
+    }
+
+
+    @Test
+    public void testPassTurnFalse() {
+        PlayerHandler handler = new PlayerHandler();
+        Player player1 = createMock(Player.class);
+        Player player2 = createMock(Player.class);
+        Pokemon p = createMock(Pokemon.class);
+
+        handler.player1 = player1;
+        handler.player2 = player2;
+        handler.playerTurn = 1;
+        handler.currentPlayer = player1;
+        handler.defendingPlayer = player2;
+        handler.playedThisTurn.add(p);
+
+        player1.passTurn();
+        expect(player2.hasActive()).andReturn(false);
+        replay(player1, player2);
+        assertFalse(handler.passTurn());
+
+        verify(player1, player2);
+        assertEquals(0, handler.playedThisTurn.size());
 
         assertEquals(player2, handler.currentPlayer);
         assertEquals(player1, handler.defendingPlayer);
@@ -295,6 +331,19 @@ public class PlayerHandlerTest {
         handler.currentPlayer = player;
 
         assertTrue(handler.activeCanAddEnergy());
+        verify(player);
+    }
+
+    @Test
+    public void testActiveCantAddEnergy() {
+        Player player = createMock(Player.class);
+        expect(player.canAddEnergy()).andReturn(false);
+        replay(player);
+
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = player;
+
+        assertFalse(handler.activeCanAddEnergy());
         verify(player);
     }
 
@@ -455,7 +504,21 @@ public class PlayerHandlerTest {
         PlayerHandler handler = new PlayerHandler();
         handler.currentPlayer = current;
 
-        handler.drawCardFromDeck();
+        assertTrue(handler.drawCardFromDeck());
+        verify(current);
+    }
+
+    @Test
+    public void testFailDrawCardFromDeck() {
+        Player current = createMock(Player.class);
+
+        expect(current.drawCard()).andReturn(false);
+        replay(current);
+
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = current;
+
+        assertFalse(handler.drawCardFromDeck());
         verify(current);
     }
 
@@ -497,12 +560,13 @@ public class PlayerHandlerTest {
         Pokemon p1 = createMock(Pokemon.class);
         Pokemon p2 = createMock(Pokemon.class);
 
-        expect(p.evolvePokemon(p1, p2)).andReturn("");
+        expect(p.evolvePokemon(p1, p2)).andReturn("output");
 
         replay(p, p1, p2);
         PlayerHandler handler = new PlayerHandler();
         handler.currentPlayer = p;
         String result = handler.evolve(p1, p2);
+        assertEquals("output", result);
 
         verify(p, p1, p2);
     }
@@ -518,7 +582,8 @@ public class PlayerHandlerTest {
         replay(p, p1);
         PlayerHandler handler = new PlayerHandler();
         handler.currentPlayer = p;
-        handler.getOnlyPreEvolutionsFromActivePlayer(p1);
+        ArrayList<Card> result = handler.getOnlyPreEvolutionsFromActivePlayer(p1);
+        assertEquals(cards, result);
 
         verify(p, p1);
     }

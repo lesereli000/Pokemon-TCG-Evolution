@@ -231,6 +231,22 @@ public class CardGeneratorTest {
         for (Energy cost : attack1.costs) {
             assertTrue(expectedCosts.contains(cost.name));
         }
-
     }
+
+    @Test
+    public void testFakeFilepath() {
+        CardGenerator cg = new CardGenerator();
+        cg.filePath = "";
+        boolean pass = false;
+        try {
+            cg.generateCard("Pikachu");
+        } catch (RuntimeException e) {
+            pass = true;
+            assertEquals("File not found in directory!", e.getMessage());
+        }
+        assertTrue(pass);
+    }
+
+
+
 }

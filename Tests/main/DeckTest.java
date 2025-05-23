@@ -327,28 +327,6 @@ public class DeckTest {
     }
 
     @Test
-    public void testMakeRandomCards() {
-        Deck d = new Deck();
-        Random rand = createMock(Random.class);
-        expect(rand.nextInt(anyInt())).andReturn(100).anyTimes();
-        replay(rand);
-        d.addRandomCards(10, rand);
-        assertEquals(10, d.size());
-        verify(rand);
-    }
-
-    @Test
-    public void testMakeFullDeckCards() {
-        Deck d = new Deck();
-        Random rand = createMock(Random.class);
-        expect(rand.nextInt(anyInt())).andReturn(100).anyTimes();
-        replay(rand);
-        d.addRandomCards(60, rand);
-        assertEquals(60, d.size());
-        verify(rand);
-    }
-
-    @Test
     public void testForBasicPokemon() {
         Deck d = new Deck();
         Pokemon p = createMock(Pokemon.class);
@@ -412,7 +390,7 @@ public class DeckTest {
         replay(p);
 
         assertEquals(1, d.size());
-        d.removeCard(p);
+        assertTrue(d.removeCard(p));
         assertEquals(0, d.size());
         verify(p);
     }
@@ -436,69 +414,6 @@ public class DeckTest {
         assertTrue(pass);
         verify(p);
     }
-
-    @Test
-    public void testAddEnergies() {
-        Deck d = new Deck();
-        Random rand = createMock(Random.class);
-        expect(rand.nextInt(anyInt(), anyInt())).andReturn(100).anyTimes();
-
-        replay(rand);
-        d.addEnergies(20, rand);
-        ArrayList<Card> cards = d.getCards();
-        for (int i = 0; i < 20; i++) {
-            assertTrue(cards.get(i) instanceof Energy);
-        }
-        verify(rand);
-    }
-
-//    @Test
-//    public void testNotTooManyRepeatsRandom() {
-//        Random rand = createMock(Random.class);
-//        expect(rand.nextInt(anyInt())).andReturn(1).times(20).andReturn(2).anyTimes();
-//        replay(rand);
-//
-//        boolean pass = false;
-//        Deck d = new Deck();
-//        d.addRandomCards(4, rand);
-//
-//        try {
-//            d.addRandomCards(1, rand);
-//        } catch (Deck.TooManyRepeatsException err) {
-//            assertEquals("Too many repeats with card Blastoise", err.getMessage());
-//            pass = true;
-//        }
-//        assertTrue(pass);
-//        verify(rand);
-//    }
-
-//    @Test
-//    public void testNotTooManyEnergyRepeats() {
-//        Random rand = createMock(Random.class);
-//        expect(rand.nextInt(anyInt())).andReturn(100).anyTimes();
-//        replay(rand);
-//
-//        Card e = createMock(Energy.class);
-//        expect(e.getName()).andReturn("Grass Energy").anyTimes();
-//        replay(e);
-//
-//        boolean pass = false;
-//        Deck d = new Deck();
-//
-//        d.addCard(e);
-//        d.addCard(e);
-//
-//        try {
-//            d.addCard(e);
-//        } catch (Deck.TooManyRepeatsException err) {
-//            assertEquals("Too many repeats with card Grass Energy", err.getMessage());
-//            pass = true;
-//        }
-//
-//        assertTrue(pass);
-//        verify(rand);
-//        verify(e);
-//    }
 
     @Test
     public void testRemoveTopCardFromDeckSizeOne() {
@@ -609,7 +524,6 @@ public class DeckTest {
                 allCards.add(card);
             }
         } catch (IOException e) {
-            System.out.println("File not found in getAllCards" + e);
             return null;
         }
         return allCards;
@@ -625,7 +539,7 @@ public class DeckTest {
         d.addCard(new CardGenerator().generateCard("Water Energy"));
 
         ArrayList<Card> originalDeck = new ArrayList<Card>(d.getCards());
-        d.shuffle();
+        assertTrue(d.shuffle());
         ArrayList<Card> shuffledDeck = d.getCards();
         assertEquals(originalDeck.size(), shuffledDeck.size());
 
@@ -674,7 +588,6 @@ public class DeckTest {
             d.createDeckFromFile("testDeckWithTooManyCards.txt");
             fail("Did not throw Too Many Cards exception");
         }catch(RuntimeException e){
-            System.out.println(e);
             assertTrue(true);
         }
 
@@ -687,7 +600,6 @@ public class DeckTest {
             d.createDeckFromFile("testDeckWithWrongFormatCount.txt");
             fail("Did not throw wrong format exception");
         }catch(RuntimeException e){
-            System.out.println(e);
             assertTrue(true);
         }
 
@@ -703,9 +615,10 @@ public class DeckTest {
     public void testTrueContainsCardNamed() {
         Deck d = new Deck();
         Pokemon p = createMock(Pokemon.class);
-        d.addCard(p);
         expect(p.getName()).andReturn("Pikachu");
         replay(p);
+        boolean result = d.addCard(p);
+        assertTrue(result);
         assertTrue(d.containsCardNamed("Pikachu"));
         verify(p);
     }
@@ -975,19 +888,4 @@ public class DeckTest {
 
         verify(e1, e2, nonEnergyCard);
     }
-
-
-    // TODO implement error catching for adding cards that dont exist.
-//    @Test
-//    public void testAddDeckFromFileWithWrongFormatCard(){
-//        Deck d = new Deck();
-//        try{
-//            d.createDeckFromFile("testDeckWithWrongFormatCard.txt");
-//            fail("Did not throw wrong format exception");
-//        }catch(Deck.DeckInIncorrectFormatException e){
-//            System.out.println(e);
-//            assertTrue(true);
-//        }
-//
-//    }
 }

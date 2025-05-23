@@ -1206,7 +1206,8 @@ public class GameTest {
 
         Game game = new Game(gui, rand, setupGame, handler);
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
-        game.displayAddEnergyInfo(cards);
+        Pokemon result = game.displayAddEnergyInfo(cards);
+        assertEquals(p, result);
 
         verify(gui);
     }
@@ -1242,7 +1243,8 @@ public class GameTest {
 
         Game game = new Game(gui, rand, setupGame, handler);
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
-        game.displayAttackInfo();
+        Attack result = game.displayAttackInfo();
+        assertEquals(atk, result);
 
         verify(gui, handler);
     }
@@ -1775,7 +1777,6 @@ public class GameTest {
         Trainer trainer = createMock(Trainer.class);
         Player player = createMock(Player.class);
 
-        ArrayList<Card> hand = new ArrayList<>();
         ArrayList<Card> pokemon = new ArrayList<>(); // assume we have options, but none selected
         Pokemon p1 = createMock(Pokemon.class);
         pokemon.add(p1);
@@ -1802,14 +1803,14 @@ public class GameTest {
         gui.displayMessage("Select Pokemon to use Potion on");
         expectLastCall().times(2);
         gui.removeAllButtons();
-        expectLastCall().anyTimes();
+        expectLastCall().times(2);
         gui.displayCards(pokemon);
-        expectLastCall().anyTimes();
+        expectLastCall().times(2);
         gui.displayConfirmAndCancelButton();
-        expectLastCall().anyTimes();
+        expectLastCall().times(2);
         gui.waitForAction();
-        expectLastCall().anyTimes();
-        expect(gui.isCancelled()).andReturn(false).anyTimes();
+        expectLastCall().times(2);
+        expect(gui.isCancelled()).andReturn(false).times(2);
         expect(gui.getLastSelectedCard()).andReturn(null).times(1);
         expect(gui.getLastSelectedCard()).andReturn(p1).times(1);
 
@@ -1848,7 +1849,7 @@ public class GameTest {
 
         expect(handler.getCurrentPlayerHand()).andReturn(hand);
         gui.removeAllButtons();
-        expectLastCall().anyTimes();
+        expectLastCall().times(4);
         gui.displayCards(hand);
         expectLastCall().anyTimes();
         gui.displayActionButtons();
@@ -1871,9 +1872,9 @@ public class GameTest {
         gui.displayCards(pokemon);
         expectLastCall().times(1);
         gui.displayConfirmAndCancelButton();
-        expectLastCall().anyTimes();
+        expectLastCall().times(3);
         gui.waitForAction();
-        expectLastCall().anyTimes();
+        expectLastCall().times(3);
         expect(gui.isCancelled()).andReturn(false);
         expect(gui.getLastSelectedCard()).andReturn(p).times(1);
 

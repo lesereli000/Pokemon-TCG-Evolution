@@ -159,6 +159,57 @@ public class PokemonTest {
     }
 
     @Test
+    public void testHealBoundary() {
+        Pokemon p = new Pokemon("Bulbasaur", "Grass", 1, 40);
+        p.takeDamage(1, "F");
+        assertEquals(1, p.damageCounters);
+
+        p.heal(1);
+        assertEquals(0, p.damageCounters);
+
+        p.damageCounters = 0;
+        p.heal(1);
+        assertEquals(0, p.damageCounters);
+    }
+
+    @Test
+    public void testCanAttackWithArgs() {
+        CardGenerator pg = new CardGenerator();
+        Pokemon p = (Pokemon) pg.generateCard("Pikachu");
+        Attack a = createMock(Attack.class);
+        Energy e = createMock(Energy.class);
+        ArrayList<Energy> energies = new ArrayList<>();
+        energies.add(e);
+        p.energies = energies;
+
+        //getEnergyMap()
+        expect(e.getName()).andReturn("Lightning Energy");
+        a.costs = energies;
+        e.name = "Lightning Energy";
+
+        replay(a, e);
+        assertTrue(p.canAttack(a));
+        verify(a, e);
+    }
+
+    @Test
+    public void testGetAttacks() {
+        CardGenerator pg = new CardGenerator();
+        Pokemon p = (Pokemon) pg.generateCard("Pikachu");
+        ArrayList<Attack> attacks = createMock(ArrayList.class);
+        p.attacks = attacks;
+        ArrayList<Attack> result = p.getAttacks();
+        assertEquals(attacks, result);
+    }
+
+    @Test
+    public void testGetType() {
+        CardGenerator pg = new CardGenerator();
+        Pokemon p = (Pokemon) pg.generateCard("Pikachu");
+        assertEquals("Lightning", p.getType());
+    }
+
+    @Test
     public void testTypeWeakness() {
         CardGenerator cg = new CardGenerator();
         Pokemon attackingMachop = (Pokemon) cg.generateCard("Machop");
@@ -525,6 +576,12 @@ public class PokemonTest {
         assertEquals(expected, p.getEnergiesString());
     }
 
+    @Test
+    public void testGetStage() {
+        CardGenerator pg = new CardGenerator();
+        Pokemon p = (Pokemon) pg.generateCard("Charizard");
+        assertEquals(2, p.getStage());
+    }
 
     @Test
     public void testEvolvesFrom() {

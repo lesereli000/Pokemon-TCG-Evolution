@@ -168,14 +168,28 @@ public class PlayerTest {
     }
 
     @Test
+    public void testBenchIsEmptyFalse() {
+        Player player = new Player();
+        Deck bench = createMock(Deck.class);
+        expect(bench.size()).andReturn(1);
+        player.bench = bench;
+
+        replay(bench);
+        assertFalse(player.benchIsEmpty());
+        verify(bench);
+    }
+
+    @Test
     public void testGetOnlyPokemonFromHand() {
         Player player = new Player();
         Deck hand = createMock(Deck.class);
-        expect(hand.getOnlyPokemon()).andReturn(null);
+        ArrayList<Card> cards = createMock(ArrayList.class);
+        expect(hand.getOnlyPokemon()).andReturn(cards);
         player.hand = hand;
         replay(hand);
 
-        player.getOnlyPokemonFromHand();
+        ArrayList<Card> result = player.getOnlyPokemonFromHand();
+        assertEquals(result, cards);
         verify(hand);
     }
 
@@ -262,6 +276,18 @@ public class PlayerTest {
     }
 
     @Test
+    public void testCantAttack() {
+        Player player = new Player();
+        Pokemon active = createMock(Pokemon.class);
+        expect(active.canAttack()).andReturn(false);
+        player.activePokemon = active;
+
+        replay(active);
+        assertFalse(player.canAttack());
+        verify(active);
+    }
+
+    @Test
     public void testCanAttackWithArgs() {
         Player player = new Player();
         Pokemon active = createMock(Pokemon.class);
@@ -272,6 +298,20 @@ public class PlayerTest {
 
         replay(active);
         assertFalse(player.canAttack(attack));
+        verify(active);
+    }
+
+    @Test
+    public void testCantAttackWithArgs() {
+        Player player = new Player();
+        Pokemon active = createMock(Pokemon.class);
+        Attack attack = createMock(Attack.class);
+
+        expect(active.canAttack(attack)).andReturn(true);
+        player.activePokemon = active;
+
+        replay(active);
+        assertTrue(player.canAttack(attack));
         verify(active);
     }
 
@@ -475,7 +515,8 @@ public class PlayerTest {
         Player player = new Player();
         player.activePokemon = active;
         player.bench = bench;
-        player.getPreEvolutions(p);
+        ArrayList<Card> result = player.getPreEvolutions(p);
+        assertEquals(cards, result);
 
         verify(active, p, bench);
     }

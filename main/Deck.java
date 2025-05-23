@@ -36,26 +36,6 @@ public class Deck {
         return repeats;
     }
 
-    public boolean addRandomCards(int numCards, Random rand) {
-        try(FileReader reader = new FileReader("src/main/resources/base1.json")) {
-            String content = new String(Files.readAllBytes(Paths.get("src/main/resources/base1.json")));
-            JSONArray pokemonArray = new JSONArray(content);
-            for (int i = 0; i < numCards; i++) {
-                int num = rand.nextInt(pokemonArray.length());
-                Card card = new CardGenerator().generateCard(pokemonArray.getJSONObject(num).getString("name"));
-                try {
-                    addCard(card);
-                } catch (TooManyRepeatsException e) {
-                    //Continue to add random cards, accounting for the i cards we have already added
-                    addRandomCards(numCards - i, rand);
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("File not found when adding random cards", e);
-        }
-        return true;
-    }
-
     public ArrayList<Card> getCards() {
         return (ArrayList<Card>) cards.clone();
     }
@@ -115,27 +95,6 @@ public class Deck {
         return allEnergy;
     }
 
-    public boolean addEnergies(int numberEnergies, Random rand) {
-        try(FileReader reader = new FileReader("src/main/resources/base1.json")) {
-            String content = new String(Files.readAllBytes(Paths.get("src/main/resources/base1.json")));
-            JSONArray pokemonArray = new JSONArray(content);
-            for (int i = 0; i < numberEnergies; i++) {
-                //97 is the first energy card in the pokemonArray
-                int num = rand.nextInt(97, pokemonArray.length());
-                Card card = new CardGenerator().generateCard(pokemonArray.getJSONObject(num).getString("name"));
-                try {
-                    addCard(card);
-                } catch (TooManyRepeatsException e) {
-                    //Continue to add random cards, accounting for the i cards we have already added
-                    addEnergies(numberEnergies - i, rand);
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("File not found when adding random cards", e);
-        }
-        return true;
-    }
-
     public void createDeckFromFile(String fileString) {
         File file = new File("DeckFiles/"+fileString);
         try (Scanner scanFile = new Scanner(file)) {
@@ -145,11 +104,9 @@ public class Deck {
                 throw new DeckInIncorrectFormatException("File " + fileString + " is in the incorrect format: " +message);
             }
             String currPokemonLine;
-            int total = 0;
                 while (scanFile.hasNext()) {
                     currPokemonLine = scanFile.nextLine();
                     int count = Integer.parseInt(currPokemonLine.split(",")[0]);
-                    total += count;
                     String name = currPokemonLine.split(",")[1];
                     for (int i = 1; i <= count; i++) {
                         Card card = new CardGenerator().generateCard(name);
@@ -166,27 +123,18 @@ public class Deck {
         int total = 0;
         try (Scanner scanFile = new Scanner(file)) {
             String currPokemonLine;
-            int lineCount = 0;
                 while (scanFile.hasNext()) {
                     currPokemonLine = scanFile.nextLine();
-                    lineCount++;
                     String numString = currPokemonLine.split(",")[0];
                     int count;
                     try{
                         count = Integer.parseInt(numString);
                     } catch (Exception e) {
-                        return "Count at line "+ lineCount+" in wrong format";
+                        return "Wrong format!";
                     }
                     total += count;
                     if(total>60){
                         return "Deck has too many cards";
-                    }
-                    String name = currPokemonLine.split(",")[1];
-                    try {
-                        Card card = new CardGenerator().generateCard(name);
-                    } catch (RuntimeException e) {
-                        System.out.println(e.getMessage());
-                        return e.getMessage();
                     }
                 }
         } catch (IOException e) {

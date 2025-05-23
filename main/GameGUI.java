@@ -63,7 +63,6 @@ public class GameGUI implements GUI {
     private final Font boldFont = new Font("Arial", Font.BOLD, 16);
     private final Font plainFont = new Font("Arial", Font.PLAIN, 12);
 
-
     private volatile boolean waitForAction = false;
     private boolean activeTurn = false;
     private boolean confirmPokemonState = false;
