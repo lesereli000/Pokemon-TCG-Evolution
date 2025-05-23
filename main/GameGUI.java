@@ -383,6 +383,31 @@ public class GameGUI implements GUI {
     @Override
     public void displayCardReport(Card card) {
         if (card instanceof Pokemon) displayPokemonReport((Pokemon) card);
+        else if (card instanceof Trainer) displayTrainerReport((Trainer) card);
+    }
+
+    private void displayTrainerReport(Trainer trainer) {
+        StringBuilder report = new StringBuilder();
+        String name = messages.getString("trainerName");
+        name = MessageFormat.format(name, trainer.getName());
+        report.append(name).append("\n");
+        String effect = messages.getString("trainerEffect");
+        report.append(effect).append("\n");
+        switch(trainer.getName()) {
+            case "Potion":
+                String potStr = messages.getString("potionEffect");
+                report.append(potStr);
+                break;
+            case "Super Potion":
+                String superPotStr = messages.getString("superPotionEffect");
+                report.append(superPotStr);
+                break;
+            case "Bill":
+                String billStr = messages.getString("billEffect");
+                report.append(billStr);
+                break;
+        }
+        displayMessage(report.toString());
     }
 
     @Override
