@@ -27,6 +27,13 @@ public class PlayerHandlerTest {
 
         assertEquals("Player 1", handler.getCurrentPlayer().getName());
         assertEquals(1, handler.getPlayerTurn());
+        Player player1 = handler.player1;
+        Player player2 = handler.player2;
+        assertEquals(7, player1.hand.size());
+        assertEquals(7, player2.hand.size());
+        assertEquals(6, player1.getNumPrizeCards());
+        assertEquals(6, player2.getNumPrizeCards());
+
     }
 
     @Test
