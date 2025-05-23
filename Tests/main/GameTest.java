@@ -2,6 +2,7 @@ package main;
 
 import org.junit.Test;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
@@ -2004,6 +2005,74 @@ public class GameTest {
         assertNull(game.displayTrainerEnergySelection(t, energies));
 
         verify(gui, t);
+    }
+
+    @Test
+    public void testMainGameLoopGameSetup() {
+        GUI gui = createMock(GUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame gameSetup = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        ArrayList<Card> cards = createMock(ArrayList.class);
+        Pokemon p = createMock(Pokemon.class);
+        Player player = createMock(Player.class);
+
+        //decide locale
+        expect(gui.displayLocaleOptions()).andReturn(Locale.US);
+        gui.displayMessage("You have chosen: English");
+
+        //setupFlipButton()
+        gui.createFlipButton();
+
+        expect(gameSetup.completeGameSetup()).andReturn("Heads");
+        handler.completePlayerSetup("Heads");
+        expect(handler.getPlayerTurn()).andReturn(1);
+        gui.updateTurn(1);
+
+        //displaySetupResults()
+        gui.displayMessage("The result was Heads Player 1 goes first!");
+
+        //selectActiveLoop
+        //displayCurrentHand
+        gui.removeAllButtons();
+        expect(handler.getCurrentPlayerHand()).andReturn(cards);
+        gui.displayCards(cards);
+
+        //displayActiveDirections
+        gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
+
+        gui.setupActivePokemon();
+        expect(gui.waitForButtonPressed()).andReturn("");
+        expect(gui.getLastSelectedCard()).andReturn(p);
+
+        //checkBasic
+        expect(p.getStage()).andReturn(0);
+
+        //makeNewActivePokemon
+        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(handler.getPlayerTurn()).andReturn(1);
+        player.setActivePokemon(p);
+        gui.makeActiveCard(p, 1);
+
+        //displayCurrentPlayerHand
+        gui.removeAllButtons();
+        expect(handler.getCurrentPlayerHand()).andReturn(cards);
+        gui.displayCards(cards);
+
+        //mainGameLoop
+        expect(handler.getCurrentPlayerHand()).andReturn(cards);
+        gui.removeAllButtons();
+        gui.displayCards(cards);
+        gui.displayActionButtons();
+        expect(gui.waitForButtonPressed()).andReturn("displayCardInfo");
+
+        replay(gui, handler, player, p, gameSetup);
+
+        Game game = new Game(gui, rand, gameSetup, handler);
+        game.testMode = true;
+        game.setupGame();
+
+        verify(gui, handler, player, p, gameSetup);
     }
 }
 

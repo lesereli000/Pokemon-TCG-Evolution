@@ -14,6 +14,7 @@ public class Game {
     protected boolean gameOver;
     protected Locale locale;
     protected ResourceBundle messages;
+    protected boolean testMode = false;
 
     public Game(GUI gui, Random random, SetupGame gameSetup, PlayerHandler playerHandler) {
         this.gui = gui;
@@ -34,6 +35,7 @@ public class Game {
         selectActiveLoop();
         while(!gameOver) {
             mainGameLoop();
+            if(testMode) gameOver = true;
         }
     }
 
