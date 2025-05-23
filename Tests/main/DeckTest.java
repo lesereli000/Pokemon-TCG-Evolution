@@ -3,6 +3,7 @@ package main;
 import org.json.JSONArray;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -618,6 +619,20 @@ public class DeckTest {
     public void testFalseContainsCardNamed() {
         Deck d = new Deck();
         assertFalse(d.containsCardNamed("Pikachu"));
+    }
+
+    @Test
+    public void testFileIncorrectFormatNonexistent() {
+        Deck d = new Deck();
+        boolean pass = false;
+        try {
+            File file = new File("nonexistentfile.txt");
+            d.fileInCorrectFormat(file);
+        } catch (RuntimeException e) {
+            pass = true;
+            assertEquals("File not found when adding cards from file", e.getMessage());
+        }
+        assertTrue(pass);
     }
 
     @Test

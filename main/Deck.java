@@ -119,7 +119,7 @@ public class Deck {
 
     }
 
-    private String fileInCorrectFormat(File file){
+    protected String fileInCorrectFormat(File file){
         int total = 0;
         try (Scanner scanFile = new Scanner(file)) {
             String currPokemonLine;
