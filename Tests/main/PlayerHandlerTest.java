@@ -151,6 +151,25 @@ public class PlayerHandlerTest {
     }
 
     @Test
+    public void testSwapPlayerTurnsOther() {
+        PlayerHandler handler = new PlayerHandler();
+        Player player1 = createMock(Player.class);
+        Player player2 = createMock(Player.class);
+
+        handler.player1 = player1;
+        handler.player2 = player2;
+        handler.playerTurn = 2;
+        handler.currentPlayer = player2;
+        handler.defendingPlayer = player1;
+
+        handler.swapPlayerTurns();
+
+        assertEquals(player1, handler.currentPlayer);
+        assertEquals(player2, handler.defendingPlayer);
+        assertEquals(1, handler.playerTurn);
+    }
+
+    @Test
     public void testPassTurn() {
         PlayerHandler handler = new PlayerHandler();
         Player player1 = createMock(Player.class);
