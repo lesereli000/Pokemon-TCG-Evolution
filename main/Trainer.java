@@ -50,7 +50,7 @@ public class Trainer extends Card{
             break;
 
             case "Discard 1 Energy card attached to your own Pokemon in order to remove up to 4 damage counters from that Pokemon.":
-                activePlayer.removeFromHand((Card) selectedEnergy);
+                activePlayer.removeFromHand(selectedEnergy);
                 selectedPokemon.heal(4);
             break;
         }

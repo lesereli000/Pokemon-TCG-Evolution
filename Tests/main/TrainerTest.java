@@ -141,32 +141,26 @@ public class TrainerTest {
 
     @Test
     public void testSuperPotion() {
-        Player p1 = new Player();
+        Player player = createMock(Player.class);
         CardGenerator pg = new CardGenerator();
-        Pokemon activePokemon = new Pokemon("Beedrill", "Grass", 2, 80, "Fire", "Fighting", null, 0);
-        ArrayList<Card> pokemon = new ArrayList<>();
-        pokemon.add(activePokemon);
-        Energy e1 = new Energy("Grass Energy");
-        Energy e2 = new Energy("Fire Energy");
-        ArrayList<Energy> expectedEnergy = new ArrayList<>();
+        Pokemon activePokemon = createMock(Pokemon.class);
+        Energy e1 = createMock(Energy.class);
+        Energy e2 = createMock(Energy.class);
 
-        p1.hand.addCard(activePokemon);
-        p1.setActivePokemon(activePokemon);
         Trainer c1 = (Trainer) pg.generateCard("Super Potion");
         Trainer c2 = (Trainer) pg.generateCard("Super Potion");
 
-        activePokemon.takeDamage(6, "Water");
-        assertEquals(activePokemon.damageCounters, 6);
+        player.removeFromHand(e1);
+        player.removeFromHand(e2);
+        activePokemon.heal(4);
+        activePokemon.heal(4);
 
-        p1.hand.addCard(e1);
-        c1.doEffects(p1, activePokemon, e1);
-        assertEquals(activePokemon.energies, expectedEnergy);
-        assertEquals(activePokemon.damageCounters, 2);
+        replay(player, activePokemon);
 
-        p1.hand.addCard(e2);
-        c2.doEffects(p1, activePokemon, e2);
-        assertEquals(activePokemon.energies, expectedEnergy);
-        assertEquals(activePokemon.damageCounters, 0);
+        c1.doEffects(player, activePokemon, e1);
+        c2.doEffects(player, activePokemon, e2);
+
+        verify(player, activePokemon);
     }
 
     @Test

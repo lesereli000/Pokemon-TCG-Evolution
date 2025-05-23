@@ -262,7 +262,6 @@ public class PlayerHandlerTest {
         handler.defendingPlayer = player2;
 
         expect(player1.canAttack()).andReturn(false);
-        //expect(player2.hasActive()).andReturn(true);  //First if will return false, not even check
 
         replay(player1, player2);
 
@@ -632,25 +631,4 @@ public class PlayerHandlerTest {
         assertEquals("JustPlayed", result);
         verify(p, p1, p2, justPlayed);
     }
-
-
-
-//    @Test
-//    public void testPlayTrainer(){
-//        Player p1 = new Player();
-//        Player p2 = createMock(Player.class);
-//        Trainer trainer = createMock(Trainer.class);
-//        Deck hand = createMock(Deck.class);
-//        p1.hand = hand;
-//        trainer.doEffects(p1, p2);
-//        expect(hand.removeCard(trainer)).andReturn(true);
-//        replay(trainer,hand);
-//
-//        PlayerHandler ph = new PlayerHandler();
-//        ph.currentPlayer = p1;
-//        ph.defendingPlayer = p2;
-//        ph.playTrainerCard(trainer);
-//
-//        verify(trainer, hand);
-//    }
 }

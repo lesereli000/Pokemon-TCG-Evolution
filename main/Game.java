@@ -98,7 +98,6 @@ public class Game {
             Card lastSelectedCard = gui.getLastSelectedCard();
             gui.displayCardReport(lastSelectedCard);
         } else {
-            //display Active Pokemon Info
             Player activePlayer = playerHandler.getCurrentPlayer();
             Pokemon currentActive = (Pokemon) activePlayer.getActivePokemon();
             gui.displayCardReport(currentActive);
@@ -132,7 +131,6 @@ public class Game {
                 message = messages.getString("noSelected");
                 gui.displayMessage(message);
                 return retreatPokemon();
-
             } else {
                 gui.replaceActiveCard(selectedCard, playerHandler.getPlayerTurn());
                 return selectedCard;
