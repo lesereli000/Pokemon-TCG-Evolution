@@ -79,7 +79,6 @@ public class Pokemon extends Card{
 
     public void heal(int damageCountersTaken) {
         damageCounters -= damageCountersTaken;
-
         if(damageCounters < 0) {
             damageCounters = 0;
         }

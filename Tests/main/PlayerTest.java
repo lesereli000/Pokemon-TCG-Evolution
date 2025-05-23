@@ -543,6 +543,31 @@ public class PlayerTest {
     }
 
     @Test
+    public void testPreEvsActiveNotOnBench() {
+        Pokemon p = createMock(Pokemon.class);
+        Pokemon p2 = createMock(Pokemon.class);
+        Pokemon active = createMock(Pokemon.class);
+        Deck bench = createMock(Deck.class);
+        ArrayList<Card> cards = new ArrayList<>();
+        cards.add(p2);
+
+        expect(active.getName()).andReturn("Bulbasaur");
+        expect(p.getEvolvesFrom()).andReturn("Pikachu");
+        expect(p2.getName()).andReturn("Magikarp");
+        expect(bench.getOnlyPokemon()).andReturn(cards);
+
+        replay(active, p, p2, bench);
+
+        Player player = new Player();
+        player.activePokemon = active;
+        player.bench = bench;
+        ArrayList<Card> result = player.getPreEvolutions(p);
+        assertTrue(result.isEmpty());
+
+        verify(active, p, p2, bench);
+    }
+
+    @Test
     public void testPreEvsManyPokemon() {
         Pokemon p = createMock(Pokemon.class);
         Pokemon p2 = createMock(Pokemon.class);

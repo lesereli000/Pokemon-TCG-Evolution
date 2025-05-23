@@ -113,7 +113,7 @@ public class Deck {
                         this.addCard(card);
                     }
                 }
-            }catch (IOException e) {
+            } catch (IOException e) {
                 throw new RuntimeException("File not found when adding cards from file", e);
         }
 
