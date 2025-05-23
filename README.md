@@ -1,6 +1,6 @@
 ﻿# S1G2-Project
 
-Our project is done when we have tested each of the BVA cases outline below and ensured proper behavior in each case. e6f24b89c0808445175e24bb2151ca89d42f92df
+Our project is done when we have tested each of the BVA cases outline below and ensured proper behavior in each case. 312d9e489022f7be1ecdf2b552b5ad9efc8e9e3e
 
 Constraints of Pokémon Trading Card Game:
 
@@ -40,7 +40,7 @@ Cards:
 
                   - Attacks 
                        - Each attack the Pokémon can use will have:
-                            - Name (commit 312d9e4)
+                            - Name (commit 312d9e489022f7be1ecdf2b552b5ad9efc8e9e3e)
                                  - BVA: Strings
                                      - The empty string: If an attack's name is empty, the program should throw an exception showing the card and attack that could not be found.
 
