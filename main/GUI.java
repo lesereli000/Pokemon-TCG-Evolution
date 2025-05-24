@@ -68,4 +68,6 @@ public interface GUI {
     Locale displayLocaleOptions();
 
     boolean gameIsOver();
+
+    void refreshGUI();
 }

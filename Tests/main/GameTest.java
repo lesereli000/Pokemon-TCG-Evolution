@@ -1696,14 +1696,12 @@ public class GameTest {
         // handleUseTrainer()
         expect(handler.getCurrentPlayer()).andReturn(player);
         expect(handler.getAllPlayerPokemon()).andReturn(pokemon);
-        expect(trainer.getName()).andReturn("Potion");
+        expect(trainer.getName()).andReturn("Potion").anyTimes();
         expect(handler.getAllPlayerEnergy()).andReturn(energy);
         player.removeFromHand(trainer);
         expectLastCall();
 
         // DisplayTrainerPokemonSelection()
-        expect(trainer.getName()).andReturn("Potion").anyTimes();
-
         gui.displayMessage("Select Pokemon to use Potion on");
         expectLastCall().anyTimes();
         gui.removeAllButtons();
@@ -1759,15 +1757,17 @@ public class GameTest {
         // handleUseTrainer()
         expect(handler.getCurrentPlayer()).andReturn(player);
         expect(handler.getAllPlayerPokemon()).andReturn(pokemon);
-        expect(trainer.getName()).andReturn("Switch").times(3);
+        expect(trainer.getName()).andReturn("Switch").anyTimes();
         expect(handler.getActivePokemon()).andReturn(active);
+        expect(handler.getHandPokemon()).andReturn(hand);
         expect(handler.getAllPlayerEnergy()).andReturn(energy);
+        expect(handler.getPlayerTurn()).andReturn(1);
         player.removeFromHand(trainer);
         expectLastCall();
 
-        // DisplayTrainerPokemonSelection()
-        expect(trainer.getName()).andReturn("Switch").anyTimes();
+        gui.replaceActiveCard(p, 1);
 
+        // DisplayTrainerPokemonSelection()
         gui.displayMessage("Select Pokemon to use Switch on");
         expectLastCall().anyTimes();
         gui.removeAllButtons();

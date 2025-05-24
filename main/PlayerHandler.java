@@ -172,5 +172,7 @@ public class PlayerHandler {
     }
 
     public Card getActivePokemon() { return currentPlayer.getActivePokemon(); }
+
+    public ArrayList<Card> getHandPokemon() { return currentPlayer.getOnlyPokemonFromHand(); }
 }
 

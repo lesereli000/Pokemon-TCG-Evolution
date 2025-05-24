@@ -281,6 +281,7 @@ public class Game {
 
         if(trainer.getName().equals("Switch")) {
             playerPokemon.remove(playerHandler.getActivePokemon());
+            playerPokemon.removeAll(playerHandler.getHandPokemon());
         }
 
         ArrayList<Card> playerEnergy = playerHandler.getAllPlayerEnergy();
@@ -288,7 +289,12 @@ public class Game {
 
         Pokemon selectedPokemon = displayTrainerPokemonSelection(trainer, playerPokemon);
         Energy selectedEnergy = displayTrainerEnergySelection(trainer, playerEnergy);
+
         trainer.doEffects(currentPlayer, selectedPokemon, selectedEnergy);
+
+        if(trainer.getName().equals("Switch")) {
+            gui.replaceActiveCard((Card) selectedPokemon, playerHandler.getPlayerTurn());
+        }
     }
 
     protected Pokemon displayTrainerPokemonSelection(Trainer trainer, ArrayList<Card> pokemon) {

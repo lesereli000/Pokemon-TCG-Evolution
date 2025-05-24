@@ -1,14 +1,13 @@
 1,Gyarados
-2,Magikarp
-3,Starmie
-4,Staryu
-2,Beedrill
+3,Magikarp
+3,Beedrill
 3,Kakuna
-3,Ivysaur
+4,Ivysaur
 4,Weedle
-3,Bulbasaur
-1,Potion
+4,Bulbasaur
+4,Potion
 4,Bill
 2,Super Potion
 12,Water Energy
-16,Grass Energy
+12,Grass Energy
+4,Switch

@@ -323,6 +323,11 @@ public class GameGUI implements GUI {
         frame.repaint();
     }
 
+    public void refreshGUI() {
+        frame.repaint();
+    }
+
+
 
     private void setLastSelectedCard(Card card) {
         this.lastSelectedCard = card;
