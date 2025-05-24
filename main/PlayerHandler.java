@@ -171,8 +171,6 @@ public class PlayerHandler {
         return currentPlayer.getAllEnergyFromHand();
     }
 
-    public Card getActivePokemon() {
-        return currentPlayer.getActivePokemon();
-    }
+    public Card getActivePokemon() { return currentPlayer.getActivePokemon(); }
 }
 

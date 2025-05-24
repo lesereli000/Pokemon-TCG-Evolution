@@ -631,4 +631,21 @@ public class PlayerHandlerTest {
         assertEquals("JustPlayed", result);
         verify(p, p1, p2, justPlayed);
     }
+
+    @Test
+    public void testGetActivePokemon() {
+        Player p = createMock(Player.class);
+        Pokemon p1 = createMock(Pokemon.class);
+
+        expect(p.getActivePokemon()).andReturn(p1);
+
+        replay(p, p1);
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = p;
+
+        Card result = handler.getActivePokemon();
+
+        assertEquals(p1, result);
+        verify(p, p1);
+    }
 }
