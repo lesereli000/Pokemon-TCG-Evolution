@@ -170,5 +170,9 @@ public class PlayerHandler {
     public ArrayList<Card> getAllPlayerEnergy() {
         return currentPlayer.getAllEnergyFromHand();
     }
+
+    public Card getActivePokemon() {
+        return currentPlayer.getActivePokemon();
+    }
 }
 

@@ -279,6 +279,11 @@ public class Game {
     protected void handleUseTrainer(Trainer trainer) {
         Player currentPlayer = playerHandler.getCurrentPlayer();
         ArrayList<Card> playerPokemon = playerHandler.getAllPlayerPokemon();
+
+        if(trainer.getName().equals("Switch")) {
+            playerPokemon.remove(playerHandler.getActivePokemon());
+        }
+
         ArrayList<Card> playerEnergy = playerHandler.getAllPlayerEnergy();
         currentPlayer.removeFromHand(trainer);
 
@@ -289,8 +294,11 @@ public class Game {
 
     protected Pokemon displayTrainerPokemonSelection(Trainer trainer, ArrayList<Card> pokemon) {
         String trainerName = trainer.getName();
-        if(trainerName.equals("Potion") || trainerName.equals("Super Potion")) {
-            String message = messages.getString("selectPokPot");
+        if(trainerName.equals("Potion") || trainerName.equals("Super Potion") || trainerName.equals("Switch")) {
+            String trainerText = "";
+            if(trainer.getName().equals("Switch")) trainerText = "selectPokSwitch";
+            if(!trainer.getName().equals("Switch")) trainerText = "selectPokPot";
+            String message = messages.getString(trainerText);
             gui.displayMessage(message);
             gui.removeAllButtons();
             gui.displayCards(pokemon);

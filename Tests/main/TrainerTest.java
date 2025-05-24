@@ -170,6 +170,38 @@ public class TrainerTest {
     }
 
     @Test
+    public void testSwitch() {
+        Player p1 = new Player();
+        Player p2 = createMock(Player.class);
+        CardGenerator pg = new CardGenerator();
+        Pokemon activePokemon = new Pokemon("Squirtle", "Water", 2, 80, "Grass", "Fighting", null, 0);
+        Pokemon benchPokemon = new Pokemon("Beedrill", "Grass", 2, 80, "Fire", "Fighting", null, 0);
+        ArrayList<Card> pokemon = new ArrayList<>();
+        pokemon.add(activePokemon);
+
+        p1.hand.addCard(activePokemon);
+        p1.setActivePokemon(activePokemon);
+        Trainer c1 = (Trainer) pg.generateCard("Switch");
+        Trainer c2 = (Trainer) pg.generateCard("Switch");
+        p1.bench.addCard(benchPokemon);
+        replay(p2);
+
+//        assertEquals(activePokemon.damageCounters, 0);
+//        activePokemon.takeDamage(3, "Water");
+//        assertEquals(3,activePokemon.damageCounters);
+//        c1.doEffects(p1, activePokemon, null);
+//        assertEquals(1, activePokemon.damageCounters);
+//        c2.doEffects(p1, activePokemon, null);
+//        assertEquals(activePokemon.damageCounters, 0);
+        assertEquals(p1.getActivePokemon(), activePokemon);
+        c1.doEffects(p1, benchPokemon, null);
+        assertEquals(p1.getActivePokemon(), benchPokemon);
+        c2.doEffects(p1, activePokemon, null);
+        assertEquals(p1.getActivePokemon(), activePokemon);
+        verify(p2);
+    }
+
+    @Test
     public void testTrainerConstructorEmptyEffectsThrowsException() {
         try {
             new Trainer("Potion", "Item", "");

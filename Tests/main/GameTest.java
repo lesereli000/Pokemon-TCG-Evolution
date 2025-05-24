@@ -1695,6 +1695,7 @@ public class GameTest {
         // handleUseTrainer()
         expect(handler.getCurrentPlayer()).andReturn(player);
         expect(handler.getAllPlayerPokemon()).andReturn(pokemon);
+        expect(trainer.getName()).andReturn("Potion");
         expect(handler.getAllPlayerEnergy()).andReturn(energy);
         player.removeFromHand(trainer);
         expectLastCall();
@@ -1703,6 +1704,70 @@ public class GameTest {
         expect(trainer.getName()).andReturn("Potion").anyTimes();
 
         gui.displayMessage("Select Pokemon to use Potion on");
+        expectLastCall().anyTimes();
+        gui.removeAllButtons();
+        expectLastCall().anyTimes();
+        gui.displayCards(pokemon);
+        expectLastCall().anyTimes();
+        gui.displayConfirmAndCancelButton();
+        expectLastCall().anyTimes();
+        gui.waitForAction();
+        expectLastCall().anyTimes();
+
+        expect(gui.isCancelled()).andReturn(false);
+        expect(gui.getLastSelectedCard()).andReturn(p);
+
+        trainer.doEffects(player, p, null);
+        expectLastCall();
+
+        replay(gui, player, handler, trainer, p);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
+        game.mainGameLoop();
+
+        verify(gui, player, handler, trainer, p);
+    }
+
+    @Test
+    public void testSwitchTrainer() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Trainer trainer = createMock(Trainer.class);
+        Pokemon p = createMock(Pokemon.class);
+        Pokemon active = createMock(Pokemon.class);
+        Energy e = createMock(Energy.class);
+        Player player = createMock(Player.class);
+        ArrayList<Card> hand = new ArrayList<>();
+        ArrayList<Card> pokemon = new ArrayList<>();
+        ArrayList<Card> energy = new ArrayList<>();
+        energy.add(e);
+        pokemon.add(p);
+
+        expect(handler.getCurrentPlayerHand()).andReturn(hand);
+        gui.removeAllButtons();
+        gui.displayCards(hand);
+        gui.displayActionButtons();
+        expect(gui.waitForButtonPressed()).andReturn("PlayTrainer");
+
+        // handleTrainerAction()
+        expect(gui.getLastSelectedCard()).andReturn(trainer);
+
+        // handleUseTrainer()
+        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(handler.getAllPlayerPokemon()).andReturn(pokemon);
+        expect(trainer.getName()).andReturn("Switch").times(3);
+        expect(handler.getActivePokemon()).andReturn(active);
+        expect(handler.getAllPlayerEnergy()).andReturn(energy);
+        player.removeFromHand(trainer);
+        expectLastCall();
+
+        // DisplayTrainerPokemonSelection()
+        expect(trainer.getName()).andReturn("Switch").anyTimes();
+
+        gui.displayMessage("Select Pokemon to use Switch on");
         expectLastCall().anyTimes();
         gui.removeAllButtons();
         expectLastCall().anyTimes();
@@ -1963,7 +2028,7 @@ public class GameTest {
         Trainer t = createMock(Trainer.class);
         ArrayList<Card> pokemon = createMock(ArrayList.class);
 
-        expect(t.getName()).andReturn("Potion");
+        expect(t.getName()).andReturn("Potion").anyTimes();
         gui.displayMessage("Select Pokemon to use Potion on");
         gui.removeAllButtons();
         gui.displayConfirmAndCancelButton();

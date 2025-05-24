@@ -53,6 +53,11 @@ public class Trainer extends Card{
                 activePlayer.removeFromHand((Card) selectedEnergy);
                 selectedPokemon.heal(4);
             break;
+
+            case "Switch 1 of your own Benched Pokemon with your Active Pokemon.":
+                activePlayer.addBenchPokemon(activePlayer.getActivePokemon());
+                activePlayer.setNewActivePokemon(selectedPokemon);
+            break;
         }
     }
 }
