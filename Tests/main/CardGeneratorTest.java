@@ -247,6 +247,14 @@ public class CardGeneratorTest {
         assertTrue(pass);
     }
 
+    @Test
+    public void testNoPokemon() {
+        CardGenerator cg = new CardGenerator();
+        cg.filePath = "src/main/resources/empty.json";
+
+        assertNull(cg.generateCard("Pikachu"));
+    }
+
 
 
 }

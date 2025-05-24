@@ -84,6 +84,17 @@ public class PokemonTest {
     }
 
     @Test
+    public void testOneHP() {
+        String name = "Pikachu";
+        String type = "Lightning";
+        int stage = 1;
+        int hp = 1;
+
+        Pokemon p = new Pokemon(name, type, stage, hp);
+        assertEquals(1, p.getCurHP());
+    }
+
+    @Test
     public void testTooLowStage() {
         boolean pass = false;
         String name = "Pikachu";
@@ -118,6 +129,7 @@ public class PokemonTest {
             assertTrue(pass);
         }
     }
+
 
     @Test
     public void testCreatePokemon() {
@@ -189,6 +201,25 @@ public class PokemonTest {
 
         replay(a, e);
         assertTrue(p.canAttack(a));
+        verify(a, e);
+    }
+
+    @Test
+    public void testCantAttackWithArgs() {
+        CardGenerator pg = new CardGenerator();
+        Pokemon p = (Pokemon) pg.generateCard("Pikachu");
+        Attack a = createMock(Attack.class);
+        Energy e = createMock(Energy.class);
+        ArrayList<Energy> energies = new ArrayList<>();
+        energies.add(e);
+        p.energies = energies;
+
+        //getEnergyMap()
+        expect(e.getName()).andReturn("Water Energy");
+        a.costs = energies;
+
+        replay(a, e);
+        assertFalse(p.canAttack(a));
         verify(a, e);
     }
 
