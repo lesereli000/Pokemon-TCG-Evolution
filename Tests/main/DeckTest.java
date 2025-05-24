@@ -3,14 +3,12 @@ package main;
 import org.json.JSONArray;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
@@ -590,7 +588,6 @@ public class DeckTest {
         }catch(RuntimeException e){
             assertTrue(true);
         }
-
     }
 
     @Test
@@ -600,15 +597,42 @@ public class DeckTest {
             d.createDeckFromFile("testDeckWithWrongFormatCount.txt");
             fail("Did not throw wrong format exception");
         }catch(RuntimeException e){
+            assertEquals("File testDeckWithWrongFormatCount.txt is in the incorrect format: Wrong format!", e.getMessage());
             assertTrue(true);
         }
+    }
 
+    @Test
+    public void testAddDeckNonexistentFile(){
+        Deck d = new Deck();
+        boolean pass = false;
+        try{
+            d.createDeckFromFile("doesntExist.txt");
+        }catch(RuntimeException e){
+            assertEquals("File not found when adding cards from file", e.getMessage());
+            pass = true;
+        }
+        assertTrue(pass);
     }
 
     @Test
     public void testFalseContainsCardNamed() {
         Deck d = new Deck();
         assertFalse(d.containsCardNamed("Pikachu"));
+    }
+
+    @Test
+    public void testFileIncorrectFormatNonexistent() {
+        Deck d = new Deck();
+        boolean pass = false;
+        try {
+            File file = new File("nonexistentfile.txt");
+            d.fileInCorrectFormat(file);
+        } catch (RuntimeException e) {
+            pass = true;
+            assertEquals("File not found when adding cards from file", e.getMessage());
+        }
+        assertTrue(pass);
     }
 
     @Test
@@ -622,6 +646,26 @@ public class DeckTest {
         assertTrue(d.containsCardNamed("Pikachu"));
         verify(p);
     }
+
+    @Test
+    public void testAddCardFail() {
+        Deck d = new Deck();
+        ArrayList<Card> cards = createMock(ArrayList.class);
+        Card card = createMock(Card.class);
+        Iterator<Card> iterator = createMock(Iterator.class);
+
+        d.cards = cards;
+
+        expect(cards.iterator()).andReturn(iterator);
+        expect(iterator.hasNext()).andReturn(false);
+
+        expect(cards.add(card)).andReturn(false);
+
+        replay(cards, iterator);
+        assertFalse(d.addCard(card));
+        verify(cards, iterator);
+    }
+
 
     @Test
     public void testContainsCardNameManyCards() {

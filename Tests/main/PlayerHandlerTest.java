@@ -27,6 +27,13 @@ public class PlayerHandlerTest {
 
         assertEquals("Player 1", handler.getCurrentPlayer().getName());
         assertEquals(1, handler.getPlayerTurn());
+        Player player1 = handler.player1;
+        Player player2 = handler.player2;
+        assertEquals(7, player1.hand.size());
+        assertEquals(7, player2.hand.size());
+        assertEquals(6, player1.getNumPrizeCards());
+        assertEquals(6, player2.getNumPrizeCards());
+
     }
 
     @Test
@@ -151,6 +158,25 @@ public class PlayerHandlerTest {
     }
 
     @Test
+    public void testSwapPlayerTurnsOther() {
+        PlayerHandler handler = new PlayerHandler();
+        Player player1 = createMock(Player.class);
+        Player player2 = createMock(Player.class);
+
+        handler.player1 = player1;
+        handler.player2 = player2;
+        handler.playerTurn = 2;
+        handler.currentPlayer = player2;
+        handler.defendingPlayer = player1;
+
+        handler.swapPlayerTurns();
+
+        assertEquals(player1, handler.currentPlayer);
+        assertEquals(player2, handler.defendingPlayer);
+        assertEquals(1, handler.playerTurn);
+    }
+
+    @Test
     public void testPassTurn() {
         PlayerHandler handler = new PlayerHandler();
         Player player1 = createMock(Player.class);
@@ -236,7 +262,6 @@ public class PlayerHandlerTest {
         handler.defendingPlayer = player2;
 
         expect(player1.canAttack()).andReturn(false);
-        //expect(player2.hasActive()).andReturn(true);  //First if will return false, not even check
 
         replay(player1, player2);
 
@@ -606,25 +631,4 @@ public class PlayerHandlerTest {
         assertEquals("JustPlayed", result);
         verify(p, p1, p2, justPlayed);
     }
-
-
-
-//    @Test
-//    public void testPlayTrainer(){
-//        Player p1 = new Player();
-//        Player p2 = createMock(Player.class);
-//        Trainer trainer = createMock(Trainer.class);
-//        Deck hand = createMock(Deck.class);
-//        p1.hand = hand;
-//        trainer.doEffects(p1, p2);
-//        expect(hand.removeCard(trainer)).andReturn(true);
-//        replay(trainer,hand);
-//
-//        PlayerHandler ph = new PlayerHandler();
-//        ph.currentPlayer = p1;
-//        ph.defendingPlayer = p2;
-//        ph.playTrainerCard(trainer);
-//
-//        verify(trainer, hand);
-//    }
 }

@@ -113,13 +113,13 @@ public class Deck {
                         this.addCard(card);
                     }
                 }
-            }catch (IOException e) {
+            } catch (IOException e) {
                 throw new RuntimeException("File not found when adding cards from file", e);
         }
 
     }
 
-    private String fileInCorrectFormat(File file){
+    protected String fileInCorrectFormat(File file){
         int total = 0;
         try (Scanner scanFile = new Scanner(file)) {
             String currPokemonLine;
