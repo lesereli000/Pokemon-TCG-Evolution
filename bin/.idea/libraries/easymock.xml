@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="easymock" type="repository">
+    <properties maven-id="org.easymock:easymock:5.5.0" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/easymock/easymock/5.5.0/easymock-5.5.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/net/bytebuddy/byte-buddy/1.15.10/byte-buddy-1.15.10.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/ow2/asm/asm/9.7.1/asm-9.7.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/objenesis/objenesis/3.4/objenesis-3.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

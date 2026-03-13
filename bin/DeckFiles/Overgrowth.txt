@@ -1,0 +1,13 @@
+1,Gyarados
+3,Magikarp
+3,Beedrill
+3,Kakuna
+4,Ivysaur
+4,Weedle
+4,Bulbasaur
+4,Potion
+4,Bill
+2,Super Potion
+12,Water Energy
+12,Grass Energy
+4,Switch
