@@ -1,4 +1,0 @@
-4,Staryu
-1,NotAPokemon
-2,Kakuna
-2,Ivysaur

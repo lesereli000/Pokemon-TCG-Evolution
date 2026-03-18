@@ -1,4 +1,0 @@
-3,Starmie
-4,Staryu
-x,Beedrill
-2,Kakuna
