@@ -1,0 +1,12 @@
+1,Gyarados
+4,Magikarp
+3,Starmie
+4,Staryu
+1,Beedrill
+2,Kakuna
+3,Pikachu
+2,Ivysaur
+4,Weedle
+4,Bulbasaur
+12,Water Energy
+16,Grass Energy
