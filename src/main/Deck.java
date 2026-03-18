@@ -96,7 +96,7 @@ public class Deck {
     }
 
     public void createDeckFromFile(String fileString) {
-        File file = new File("DeckFiles/"+fileString);
+        File file = new File("src/main/resources/"+fileString);
         try (Scanner scanFile = new Scanner(file)) {
             String message = "";
             message = this.fileInCorrectFormat(file);
