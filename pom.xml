@@ -101,6 +101,6 @@
             </plugin>
         </plugins>
         <sourceDirectory>.</sourceDirectory>
-        <testSourceDirectory>Tests</testSourceDirectory>
+        <testSourceDirectory>tests</testSourceDirectory>
     </build>
 </project>
