@@ -9,10 +9,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class CardGenerator {
 
     protected String filePath = "src/main/resources/base1.json";
+    
+    private static Map<String, JSONArray> cachedDatabases = new HashMap<>();
 
     public Card generateCard(String name) {
         if(name == null || name.isEmpty()){
@@ -41,8 +45,11 @@ public class CardGenerator {
     }
 
     private JSONArray loadDatabase() throws IOException {
-        String content = new String(Files.readAllBytes(Paths.get(filePath)));
-        return new JSONArray(content);
+        if (!cachedDatabases.containsKey(filePath)) {
+            String content = new String(Files.readAllBytes(Paths.get(filePath)));
+            cachedDatabases.put(filePath, new JSONArray(content));
+        }
+        return cachedDatabases.get(filePath);
     }
 
     private JSONObject findCardData(JSONArray database, String targetName) {

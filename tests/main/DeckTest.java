@@ -27,6 +27,8 @@ public class DeckTest {
     public void testOneCard() {
         Deck d = new Deck();
         Card p = createMock(Pokemon.class);
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
+        replay(p);
         d.addCard(p);
         assertEquals(1, d.size());
     }
@@ -35,6 +37,8 @@ public class DeckTest {
     public void testGetLargeSizeDeck() {
         Deck d = new Deck();
         Card e = createMock(Energy.class);
+        expect(e.getCardType()).andReturn(Card.CardType.ENERGY).anyTimes();
+        replay(e);
         for (int i = 0; i < 300; i++) {
             d.addCard(e);
         }
@@ -45,6 +49,8 @@ public class DeckTest {
     public void testFirstCard() {
         Deck d = new Deck();
         Card p = createMock(Pokemon.class);
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
+        replay(p);
         d.addCard(p);
         ArrayList<Card> pokemons = d.getCards();
         assertEquals(pokemons.get(0), p);
@@ -53,6 +59,7 @@ public class DeckTest {
     @Test
     public void testAddTrainerToDeck() {
         Card t = createMock(Trainer.class);
+        expect(t.getCardType()).andReturn(Card.CardType.TRAINER).anyTimes();
         expect(t.getName()).andReturn("Scoop Up");
         replay(t);
         Deck d = new Deck();
@@ -67,18 +74,22 @@ public class DeckTest {
     @Test
     public void mixTrainersAndPokemon() {
         Card trainer = createMock(Trainer.class);
+        expect(trainer.getCardType()).andReturn(Card.CardType.TRAINER).anyTimes();
         expect(trainer.getName()).andReturn("Scoop Up").anyTimes();
         replay(trainer);
 
         Card p1 = createMock(Pokemon.class);
+        expect(p1.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         expect(p1.getName()).andReturn("Charizard").anyTimes();
         replay(p1);
 
         Card p2 = createMock(Pokemon.class);
+        expect(p2.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         expect(p2.getName()).andReturn("Pikachu").anyTimes();
         replay(p2);
 
         Card p3 = createMock(Pokemon.class);
+        expect(p3.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         expect(p3.getName()).andReturn("Squirtle").anyTimes();
         replay(p3);
 
@@ -104,6 +115,7 @@ public class DeckTest {
     @Test
     public void testAddEnergyToDeck() {
         Card e = createMock(Energy.class);
+        expect(e.getCardType()).andReturn(Card.CardType.ENERGY).anyTimes();
         expect(e.getName()).andReturn("Lightning Energy").anyTimes();
         replay(e);
         Deck d = new Deck();
@@ -117,28 +129,34 @@ public class DeckTest {
     @Test
     public void testMakeFullDeck() {
         Card trainer = createMock(Trainer.class);
+        expect(trainer.getCardType()).andReturn(Card.CardType.TRAINER).anyTimes();
         expect(trainer.getName()).andReturn("Scoop Up").anyTimes();
         replay(trainer);
 
         Card e = createMock(Energy.class);
+        expect(e.getCardType()).andReturn(Card.CardType.ENERGY).anyTimes();
         expect(e.getName()).andReturn("Lightning Energy").anyTimes();
         replay(e);
 
         Card e2 = createMock(Energy.class);
+        expect(e2.getCardType()).andReturn(Card.CardType.ENERGY).anyTimes();
         expect(e2.getName()).andReturn("Psychic Energy").anyTimes();
         replay(e2);
 
         Deck d = new Deck();
 
         Card p1 = createMock(Pokemon.class);
+        expect(p1.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         expect(p1.getName()).andReturn("Charizard").anyTimes();
         replay(p1);
 
         Card p2 = createMock(Pokemon.class);
+        expect(p2.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         expect(p2.getName()).andReturn("Pikachu").anyTimes();
         replay(p2);
 
         Card p3 = createMock(Pokemon.class);
+        expect(p3.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         expect(p3.getName()).andReturn("Squirtle").anyTimes();
         replay(p3);
 
@@ -169,6 +187,7 @@ public class DeckTest {
     public void testHowManyRepeatsZero() {
         Deck d = new Deck();
         Card p = createMock(Pokemon.class);
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         expect(p.getName()).andReturn("Pikachu").anyTimes();
         replay(p);
 
@@ -182,6 +201,7 @@ public class DeckTest {
         Deck d = new Deck();
 
         Card p = createMock(Pokemon.class);
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         expect(p.getName()).andReturn("Pikachu").anyTimes();
         replay(p);
 
@@ -197,14 +217,17 @@ public class DeckTest {
         Deck d = new Deck();
 
         Card p = createMock(Pokemon.class);
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         expect(p.getName()).andReturn("Pikachu").anyTimes();
         replay(p);
 
         Card p2 = createMock(Pokemon.class);
+        expect(p2.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         expect(p2.getName()).andReturn("Squirtle").anyTimes();
         replay(p2);
 
         Card e = createMock(Energy.class);
+        expect(e.getCardType()).andReturn(Card.CardType.ENERGY).anyTimes();
         expect(e.getName()).andReturn("Lightning Energy").anyTimes();
         replay(e);
 
@@ -237,6 +260,7 @@ public class DeckTest {
     public void testNoMoreFourRepeats() {
         Deck d = new Deck();
         Pokemon p = createMock(Pokemon.class);
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         expect(p.getName()).andReturn("Pikachu").anyTimes();
         replay(p);
         boolean pass = false;
@@ -269,6 +293,8 @@ public class DeckTest {
     public void testEnergyCardsCanRepeat() {
         Deck d = new Deck();
         Energy e = createMock(Energy.class);
+        expect(e.getCardType()).andReturn(Card.CardType.ENERGY).anyTimes();
+        replay(e);
         boolean pass = false;
 
         try {
@@ -289,9 +315,11 @@ public class DeckTest {
     public void testPokemonAndEnergyRepeats() {
         Deck d = new Deck();
         Pokemon p = createMock(Pokemon.class);
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         expect(p.getName()).andReturn("Charizard").anyTimes();
         replay(p);
         Energy e = createMock(Energy.class);
+        expect(e.getCardType()).andReturn(Card.CardType.ENERGY).anyTimes();
         expect(e.getName()).andReturn("Grass Energy").anyTimes();
         replay(e);
 
@@ -328,7 +356,8 @@ public class DeckTest {
     public void testForBasicPokemon() {
         Deck d = new Deck();
         Pokemon p = createMock(Pokemon.class);
-        expect(p.getStage()).andReturn(0).anyTimes();
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
+        expect(p.isBasicPokemon()).andReturn(true).anyTimes();
         expect(p.getName()).andReturn("Pikachu").anyTimes();
         replay(p);
 
@@ -344,7 +373,8 @@ public class DeckTest {
     public void testNoBasicPokemon() {
         Deck d = new Deck();
         Pokemon p = createMock(Pokemon.class);
-        expect(p.getStage()).andReturn(2).anyTimes();
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
+        expect(p.isBasicPokemon()).andReturn(false).anyTimes();
         expect(p.getName()).andReturn("Charizard").anyTimes();
         replay(p);
 
@@ -360,11 +390,13 @@ public class DeckTest {
     public void testMixedBasic() {
         Deck d = new Deck();
         Pokemon basic = createMock(Pokemon.class);
-        expect(basic.getStage()).andReturn(0).anyTimes();
+        expect(basic.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
+        expect(basic.isBasicPokemon()).andReturn(true).anyTimes();
         expect(basic.getName()).andReturn("Pikachu").anyTimes();
 
         Pokemon p = createMock(Pokemon.class);
-        expect(p.getStage()).andReturn(1).anyTimes();
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
+        expect(p.isBasicPokemon()).andReturn(false).anyTimes();
         expect(p.getName()).andReturn("Gyarados").anyTimes();
 
         replay(basic);
@@ -384,8 +416,9 @@ public class DeckTest {
     public void testRemoveCard() {
         Deck d = new Deck();
         Pokemon p = createMock(Pokemon.class);
-        d.addCard(p);
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         replay(p);
+        d.addCard(p);
 
         assertEquals(1, d.size());
         assertTrue(d.removeCard(p));
@@ -397,6 +430,7 @@ public class DeckTest {
     public void testRemoveNullCard() {
         Deck d = new Deck();
         Pokemon p = createMock(Pokemon.class);
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         expect(p.getName()).andReturn("Pikachu").anyTimes();
         replay(p);
 
@@ -418,6 +452,7 @@ public class DeckTest {
         Deck d = new Deck();
 
         Card p = createMock(Pokemon.class);
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         expect(p.getName()).andReturn("Pikachu").anyTimes();
         replay(p);
 
@@ -433,14 +468,17 @@ public class DeckTest {
         Deck d = new Deck();
 
         Card p = createMock(Pokemon.class);
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         expect(p.getName()).andReturn("Pikachu").anyTimes();
         replay(p);
 
         Card e = createMock(Energy.class);
+        expect(e.getCardType()).andReturn(Card.CardType.ENERGY).anyTimes();
         expect(e.getName()).andReturn("Grass Energy").anyTimes();
         replay(e);
 
         Card t = createMock(Trainer.class);
+        expect(t.getCardType()).andReturn(Card.CardType.TRAINER).anyTimes();
         expect(t.getName()).andReturn("Scoop Up").anyTimes();
         replay(t);
 
@@ -550,15 +588,13 @@ public class DeckTest {
 
     @Test
     public void testAddEmptyDeckFromFile(){
-        Deck d = new Deck();
-        d.createDeckFromFile("testDeckEmpty.txt");
+        Deck d = new DeckGenerator().generateFromFile("testDeckEmpty.txt");
         assertTrue(d.size() == 0);
     }
 
     @Test
     public void testAddDeckFromFileWithSize1(){
-        Deck d = new Deck();
-        d.createDeckFromFile("testDeckSize1.txt");
+        Deck d = new DeckGenerator().generateFromFile("testDeckSize1.txt");
         assertTrue(d.size() == 1);
         ArrayList<Card> deck = d.getCards();
         Card pika = deck.get(0);
@@ -568,8 +604,7 @@ public class DeckTest {
 
     @Test
     public void testAddDeckFromFileWithMultiples(){
-        Deck d = new Deck();
-        d.createDeckFromFile("testDeckMultipleCopies.txt");
+        Deck d = new DeckGenerator().generateFromFile("testDeckMultipleCopies.txt");
         assertTrue(d.size() == 3);
         ArrayList<Card> deck = d.getCards();
         for(int i = 0; i < deck.size(); i++){
@@ -581,9 +616,8 @@ public class DeckTest {
 
     @Test
     public void testAddDeckFromFileWithTooManyCards(){
-        Deck d = new Deck();
         try{
-            d.createDeckFromFile("testDeckWithTooManyCards.txt");
+            Deck d = new DeckGenerator().generateFromFile("testDeckWithTooManyCards.txt");
             fail("Did not throw Too Many Cards exception");
         }catch(RuntimeException e){
             assertTrue(true);
@@ -592,9 +626,8 @@ public class DeckTest {
 
     @Test
     public void testAddDeckFromFileWithWrongFormatCount(){
-        Deck d = new Deck();
         try{
-            d.createDeckFromFile("testDeckWithWrongFormatCount.txt");
+            Deck d = new DeckGenerator().generateFromFile("testDeckWithWrongFormatCount.txt");
             fail("Did not throw wrong format exception");
         }catch(RuntimeException e){
             assertEquals("File testDeckWithWrongFormatCount.txt is in the incorrect format: Wrong format!", e.getMessage());
@@ -604,10 +637,9 @@ public class DeckTest {
 
     @Test
     public void testAddDeckNonexistentFile(){
-        Deck d = new Deck();
         boolean pass = false;
         try{
-            d.createDeckFromFile("doesntExist.txt");
+            Deck d = new DeckGenerator().generateFromFile("doesntExist.txt");
         }catch(RuntimeException e){
             assertEquals("File not found when adding cards from file", e.getMessage());
             pass = true;
@@ -618,32 +650,22 @@ public class DeckTest {
     @Test
     public void testFalseContainsCardNamed() {
         Deck d = new Deck();
-        assertFalse(d.containsCardNamed("Pikachu"));
+        assertTrue(d.getCardFromName("Pikachu").isNull());
     }
 
-    @Test
-    public void testFileIncorrectFormatNonexistent() {
-        Deck d = new Deck();
-        boolean pass = false;
-        try {
-            File file = new File("nonexistentfile.txt");
-            d.fileInCorrectFormat(file);
-        } catch (RuntimeException e) {
-            pass = true;
-            assertEquals("File not found when adding cards from file", e.getMessage());
-        }
-        assertTrue(pass);
-    }
+
 
     @Test
     public void testTrueContainsCardNamed() {
         Deck d = new Deck();
         Pokemon p = createMock(Pokemon.class);
-        expect(p.getName()).andReturn("Pikachu");
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
+        expect(p.getName()).andReturn("Pikachu").anyTimes();
+        expect(p.isNull()).andReturn(false).anyTimes();
         replay(p);
         boolean result = d.addCard(p);
         assertTrue(result);
-        assertTrue(d.containsCardNamed("Pikachu"));
+        assertFalse(d.getCardFromName("Pikachu").isNull());
         verify(p);
     }
 
@@ -652,6 +674,8 @@ public class DeckTest {
         Deck d = new Deck();
         ArrayList<Card> cards = createMock(ArrayList.class);
         Card card = createMock(Card.class);
+        expect(card.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
+        replay(card);
         Iterator<Card> iterator = createMock(Iterator.class);
 
         d.cards = cards;
@@ -671,8 +695,11 @@ public class DeckTest {
     public void testContainsCardNameManyCards() {
         Deck d = new Deck();
         Pokemon p = createMock(Pokemon.class);
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         Trainer t = createMock(Trainer.class);
+        expect(t.getCardType()).andReturn(Card.CardType.TRAINER).anyTimes();
         Energy e = createMock(Energy.class);
+        expect(e.getCardType()).andReturn(Card.CardType.ENERGY).anyTimes();
 
         expect(e.getName()).andReturn("Energy").anyTimes();
         expect(t.getName()).andReturn("Trainer").anyTimes();
@@ -691,7 +718,7 @@ public class DeckTest {
         d.addCard(p);
         d.addCard(p);
 
-        assertFalse(d.containsCardNamed("Charizard"));
+        assertTrue(d.getCardFromName("Charizard").isNull());
         verify(e, t, p);
     }
 
@@ -699,14 +726,19 @@ public class DeckTest {
     public void testTrueManyCardsContains() {
         Deck d = new Deck();
         Pokemon p = createMock(Pokemon.class);
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         Pokemon p2 = createMock(Pokemon.class);
+        expect(p2.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         Trainer t = createMock(Trainer.class);
+        expect(t.getCardType()).andReturn(Card.CardType.TRAINER).anyTimes();
         Energy e = createMock(Energy.class);
+        expect(e.getCardType()).andReturn(Card.CardType.ENERGY).anyTimes();
 
         expect(e.getName()).andReturn("Energy").anyTimes();
         expect(t.getName()).andReturn("Trainer").anyTimes();
         expect(p.getName()).andReturn("Pikachu").anyTimes();
         expect(p2.getName()).andReturn("Charizard").anyTimes();
+        expect(p2.isNull()).andReturn(false).anyTimes();
         replay(e, t, p, p2);
 
         d.addCard(e);
@@ -721,30 +753,25 @@ public class DeckTest {
         d.addCard(p);
         d.addCard(p2);
 
-        assertTrue(d.containsCardNamed("Charizard"));
+        assertFalse(d.getCardFromName("Charizard").isNull());
         verify(e, t, p, p2);
     }
 
     @Test
     public void testGetCardFromName() {
         Deck d = new Deck();
-        boolean passes = false;
-        try {
-            d.getCardFromName("Pikachu");
-        } catch (RuntimeException e) {
-            assertEquals("Pikachu not found in deck!", e.getMessage());
-            passes = true;
-        }
-        assertTrue(passes);
+        assertTrue(d.getCardFromName("Pikachu").isNull());
     }
 
     @Test
     public void testGetCardFromNameMany() {
         Deck d = new Deck();
-        boolean passes = false;
         Pokemon p = createMock(Pokemon.class);
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         Trainer t = createMock(Trainer.class);
+        expect(t.getCardType()).andReturn(Card.CardType.TRAINER).anyTimes();
         Energy e = createMock(Energy.class);
+        expect(e.getCardType()).andReturn(Card.CardType.ENERGY).anyTimes();
 
         expect(e.getName()).andReturn("Energy").anyTimes();
         expect(t.getName()).andReturn("Trainer").anyTimes();
@@ -752,13 +779,7 @@ public class DeckTest {
 
         replay(e, t, p);
 
-        try {
-            d.getCardFromName("Charizard");
-        } catch (RuntimeException exc) {
-            assertEquals("Charizard not found in deck!", exc.getMessage());
-            passes = true;
-        }
-        assertTrue(passes);
+        assertTrue(d.getCardFromName("Charizard").isNull());
     }
 
     @Test
@@ -767,8 +788,11 @@ public class DeckTest {
         CardGenerator pg = new CardGenerator();
         Pokemon charizard = (Pokemon) pg.generateCard("Charizard");
         Pokemon p = createMock(Pokemon.class);
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         Energy e = createMock(Energy.class);
+        expect(e.getCardType()).andReturn(Card.CardType.ENERGY).anyTimes();
         Trainer t = createMock(Trainer.class);
+        expect(t.getCardType()).andReturn(Card.CardType.TRAINER).anyTimes();
 
 
         expect(e.getName()).andReturn("Energy").anyTimes();
@@ -803,6 +827,8 @@ public class DeckTest {
     public void testGetOnlyOnePokemon() {
         Deck d = new Deck();
         Pokemon p = createMock(Pokemon.class);
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
+        replay(p);
         ArrayList<Card> expected = new ArrayList<>();
         expected.add(p);
         d.cards = expected;
@@ -815,7 +841,10 @@ public class DeckTest {
     public void testGetOnlyPokemonNoPokemon() {
         Deck d = new Deck();
         Trainer t = createMock(Trainer.class);
+        expect(t.getCardType()).andReturn(Card.CardType.TRAINER).anyTimes();
         Energy e = createMock(Energy.class);
+        expect(e.getCardType()).andReturn(Card.CardType.ENERGY).anyTimes();
+        replay(t, e);
         ArrayList<Card> input = new ArrayList<>();
         input.add(t);
         input.add(e);
@@ -829,8 +858,12 @@ public class DeckTest {
     public void testGetOnlyPokemonMany() {
         Deck d = new Deck();
         Pokemon p = createMock(Pokemon.class);
+        expect(p.getCardType()).andReturn(Card.CardType.POKEMON).anyTimes();
         Trainer t = createMock(Trainer.class);
+        expect(t.getCardType()).andReturn(Card.CardType.TRAINER).anyTimes();
         Energy e = createMock(Energy.class);
+        expect(e.getCardType()).andReturn(Card.CardType.ENERGY).anyTimes();
+        replay(p, t, e);
         ArrayList<Card> input = new ArrayList<>();
         input.add(p);
         input.add(p);
@@ -910,8 +943,11 @@ public class DeckTest {
     public void testGetOnlyEnergy() {
         Deck deck = new Deck();
         Energy e1 = createMock(Energy.class);
+        expect(e1.getCardType()).andReturn(Card.CardType.ENERGY).anyTimes();
         Energy e2 = createMock(Energy.class);
+        expect(e2.getCardType()).andReturn(Card.CardType.ENERGY).anyTimes();
         Trainer nonEnergyCard = createMock(Trainer.class);
+        expect(nonEnergyCard.getCardType()).andReturn(Card.CardType.TRAINER).anyTimes();
 
         expect(e1.getName()).andReturn("Grass Energy").anyTimes();
         expect(e2.getName()).andReturn("Fire Energy").anyTimes();

@@ -17,5 +17,10 @@ public class Energy extends Card {
             throw new CardCreationException("Not an energy name");
         }
     }
+
+    @Override
+    public CardType getCardType() {
+        return CardType.ENERGY;
+    }
 }
 

@@ -14,5 +14,19 @@ public abstract class Card {
         return name;
     }
 
+    public boolean isNull() {
+        return false;
+    }
+
+    public enum CardType {
+        POKEMON, ENERGY, TRAINER, NULL_CARD
+    }
+
+    public abstract CardType getCardType();
+
+    public boolean isBasicPokemon() {
+        return false;
+    }
+
 }
 

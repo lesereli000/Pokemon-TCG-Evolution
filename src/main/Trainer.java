@@ -60,4 +60,9 @@ public class Trainer extends Card{
             break;
         }
     }
+
+    @Override
+    public CardType getCardType() {
+        return CardType.TRAINER;
+    }
 }

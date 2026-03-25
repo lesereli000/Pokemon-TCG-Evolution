@@ -68,6 +68,16 @@ public class Pokemon extends Card{
 
     public int getStage() {return this.stage;}
 
+    @Override
+    public boolean isBasicPokemon() {
+        return this.stage == 0;
+    }
+
+    @Override
+    public CardType getCardType() {
+        return CardType.POKEMON;
+    }
+
     public void takeDamage(int damageCountersTaken, String damageType) {
         if(damageType.equals(resistance)) {
             damageCountersTaken--;
