@@ -317,8 +317,8 @@ public class PlayerHandlerTest {
         expect(attack.getDamage()).andReturn(20);
         expect(player1.getActivePokemon()).andReturn(p);
         expect(player1.canAttack(attack)).andReturn(true);
-        expect(p.getType()).andReturn("ABC");
-        player2.takeDamage(2, "ABC");
+        p.type = EnergyType.FIGHTING;
+        player2.takeDamage(2, EnergyType.FIGHTING);
 
         replay(player1, player2, p, attack);
 

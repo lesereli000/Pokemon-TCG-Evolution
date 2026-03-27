@@ -46,7 +46,7 @@ public class CardGeneratorTest {
 
     private void checkSinglePokemonIsCorrect(Pokemon p) {
         assertEquals("Charizard", p.getName());
-        assertEquals("Fire", p.type);
+        assertEquals("Fire", p.getType());
         assertEquals(120, p.hp);
         assertEquals(2, p.stage);
         assertEquals(3, p.retreatCost);
@@ -55,39 +55,39 @@ public class CardGeneratorTest {
 
     private void checkManyPokemonAreCorrect(Pokemon p1, Pokemon p2, Pokemon p3, Pokemon p4, Pokemon p5, Pokemon p6) {
         assertEquals("Charizard", p1.getName());
-        assertEquals("Fire", p1.type);
+        assertEquals("Fire", p1.getType());
         assertEquals(2, p1.stage);
         assertEquals(120, p1.hp);
         assertEquals(3, p1.retreatCost);
 
         assertEquals("Pikachu", p2.getName());
-        assertEquals("Lightning", p2.type);
+        assertEquals("Lightning", p2.getType());
         assertEquals(0, p2.stage);
         assertEquals(40, p2.hp);
         assertEquals(1, p2.retreatCost);
 
         assertEquals("Squirtle", p3.getName());
-        assertEquals("Water", p3.type);
+        assertEquals("Water", p3.getType());
         assertEquals(0, p3.stage);
         assertEquals(40, p3.hp);
         assertEquals(1, p3.retreatCost);
 
 
         assertEquals("Alakazam", p4.getName());
-        assertEquals("Psychic", p4.type);
+        assertEquals("Psychic", p4.getType());
         assertEquals(2, p4.stage);
         assertEquals(80, p4.hp);
         assertEquals(3, p4.retreatCost);
 
 
         assertEquals("Arcanine", p5.getName());
-        assertEquals("Fire", p5.type);
+        assertEquals("Fire", p5.getType());
         assertEquals(1, p5.stage);
         assertEquals(100, p5.hp);
         assertEquals(3, p5.retreatCost);
 
         assertEquals("Magikarp", p6.getName());
-        assertEquals("Water", p6.type);
+        assertEquals("Water", p6.getType());
         assertEquals(0, p6.stage);
         assertEquals(30, p6.hp);
         assertEquals(1, p6.retreatCost);
@@ -115,7 +115,7 @@ public class CardGeneratorTest {
 
         assertEquals(expectedCosts.size(), p1attack1.costs.size());
         for(Energy e : p1attack1.costs) {
-            assertTrue(expectedCosts.contains(e.name));
+            assertTrue(expectedCosts.contains(e.getName()));
         }
 
         ArrayList<Attack> p2Attacks = p2.attacks;
@@ -127,7 +127,7 @@ public class CardGeneratorTest {
         p2attack1ExpectedCosts.add(colorlessEnergy);
         assertEquals(p2attack1ExpectedCosts.size(), p2attack1.costs.size());
         for(Energy e : p2attack1.costs) {
-            assertTrue(p2attack1ExpectedCosts.contains(e.name));
+            assertTrue(p2attack1ExpectedCosts.contains(e.getName()));
         }
         Attack p2attack2 = p2Attacks.get(1);
         assertEquals("Thunder Jolt", p2attack2.name);
@@ -137,7 +137,7 @@ public class CardGeneratorTest {
         p2attack2ExpectedCosts.add(lightingEnergy);
         assertEquals(p2attack2ExpectedCosts.size(), p2attack2.costs.size());
         for(Energy e : p2attack2.costs) {
-            assertTrue(p2attack2ExpectedCosts.contains(e.name));
+            assertTrue(p2attack2ExpectedCosts.contains(e.getName()));
         }
 
         ArrayList<Attack> p3Attacks = p3.attacks;
@@ -148,7 +148,7 @@ public class CardGeneratorTest {
         p3attackExpectedCosts.add(waterEnergy);
         assertEquals(p3attackExpectedCosts.size(), p3attack1.costs.size());
         for(Energy e : p3attack1.costs) {
-            assertTrue(p3attackExpectedCosts.contains(e.name));
+            assertTrue(p3attackExpectedCosts.contains(e.getName()));
         }
         Attack p3attack2 = p3Attacks.get(1);
         assertEquals("Withdraw", p3attack2.name);
@@ -156,7 +156,7 @@ public class CardGeneratorTest {
         p3attackExpectedCosts.add(colorlessEnergy);
         assertEquals(p3attackExpectedCosts.size(), p3attack2.costs.size());
         for(Energy e : p3attack2.costs) {
-            assertTrue(p3attackExpectedCosts.contains(e.name));
+            assertTrue(p3attackExpectedCosts.contains(e.getName()));
         }
 
         ArrayList<Attack> p4Attacks = p4.attacks;
@@ -169,7 +169,7 @@ public class CardGeneratorTest {
         p4attackExpectedCost.add(psychicEnergy);
         assertEquals(p4attackExpectedCost.size(), p4attack.costs.size());
         for(Energy e : p4attack.costs) {
-            assertTrue(p4attackExpectedCost.contains(e.name));
+            assertTrue(p4attackExpectedCost.contains(e.getName()));
         }
 
         ArrayList<Attack> p5Attacks = p5.attacks;
@@ -182,7 +182,7 @@ public class CardGeneratorTest {
         p5attack1ExpectedCost.add(colorlessEnergy);
         assertEquals(p5attack1ExpectedCost.size(), p5attack1.costs.size());
         for(Energy e : p5attack1.costs) {
-            assertTrue(p5attack1ExpectedCost.contains(e.name));
+            assertTrue(p5attack1ExpectedCost.contains(e.getName()));
         }
         Attack p5attack2 = p5Attacks.get(1);
         assertEquals("Take Down", p5attack2.name);
@@ -190,7 +190,7 @@ public class CardGeneratorTest {
         p5attack1ExpectedCost.add(colorlessEnergy);
         assertEquals(p5attack1ExpectedCost.size(), p5attack2.costs.size());
         for(Energy e : p5attack2.costs) {
-            assertTrue(p5attack1ExpectedCost.contains(e.name));
+            assertTrue(p5attack1ExpectedCost.contains(e.getName()));
         }
 
         ArrayList<Attack> p6Attacks = p6.attacks;
@@ -201,7 +201,7 @@ public class CardGeneratorTest {
         p6attack1ExpectedCost.add(colorlessEnergy);
         assertEquals(p6attack1ExpectedCost.size(), p6attack1.costs.size());
         for(Energy e : p6attack1.costs) {
-            assertTrue(p6attack1ExpectedCost.contains(e.name));
+            assertTrue(p6attack1ExpectedCost.contains(e.getName()));
         }
         Attack p6attack2 = p6Attacks.get(1);
         assertEquals("Flail", p6attack2.name);
@@ -210,7 +210,7 @@ public class CardGeneratorTest {
         p6attack2ExpectedCost.add(waterEnergy);
         assertEquals(p6attack2ExpectedCost.size(), p6attack2.costs.size());
         for(Energy e : p6attack2.costs) {
-            assertTrue(p6attack2ExpectedCost.contains(e.name));
+            assertTrue(p6attack2ExpectedCost.contains(e.getName()));
         }
     }
 
@@ -229,7 +229,7 @@ public class CardGeneratorTest {
 
         assertEquals(expectedCosts.size(), attack1.costs.size());
         for (Energy cost : attack1.costs) {
-            assertTrue(expectedCosts.contains(cost.name));
+            assertTrue(expectedCosts.contains(cost.getName()));
         }
     }
 

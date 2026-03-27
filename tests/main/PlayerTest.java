@@ -198,11 +198,11 @@ public class PlayerTest {
     public void testTakeDamage() {
         Player player = new Player();
         Pokemon active = createMock(Pokemon.class);
-        active.takeDamage(30, "Fire");
+        active.takeDamage(30, EnergyType.FIRE);
         player.activePokemon = active;
 
         replay(active);
-        player.takeDamage(30, "Fire");
+        player.takeDamage(30, EnergyType.FIRE);
         verify(active);
     }
 
@@ -459,7 +459,7 @@ public class PlayerTest {
         Deck hand = createMock(Deck.class);
 
         expect(p2.getDamageCounters()).andReturn(0);
-        p1.takeDamage(0, "");
+        p1.takeDamage(0, null);
         expect(p2.getEnergies()).andReturn(new ArrayList<Energy>());
         p1.addEnergies(anyObject());
 
@@ -482,7 +482,7 @@ public class PlayerTest {
         Deck bench = createMock(Deck.class);
 
         expect(p2.getDamageCounters()).andReturn(0);
-        p1.takeDamage(0, "");
+        p1.takeDamage(0, null);
         expect(p2.getEnergies()).andReturn(new ArrayList<Energy>());
         p1.addEnergies(anyObject());
 
@@ -610,7 +610,7 @@ public class PlayerTest {
         InvalidMoveException e = createMock(InvalidMoveException.class);
 
         expect(p2.getDamageCounters()).andReturn(3);
-        p1.takeDamage(3, "");
+        p1.takeDamage(3, null);
         expect(p2.getEnergies()).andReturn(new ArrayList<Energy>());
         p1.addEnergies(anyObject());
 

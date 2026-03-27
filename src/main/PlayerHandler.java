@@ -112,8 +112,7 @@ public class PlayerHandler {
         int damage = selectedAttack.getDamage();
         int dmgCounters = damage/10;
         Pokemon activePokemon = (Pokemon) currentPlayer.getActivePokemon();
-        String damageType = activePokemon.getType();
-        defendingPlayer.takeDamage(dmgCounters, damageType);
+        defendingPlayer.takeDamage(dmgCounters, activePokemon.type);
         return true;
     }
 

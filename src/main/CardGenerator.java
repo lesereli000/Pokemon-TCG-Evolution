@@ -35,7 +35,7 @@ public class CardGenerator {
             if (supertype.equals("Pokemon")) {
                 return createPokemon(cardData);
             } else if (supertype.equals("Energy")) {
-                return new Energy(name);
+                return new Energy(EnergyType.fromName(name));
             } else {
                 return createTrainer(cardData);
             }
@@ -132,7 +132,7 @@ public class CardGenerator {
             List<Energy> attackCosts = new ArrayList<>();
             for(int k = 0; k < jsonCosts.length(); k++) {
                 String currentEnergyString = jsonCosts.getString(k);
-                attackCosts.add(new Energy(currentEnergyString + " Energy"));
+                attackCosts.add(new Energy(EnergyType.fromName(currentEnergyString + " Energy")));
             }
 
             parsedAttacks.add(new Attack(attackName, attackCosts, damage));

@@ -1905,8 +1905,8 @@ public class GameTest {
         Trainer trainer = createMock(Trainer.class);
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
-        Energy e1 = new Energy("Grass Energy");  // in energy
-        Energy e2 = new Energy("Fire Energy");   // NOT in energy
+        Energy e1 = new Energy(EnergyType.fromName("Grass Energy"));  // in energy
+        Energy e2 = new Energy(EnergyType.fromName("Fire Energy"));   // NOT in energy
         ArrayList<Card> hand = new ArrayList<>();
         ArrayList<Card> pokemon = new ArrayList<>();
         ArrayList<Card> energy = new ArrayList<>();

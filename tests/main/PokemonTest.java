@@ -130,7 +130,6 @@ public class PokemonTest {
         }
     }
 
-
     @Test
     public void testCreatePokemon() {
         String name = "Pikachu";
@@ -140,7 +139,7 @@ public class PokemonTest {
         try {
             Pokemon c = new Pokemon(name, type, stage, hp);
             assertEquals("Pikachu", c.name);
-            assertEquals("Lightning", c.type);
+            assertEquals("Lightning", c.getType());
             assertEquals(stage, c.stage);
             assertEquals(hp, c.hp);
 
@@ -152,7 +151,7 @@ public class PokemonTest {
     @Test
     public void testBaseDamage() {
         Pokemon p = new Pokemon("Pikachu", "Lightning", 1, 40);
-        p.takeDamage(1, "F");
+        p.takeDamage(1, null);
         assertEquals(30, p.getCurHP());
     }
 
@@ -160,7 +159,7 @@ public class PokemonTest {
     public void testHeal() {
         Pokemon p = new Pokemon("Beedrill", "Grass", 1, 40);
         assertEquals(0, p.damageCounters);
-        p.takeDamage(3, "F");
+        p.takeDamage(3, null);
         assertEquals(3, p.damageCounters);
         p.heal(2);
         assertEquals(1, p.damageCounters);
@@ -173,7 +172,7 @@ public class PokemonTest {
     @Test
     public void testHealBoundary() {
         Pokemon p = new Pokemon("Bulbasaur", "Grass", 1, 40);
-        p.takeDamage(1, "F");
+        p.takeDamage(1, null);
         assertEquals(1, p.damageCounters);
 
         p.heal(1);
@@ -194,8 +193,9 @@ public class PokemonTest {
         energies.add(e);
         p.energies = energies;
 
-        //getEnergyMap()
-        expect(e.getName()).andReturn("Lightning Energy");
+        // getEnergyMap()
+        expect(e.getEnergyType()).andReturn(EnergyType.LIGHTNING).anyTimes();
+        expect(e.getName()).andReturn("Lightning Energy").anyTimes();
         a.costs = energies;
         e.name = "Lightning Energy";
 
@@ -214,13 +214,23 @@ public class PokemonTest {
         energies.add(e);
         p.energies = energies;
 
-        //getEnergyMap()
-        expect(e.getName()).andReturn("Water Energy");
-        a.costs = energies;
+        // getEnergyMap()
+        expect(e.getEnergyType()).andReturn(EnergyType.FIRE).anyTimes();
+        expect(e.getName()).andReturn("Fire Energy").anyTimes();
+        a.costs = energies; // Attack costs 1 Fire Energy
+        // But the energy e mocked as FIRE is what the Pokemon has. 
+        // Wait, I need them to be different.
+        Energy e2 = createMock(Energy.class);
+        expect(e2.getEnergyType()).andReturn(EnergyType.WATER).anyTimes();
+        expect(e2.getName()).andReturn("Water Energy").anyTimes();
+        ArrayList<Energy> costEnergies = new ArrayList<>();
+        costEnergies.add(e2);
+        a.costs = costEnergies; // Attack costs 1 Water Energy
+        replay(e2);
 
         replay(a, e);
         assertFalse(p.canAttack(a));
-        verify(a, e);
+        verify(a, e, e2);
     }
 
     @Test
@@ -289,7 +299,8 @@ public class PokemonTest {
     public void testCanAttack() {
         CardGenerator pg = new CardGenerator();
         Energy e = createMock(Energy.class);
-        expect(e.getName()).andReturn("Colorless Energy");
+        expect(e.getEnergyType()).andReturn(EnergyType.COLORLESS).anyTimes();
+        expect(e.getName()).andReturn("Colorless Energy").anyTimes();
         replay(e);
         Pokemon pikachu = (Pokemon) pg.generateCard("Pikachu");
         assertFalse(pikachu.canAttack());
@@ -306,6 +317,7 @@ public class PokemonTest {
 
         // Set expectations BEFORE using the mock
         expect(e.getName()).andReturn("Grass Energy").anyTimes();
+        expect(e.getEnergyType()).andReturn(EnergyType.GRASS).anyTimes();
 
         replay(e); // activate the mock
 
@@ -324,8 +336,10 @@ public class PokemonTest {
         Pokemon kakuna = (Pokemon) pg.generateCard("Kakuna");
         Energy water = createMock(Energy.class);
         Energy grass = createMock(Energy.class);
-        expect(water.getName()).andReturn("Water").anyTimes();
-        expect(grass.getName()).andReturn("Grass").anyTimes();
+        expect(water.getName()).andReturn("Water Energy").anyTimes();
+        expect(water.getEnergyType()).andReturn(EnergyType.WATER).anyTimes();
+        expect(grass.getName()).andReturn("Grass Energy").anyTimes();
+        expect(grass.getEnergyType()).andReturn(EnergyType.GRASS).anyTimes();
 
         replay(water, grass);
         kakuna.addEnergy(water);
@@ -340,13 +354,14 @@ public class PokemonTest {
         Pokemon p = new Pokemon("Pikachu", "Lightning", 1, 40);
         Energy e = createMock(Energy.class);
         expect(e.getName()).andReturn("Lightning Energy").anyTimes();
+        expect(e.getEnergyType()).andReturn(EnergyType.LIGHTNING).anyTimes();
         replay(e);
 
         p.addEnergy(e);
-        HashMap<String, Integer> map = p.getEnergyMap();
-        assertTrue(map.containsKey("Colorless Energy"));
-        assertEquals(1, (int) map.get("Colorless Energy"));
-        assertEquals(1, (int) map.get("Lightning Energy"));
+        HashMap<EnergyType, Integer> map = p.getEnergyMap();
+        assertTrue(map.containsKey(EnergyType.COLORLESS));
+        assertEquals(1, (int) map.get(EnergyType.COLORLESS));
+        assertEquals(1, (int) map.get(EnergyType.LIGHTNING));
     }
 
     @Test
@@ -356,18 +371,16 @@ public class PokemonTest {
         assertEquals("Pikachu", p.getEvolvesFrom());
     }
 
-
-
     @Test
     public void testIsAlive() {
         CardGenerator pg = new CardGenerator();
         Pokemon pikachu = (Pokemon) pg.generateCard("Pikachu");
 
-        pikachu.takeDamage(1, "Q");
-        pikachu.takeDamage(1, "Q");
-        pikachu.takeDamage(1, "Q");
+        pikachu.takeDamage(1, null);
+        pikachu.takeDamage(1, null);
+        pikachu.takeDamage(1, null);
         assertTrue(pikachu.isAlive());
-        pikachu.takeDamage(1, "Q");
+        pikachu.takeDamage(1, null);
         assertFalse(pikachu.isAlive());
     }
 
@@ -378,7 +391,8 @@ public class PokemonTest {
 
         Energy e = createMock(Energy.class);
 
-        e.name = "Grass Energy";
+        expect(e.getEnergyType()).andReturn(EnergyType.GRASS).anyTimes();
+        expect(e.getName()).andReturn("Grass Energy").anyTimes();
         replay(e);
         ArrayList<Energy> energies = pikachu.energies;
         pikachu.addEnergy(e);
@@ -396,9 +410,12 @@ public class PokemonTest {
         Energy e2 = createMock(Energy.class);
         Energy e3 = createMock(Energy.class);
 
-        e.name = "Grass Energy";
-        e2.name = "Lightning Energy";
-        e3.name = "Water Energy";
+        expect(e.getEnergyType()).andReturn(EnergyType.GRASS).anyTimes();
+        expect(e.getName()).andReturn("Grass Energy").anyTimes();
+        expect(e2.getEnergyType()).andReturn(EnergyType.LIGHTNING).anyTimes();
+        expect(e2.getName()).andReturn("Lightning Energy").anyTimes();
+        expect(e3.getEnergyType()).andReturn(EnergyType.WATER).anyTimes();
+        expect(e3.getName()).andReturn("Water Energy").anyTimes();
         replay(e, e2, e3);
 
         ArrayList<Energy> energies = kakuna.energies;
@@ -420,8 +437,8 @@ public class PokemonTest {
         kakuna.removeEnergy(e2);
 
         assertEquals(6, energies.size());
-        for(Energy energy : energies) {
-            assertNotEquals("Lightning Energy", energy.name);
+        for (Energy energy : energies) {
+            assertNotEquals(EnergyType.LIGHTNING, energy.getEnergyType());
         }
 
         kakuna.removeEnergy(e3);
@@ -430,8 +447,8 @@ public class PokemonTest {
 
         assertEquals(3, energies.size());
         for (Energy energy : energies) {
-            assertNotEquals("Water Energy", energy.name);
-            assertNotEquals("Lightning Energy", energy.name);
+            assertNotEquals(EnergyType.WATER, energy.getEnergyType());
+            assertNotEquals(EnergyType.LIGHTNING, energy.getEnergyType());
         }
 
         kakuna.removeEnergy(e);
@@ -528,8 +545,6 @@ public class PokemonTest {
 
     }
 
-
-
     @Test
     public void testCanRetreatManyEnergy() {
         CardGenerator pg = new CardGenerator();
@@ -593,16 +608,18 @@ public class PokemonTest {
         Pokemon p = new Pokemon("Pikachu", "Lightning", 1, 40);
         Energy e1 = createMock(Energy.class);
         Energy e2 = createMock(Energy.class);
-        e1.name = "Fire";
-        e2.name = "Water";
+        expect(e1.getName()).andReturn("Fire Energy").anyTimes();
+        expect(e1.getEnergyType()).andReturn(EnergyType.FIRE).anyTimes();
+        expect(e2.getName()).andReturn("Water Energy").anyTimes();
+        expect(e2.getEnergyType()).andReturn(EnergyType.WATER).anyTimes();
         replay(e1, e2);
 
         p.addEnergy(e1);
         p.addEnergy(e2);
 
         String expected = """
-                Fire
-                Water
+                Fire Energy
+                Water Energy
                 """;
         assertEquals(expected, p.getEnergiesString());
     }
@@ -622,19 +639,19 @@ public class PokemonTest {
     }
 
     @Test
-    public void testGetDamageCounters(){
+    public void testGetDamageCounters() {
         Pokemon p = new Pokemon("Pikachu", "Lightning", 1, 40);
 
-        p.takeDamage(2, "");
+        p.takeDamage(2, null);
         assertEquals(2, p.getDamageCounters());
 
-        p.takeDamage(1, "");
+        p.takeDamage(1, null);
         assertEquals(3, p.getDamageCounters());
 
     }
 
     @Test
-    public void testGetEnergies(){
+    public void testGetEnergies() {
         Pokemon p = new Pokemon("Pikachu", "Lightning", 1, 40);
 
         p.addEnergy(createMock(Energy.class));
@@ -649,7 +666,7 @@ public class PokemonTest {
     }
 
     @Test
-    public void testAddEnergies(){
+    public void testAddEnergies() {
         Pokemon p = new Pokemon("Pikachu", "Lightning", 1, 40);
         ArrayList<Energy> energies = new ArrayList<>();
         energies.add(createMock(Energy.class));

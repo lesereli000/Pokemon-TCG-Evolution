@@ -130,7 +130,7 @@ public class TrainerTest {
         Trainer c2 = (Trainer) pg.generateCard("Potion");
         replay(p2);
         assertEquals(activePokemon.damageCounters, 0);
-        activePokemon.takeDamage(3, "Water");
+        activePokemon.takeDamage(3, EnergyType.WATER);
         assertEquals(3,activePokemon.damageCounters);
         c1.doEffects(p1, activePokemon, null);
         assertEquals(1, activePokemon.damageCounters);

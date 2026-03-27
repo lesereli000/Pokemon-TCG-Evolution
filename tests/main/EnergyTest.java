@@ -13,7 +13,7 @@ public class EnergyTest {
         boolean pass = false;
 
         try{
-            new Energy("");
+            EnergyType.fromName("");
         } catch (CardCreationException e) {
             pass = true;
             assertEquals("Name cannot be empty", e.getMessage());
@@ -25,7 +25,7 @@ public class EnergyTest {
     @Test
     public void testGetName() {
         String name = "Grass Energy";
-        Card c = new Energy(name);
+        Card c = new Energy(EnergyType.fromName(name));
 
         assertEquals(name, c.getName());
     }
@@ -36,7 +36,7 @@ public class EnergyTest {
         String name = "Charizard";
 
         try{
-            new Energy(name);
+            EnergyType.fromName(name);
         } catch (CardCreationException e) {
             pass = true;
             assertEquals("Not an energy name", e.getMessage());
@@ -51,7 +51,7 @@ public class EnergyTest {
         Card[] cards = new Card[allTypes.length];
 
         for (int i = 0; i < allTypes.length; i++) {
-            cards[i] = new Energy(allTypes[i]);
+            cards[i] = new Energy(EnergyType.fromName(allTypes[i]));
         }
 
         checkEachEnergyCard(cards);

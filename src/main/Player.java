@@ -117,7 +117,7 @@ public class Player {
         return activePokemon.canAttack(attack);
     }
 
-    public void takeDamage(int damageCounters, String damageType) {
+    public void takeDamage(int damageCounters, EnergyType damageType) {
         activePokemon.takeDamage(damageCounters, damageType);
     }
 
@@ -164,7 +164,7 @@ public class Player {
     }
 
     public String evolvePokemon(Pokemon evolution, Pokemon evolvesFrom) {
-        evolution.takeDamage(evolvesFrom.getDamageCounters(), "");
+        evolution.takeDamage(evolvesFrom.getDamageCounters(), null);
         evolution.addEnergies(evolvesFrom.getEnergies());
 
         hand.removeCard(evolution);

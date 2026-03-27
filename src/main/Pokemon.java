@@ -5,68 +5,64 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.stream.Collectors;
 
-public class Pokemon extends Card{
-    private static final String[] allTypes = {"Grass", "Fire", "Water", "Lightning", "Psychic", "Fighting", "Darkness",
-            "Metal", "Fairy", "Dragon", "Colorless"};
-    String type;
+public class Pokemon extends Card {
+    // Removed redundant allTypes array and using EnergyType enum for validation.
+    EnergyType type;
     int stage;
     int hp;
     int damageCounters;
-    String weakness;
-    String resistance;
+    EnergyType weakness;
+    EnergyType resistance;
     ArrayList<Attack> attacks;
     ArrayList<Energy> energies = new ArrayList<Energy>();
     int retreatCost;
     String evolvesFrom;
 
-    public Pokemon(String name, String type, int stage, int hp, String weakness, String resistance, ArrayList<Attack> attacks, int retreatCost) {
+    public Pokemon(String name, String type, int stage, int hp, String weakness, String resistance,
+            ArrayList<Attack> attacks, int retreatCost) {
         super(name);
 
-        if(type.isEmpty()){
-            throw new CardCreationException("Pokemon type cannot be empty");
-        } else {
-            boolean validType = false;
-            for (String poketype : allTypes) {
-                if (poketype.equals(type)) {
-                    validType = true;
-                }
+        try {
+            this.type = EnergyType.fromName(type);
+        } catch (CardCreationException e) {
+            if (type == null || type.isEmpty()) {
+                throw new CardCreationException("Pokemon type cannot be empty");
             }
-            if (!validType) {
-                throw new CardCreationException("Invalid pokemon type");
-            } else {
-                this.type = type;
-            }
+            throw new CardCreationException("Invalid pokemon type");
         }
 
-        if(stage < 0){
+        this.weakness = (weakness == null || weakness.isEmpty() || weakness.equals("ids")) ? null : EnergyType.fromName(weakness);
+        this.resistance = (resistance == null || resistance.isEmpty() || resistance.equals("sdad")) ? null : EnergyType.fromName(resistance);
+
+        if (stage < 0) {
             throw new CardCreationException("Stage cannot be less than 0. 0 is Basic.");
-        } else if(stage > 2){
+        } else if (stage > 2) {
             throw new CardCreationException("Stage cannot be greater than 2. Stage 2 is the highest evolution.");
-        } else{
+        } else {
             this.stage = stage;
         }
 
-        if(hp < 1){
+        if (hp < 1) {
             throw new CardCreationException("Pokemon health must be greater than 0.");
         } else {
             this.hp = hp;
         }
         damageCounters = 0;
-        this.weakness = weakness;
-        this.resistance = resistance;
         this.attacks = attacks;
         this.retreatCost = retreatCost;
     }
 
     public Pokemon(String name, String type, int stage, int hp) {
-        this(name, type, stage, hp, "ids", "sdad", new ArrayList<Attack>(), 2);
+        this(name, type, stage, hp, null, null, new ArrayList<Attack>(), 2);
     }
 
     public String getName() {
         return super.getName();
     }
 
-    public int getStage() {return this.stage;}
+    public int getStage() {
+        return this.stage;
+    }
 
     @Override
     public boolean isBasicPokemon() {
@@ -78,27 +74,29 @@ public class Pokemon extends Card{
         return CardType.POKEMON;
     }
 
-    public void takeDamage(int damageCountersTaken, String damageType) {
-        if(damageType.equals(resistance)) {
-            damageCountersTaken--;
-        } else if (damageType.equals(weakness)) {
-            damageCountersTaken = damageCountersTaken * 2;
+    public void takeDamage(int damageCountersTaken, EnergyType dType) {
+        if (dType != null) {
+            if (dType == resistance) {
+                damageCountersTaken--;
+            } else if (dType == weakness) {
+                damageCountersTaken = damageCountersTaken * 2;
+            }
         }
         damageCounters += damageCountersTaken;
     }
 
     public void heal(int damageCountersTaken) {
         damageCounters -= damageCountersTaken;
-        if(damageCounters < 0) {
+        if (damageCounters < 0) {
             damageCounters = 0;
         }
     }
 
-    public int getMaxHP(){
+    public int getMaxHP() {
         return hp;
     }
 
-    public int getCurHP(){
+    public int getCurHP() {
         return hp - (10 * damageCounters);
     }
 
@@ -115,46 +113,46 @@ public class Pokemon extends Card{
         boolean removed = false;
         while (iterator.hasNext()) {
             Energy e = iterator.next();
-            String actualName = e.name;
-            String energyName = energy.name;
-            if (actualName.equals(energyName)) {
+            if (e.getName().equals(energy.getName())) {
                 removed = true;
                 iterator.remove();
                 break;
             }
         }
-        if(!removed) throw new IllegalArgumentException("Energy does not exist");
+        if (!removed)
+            throw new IllegalArgumentException("Energy does not exist");
     }
 
     public boolean canAttack(Attack attack) {
-        HashMap<String, Integer> energyCount = getEnergyMap();
-        HashMap<String, Integer> costCount = getCostMap(attack);
+        HashMap<EnergyType, Integer> energyCount = getEnergyMap();
+        HashMap<EnergyType, Integer> costCount = getCostMap(attack);
         return canPay(energyCount, costCount);
     }
 
-    private HashMap<String, Integer> getCostMap(Attack attack) {
-        HashMap<String, Integer> costCount = new HashMap<>();
+    private HashMap<EnergyType, Integer> getCostMap(Attack attack) {
+        HashMap<EnergyType, Integer> costCount = new HashMap<>();
         for (Energy energy : attack.costs) {
-            String name = energy.name;
-            int amount = costCount.getOrDefault(name, 0) + 1;
-            costCount.put(name, amount);
+            EnergyType eType = energy.getEnergyType();
+            int amount = costCount.getOrDefault(eType, 0) + 1;
+            costCount.put(eType, amount);
         }
         return costCount;
     }
 
     public boolean canAttack() {
-        HashMap<String, Integer> energyCount = getEnergyMap();
+        HashMap<EnergyType, Integer> energyCount = getEnergyMap();
         for (Attack atk : attacks) {
-            HashMap<String, Integer> costCount = getCostMap(atk);
+            HashMap<EnergyType, Integer> costCount = getCostMap(atk);
             boolean canPay = canPay(energyCount, costCount);
-            if(canPay) return true;
+            if (canPay)
+                return true;
         }
 
         return false;
     }
 
-    private boolean canPay(HashMap<String, Integer> energyCount, HashMap<String, Integer> costCount) {
-        for (String energyType : costCount.keySet()) {
+    private boolean canPay(HashMap<EnergyType, Integer> energyCount, HashMap<EnergyType, Integer> costCount) {
+        for (EnergyType energyType : costCount.keySet()) {
             int required = costCount.get(energyType);
             int available = energyCount.getOrDefault(energyType, 0);
             if (available < required) {
@@ -164,14 +162,14 @@ public class Pokemon extends Card{
         return true;
     }
 
-    public HashMap<String, Integer> getEnergyMap() {
-        HashMap<String, Integer> energyCount = new HashMap<>();
+    public HashMap<EnergyType, Integer> getEnergyMap() {
+        HashMap<EnergyType, Integer> energyCount = new HashMap<>();
         for (Energy energy : energies) {
-            String name = energy.getName();
-            int numEnergy = energyCount.getOrDefault(name, 0) + 1;
-            energyCount.put(name, numEnergy);
+            EnergyType eType = energy.getEnergyType();
+            int numEnergy = energyCount.getOrDefault(eType, 0) + 1;
+            energyCount.put(eType, numEnergy);
         }
-        energyCount.put("Colorless Energy", numColorless());
+        energyCount.put(EnergyType.COLORLESS, numColorless());
         return energyCount;
     }
 
@@ -182,13 +180,13 @@ public class Pokemon extends Card{
     public String getEnergiesString() {
         StringBuilder output = new StringBuilder();
         for (Energy e : energies) {
-            output.append(e.name).append("\n");
+            output.append(e.getName()).append("\n");
         }
         return output.toString();
     }
 
     public void removeColorless(int energiesToRemove) {
-        if(energiesToRemove > energies.size()) {
+        if (energiesToRemove > energies.size()) {
             throw new IllegalArgumentException("Can not remove this many energies!");
         }
         int size = energies.size();
@@ -215,10 +213,10 @@ public class Pokemon extends Card{
     }
 
     public String getType() {
-        return type;
+        return type.getTypeName();
     }
 
-    public int getDamageCounters(){
+    public int getDamageCounters() {
         return damageCounters;
     }
 
