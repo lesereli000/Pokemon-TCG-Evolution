@@ -8,6 +8,7 @@ import java.util.Locale;
 public interface GUI {
     void createGUI();
     void createFlipButton();
+    void setPlayers(Player p1, Player p2);
 
     void waitForPassTurn();
 

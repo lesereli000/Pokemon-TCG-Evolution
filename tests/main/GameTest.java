@@ -377,6 +377,7 @@ public class GameTest {
         //coinflip
         expect(setupGame.completeGameSetup()).andReturn("Heads");
         handler.completePlayerSetup("Heads");
+        gui.setPlayers(handler.player1, handler.player2);
 
         //player
         expect(handler.getCurrentPlayer()).andReturn(player);
@@ -2091,6 +2092,7 @@ public class GameTest {
 
         expect(gameSetup.completeGameSetup()).andReturn("Heads");
         handler.completePlayerSetup("Heads");
+        gui.setPlayers(handler.player1, handler.player2);
         expect(handler.getPlayerTurn()).andReturn(1);
         gui.updateTurn(1);
 
@@ -2159,6 +2161,7 @@ public class GameTest {
 
         expect(gameSetup.completeGameSetup()).andReturn("Heads");
         handler.completePlayerSetup("Heads");
+        gui.setPlayers(handler.player1, handler.player2);
         expect(handler.getPlayerTurn()).andReturn(1);
         gui.updateTurn(1);
 

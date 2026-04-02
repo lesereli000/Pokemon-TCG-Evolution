@@ -28,6 +28,7 @@ public class Game {
         setupFlipButton();
         String coinFlipResult = gameSetup.completeGameSetup();
         playerHandler.completePlayerSetup(coinFlipResult);
+        gui.setPlayers(playerHandler.player1, playerHandler.player2);
         int playerTurn = playerHandler.getPlayerTurn();
         gui.updateTurn(playerTurn);
         displaySetupResults(coinFlipResult, playerTurn);
