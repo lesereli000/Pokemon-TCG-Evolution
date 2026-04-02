@@ -1,5 +1,7 @@
 package main;
 
+import java.util.ResourceBundle;
+
 public class NullCard extends Card {
     
     public NullCard() {
@@ -19,5 +21,10 @@ public class NullCard extends Card {
     @Override
     public CardType getCardType() {
         return CardType.NULL_CARD;
+    }
+
+    @Override
+    public String getReport(ResourceBundle messages) {
+        return this.getName();
     }
 }

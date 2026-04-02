@@ -45,8 +45,6 @@ public interface GUI {
 
     void displayConfirmAndCancelButton();
 
-    void displayPokemonReport(Pokemon pokemon);
-
     void displayCardReport(Card card);
 
     void displayPossibleAttacks(ArrayList<Attack> attacks);

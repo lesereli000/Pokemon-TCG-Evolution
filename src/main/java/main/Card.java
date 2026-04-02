@@ -1,5 +1,7 @@
 package main;
 
+import java.util.ResourceBundle;
+
 public abstract class Card {
 
     String name;
@@ -28,5 +30,6 @@ public abstract class Card {
         return false;
     }
 
+    public abstract String getReport(ResourceBundle messages);
 }
 

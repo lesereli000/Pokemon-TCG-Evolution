@@ -129,6 +129,10 @@ public class Player {
         return activePokemon;
     }
 
+    public String getActivePokemonName() {
+        return activePokemon.getName();
+    }
+
     public void addEnergyToPokemon(Pokemon selectedPokemon, Energy selectedEnergy) {
         canAddEnergy = false;
         removeFromHand(selectedEnergy);

@@ -1,9 +1,10 @@
 package main;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.stream.Collectors;
+import java.util.ResourceBundle;
 
 public class Pokemon extends Card {
     // Removed redundant allTypes array and using EnergyType enum for validation.
@@ -226,5 +227,60 @@ public class Pokemon extends Card {
 
     public void addEnergies(ArrayList<Energy> energies) {
         this.energies.addAll(energies);
+    }
+
+    public String getReport(ResourceBundle messages) {
+        StringBuilder report = new StringBuilder();
+        int stageNum = this.getStage();
+        // General info
+        String pokReport = messages.getString("pokReport");
+        report.append(pokReport).append("\n\n");
+
+        String pokName = messages.getString("pokName");
+        pokName = MessageFormat.format(pokName, this.getName());
+        report.append(pokName).append("\n");
+
+        String pokStage = messages.getString("pokStage");
+        pokStage = MessageFormat.format(pokStage, stageNum);
+        report.append(pokStage).append("\n");
+
+        String pokType = messages.getString("pokType");
+        pokType = MessageFormat.format(pokType, this.getType());
+        report.append(pokType).append("\n");
+
+        String pokHP = messages.getString("pokHP");
+        pokHP = MessageFormat.format(pokHP, this.getCurHP());
+        report.append(pokHP).append("\n");
+
+        String retreatCostStr = messages.getString("retreatCost");
+        retreatCostStr = MessageFormat.format(retreatCostStr, this.retreatCost);
+        report.append(retreatCostStr).append("\n");
+
+        if (stageNum > 0) {
+            String evolvesFromStr = messages.getString("evolvesFrom");
+            evolvesFromStr = MessageFormat.format(evolvesFromStr, this.getEvolvesFrom());
+            report.append(evolvesFromStr).append("\n");
+        }
+
+        // Energies
+        String pokEnergies = messages.getString("pokEnergies");
+        report.append("\n").append(pokEnergies).append("\n");
+        if (this.energies.isEmpty()) {
+            String none = messages.getString("none");
+            report.append(none).append("\n");
+        } else {
+            for (Energy energy : this.energies) {
+                report.append("• ").append(energy.getName()).append("\n");
+            }
+        }
+
+        // Attacks
+        String atks = messages.getString("atks");
+        report.append("\n").append(atks).append("\n");
+        for (Attack attack : this.attacks) {
+            report.append(attack.getReport(messages));
+        }
+
+        return report.toString();
     }
 }

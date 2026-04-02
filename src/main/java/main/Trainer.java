@@ -1,6 +1,7 @@
 package main;
 
-import java.util.ArrayList;
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
 
 public class Trainer extends Card{
     private String effects;
@@ -64,5 +65,29 @@ public class Trainer extends Card{
     @Override
     public CardType getCardType() {
         return CardType.TRAINER;
+    }
+
+    public String getReport(ResourceBundle messages) {
+        StringBuilder report = new StringBuilder();
+        String nameStr = messages.getString("trainerName");
+        nameStr = MessageFormat.format(nameStr, this.getName());
+        report.append(nameStr).append("\n");
+        String effectStr = messages.getString("trainerEffect");
+        report.append(effectStr).append("\n");
+        switch (this.getName()) {
+            case "Potion":
+                String potStr = messages.getString("potionEffect");
+                report.append(potStr);
+                break;
+            case "Super Potion":
+                String superPotStr = messages.getString("superPotionEffect");
+                report.append(superPotStr);
+                break;
+            case "Bill":
+                String billStr = messages.getString("billEffect");
+                report.append(billStr);
+                break;
+        }
+        return report.toString();
     }
 }
