@@ -82,7 +82,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>Main</mainClass>
+                            <mainClass>main.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -92,69 +92,6 @@
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-maven</artifactId>
-                <version>1.15.8</version>
-                <configuration>
-                    <targetClasses>
-                        <param>main.Attack</param>
-                        <param>main.Card</param>
-                        <param>main.CardGenerator</param>
-                        <param>main.Deck</param>
-                        <param>main.DeckGenerator</param>
-                        <param>main.Energy</param>
-                        <param>main.EnergyType</param>
-                        <param>main.Game</param>
-                        <param>main.Player</param>
-                        <param>main.PlayerHandler</param>
-                        <param>main.Pokemon</param>
-                        <param>main.Trainer</param>
-                        <param>main.NullCard</param>
-                    </targetClasses>
-                    <targetTests>
-                        <param>main.AttackTest</param>
-                        <param>main.CardGeneratorTest</param>
-                        <param>main.DeckTest</param>
-                        <param>main.EnergyTest</param>
-                        <param>main.GameTest</param>
-                        <param>main.PlayerHandlerTest</param>
-                        <param>main.PlayerTest</param>
-                        <param>main.PokemonTest</param>
-                        <param>main.TrainerTest</param>
-                        <param>main.NullCardTest</param>
-                    </targetTests>
-                    <avoidCallsTo>
-                        <param>java.util.logging</param>
-                    </avoidCallsTo>
-                    <excludedClasses>
-                        <param>main.GameGUI</param>
-                        <param>main.BoardPanel</param>
-                        <param>main.GUI</param>
-                        <param>main.ImageLoader</param>
-                        <param>main.Main</param>
-                    </excludedClasses>
-                    <excludedTests>
-                        <param>main.GameGUISystemTest</param>
-                        <param>main.BoardPanelTest</param>
-                        <param>main.ImageLoaderTest</param>
-                        <param>main.MainTest</param>
-                    </excludedTests>
-                    <jvmArgs>
-                        <jvmArg>-Djava.awt.headless=true</jvmArg>
-                    </jvmArgs>
-                    <testStrengthThreshold>90</testStrengthThreshold>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>pitest-mutation-coverage</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>mutationCoverage</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -199,6 +136,71 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.15.8</version>
+                <configuration>
+                    <targetClasses>
+                        <param>main.Attack</param>
+                        <param>main.AttackType</param>
+                        <param>main.Card</param>
+                        <param>main.CardGenerator</param>
+                        <param>main.Deck</param>
+                        <param>main.DeckEntry</param>
+                        <param>main.DeckGenerator</param>
+                        <param>main.Energy</param>
+                        <param>main.EnergyType</param>
+                        <param>main.Game</param>
+                        <param>main.Player</param>
+                        <param>main.PlayerHandler</param>
+                        <param>main.Pokemon</param>
+                        <param>main.Trainer</param>
+                        <param>main.NullCard</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>main.AttackTest</param>
+                        <param>main.CardGeneratorTest</param>
+                        <param>main.DeckTest</param>
+                        <param>main.EnergyTest</param>
+                        <param>main.GameTest</param>
+                        <param>main.PlayerHandlerTest</param>
+                        <param>main.PlayerTest</param>
+                        <param>main.PokemonTest</param>
+                        <param>main.TrainerTest</param>
+                        <param>main.NullCardTest</param>
+                    </targetTests>
+                    <avoidCallsTo>
+                        <param>java.util.logging</param>
+                    </avoidCallsTo>
+                    <excludedClasses>
+                        <param>main.GameGUI</param>
+                        <param>main.BoardPanel</param>
+                        <param>main.GUI</param>
+                        <param>main.ImageLoader</param>
+                        <param>main.Main</param>
+                    </excludedClasses>
+                    <excludedTestClasses>
+                        <param>main.GameGUISystemTest</param>
+                        <param>main.GameGUITestHarness</param>
+                        <param>main.ImageLoaderTest</param>
+                        <param>main.MainTest</param>
+                    </excludedTestClasses>
+                    <jvmArgs>
+                        <jvmArg>-Djava.awt.headless=true</jvmArg>
+                    </jvmArgs>
+                    <testStrengthThreshold>90</testStrengthThreshold>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>pitest-mutation-coverage</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>mutationCoverage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
@@ -225,6 +227,20 @@
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>Tests</directory>
+                <includes>
+                    <include>**/*.txt</include>
+                    <include>**/*.json</include>
+                </includes>
+            </testResource>
+        </testResources>
         <sourceDirectory>src/main/java</sourceDirectory>
         <testSourceDirectory>Tests</testSourceDirectory>
     </build>
