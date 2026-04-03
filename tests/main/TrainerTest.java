@@ -37,7 +37,7 @@ public class TrainerTest {
     public void testInvalidSubtype() {
         String name = "Potion";
         String effects = "Test";
-        String subtype = "Invalid";
+        TrainerSubtype subtype = TrainerSubtype.TRAINER;
         boolean pass = false;
 
         try {
@@ -54,22 +54,22 @@ public class TrainerTest {
     public void testAllValidSubtypes() {
         String name = "Potion";
         String effects = "Test";
-        String subtype = "Item";
+        TrainerSubtype subtype = TrainerSubtype.ITEM;
         Trainer c1 = new Trainer(name, subtype, effects);
 
         name = "Potion";
         effects = "Test";
-        subtype = "Supporter";
+        subtype = TrainerSubtype.SUPPORTER;
         Trainer c2 = new Trainer(name, subtype, effects);
 
         name = "Potion";
         effects = "Test";
-        subtype = "Stadium";
+        subtype = TrainerSubtype.STADIUM;
         Trainer c3 = new Trainer(name, subtype, effects);
 
-        assertEquals("Item", c1.getTrainerType());
-        assertEquals("Supporter", c2.getTrainerType());
-        assertEquals("Stadium", c3.getTrainerType());
+        assertEquals(TrainerSubtype.ITEM, c1.getTrainerType());
+        assertEquals(TrainerSubtype.SUPPORTER, c2.getTrainerType());
+        assertEquals(TrainerSubtype.STADIUM, c3.getTrainerType());
 
     }
 
@@ -197,7 +197,7 @@ public class TrainerTest {
     @Test
     public void testTrainerConstructorEmptyEffectsThrowsException() {
         try {
-            new Trainer("Potion", "Item", "");
+            new Trainer("Potion", TrainerSubtype.ITEM, "");
             fail("CardCreationException is not thrown");
         } catch (CardCreationException e) {
             assertEquals("Trainer effects cannot be empty", e.getMessage());
