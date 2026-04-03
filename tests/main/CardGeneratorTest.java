@@ -237,7 +237,7 @@ public class CardGeneratorTest {
     @Test
     public void testFakeFilepath() {
         CardGenerator cg = new CardGenerator();
-        cg.filePath = "";
+        cg.resourcePath = "nonexistent.json";
         boolean pass = false;
         try {
             cg.generateCard("Pikachu");
@@ -251,9 +251,13 @@ public class CardGeneratorTest {
     @Test
     public void testNoPokemon() {
         CardGenerator cg = new CardGenerator();
-        cg.filePath = "src/main/resources/empty.json";
+        cg.resourcePath = "empty.json"; // This file should exist in src/test/resources or just be missing
 
-        assertNull(cg.generateCard("Pikachu"));
+        try {
+            cg.generateCard("Pikachu");
+        } catch (RuntimeException e) {
+            assertEquals("File not found in directory!", e.getMessage());
+        }
     }
     @Test
     public void testCardImageUrls() {

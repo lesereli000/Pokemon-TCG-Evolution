@@ -5,8 +5,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,7 @@ import java.util.HashMap;
 
 public class CardGenerator {
 
-    protected String filePath = "src/main/resources/base1.json";
+    protected String resourcePath = "base1.json";
     
     private static Map<String, JSONArray> cachedDatabases = new HashMap<>();
 
@@ -57,11 +58,17 @@ public class CardGenerator {
     }
 
     private JSONArray loadDatabase() throws IOException {
-        if (!cachedDatabases.containsKey(filePath)) {
-            String content = new String(Files.readAllBytes(Paths.get(filePath)));
-            cachedDatabases.put(filePath, new JSONArray(content));
+        if (!cachedDatabases.containsKey(resourcePath)) {
+            InputStream is = getClass().getClassLoader().getResourceAsStream(resourcePath);
+            if (is == null) {
+                throw new IOException("Resource not found: " + resourcePath);
+            }
+            try (Scanner s = new Scanner(is, StandardCharsets.UTF_8).useDelimiter("\\A")) {
+                String content = s.hasNext() ? s.next() : "";
+                cachedDatabases.put(resourcePath, new JSONArray(content));
+            }
         }
-        return cachedDatabases.get(filePath);
+        return cachedDatabases.get(resourcePath);
     }
 
     private JSONObject findCardData(JSONArray database, String targetName) {

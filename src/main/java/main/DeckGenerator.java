@@ -1,7 +1,6 @@
 package main;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -19,13 +18,17 @@ public class DeckGenerator {
 
     public Deck generateFromFile(String fileString) {
         Deck newDeck = new Deck();
-        File file = new File("src/main/resources/" + fileString);
+        InputStream is = getClass().getClassLoader().getResourceAsStream(fileString);
+        if (is == null) {
+            throw new RuntimeException("File not found when adding cards from file");
+        }
         ArrayList<DeckEntry> parsedEntries = new ArrayList<>();
         int totalCards = 0;
 
-        try (Scanner scanFile = new Scanner(file)) {
-            while (scanFile.hasNext()) {
+        try (Scanner scanFile = new Scanner(is)) {
+            while (scanFile.hasNextLine()) {
                 String line = scanFile.nextLine();
+                if (line.trim().isEmpty()) continue;
                 String[] parts = line.split(",");
 
                 if (parts.length < 2) {
@@ -50,8 +53,6 @@ public class DeckGenerator {
                 String name = parts[1];
                 parsedEntries.add(new DeckEntry(count, name));
             }
-        } catch (IOException e) {
-            throw new RuntimeException("File not found when adding cards from file", e);
         }
 
         CardGenerator generator = new CardGenerator();
