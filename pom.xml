@@ -147,7 +147,7 @@
                     <jvmArgs>
                         <jvmArg>-Djava.awt.headless=true</jvmArg>
                     </jvmArgs>
-                    <mutationThreshold>90</mutationThreshold>
+                    <testStrengthThreshold>90</testStrengthThreshold>
                 </configuration>
                 <executions>
                     <execution>
