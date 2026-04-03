@@ -15,26 +15,26 @@ public interface GUI {
     void removeButton(JButton button);
     void setDeckColor(Color deckColor);
     void displayMessage(String message);
-    void makeActiveCard(Card newActive, int playerTurn);
+    void makeActiveCard(Player player, Card newActive);
     Card getLastSelectedCard();
     Attack getLastSelectedAttack();
     void displayCards(ArrayList<Card> currentCards);
     JButton createButton(String message);
     JButton createLinkedButtonCard(String message, Card currCard);
     JButton createSDHoldingButton(String message);
-    void addBenchCard(Card newBench, int playerTurn);
-    void removeBenchCard(Card newBench, int playerTurn);
+    void addBenchCard(Player player, Card newBench);
+    void removeBenchCard(Player player, Card newBench);
     JButton createPassTurnButton();
     boolean cancelled = false;
 
     void removeAllButtons();
-    void retreat(Card newCard, int playerTurn);
+    void retreat(Player player, Card newCard);
 
     void updateTurn(int playerTurn);
 
     void closeWindow();
 
-    void removePrizeCard(int playerNum);
+    void removePrizeCard(Player player);
 
     String waitForButtonPressed();
 
@@ -54,7 +54,7 @@ public interface GUI {
 
     void displayRetreatEnergy(Pokemon pokemon, boolean canRetreat);
 
-    void replaceActiveCard(Card selectedCard, int playerTurn);
+    void replaceActiveCard(Player player, Card selectedCard);
 
     void displayDeadActiveInfo(Player defendingPlayer);
 

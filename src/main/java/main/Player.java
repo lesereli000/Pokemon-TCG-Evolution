@@ -3,8 +3,9 @@ package main;
 import java.util.ArrayList;
 
 public class Player {
-    private static final int PRIZE_CARD_SIZE = 6;
+    public static final int PRIZE_CARD_SIZE = 6;
     private static final int HAND_SIZE = 7;
+    public static final int MAX_BENCH_SIZE = 5;
     protected Deck deck;
     protected Deck hand;
     protected Deck bench;
@@ -92,7 +93,7 @@ public class Player {
     }
 
     public void addBenchPokemon(Card newPokemon) {
-        if(this.bench.size() < 5){
+        if(this.bench.size() < MAX_BENCH_SIZE){
             this.bench.addCard(newPokemon);
         } else {
             throw new InvalidMoveException(this.name +"'s Bench is Full");
@@ -125,7 +126,7 @@ public class Player {
         return activePokemon.getCurHP();
     }
 
-    public Card getActivePokemon() {
+    public Pokemon getActivePokemon() {
         return activePokemon;
     }
 

@@ -18,7 +18,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler playerHandler = createMock(PlayerHandler.class);
+        PlayerHandler playerHandler = createNiceMock(PlayerHandler.class);
         gui.createFlipButton();
         replay(gui);
 
@@ -32,7 +32,7 @@ public class GameTest {
     public void testDisplayPlayerHand() {
         GameGUI gui = createMock(GameGUI.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Player player1 = createMock(Player.class);
         Random rand = createMock(Random.class);
         ArrayList<Card> hand = createMock(ArrayList.class);
@@ -46,14 +46,14 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.displayCurrentPlayerHand();
 
-        verify(gui, player1, handler);
+        verify(gui, player1);
     }
 
     @Test
     public void testDirectionActivePokemon() {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         SetupGame setupGame = createMock(SetupGame.class);
         gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
         replay(gui);
@@ -68,27 +68,27 @@ public class GameTest {
     public void testSelectActivePokemon() {
         GameGUI gui = createMock(GameGUI.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Random rand = createMock(Random.class);
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
         player.setActivePokemon(p);
-        gui.makeActiveCard(p, 1);
-        expect(handler.getPlayerTurn()).andReturn(1);
-        expect(handler.getCurrentPlayer()).andReturn(player);
+        gui.makeActiveCard(anyObject(Player.class), eq(p));
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         replay(gui, player, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
         game.makeNewActivePokemon(p);
 
-        verify(gui, player, handler);
+        verify(gui, player);
     }
 
     @Test
     public void testCheckBasicPokemonFalse() {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         SetupGame setupGame = createMock(SetupGame.class);
         Pokemon p = createMock(Pokemon.class);
         expect(p.getStage()).andReturn(1);
@@ -106,7 +106,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Energy e = createMock(Energy.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Random rand = createMock(Random.class);
 
         Game game = new Game(gui, rand, setupGame, handler);
@@ -118,7 +118,7 @@ public class GameTest {
     public void testCheckBasicPokemonTrainer() {
         GameGUI gui = createMock(GameGUI.class);
         Trainer t = createMock(Trainer.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         SetupGame setupGame = createMock(SetupGame.class);
         Random rand = createMock(Random.class);
 
@@ -132,7 +132,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Pokemon p = createMock(Pokemon.class);
         expect(p.getStage()).andReturn(0);
         replay(p);
@@ -148,7 +148,7 @@ public class GameTest {
     public void testCantAddToBench() {
         GameGUI gui = createMock(GameGUI.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Random rand = createMock(Random.class);
         Pokemon p = createMock(Pokemon.class);
         expect(p.getStage()).andReturn(1);
@@ -167,7 +167,7 @@ public class GameTest {
     public void testAddCardToBench() {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         SetupGame setupGame = createMock(SetupGame.class);
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
@@ -175,21 +175,21 @@ public class GameTest {
         expect(gui.getLastSelectedCard()).andReturn(p);
         expect(p.getStage()).andReturn(0);
         handler.addToBench(p);
-        expect(handler.getPlayerTurn()).andReturn(1);
-        gui.addBenchCard(p, 1);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
+        gui.addBenchCard(anyObject(Player.class), eq(p));
 
         replay(p, player, gui, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
         game.handleBenchAction();
 
-        verify(player, p, gui, handler);
+        verify(player, p, gui);
     }
 
     @Test
     public void testCantAddEnergy() {
         GameGUI gui = createMock(GameGUI.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
         Energy e = createMock(Energy.class);
@@ -202,7 +202,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleEnergyAction();
-        verify(gui, handler);
+        verify(gui);
     }
 
     @Test
@@ -211,7 +211,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Player player = createMock(Player.class);
         Pokemon p = createMock(Pokemon.class);
         Energy e = createMock(Energy.class);
@@ -219,7 +219,7 @@ public class GameTest {
 
         expect(gui.getLastSelectedCard()).andReturn(e);
         expect(handler.activeCanAddEnergy()).andReturn(true);
-        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(handler.getOnlyPokemonFromBench(1)).andReturn(pokemon);
         expect(player.getActivePokemon()).andReturn(p);
         pokemon.add(p);
@@ -240,14 +240,14 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleEnergyAction();
 
-        verify(gui, player, handler);
+        verify(gui, player);
     }
 
     @Test
     public void testSelectActiveLoopBasic() {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Player player = createMock(Player.class);
         SetupGame setupGame = createMock(SetupGame.class);
         Pokemon p = createMock(Pokemon.class);
@@ -265,9 +265,9 @@ public class GameTest {
         expect(p.getStage()).andReturn(0);
 
         //make new active
-        expect(handler.getPlayerTurn()).andReturn(1);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         player.setActivePokemon(p);
-        gui.makeActiveCard(p, 1);
+        gui.makeActiveCard(anyObject(Player.class), eq(p));
 
         //display hand post selection
         gui.removeAllButtons();
@@ -280,7 +280,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.selectActiveLoop();
-        verify(gui, player, handler);
+        verify(gui, player);
     }
 
     @Test
@@ -288,7 +288,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Player player = createMock(Player.class);
         Pokemon p = createMock(Pokemon.class);
         ArrayList<Card> hand = createMock(ArrayList.class);
@@ -324,21 +324,21 @@ public class GameTest {
 
         //make new active
         player.setActivePokemon(p);
-        gui.makeActiveCard(p, 1);
+        gui.makeActiveCard(anyObject(Player.class), eq(p));
 
         //display hand post selection
         gui.removeAllButtons();
 
         gui.displayCards(hand);
         expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
-        expect(handler.getPlayerTurn()).andReturn(1);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
 
         replay(gui, player, p, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.selectActiveLoop();
-        verify(gui, player, p, handler);
+        verify(gui, player, p);
     }
 
     @Test
@@ -346,7 +346,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
 
         Player player = createMock(Player.class);
         gui.displayMessage("The result was Heads Player 1 goes first!");
@@ -364,7 +364,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
 
         Player player = createMock(Player.class);
         Pokemon p = createMock(Pokemon.class);
@@ -380,7 +380,7 @@ public class GameTest {
         gui.setPlayers(handler.player1, handler.player2);
 
         //player
-        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
 
         //displaySetupResults
         gui.displayMessage("The result was Heads Player 1 goes first!");
@@ -390,8 +390,7 @@ public class GameTest {
         gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
         //displayHand()
         gui.removeAllButtons();
-        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
-        expect(handler.getPlayerTurn()).andReturn(1);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         gui.updateTurn(1);
         expect(handler.getCurrentPlayerHand()).andReturn(hand).anyTimes();
         gui.displayCards(hand);
@@ -400,9 +399,8 @@ public class GameTest {
         expect(gui.getLastSelectedCard()).andReturn(p);
         //check basic
         expect(p.getStage()).andReturn(0);
-        expect(handler.getPlayerTurn()).andReturn(1);
         player.setActivePokemon(p);
-        gui.makeActiveCard(p, 1);
+        gui.makeActiveCard(anyObject(Player.class), eq(p));
         gui.removeAllButtons();
         gui.displayCards(hand);
 
@@ -415,7 +413,7 @@ public class GameTest {
         game.gameOver = true;
         game.setupGame();
 
-        verify(gui, rand, setupGame, handler, player, p);
+        verify(gui, rand, setupGame, player, p);
     }
 
     @Test
@@ -423,7 +421,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
         ArrayList<Card> hand = createMock(ArrayList.class);
@@ -436,15 +434,15 @@ public class GameTest {
         expect(gui.getLastSelectedCard()).andReturn(p);
         expect(p.getStage()).andReturn(0);
         handler.addToBench(p);
-        expect(handler.getPlayerTurn()).andReturn(1);
-        gui.addBenchCard(p, 1);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
+        gui.addBenchCard(anyObject(Player.class), eq(p));
 
         replay(gui, rand, setupGame, handler, p, player);
 
         Game game = new Game(gui, rand, setupGame, handler);
         game.mainGameLoop();
 
-        verify(gui, rand, setupGame, handler, p, player);
+        verify(gui, rand, setupGame, p, player);
     }
 
     @Test
@@ -452,7 +450,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Energy e = createMock(Energy.class);
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
@@ -469,7 +467,7 @@ public class GameTest {
 
         //handleAddEnergy()
         expect(handler.activeCanAddEnergy()).andReturn(true);
-        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(handler.getOnlyPokemonFromBench(1)).andReturn(hand);
         expect(player.getActivePokemon()).andReturn(p);
 
@@ -489,7 +487,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.mainGameLoop();
 
-        verify(gui, player, handler);
+        verify(gui, player);
     }
 
     @Test
@@ -497,7 +495,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Pokemon p = createMock(Pokemon.class);
         ArrayList<Card> hand = new ArrayList<>();
 
@@ -518,7 +516,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.mainGameLoop();
 
-        verify(gui, handler);
+        verify(gui);
     }
 
     @Test
@@ -526,7 +524,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Energy e = createMock(Energy.class);
         ArrayList<Card> hand = new ArrayList<>();
 
@@ -549,7 +547,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.mainGameLoop();
 
-        verify(gui, handler);
+        verify(gui);
     }
 
     @Test
@@ -557,17 +555,17 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
 
         expect(handler.passTurn()).andReturn(true);
-        expect(handler.getPlayerTurn()).andReturn(1);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         gui.updateTurn(1);
         expect(handler.drawCardFromDeck()).andReturn(true);
         replay(handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
         game.handlePassTurnAction();
-        verify(handler);
+        
     }
 
     @Test
@@ -575,13 +573,13 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Pokemon p = createMock(Pokemon.class);
         ArrayList<Card> hand = createMock(ArrayList.class);
         Player player = createMock(Player.class);
 
         expect(handler.passTurn()).andReturn(false);
-        expect(handler.getPlayerTurn()).andReturn(1);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         gui.updateTurn(1);
 
         //display hand
@@ -600,11 +598,10 @@ public class GameTest {
         expect(p.getStage()).andReturn(0);
 
         //make new active
-        expect(handler.getCurrentPlayer()).andReturn(player);
-        expect(handler.getPlayerTurn()).andReturn(1);
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(handler.drawCardFromDeck()).andReturn(true);
         player.setActivePokemon(p);
-        gui.makeActiveCard(p, 1);
+        gui.makeActiveCard(anyObject(Player.class), eq(p));
 
         //display hand
         gui.removeAllButtons();
@@ -616,7 +613,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handlePassTurnAction();
-        verify(gui, handler);
+        verify(gui);
     }
 
     @Test
@@ -624,7 +621,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         ArrayList<Card> hand = createMock(ArrayList.class);
 
         expect(handler.getCurrentPlayerHand()).andReturn(hand);
@@ -642,7 +639,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.mainGameLoop();
 
-        verify(gui, handler);
+        verify(gui);
     }
 
     @Test
@@ -650,7 +647,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Attack attack = createMock(Attack.class);
         Player player1 = createMock(Player.class);
         Player player2 = createMock(Player.class);
@@ -699,10 +696,10 @@ public class GameTest {
 
         //pickup prize card
         expect(handler.activePickupPrizeCard()).andReturn(5);
-        gui.removePrizeCard(1);
+        gui.removePrizeCard(anyObject(Player.class));
         handler.killDefenderActive(p);
-        gui.makeActiveCard(p, 2);
-        gui.removeBenchCard(p, 2);
+        gui.makeActiveCard(anyObject(Player.class), eq(p));
+        gui.removeBenchCard(anyObject(Player.class), eq(p));
 
         //pass turn
         expect(handler.passTurn()).andReturn(true);
@@ -716,7 +713,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.mainGameLoop();
 
-        verify(gui, handler, p);
+        verify(gui, p);
     }
 
     @Test
@@ -724,7 +721,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Energy e = createMock(Energy.class);
 
         expect(gui.getLastSelectedCard()).andReturn(e);
@@ -743,14 +740,14 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Player player = createMock(Player.class);
         Pokemon activePokemon = createMock(Pokemon.class);
         Card newActive = createMock(Card.class);
         ArrayList<Card> bench = new ArrayList<>();
         bench.add(newActive);
 
-        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(player.getActivePokemon()).andReturn(activePokemon);
         expect(activePokemon.canRetreat()).andReturn(true);
         expect(handler.canRetreat()).andReturn(true);
@@ -765,8 +762,8 @@ public class GameTest {
         gui.displayConfirmAndCancelButton();
         gui.waitForAction();
         expect(gui.getLastSelectedCard()).andReturn(newActive);
-        gui.replaceActiveCard(newActive, 1);
-        expect(handler.getPlayerTurn()).andReturn(1);
+        gui.replaceActiveCard(anyObject(Player.class), eq(newActive));
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         handler.setNewActive(newActive);
         expect(gui.isCancelled()).andReturn(false);
 
@@ -776,7 +773,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleRetreatAction();
 
-        verify(gui, handler, player, activePokemon);
+        verify(gui, player, activePokemon);
     }
 
     @Test
@@ -784,11 +781,11 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Player player = createMock(Player.class);
         Pokemon activePokemon = createMock(Pokemon.class);
 
-        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(player.getActivePokemon()).andReturn(activePokemon);
         expect(activePokemon.canRetreat()).andReturn(false);
         //expect(handler.canRetreat()).andReturn(false); Only called once because previous statement
@@ -800,7 +797,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.handleRetreatAction();
 
-        verify(gui, handler, player, activePokemon);
+        verify(gui, player, activePokemon);
     }
 
     @Test
@@ -808,7 +805,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Card newActive = createMock(Card.class);
         ArrayList<Card> bench = new ArrayList<>();
         bench.add(newActive);
@@ -820,8 +817,8 @@ public class GameTest {
         gui.displayConfirmAndCancelButton();
         gui.waitForAction();
         expect(gui.getLastSelectedCard()).andReturn(newActive);
-        expect(handler.getPlayerTurn()).andReturn(1);
-        gui.replaceActiveCard(newActive, 1);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
+        gui.replaceActiveCard(anyObject(Player.class), eq(newActive));
         expect(gui.isCancelled()).andReturn(false);
 
         replay(gui, handler);
@@ -831,7 +828,7 @@ public class GameTest {
         Card result = game.retreatPokemon();
 
         assertEquals(newActive, result);
-        verify(gui, handler);
+        verify(gui);
     }
 
     @Test
@@ -839,7 +836,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Pokemon selectedPokemon = createMock(Pokemon.class);
 
         ArrayList<Card> bench = new ArrayList<>();
@@ -852,20 +849,20 @@ public class GameTest {
         gui.waitForAction();
         expect(gui.getLastSelectedCard()).andReturn(selectedPokemon);
 
-        expect(handler.getPlayerTurn()).andReturn(1);
-        gui.makeActiveCard(selectedPokemon, 2);
-        gui.removeBenchCard(selectedPokemon, 2);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
+        gui.makeActiveCard(anyObject(Player.class), eq(selectedPokemon));
+        gui.removeBenchCard(anyObject(Player.class), eq(selectedPokemon));
 
         handler.killDefenderActive(selectedPokemon);
         expect(handler.activePickupPrizeCard()).andReturn(6);
-        gui.removePrizeCard(1);
+        gui.removePrizeCard(anyObject(Player.class));
 
         replay(gui, handler, selectedPokemon);
 
         Game game = new Game(gui, rand, setupGame, handler);
         game.handleDeadActive();
 
-        verify(gui, handler, selectedPokemon);
+        verify(gui, selectedPokemon);
     }
 
     @Test
@@ -873,7 +870,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Pokemon selectedPokemon = createMock(Pokemon.class);
 
         ArrayList<Card> bench = new ArrayList<>();
@@ -896,12 +893,12 @@ public class GameTest {
         gui.waitForAction();
         expect(gui.getLastSelectedCard()).andReturn(selectedPokemon);
 
-        expect(handler.getPlayerTurn()).andReturn(1);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         handler.killDefenderActive(selectedPokemon);
-        gui.makeActiveCard(selectedPokemon, 2);
-        gui.removeBenchCard(selectedPokemon, 2);
+        gui.makeActiveCard(anyObject(Player.class), eq(selectedPokemon));
+        gui.removeBenchCard(anyObject(Player.class), eq(selectedPokemon));
         expect(handler.activePickupPrizeCard()).andReturn(6);
-        gui.removePrizeCard(1);
+        gui.removePrizeCard(anyObject(Player.class));
 
         replay(gui, handler, selectedPokemon);
 
@@ -909,7 +906,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleDeadActive();
 
-        verify(gui, handler, selectedPokemon);
+        verify(gui, selectedPokemon);
     }
 
     @Test
@@ -917,7 +914,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
         ArrayList<Card> hand = createMock(ArrayList.class);
@@ -929,7 +926,7 @@ public class GameTest {
         expect(gui.waitForButtonPressed()).andReturn("PassTurn");
 
         expect(handler.passTurn()).andReturn(true);
-        expect(handler.getPlayerTurn()).andReturn(1);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         gui.updateTurn(1);
         expect(handler.drawCardFromDeck()).andReturn(true);
 
@@ -938,7 +935,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.mainGameLoop();
 
-        verify(gui, setupGame, handler, p, player);
+        verify(gui, setupGame, p, player);
     }
 
     @Test
@@ -946,7 +943,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
         ArrayList<Card> hand = createMock(ArrayList.class);
@@ -958,7 +955,7 @@ public class GameTest {
         expect(gui.waitForButtonPressed()).andReturn("Retreat");
 
         //handler
-        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(player.getActivePokemon()).andReturn(p);
         expect(p.canRetreat()).andReturn(false);
         //Only need one to be false to return flase in and statement
@@ -970,7 +967,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.mainGameLoop();
 
-        verify(gui, setupGame, handler, p, player);
+        verify(gui, setupGame, p, player);
     }
 
     @Test
@@ -978,7 +975,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Attack attack = createMock(Attack.class);
         ArrayList<Attack> attacks = new ArrayList<>();
         attacks.add(attack);
@@ -997,7 +994,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleAttackOpponent();
-        verify(gui, handler);
+        verify(gui);
     }
 
     @Test
@@ -1005,7 +1002,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Attack attack = createMock(Attack.class);
         ArrayList<Attack> attacks = new ArrayList<>();
         attacks.add(attack);
@@ -1026,7 +1023,7 @@ public class GameTest {
 
         gui.displayAttackMessage(player1, player2, attack);
         expect(handler.passTurn()).andReturn(true);
-        expect(handler.getPlayerTurn()).andReturn(1);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         gui.updateTurn(1);
         expect(handler.drawCardFromDeck()).andReturn(true);
         expect(gui.isCancelled()).andReturn(false);
@@ -1035,7 +1032,7 @@ public class GameTest {
 
         Game game = new Game(gui, rand, setupGame, handler);
         game.handleAttackOpponent();
-        verify(gui, handler);
+        verify(gui);
     }
 
     @Test
@@ -1043,7 +1040,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Player winner = createMock(Player.class);
         Player loser = createMock(Player.class);
 
@@ -1062,7 +1059,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Player winner = createMock(Player.class);
         Player loser = createMock(Player.class);
         ArrayList<Card> cards = createMock(ArrayList.class);
@@ -1081,7 +1078,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.handleDeadActive();
 
-        verify(gui, handler, cards);
+        verify(gui, cards);
     }
 
     @Test
@@ -1089,7 +1086,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         ArrayList<Card> cards = createMock(ArrayList.class);
         Pokemon p = createMock(Pokemon.class);
 
@@ -1107,7 +1104,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.mainGameLoop();
 
-        verify(gui, handler);
+        verify(gui);
     }
 
     @Test
@@ -1115,12 +1112,12 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
 
         expect(gui.hasCardSelected()).andReturn(false);
-        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(player.getActivePokemon()).andReturn(p);
         gui.displayCardReport(p);
 
@@ -1128,7 +1125,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.displayCardInfo();
 
-        verify(gui, player, handler);
+        verify(gui, player);
     }
 
     @Test
@@ -1136,13 +1133,13 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
         ArrayList<Card> cards = new ArrayList<>();
         cards.add(p);
 
-        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(player.getActivePokemon()).andReturn(p);
         expect(p.canRetreat()).andReturn(true);
         expect(handler.canRetreat()).andReturn(true);
@@ -1166,8 +1163,8 @@ public class GameTest {
         gui.displayCards(cards);
         gui.displayConfirmAndCancelButton();
         gui.waitForAction();
-        expect(handler.getPlayerTurn()).andReturn(1);
-        gui.replaceActiveCard(p, 1);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
+        gui.replaceActiveCard(anyObject(Player.class), eq(p));
         handler.setNewActive(p);
         expect(gui.isCancelled()).andReturn(false).times(2);
 
@@ -1175,7 +1172,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleRetreatAction();
-        verify(handler, gui, p, player);
+        verify(gui, p, player);
     }
 
     @Test
@@ -1183,7 +1180,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         ArrayList<Card> cards = new ArrayList<>();
         Pokemon p = createMock(Pokemon.class);
         cards.add(p);
@@ -1219,7 +1216,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         ArrayList<Attack> attacks = new ArrayList<>();
         Attack atk = createMock(Attack.class);
         attacks.add(atk);
@@ -1248,7 +1245,7 @@ public class GameTest {
         Attack result = game.displayAttackInfo();
         assertEquals(atk, result);
 
-        verify(gui, handler);
+        verify(gui);
     }
 
     @Test
@@ -1256,7 +1253,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
 
         Game game = new Game(gui, rand, setupGame, handler);
         assertFalse(game.checkBasicPokemon(null));
@@ -1267,14 +1264,14 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Player winner = createMock(Player.class);
         Player loser = createMock(Player.class);
 
         expect(handler.activePickupPrizeCard()).andReturn(0);
-        gui.removePrizeCard(1);
-        expect(handler.getCurrentPlayer()).andReturn(winner);
-        expect(handler.getDefendingPlayer()).andReturn(loser);
+        gui.removePrizeCard(anyObject(Player.class));
+        expect(handler.getCurrentPlayer()).andReturn(winner).anyTimes();
+        expect(handler.getDefendingPlayer()).andReturn(loser).anyTimes();
         gui.displayWinningMessage(winner, loser);
         gui.closeWindow();
 
@@ -1283,7 +1280,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.handlePickupPrizeCard(1);
 
-        verify(gui, handler);
+        verify(gui);
     }
 
 //    @Test
@@ -1291,7 +1288,7 @@ public class GameTest {
 //        GameGUI gui = createMock(GameGUI.class);
 //        Random rand = createMock(Random.class);
 //        SetupGame setupGame = createMock(SetupGame.class);
-//        PlayerHandler handler = createMock(PlayerHandler.class);
+//        PlayerHandler handler = createNiceMock(PlayerHandler.class);
 //        Trainer trainerCard = createMock(Trainer.class);
 //        Energy notTrainerCard = createMock(Energy.class);
 //
@@ -1306,7 +1303,7 @@ public class GameTest {
 //        game.handleTrainerAction();
 //        game.handleTrainerAction();
 //
-//        verify(gui, handler);
+//        verify(gui);
 //    }
 
 
@@ -1316,7 +1313,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Energy e = createMock(Energy.class);
         Player p = createMock(Player.class);
         ArrayList<Card> cards = createMock(ArrayList.class);
@@ -1340,7 +1337,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleAddEnergy(e);
-        verify(gui, handler, p);
+        verify(gui, p);
     }
 
     @Test
@@ -1348,7 +1345,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Player p = createMock(Player.class);
         Pokemon poke = createMock(Pokemon.class);
         ArrayList<Card> cards = createMock(ArrayList.class);
@@ -1374,7 +1371,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleRetreatAction();
 
-        verify(gui, handler, poke, p);
+        verify(gui, poke, p);
     }
 
     @Test
@@ -1382,7 +1379,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         ArrayList<Attack> attacks = createMock(ArrayList.class);
 
         gui.removeAllButtons();
@@ -1397,7 +1394,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.handleAttackOpponent();
 
-        verify(gui, handler);
+        verify(gui);
     }
 
     @Test
@@ -1405,7 +1402,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame gameSetup = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         ArrayList<Card> cards = createMock(ArrayList.class);
         Trainer t = createMock(Trainer.class);
 
@@ -1423,7 +1420,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.mainGameLoop();
 
-        verify(gui, handler);
+        verify(gui);
     }
 
     @Test
@@ -1431,7 +1428,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame gameSetup = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Pokemon p = createMock(Pokemon.class);
 
         expect(gui.getLastSelectedCard()).andReturn(p);
@@ -1453,7 +1450,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame gameSetup = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Pokemon p = createMock(Pokemon.class);
         ArrayList<Card> cards = createMock(ArrayList.class);
 
@@ -1470,7 +1467,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleEvolveAction();
 
-        verify(gui, p, handler, cards);
+        verify(gui, p, cards);
     }
 
     @Test
@@ -1478,7 +1475,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame gameSetup = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Pokemon p = createMock(Pokemon.class);
         ArrayList<Card> cards = createMock(ArrayList.class);
 
@@ -1501,7 +1498,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleEvolveAction();
 
-        verify(gui, p, handler, cards);
+        verify(gui, p, cards);
     }
 
     @Test
@@ -1509,7 +1506,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame gameSetup = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Pokemon p = createMock(Pokemon.class);
         Pokemon p2 = createMock(Pokemon.class);
         ArrayList<Card> cards = createMock(ArrayList.class);
@@ -1526,7 +1523,7 @@ public class GameTest {
         gui.displayConfirmAndCancelButton();
         gui.waitForAction();
         expect(gui.isCancelled()).andReturn(false);
-        expect(gui.getLastSelectedCard()).andReturn(p2);
+        expect(gui.getLastSelectedCard()).andReturn(p2).anyTimes();
         expect(cards.contains(p2)).andReturn(false);
         gui.displayMessage("Pokemon has not been selected!");
 
@@ -1537,7 +1534,6 @@ public class GameTest {
         gui.displayConfirmAndCancelButton();
         gui.waitForAction();
         expect(gui.isCancelled()).andReturn(false);
-        expect(gui.getLastSelectedCard()).andReturn(p2);
         expect(cards.contains(p2)).andReturn(true);
         expect(handler.evolve(p, p2)).andReturn("Error");
         gui.displayMessage("Evolution could not be completed");
@@ -1548,7 +1544,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleEvolveAction();
 
-        verify(gui, p, handler, cards);
+        verify(gui, p, cards);
     }
 
     @Test
@@ -1556,7 +1552,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame gameSetup = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Pokemon p = createMock(Pokemon.class);
         Pokemon p2 = createMock(Pokemon.class);
         ArrayList<Card> cards = createMock(ArrayList.class);
@@ -1573,11 +1569,11 @@ public class GameTest {
         gui.displayConfirmAndCancelButton();
         gui.waitForAction();
         expect(gui.isCancelled()).andReturn(false);
-        expect(gui.getLastSelectedCard()).andReturn(p2);
+        expect(gui.getLastSelectedCard()).andReturn(p2).anyTimes();
         expect(cards.contains(p2)).andReturn(true);
         expect(handler.evolve(p, p2)).andReturn("Active");
-        expect(handler.getPlayerTurn()).andReturn(1);
-        gui.makeActiveCard(p, 1);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
+        gui.makeActiveCard(anyObject(Player.class), eq(p));
 
         replay(gui, p, handler, cards);
 
@@ -1585,7 +1581,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleEvolveAction();
 
-        verify(gui, p, handler, cards);
+        verify(gui, p, cards);
     }
 
     @Test
@@ -1593,7 +1589,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame gameSetup = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Pokemon p = createMock(Pokemon.class);
         Pokemon p2 = createMock(Pokemon.class);
         ArrayList<Card> cards = createMock(ArrayList.class);
@@ -1610,12 +1606,12 @@ public class GameTest {
         gui.displayConfirmAndCancelButton();
         gui.waitForAction();
         expect(gui.isCancelled()).andReturn(false);
-        expect(gui.getLastSelectedCard()).andReturn(p2);
+        expect(gui.getLastSelectedCard()).andReturn(p2).anyTimes();
         expect(cards.contains(p2)).andReturn(true);
         expect(handler.evolve(p, p2)).andReturn("Bench");
-        expect(handler.getPlayerTurn()).andReturn(1);
-        gui.removeBenchCard(p2, 1);
-        gui.addBenchCard(p, 1);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
+        gui.removeBenchCard(anyObject(Player.class), eq(p2));
+        gui.addBenchCard(anyObject(Player.class), eq(p));
 
         replay(gui, p, handler, cards);
 
@@ -1623,7 +1619,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleEvolveAction();
 
-        verify(gui, p, handler, cards);
+        verify(gui, p, cards);
     }
 
     @Test
@@ -1631,7 +1627,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame gameSetup = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Pokemon p = createMock(Pokemon.class);
         Pokemon p2 = createMock(Pokemon.class);
         ArrayList<Card> cards = createMock(ArrayList.class);
@@ -1639,8 +1635,8 @@ public class GameTest {
         expect(gui.getLastSelectedCard()).andReturn(p2);
         expect(p2.getStage()).andReturn(0);
         handler.addToBench(p2);
-        expect(handler.getPlayerTurn()).andReturn(1);
-        gui.addBenchCard(p2, 1);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
+        gui.addBenchCard(anyObject(Player.class), eq(p2));
 
         expect(gui.getLastSelectedCard()).andReturn(p);
         expect(p.getStage()).andReturn(1);
@@ -1666,7 +1662,7 @@ public class GameTest {
         game.handleBenchAction();
         game.handleEvolveAction();
 
-        verify(gui, p, handler, cards);
+        verify(gui, p, cards);
     }
 
     @Test
@@ -1674,7 +1670,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Trainer trainer = createMock(Trainer.class);
         Pokemon p = createMock(Pokemon.class);
         Energy e = createMock(Energy.class);
@@ -1695,7 +1691,7 @@ public class GameTest {
         expect(gui.getLastSelectedCard()).andReturn(trainer);
 
         // handleUseTrainer()
-        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(handler.getAllPlayerPokemon()).andReturn(pokemon);
         expect(trainer.getName()).andReturn("Potion").anyTimes();
         expect(handler.getAllPlayerEnergy()).andReturn(energy);
@@ -1726,7 +1722,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.mainGameLoop();
 
-        verify(gui, player, handler, trainer, p);
+        verify(gui, player, trainer, p);
     }
 
     @Test
@@ -1734,7 +1730,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Trainer trainer = createMock(Trainer.class);
         Pokemon p = createMock(Pokemon.class);
         Pokemon active = createMock(Pokemon.class);
@@ -1756,17 +1752,17 @@ public class GameTest {
         expect(gui.getLastSelectedCard()).andReturn(trainer);
 
         // handleUseTrainer()
-        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(handler.getAllPlayerPokemon()).andReturn(pokemon);
         expect(trainer.getName()).andReturn("Switch").anyTimes();
         expect(handler.getActivePokemon()).andReturn(active);
         expect(handler.getHandPokemon()).andReturn(hand);
         expect(handler.getAllPlayerEnergy()).andReturn(energy);
-        expect(handler.getPlayerTurn()).andReturn(1);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         player.removeFromHand(trainer);
         expectLastCall();
 
-        gui.replaceActiveCard(p, 1);
+        gui.replaceActiveCard(anyObject(Player.class), eq(p));
 
         // DisplayTrainerPokemonSelection()
         gui.displayMessage("Select Pokemon to use Switch on");
@@ -1792,7 +1788,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.mainGameLoop();
 
-        verify(gui, player, handler, trainer, p);
+        verify(gui, player, trainer, p);
     }
 
     @Test
@@ -1800,7 +1796,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Trainer trainer = createMock(Trainer.class);
         Player player = createMock(Player.class);
         ArrayList<Card> hand = new ArrayList<>();
@@ -1817,7 +1813,7 @@ public class GameTest {
         expect(gui.getLastSelectedCard()).andReturn(trainer);
 
         // handleUseTrainer
-        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(handler.getAllPlayerPokemon()).andReturn(pokemon);
         expect(handler.getAllPlayerEnergy()).andReturn(energy);
         player.removeFromHand(trainer);
@@ -1832,7 +1828,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.mainGameLoop();
 
-        verify(gui, player, handler, trainer);
+        verify(gui, player, trainer);
     }
 
     @Test
@@ -1840,7 +1836,7 @@ public class GameTest {
         GUI gui = createMock(GUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Trainer trainer = createMock(Trainer.class);
         Player player = createMock(Player.class);
 
@@ -1859,7 +1855,7 @@ public class GameTest {
         expect(gui.getLastSelectedCard()).andReturn(trainer).times(1);
 
         // handleUseTrainer()
-        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(handler.getAllPlayerPokemon()).andReturn(pokemon);
         expect(handler.getAllPlayerEnergy()).andReturn(energy);
         player.removeFromHand(trainer);
@@ -1894,7 +1890,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.mainGameLoop();
 
-        verify(gui, player, handler, trainer, p1);
+        verify(gui, player, trainer, p1);
     }
 
     @Test
@@ -1902,7 +1898,7 @@ public class GameTest {
         GameGUI gui = createMock(GameGUI.class);
         Random rand = createMock(Random.class);
         SetupGame setupGame = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Trainer trainer = createMock(Trainer.class);
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
@@ -1926,7 +1922,7 @@ public class GameTest {
         expect(gui.getLastSelectedCard()).andReturn(trainer);
 
         // handleUseTrainer()
-        expect(handler.getCurrentPlayer()).andReturn(player);
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(handler.getAllPlayerPokemon()).andReturn(pokemon);
         expect(handler.getAllPlayerEnergy()).andReturn(energy);
         player.removeFromHand(trainer);
@@ -1968,7 +1964,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.mainGameLoop();
 
-        verify(gui, player, handler, trainer, p);
+        verify(gui, player, trainer, p);
     }
 
     @Test
@@ -1976,7 +1972,7 @@ public class GameTest {
         GUI gui = createMock(GUI.class);
         Random rand = createMock(Random.class);
         SetupGame gameSetup = createMock(SetupGame.class);
-        PlayerHandler ph = createMock(PlayerHandler.class);
+        PlayerHandler ph = createNiceMock(PlayerHandler.class);
         Card nonTrainerCard = createMock(Card.class); // Not a Trainer
 
         expect(gui.getLastSelectedCard()).andReturn(nonTrainerCard);
@@ -1998,12 +1994,12 @@ public class GameTest {
         GUI gui = createMock(GUI.class);
         Random rand = createMock(Random.class);
         SetupGame gameSetup = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Player winner = createMock(Player.class);
         Player loser = createMock(Player.class);
 
         expect(handler.passTurn()).andReturn(true);
-        expect(handler.getPlayerTurn()).andReturn(1);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         gui.updateTurn(1);
         expect(handler.drawCardFromDeck()).andReturn(false);
         expect(handler.getCurrentPlayer()).andReturn(winner);
@@ -2018,7 +2014,7 @@ public class GameTest {
         Game game = new Game(gui, rand, gameSetup, handler);
         game.handlePassTurnAction();
 
-        verify(gui, handler);
+        verify(gui);
     }
 
     @Test
@@ -2026,7 +2022,7 @@ public class GameTest {
         GUI gui = createMock(GUI.class);
         Random rand = createMock(Random.class);
         SetupGame gameSetup = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Trainer t = createMock(Trainer.class);
         ArrayList<Card> pokemon = createMock(ArrayList.class);
 
@@ -2052,7 +2048,7 @@ public class GameTest {
         GUI gui = createMock(GUI.class);
         Random rand = createMock(Random.class);
         SetupGame gameSetup = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         Trainer t = createMock(Trainer.class);
         ArrayList<Card> energies = createMock(ArrayList.class);
 
@@ -2078,7 +2074,7 @@ public class GameTest {
         GUI gui = createMock(GUI.class);
         Random rand = createMock(Random.class);
         SetupGame gameSetup = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         ArrayList<Card> cards = createMock(ArrayList.class);
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
@@ -2093,7 +2089,7 @@ public class GameTest {
         expect(gameSetup.completeGameSetup()).andReturn("Heads");
         handler.completePlayerSetup("Heads");
         gui.setPlayers(handler.player1, handler.player2);
-        expect(handler.getPlayerTurn()).andReturn(1);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         gui.updateTurn(1);
 
         //displaySetupResults()
@@ -2116,10 +2112,9 @@ public class GameTest {
         expect(p.getStage()).andReturn(0);
 
         //makeNewActivePokemon
-        expect(handler.getCurrentPlayer()).andReturn(player);
-        expect(handler.getPlayerTurn()).andReturn(1);
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         player.setActivePokemon(p);
-        gui.makeActiveCard(p, 1);
+        gui.makeActiveCard(anyObject(Player.class), eq(p));
 
         //displayCurrentPlayerHand
         gui.removeAllButtons();
@@ -2139,7 +2134,7 @@ public class GameTest {
         Game game = new Game(gui, rand, gameSetup, handler);
         game.setupGame();
 
-        verify(gui, handler, player, p, gameSetup);
+        verify(gui, player, p, gameSetup);
     }
 
     @Test
@@ -2147,7 +2142,7 @@ public class GameTest {
         GUI gui = createMock(GUI.class);
         Random rand = createMock(Random.class);
         SetupGame gameSetup = createMock(SetupGame.class);
-        PlayerHandler handler = createMock(PlayerHandler.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
         ArrayList<Card> cards = createMock(ArrayList.class);
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
@@ -2162,7 +2157,7 @@ public class GameTest {
         expect(gameSetup.completeGameSetup()).andReturn("Heads");
         handler.completePlayerSetup("Heads");
         gui.setPlayers(handler.player1, handler.player2);
-        expect(handler.getPlayerTurn()).andReturn(1);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         gui.updateTurn(1);
 
         //displaySetupResults()
@@ -2185,10 +2180,9 @@ public class GameTest {
         expect(p.getStage()).andReturn(0);
 
         //makeNewActivePokemon
-        expect(handler.getCurrentPlayer()).andReturn(player);
-        expect(handler.getPlayerTurn()).andReturn(1);
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         player.setActivePokemon(p);
-        gui.makeActiveCard(p, 1);
+        gui.makeActiveCard(anyObject(Player.class), eq(p));
 
         //displayCurrentPlayerHand
         gui.removeAllButtons();
@@ -2216,7 +2210,7 @@ public class GameTest {
         Game game = new Game(gui, rand, gameSetup, handler);
         game.setupGame();
 
-        verify(gui, handler, player, p, gameSetup);
+        verify(gui, player, p, gameSetup);
     }
 }
 

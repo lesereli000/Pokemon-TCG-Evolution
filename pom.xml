@@ -100,7 +100,7 @@
                 <version>3.2.5</version>
             </plugin>
         </plugins>
-        <sourceDirectory>.</sourceDirectory>
-        <testSourceDirectory>tests</testSourceDirectory>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <testSourceDirectory>Tests</testSourceDirectory>
     </build>
 </project>

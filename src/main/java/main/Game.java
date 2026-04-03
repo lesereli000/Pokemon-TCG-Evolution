@@ -100,14 +100,14 @@ public class Game {
             gui.displayCardReport(lastSelectedCard);
         } else {
             Player activePlayer = playerHandler.getCurrentPlayer();
-            Pokemon currentActive = (Pokemon) activePlayer.getActivePokemon();
+            Pokemon currentActive = activePlayer.getActivePokemon();
             gui.displayCardReport(currentActive);
         }
     }
 
     protected void handleRetreatAction() {
         Player activePlayer = playerHandler.getCurrentPlayer();
-        Pokemon activePokemon = (Pokemon) activePlayer.getActivePokemon();
+        Pokemon activePokemon = activePlayer.getActivePokemon();
         boolean canRetreat = activePokemon.canRetreat() && playerHandler.canRetreat();
         gui.displayRetreatEnergy(activePokemon, canRetreat);
         if(canRetreat) {
@@ -133,7 +133,7 @@ public class Game {
                 gui.displayMessage(message);
                 return retreatPokemon();
             } else {
-                gui.replaceActiveCard(selectedCard, playerHandler.getPlayerTurn());
+                gui.replaceActiveCard(playerHandler.getCurrentPlayer(), selectedCard);
                 return selectedCard;
             }
         } else {
@@ -190,17 +190,17 @@ public class Game {
             } else {
                 int playerTurn = playerHandler.getPlayerTurn();
                 handlePickupPrizeCard(playerTurn);
-                int defendingNum = playerTurn % 2 + 1;
                 playerHandler.killDefenderActive((Pokemon)lastSelectedCard);
-                gui.makeActiveCard(lastSelectedCard, defendingNum);
-                gui.removeBenchCard(lastSelectedCard, defendingNum);
+                Player defendingPlayer = playerHandler.getDefendingPlayer();
+                gui.makeActiveCard(defendingPlayer, lastSelectedCard);
+                gui.removeBenchCard(defendingPlayer, lastSelectedCard);
             }
         }
     }
 
     protected void handlePickupPrizeCard(int turn) {
         int prizeCardsLeft = playerHandler.activePickupPrizeCard();
-        gui.removePrizeCard(turn);
+        gui.removePrizeCard(playerHandler.getCurrentPlayer());
         if(prizeCardsLeft == 0) {
             Player winner = playerHandler.getCurrentPlayer();
             Player loser = playerHandler.getDefendingPlayer();
@@ -294,7 +294,7 @@ public class Game {
         trainer.doEffects(currentPlayer, selectedPokemon, selectedEnergy);
 
         if(trainer.getName().equals("Switch")) {
-            gui.replaceActiveCard((Card) selectedPokemon, playerHandler.getPlayerTurn());
+            gui.replaceActiveCard(currentPlayer, (Card) selectedPokemon);
         }
     }
 
@@ -394,13 +394,13 @@ public class Game {
                             break;
 
                         case "Active":
-                            gui.makeActiveCard(evolution, playerHandler.getPlayerTurn());
+                            gui.makeActiveCard(playerHandler.getCurrentPlayer(), evolution);
                             break;
 
                         case "Bench":
-                            int playerTurn = playerHandler.getPlayerTurn();
-                            gui.removeBenchCard(basePokemon, playerTurn);
-                            gui.addBenchCard(evolution, playerTurn);
+                            Player currentPlayer = playerHandler.getCurrentPlayer();
+                            gui.removeBenchCard(currentPlayer, basePokemon);
+                            gui.addBenchCard(currentPlayer, evolution);
                             break;
                     }
                 }
@@ -447,9 +447,8 @@ public class Game {
 
     public void makeNewActivePokemon(Pokemon p) {
         Player currentPlayer = playerHandler.getCurrentPlayer();
-        int curTurn = playerHandler.getPlayerTurn();
         currentPlayer.setActivePokemon(p);
-        gui.makeActiveCard(p,curTurn);
+        gui.makeActiveCard(currentPlayer, p);
     }
 
     public boolean checkBasicPokemon(Card card) {
@@ -464,8 +463,7 @@ public class Game {
         int pokemonStage = selectedPokemon.getStage();
         if(pokemonStage == 0) {
             playerHandler.addToBench(selectedPokemon);
-            int playerTurn = playerHandler.getPlayerTurn();
-            gui.addBenchCard(selectedPokemon, playerTurn);
+            gui.addBenchCard(playerHandler.getCurrentPlayer(), selectedPokemon);
         } else {
             String message = messages.getString("noAddBench");
             gui.displayMessage(message);
@@ -479,7 +477,7 @@ public class Game {
         } else {
             Player currentPlayer = playerHandler.getCurrentPlayer();
             ArrayList<Card> onlyPokemon = playerHandler.getOnlyPokemonFromBench(1);
-            Card activePokemon = currentPlayer.getActivePokemon();
+            Pokemon activePokemon = currentPlayer.getActivePokemon();
             onlyPokemon.add(activePokemon);
 
             Pokemon selectedPokemon = displayAddEnergyInfo(onlyPokemon);

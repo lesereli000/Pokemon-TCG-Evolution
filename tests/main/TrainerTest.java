@@ -3,7 +3,6 @@ package main;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
@@ -100,7 +99,7 @@ public class TrainerTest {
     }
 
     @Test
-    public void testBillTrainer(){
+    public void testBillTrainer() {
         Player p1 = createMock(Player.class);
         Player p2 = createMock(Player.class);
         CardGenerator pg = new CardGenerator();
@@ -110,9 +109,9 @@ public class TrainerTest {
         assertEquals("Bill", c.getName());
         expect(p1.drawCard()).andReturn(true);
         expect(p1.drawCard()).andReturn(true);
-        replay(p1,p2);
-        c.doEffects(p1,p,e);
-        verify(p1,p2);
+        replay(p1, p2);
+        c.doEffects(p1, p, e);
+        verify(p1, p2);
     }
 
     @Test
@@ -131,7 +130,7 @@ public class TrainerTest {
         replay(p2);
         assertEquals(activePokemon.damageCounters, 0);
         activePokemon.takeDamage(3, EnergyType.WATER);
-        assertEquals(3,activePokemon.damageCounters);
+        assertEquals(3, activePokemon.damageCounters);
         c1.doEffects(p1, activePokemon, null);
         assertEquals(1, activePokemon.damageCounters);
         c2.doEffects(p1, activePokemon, null);
@@ -180,13 +179,13 @@ public class TrainerTest {
         p1.bench.addCard(benchPokemon);
         replay(p2);
 
-//        assertEquals(activePokemon.damageCounters, 0);
-//        activePokemon.takeDamage(3, "Water");
-//        assertEquals(3,activePokemon.damageCounters);
-//        c1.doEffects(p1, activePokemon, null);
-//        assertEquals(1, activePokemon.damageCounters);
-//        c2.doEffects(p1, activePokemon, null);
-//        assertEquals(activePokemon.damageCounters, 0);
+        // assertEquals(activePokemon.damageCounters, 0);
+        // activePokemon.takeDamage(3, "Water");
+        // assertEquals(3,activePokemon.damageCounters);
+        // c1.doEffects(p1, activePokemon, null);
+        // assertEquals(1, activePokemon.damageCounters);
+        // c2.doEffects(p1, activePokemon, null);
+        // assertEquals(activePokemon.damageCounters, 0);
         assertEquals(p1.getActivePokemon(), activePokemon);
         c1.doEffects(p1, benchPokemon, null);
         assertEquals(p1.getActivePokemon(), benchPokemon);

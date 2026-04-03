@@ -33,7 +33,7 @@ public class Deck {
     }
 
     public ArrayList<Card> getCards() {
-        return (ArrayList<Card>) cards.clone();
+        return new ArrayList<>(cards);
     }
 
     public boolean shuffle() {

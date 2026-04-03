@@ -101,7 +101,7 @@ public class PlayerHandler {
     }
 
     public ArrayList<Attack> getCurrentPlayerAttacks() {
-        Pokemon currentPlayerActive = (Pokemon) currentPlayer.getActivePokemon();
+        Pokemon currentPlayerActive = currentPlayer.getActivePokemon();
         return currentPlayerActive.getAttacks();
     }
 
@@ -111,7 +111,7 @@ public class PlayerHandler {
         }
         int damage = selectedAttack.getDamage();
         int dmgCounters = damage/10;
-        Pokemon activePokemon = (Pokemon) currentPlayer.getActivePokemon();
+        Pokemon activePokemon = currentPlayer.getActivePokemon();
         defendingPlayer.takeDamage(dmgCounters, activePokemon.type);
         return true;
     }
@@ -129,7 +129,7 @@ public class PlayerHandler {
     }
 
     public boolean isDefendingDead() {
-        Pokemon defendingPokemon = (Pokemon) defendingPlayer.getActivePokemon();
+        Pokemon defendingPokemon = defendingPlayer.getActivePokemon();
         return defendingPokemon.getCurHP() <= 0;
     }
 
@@ -160,7 +160,7 @@ public class PlayerHandler {
 
     public ArrayList<Card> getAllPlayerPokemon() {
         ArrayList<Card> playerPokemon = currentPlayer.getOnlyPokemonFromHand();
-        playerPokemon.add((Card) currentPlayer.activePokemon);
+        playerPokemon.add(currentPlayer.activePokemon);
         ArrayList<Card> benchPokemon = currentPlayer.getPokemonOnBench();
         playerPokemon.addAll(benchPokemon);
         return playerPokemon;
@@ -170,7 +170,7 @@ public class PlayerHandler {
         return currentPlayer.getAllEnergyFromHand();
     }
 
-    public Card getActivePokemon() { return currentPlayer.getActivePokemon(); }
+    public Pokemon getActivePokemon() { return currentPlayer.getActivePokemon(); }
 
     public ArrayList<Card> getHandPokemon() { return currentPlayer.getOnlyPokemonFromHand(); }
 }
