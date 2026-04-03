@@ -410,7 +410,7 @@ public class PlayerTest {
     @Test
     public void testHandAsList() {
         Player player = new Player();
-        Deck hand = new Deck();
+        new Deck();
         ArrayList<Card> cards = new ArrayList<>();
         Pokemon p = new Pokemon("Beedrill", "Grass", 2, 80, "Fire", "Fighting", null, 0);
 

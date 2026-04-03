@@ -32,15 +32,27 @@ public class CardGenerator {
 
             String supertype = cardData.getString("supertype");
 
+            Card card;
             if (supertype.equals("Pokemon")) {
-                return createPokemon(cardData);
+                card = createPokemon(cardData);
             } else if (supertype.equals("Energy")) {
-                return new Energy(EnergyType.fromName(name));
+                card = new Energy(EnergyType.fromName(name));
             } else {
-                return createTrainer(cardData);
+                card = createTrainer(cardData);
             }
+            setImageUrl(card, cardData);
+            return card;
         } catch (IOException e) {
             throw new RuntimeException("File not found in directory!", e);
+        }
+    }
+
+    private void setImageUrl(Card card, JSONObject cardData) {
+        if (cardData.has("images")) {
+            JSONObject images = cardData.getJSONObject("images");
+            if (images.has("small")) {
+                card.setImageUrl(images.getString("small"));
+            }
         }
     }
 

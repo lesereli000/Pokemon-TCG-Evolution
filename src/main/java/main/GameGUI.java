@@ -469,6 +469,16 @@ public class GameGUI implements GUI {
     @Override
     public JButton createLinkedButtonCard(String message, Card currCard) {
         JButton btn = new JButton(message);
+        
+        String url = currCard.getImageUrl();
+        if (url != null) {
+            // Scaling constants from BoardPanel
+            int width = (frameWidth * 2) / 25;
+            int height = width * 7 / 5;
+            ImageLoader.loadIntoButton(url, btn, width, height);
+            btn.setPreferredSize(new Dimension(width, height));
+        }
+
         btn.addActionListener(e -> {
             if (lastSelectedButton != null) {
                 lastSelectedButton.setBackground(Color.WHITE);

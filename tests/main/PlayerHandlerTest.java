@@ -3,7 +3,6 @@ package main;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;

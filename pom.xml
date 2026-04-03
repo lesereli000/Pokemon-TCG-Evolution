@@ -35,16 +35,7 @@
             <version>20250107</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.8.0</version>
-        </dependency>
-
-
-        <!-- JUnit 5 compatibility. There are different ones for JUnit 4. -->
-
-        <!-- The actual name of JUnit 5 -->
+        <!-- JUnit 4 -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -52,8 +43,7 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- Picocontainer enables dependency injection of cucumber step definition files into each other -->
-        <!-- EasyMock is here too if you want it -->
+        <!-- EasyMock -->
         <dependency>
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
@@ -64,6 +54,14 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <release>17</release>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>

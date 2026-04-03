@@ -254,7 +254,21 @@ public class CardGeneratorTest {
 
         assertNull(cg.generateCard("Pikachu"));
     }
+    @Test
+    public void testCardImageUrls() {
+        CardGenerator pg = new CardGenerator();
+        
+        // Test Pokemon
+        Card alakazam = pg.generateCard("Alakazam");
+        assertEquals("https://images.pokemontcg.io/base1/1.png", alakazam.getImageUrl());
 
+        // Test Energy
+        Card waterEnergy = pg.generateCard("Water Energy");
+        assertEquals("https://images.pokemontcg.io/base1/102.png", waterEnergy.getImageUrl());
 
+        // Test Trainer
+        Card bill = pg.generateCard("Bill");
+        assertEquals("https://images.pokemontcg.io/base1/91.png", bill.getImageUrl());
+    }
 
 }

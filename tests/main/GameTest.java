@@ -2,7 +2,6 @@ package main;
 
 import org.junit.Test;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;

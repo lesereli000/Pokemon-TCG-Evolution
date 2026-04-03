@@ -2,8 +2,6 @@ package main;
 
 import org.json.JSONArray;
 import org.junit.Test;
-
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -617,7 +615,7 @@ public class DeckTest {
     @Test
     public void testAddDeckFromFileWithTooManyCards(){
         try{
-            Deck d = new DeckGenerator().generateFromFile("testDeckWithTooManyCards.txt");
+            new DeckGenerator().generateFromFile("testDeckWithTooManyCards.txt");
             fail("Did not throw Too Many Cards exception");
         }catch(RuntimeException e){
             assertTrue(true);
@@ -627,7 +625,7 @@ public class DeckTest {
     @Test
     public void testAddDeckFromFileWithWrongFormatCount(){
         try{
-            Deck d = new DeckGenerator().generateFromFile("testDeckWithWrongFormatCount.txt");
+            new DeckGenerator().generateFromFile("testDeckWithWrongFormatCount.txt");
             fail("Did not throw wrong format exception");
         }catch(RuntimeException e){
             assertEquals("File testDeckWithWrongFormatCount.txt is in the incorrect format: Wrong format!", e.getMessage());
@@ -639,7 +637,7 @@ public class DeckTest {
     public void testAddDeckNonexistentFile(){
         boolean pass = false;
         try{
-            Deck d = new DeckGenerator().generateFromFile("doesntExist.txt");
+            new DeckGenerator().generateFromFile("doesntExist.txt");
         }catch(RuntimeException e){
             assertEquals("File not found when adding cards from file", e.getMessage());
             pass = true;

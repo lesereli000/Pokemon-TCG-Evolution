@@ -5,6 +5,8 @@ import java.util.ResourceBundle;
 public abstract class Card {
 
     String name;
+    String imageUrl;
+
     public Card(String name) {
         if(name == null || name.isEmpty()){
             throw new CardCreationException("Name cannot be empty");
@@ -14,6 +16,14 @@ public abstract class Card {
 
     public String getName() {
         return name;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public boolean isNull() {
