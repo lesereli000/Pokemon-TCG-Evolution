@@ -59,15 +59,24 @@ public class GameGUITestHarness {
      * @param text The text of the button to click.
      * @param delayMs The delay in milliseconds before attempting to click.
      */
-    public void clickButtonAsync(String text, long delayMs) {
+    public void clickButtonAsync(String text, long initialDelayMs) {
         new Thread(() -> {
             try {
-                Thread.sleep(delayMs);
-                JButton btn = getButtonWithText(text);
+                Thread.sleep(initialDelayMs);
+                long startTime = System.currentTimeMillis();
+                JButton btn = null;
+                while (btn == null && (System.currentTimeMillis() - startTime < 2000)) {
+                    btn = getButtonWithText(text);
+                    if (btn == null) {
+                        Thread.sleep(50);
+                    }
+                }
+                
                 if (btn != null) {
-                    SwingUtilities.invokeLater(() -> btn.doClick());
+                    final JButton finalBtn = btn;
+                    SwingUtilities.invokeLater(() -> finalBtn.doClick());
                 } else {
-                    System.err.println("GameGUITestHarness: Button not found: " + text);
+                    System.err.println("GameGUITestHarness: Button not found after timeout: " + text);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -91,21 +100,60 @@ public class GameGUITestHarness {
      * Asynchronously closes any active JDialog (e.g. JOptionPane).
      * Necessary because JOptionPane blocks the current thread.
      */
-    public void dismissDialogAsync(long delayMs) {
+    public void dismissDialogAsync(long initialDelayMs) {
         new Thread(() -> {
             try {
-                Thread.sleep(delayMs);
-                SwingUtilities.invokeLater(() -> {
-                    Window[] windows = Window.getWindows();
-                    for (Window window : windows) {
-                        if (window instanceof JDialog && window.isVisible()) {
-                            window.dispose();
+                Thread.sleep(initialDelayMs);
+                long startTime = System.currentTimeMillis();
+                boolean dismissed = false;
+                while (!dismissed && (System.currentTimeMillis() - startTime < 2000)) {
+                    final boolean[] found = {false};
+                    SwingUtilities.invokeAndWait(() -> {
+                        Window[] windows = Window.getWindows();
+                        for (Window window : windows) {
+                            if (window instanceof JDialog && window.isVisible()) {
+                                window.dispose();
+                                found[0] = true;
+                                break;
+                            }
                         }
+                    });
+                    if (found[0]) {
+                        dismissed = true;
+                    } else {
+                        Thread.sleep(50);
                     }
-                });
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    public BoardPanel getHandPanel() throws Exception {
+        Field field = GameGUI.class.getDeclaredField("handPanel");
+        field.setAccessible(true);
+        return (BoardPanel) field.get(gui);
+    }
+
+    public BoardPanel getDecisionPanel() throws Exception {
+        Field field = GameGUI.class.getDeclaredField("decisionPanel");
+        field.setAccessible(true);
+        return (BoardPanel) field.get(gui);
+    }
+
+    public Color getPlayer1ActiveColor() throws Exception {
+        Field field = GameGUI.class.getDeclaredField("player1ActiveColor");
+        field.setAccessible(true);
+        return (Color) field.get(gui);
+    }
+
+    public JButton getButtonContainingText(String substring) throws Exception {
+        for (JButton btn : getButtons()) {
+            if (btn.getText().contains(substring)) {
+                return btn;
+            }
+        }
+        return null;
     }
 }

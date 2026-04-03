@@ -50,6 +50,15 @@
             <version>5.2.0</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- Source: https://mvnrepository.com/artifact/com.github.jeluard/plantuml-maven-plugin -->
+        <!-- Source: https://mvnrepository.com/artifact/de.elnarion.maven/plantuml-generator-maven-plugin -->
+        <dependency>
+            <groupId>de.elnarion.maven</groupId>
+            <artifactId>plantuml-generator-maven-plugin</artifactId>
+            <version>3.0.1</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -91,14 +100,91 @@
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
                 <version>1.19.1</version>
+                <configuration>
+                    <targetClasses>
+                        <param>main.Attack</param>
+                        <param>main.Card</param>
+                        <param>main.CardGenerator</param>
+                        <param>main.Deck</param>
+                        <param>main.DeckGenerator</param>
+                        <param>main.Energy</param>
+                        <param>main.EnergyType</param>
+                        <param>main.Game</param>
+                        <param>main.Player</param>
+                        <param>main.PlayerHandler</param>
+                        <param>main.Pokemon</param>
+                        <param>main.Trainer</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>main.AttackTest</param>
+                        <param>main.CardGeneratorTest</param>
+                        <param>main.DeckTest</param>
+                        <param>main.EnergyTest</param>
+                        <param>main.GameTest</param>
+                        <param>main.PlayerHandlerTest</param>
+                        <param>main.PlayerTest</param>
+                        <param>main.PokemonTest</param>
+                        <param>main.TrainerTest</param>
+                    </targetTests>
+                    <excludedClasses>
+                        <param>main.GameGUI</param>
+                        <param>main.BoardPanel</param>
+                        <param>main.ImageLoader</param>
+                        <param>main.GameGUISystemTest</param>
+                        <param>main.GameGUITestHarness</param>
+                    </excludedClasses>
+                    <jvmArgs>
+                        <jvmArg>-Djava.awt.headless=true</jvmArg>
+                    </jvmArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.11</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
             </plugin>
+            <plugin>
+                <groupId>de.elnarion.maven</groupId>
+                <artifactId>plantuml-generator-maven-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>generate-plantuml-diagram</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <phase>generate-test-sources</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <outputFilename>class_diagram.puml</outputFilename>
+                    <scanPackages>
+                        <scanPackage>main</scanPackage>
+                    </scanPackages>
+                    <outputDirectory>${project.build.directory}/generated-diagrams</outputDirectory>
+                </configuration>
+            </plugin>
         </plugins>
         <sourceDirectory>src/main/java</sourceDirectory>
-        <testSourceDirectory>tests</testSourceDirectory>
+        <testSourceDirectory>Tests</testSourceDirectory>
     </build>
 </project>
