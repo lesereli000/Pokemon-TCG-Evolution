@@ -2,10 +2,9 @@ package main;
 
 import org.json.JSONArray;
 import org.junit.Test;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 import java.util.*;
 
 import static org.easymock.EasyMock.*;
@@ -549,15 +548,20 @@ public class DeckTest {
         ArrayList<Card> allCards = new ArrayList<Card>();
         CardGenerator cg = new CardGenerator();
 
-        try (FileReader reader = new FileReader("src/main/resources/base1.json")) {
-            String content = new String(Files.readAllBytes(Paths.get("src/main/resources/base1.json")));
+        InputStream is = getClass().getClassLoader().getResourceAsStream("base1.json");
+        if (is == null) {
+            return null;
+        }
+
+        try (Scanner s = new Scanner(is, StandardCharsets.UTF_8).useDelimiter("\\A")) {
+            String content = s.hasNext() ? s.next() : "";
             JSONArray pokemonArray = new JSONArray(content);
             for (int i = 0; i < pokemonArray.length(); i++) {
                 String PokemonName = pokemonArray.getJSONObject(i).getString("name");
                 Card card = cg.generateCard(PokemonName);
                 allCards.add(card);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             return null;
         }
         return allCards;
