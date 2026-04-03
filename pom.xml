@@ -99,7 +99,7 @@
             <plugin>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
-                <version>1.19.1</version>
+                <version>1.15.8</version>
                 <configuration>
                     <targetClasses>
                         <param>main.Attack</param>
@@ -114,6 +114,7 @@
                         <param>main.PlayerHandler</param>
                         <param>main.Pokemon</param>
                         <param>main.Trainer</param>
+                        <param>main.NullCard</param>
                     </targetClasses>
                     <targetTests>
                         <param>main.AttackTest</param>
@@ -125,14 +126,24 @@
                         <param>main.PlayerTest</param>
                         <param>main.PokemonTest</param>
                         <param>main.TrainerTest</param>
+                        <param>main.NullCardTest</param>
                     </targetTests>
+                    <avoidCallsTo>
+                        <param>java.util.logging</param>
+                    </avoidCallsTo>
                     <excludedClasses>
                         <param>main.GameGUI</param>
                         <param>main.BoardPanel</param>
+                        <param>main.GUI</param>
                         <param>main.ImageLoader</param>
-                        <param>main.GameGUISystemTest</param>
-                        <param>main.GameGUITestHarness</param>
+                        <param>main.Main</param>
                     </excludedClasses>
+                    <excludedTests>
+                        <param>main.GameGUISystemTest</param>
+                        <param>main.BoardPanelTest</param>
+                        <param>main.ImageLoaderTest</param>
+                        <param>main.MainTest</param>
+                    </excludedTests>
                     <jvmArgs>
                         <jvmArg>-Djava.awt.headless=true</jvmArg>
                     </jvmArgs>

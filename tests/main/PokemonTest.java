@@ -667,16 +667,100 @@ public class PokemonTest {
 
     @Test
     public void testAddEnergies() {
-        Pokemon p = new Pokemon("Pikachu", "Lightning", 1, 40);
+        Pokemon p = new Pokemon("Pikachu", "Lightning", 0, 40);
         ArrayList<Energy> energies = new ArrayList<>();
-        energies.add(createMock(Energy.class));
-        energies.add(createMock(Energy.class));
+        energies.add(new Energy(EnergyType.LIGHTNING));
+        energies.add(new Energy(EnergyType.COLORLESS));
 
         p.addEnergies(energies);
         assertEquals(2, p.getEnergies().size());
 
         p.addEnergies(energies);
         assertEquals(4, p.getEnergies().size());
+    }
 
+    @Test
+    public void testIsBasicPokemon() {
+        Pokemon p0 = new Pokemon("Pikachu", "Lightning", 0, 40);
+        assertTrue(p0.isBasicPokemon());
+        Pokemon p1 = new Pokemon("Raichu", "Lightning", 1, 90);
+        assertFalse(p1.isBasicPokemon());
+    }
+
+    @Test
+    public void testGetCardType() {
+        Pokemon p = new Pokemon("Pikachu", "Lightning", 0, 40);
+        assertEquals(Card.CardType.POKEMON, p.getCardType());
+    }
+
+    @Test
+    public void testGetReport() {
+        java.util.ResourceBundle messages = new java.util.ListResourceBundle() {
+            @Override
+            protected Object[][] getContents() {
+                return new Object[][] {
+                    {"pokReport", "Report"}, {"pokName", "Name: {0}"}, {"pokStage", "Stage: {0}"},
+                    {"pokType", "Type: {0}"}, {"pokHP", "HP: {0}"}, {"retreatCost", "Retreat: {0}"},
+                    {"evolvesFrom", "From: {0}"}, {"pokEnergies", "Energies:"}, {"none", "None"},
+                    {"atks", "Attacks"}, {"costs", "Costs"}, {"dmg", "D: {0}"}
+                };
+            }
+        };
+
+        Pokemon p = new Pokemon("Ivysaur", "Grass", 1, 60);
+        p.setEvolvesFrom("Bulbasaur");
+        
+        String report = p.getReport(messages);
+        assertTrue(report.contains("Ivysaur"));
+        assertTrue(report.contains("Stage: 1"));
+        assertTrue(report.contains("Type: Grass"));
+        assertTrue(report.contains("From: Bulbasaur"));
+        assertTrue(report.contains("None")); // No energies yet
+    }
+
+    @Test
+    public void testGetReportWithEnergiesAndAttacks() {
+        java.util.ResourceBundle messages = new java.util.ListResourceBundle() {
+            @Override
+            protected Object[][] getContents() {
+                return new Object[][] {
+                    {"pokReport", "Report"}, {"pokName", "Name: {0}"}, {"pokStage", "Stage: {0}"},
+                    {"pokType", "Type: {0}"}, {"pokHP", "HP: {0}"}, {"retreatCost", "Retreat: {0}"},
+                    {"pokEnergies", "Energies:"}, {"atks", "Attacks"}, {"costs", "Costs"}, {"dmg", "D: {0}"}
+                };
+            }
+        };
+
+        ArrayList<Attack> attacks = new ArrayList<>();
+        attacks.add(new Attack("Thunder", new ArrayList<>(), 30));
+        Pokemon p = new Pokemon("Pikachu", "Lightning", 0, 40, null, null, attacks, 1);
+        p.addEnergy(new Energy(EnergyType.LIGHTNING));
+        
+        String report = p.getReport(messages);
+        assertTrue(report.contains("Pikachu"));
+        assertTrue(report.contains("Lightning Energy"));
+        assertTrue(report.contains("Thunder"));
+    }
+
+    @Test
+    public void testTakeDamageWithNullType() {
+        Pokemon p = new Pokemon("P", "Grass", 0, 100);
+        p.takeDamage(2, null);
+        assertEquals(80, p.getCurHP());
+    }
+
+    @Test
+    public void testRemoveEnergyNotFound() {
+        Pokemon p = new Pokemon("P", "Grass", 0, 100);
+        Energy e = new Energy(EnergyType.FIRE);
+        assertThrows(IllegalArgumentException.class, () -> p.removeEnergy(e));
+    }
+
+    @Test
+    public void testFullConstructorSpecialValues() {
+        // Test "ids" and "sdad" special strings for weakness/resistance
+        Pokemon p = new Pokemon("P", "Grass", 0, 100, "ids", "sdad", new ArrayList<>(), 1);
+        assertNull(p.weakness);
+        assertNull(p.resistance);
     }
 }

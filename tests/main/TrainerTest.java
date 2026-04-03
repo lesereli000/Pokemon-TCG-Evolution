@@ -203,4 +203,60 @@ public class TrainerTest {
             assertEquals("Trainer effects cannot be empty", e.getMessage());
         }
     }
+
+    @Test
+    public void testGetCardType() {
+        Trainer t = new Trainer("Bill", "Draw 2 cards.");
+        assertEquals(Card.CardType.TRAINER, t.getCardType());
+    }
+
+    @Test
+    public void testGetReport() {
+        java.util.ResourceBundle messages = new java.util.ListResourceBundle() {
+            @Override
+            protected Object[][] getContents() {
+                return new Object[][] {
+                    {"trainerName", "Name: {0}"},
+                    {"trainerEffect", "Effect:"},
+                    {"billEffect", "Draw 2 cards"}
+                };
+            }
+        };
+
+        Trainer t = new Trainer("Bill", "Draw 2 cards.");
+        String report = t.getReport(messages);
+        
+        assertTrue(report.contains("Name: Bill"));
+        assertTrue(report.contains("Effect:"));
+        assertTrue(report.contains("Draw 2 cards"));
+    }
+
+    @Test
+    public void testGetReportDifferentName() {
+        java.util.ResourceBundle messages = new java.util.ListResourceBundle() {
+            @Override
+            protected Object[][] getContents() {
+                return new Object[][] {
+                    {"trainerName", "Name: {0}"},
+                    {"trainerEffect", "Effect:"},
+                    {"superPotionEffect", "Heal 4"}
+                };
+            }
+        };
+
+        Trainer t = new Trainer("Super Potion", "Discard 1 Energy card attached to your own Pokemon in order to remove up to 4 damage counters from that Pokemon.");
+        String report = t.getReport(messages);
+        
+        assertTrue(report.contains("Name: Super Potion"));
+        assertTrue(report.contains("Heal 4"));
+    }
+
+    @Test
+    public void testDoEffectsWithNullStrategy() {
+        Trainer t = new Trainer("Unknown", "Some random effect");
+        Player p = createMock(Player.class);
+        replay(p);
+        t.doEffects(p, null, null); // Should not throw exception
+        verify(p);
+    }
 }

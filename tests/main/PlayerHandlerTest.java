@@ -668,4 +668,51 @@ public class PlayerHandlerTest {
         assertEquals(handPokemon, result);
         verify(p, p1, p2);
     }
+
+    @Test
+    public void testGetAllPlayerPokemon() {
+        Player player = createMock(Player.class);
+        Pokemon active = createMock(Pokemon.class);
+        Pokemon handPok = createMock(Pokemon.class);
+        Pokemon benchPok = createMock(Pokemon.class);
+        
+        ArrayList<Card> handList = new ArrayList<>();
+        handList.add(handPok);
+        
+        ArrayList<Card> benchList = new ArrayList<>();
+        benchList.add(benchPok);
+
+        expect(player.getOnlyPokemonFromHand()).andReturn(handList);
+        player.activePokemon = active;
+        expect(player.getPokemonOnBench()).andReturn(benchList);
+
+        replay(player, active, handPok, benchPok);
+        
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = player;
+        
+        ArrayList<Card> result = handler.getAllPlayerPokemon();
+        
+        assertTrue(result.contains(active));
+        assertTrue(result.contains(handPok));
+        assertTrue(result.contains(benchPok));
+        assertEquals(3, result.size());
+        
+        verify(player, active, handPok, benchPok);
+    }
+
+    @Test
+    public void testGetAllPlayerEnergy() {
+        Player player = createMock(Player.class);
+        ArrayList<Card> energyList = new ArrayList<>();
+        
+        expect(player.getAllEnergyFromHand()).andReturn(energyList);
+        replay(player);
+        
+        PlayerHandler handler = new PlayerHandler();
+        handler.currentPlayer = player;
+        
+        assertEquals(energyList, handler.getAllPlayerEnergy());
+        verify(player);
+    }
 }

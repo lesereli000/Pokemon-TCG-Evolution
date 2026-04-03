@@ -333,7 +333,13 @@ public class Game {
             gui.displayConfirmAndCancelButton();
             gui.waitForAction();
             if(gui.isCancelled()) return null;
-            Energy selectedEnergy = (Energy) gui.getLastSelectedCard();
+            Card lastCard = gui.getLastSelectedCard();
+            if (!(lastCard instanceof Energy)) {
+                String msg = messages.getString("noEnergy");
+                gui.displayMessage(msg);
+                return displayTrainerEnergySelection(trainer, energy);
+            }
+            Energy selectedEnergy = (Energy) lastCard;
             if(!energy.contains(selectedEnergy)) {
                 String msg = messages.getString("noEnergy");
                 gui.displayMessage(msg);

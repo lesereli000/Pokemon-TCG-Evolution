@@ -85,6 +85,7 @@ public class CardGeneratorTest {
         assertEquals(1, p5.stage);
         assertEquals(100, p5.hp);
         assertEquals(3, p5.retreatCost);
+        assertEquals("Growlithe", p5.getEvolvesFrom()); // Kills survivor in CardGenerator
 
         assertEquals("Magikarp", p6.getName());
         assertEquals("Water", p6.getType());

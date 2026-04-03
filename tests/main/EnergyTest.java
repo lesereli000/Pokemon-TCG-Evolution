@@ -1,8 +1,11 @@
 package main;
 
 import org.junit.Test;
+import java.util.ResourceBundle;
+import java.util.Locale;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class EnergyTest {
 
@@ -69,4 +72,17 @@ public class EnergyTest {
         assertEquals("Colorless Energy", cards[10].getName());
     }
 
+    @Test
+    public void testEnergyProperties() {
+        Energy grass = new Energy(EnergyType.GRASS);
+        assertEquals(EnergyType.GRASS, grass.getEnergyType());
+        assertEquals(Card.CardType.ENERGY, grass.getCardType());
+        
+        // Kill Card.java surviving mutants
+        assertFalse(grass.isNull());
+        assertFalse(grass.isBasicPokemon());
+        
+        ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
+        assertEquals("Grass Energy", grass.getReport(messages));
+    }
 }

@@ -239,7 +239,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleEnergyAction();
 
-        verify(gui, player);
+        verify(gui, player, handler);
     }
 
     @Test
@@ -486,7 +486,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.mainGameLoop();
 
-        verify(gui, player);
+        verify(gui, player, handler);
     }
 
     @Test
@@ -712,7 +712,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.mainGameLoop();
 
-        verify(gui, p);
+        verify(gui, p, handler);
     }
 
     @Test
@@ -861,7 +861,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.handleDeadActive();
 
-        verify(gui, selectedPokemon);
+        verify(gui, selectedPokemon, handler);
     }
 
     @Test
@@ -905,7 +905,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleDeadActive();
 
-        verify(gui, selectedPokemon);
+        verify(gui, selectedPokemon, handler);
     }
 
     @Test
@@ -934,7 +934,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.mainGameLoop();
 
-        verify(gui, setupGame, p, player);
+        verify(gui, setupGame, p, player, handler);
     }
 
     @Test
@@ -1200,14 +1200,14 @@ public class GameTest {
         gui.waitForAction();
         expect(gui.isCancelled()).andReturn(false).times(2);
 
-        replay(gui);
+        replay(gui, handler);
 
         Game game = new Game(gui, rand, setupGame, handler);
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         Pokemon result = game.displayAddEnergyInfo(cards);
         assertEquals(p, result);
 
-        verify(gui);
+        verify(gui, handler);
     }
 
     @Test
@@ -1244,7 +1244,7 @@ public class GameTest {
         Attack result = game.displayAttackInfo();
         assertEquals(atk, result);
 
-        verify(gui);
+        verify(gui, handler);
     }
 
     @Test
@@ -1282,28 +1282,97 @@ public class GameTest {
         verify(gui);
     }
 
-//    @Test
-//    public void testHandleTrainerCard() {
-//        GameGUI gui = createMock(GameGUI.class);
-//        Random rand = createMock(Random.class);
-//        SetupGame setupGame = createMock(SetupGame.class);
-//        PlayerHandler handler = createNiceMock(PlayerHandler.class);
-//        Trainer trainerCard = createMock(Trainer.class);
-//        Energy notTrainerCard = createMock(Energy.class);
-//
-//        expect(gui.getLastSelectedCard()).andReturn(notTrainerCard);
-//        gui.displayMessage("Trainer has not been selected!");
-//        expect(gui.getLastSelectedCard()).andReturn(trainerCard);
-//        handler.playTrainerCard(trainerCard);
-//
-//        replay(gui, handler);
-//
-//        Game game = new Game(gui, rand, setupGame, handler);
-//        game.handleTrainerAction();
-//        game.handleTrainerAction();
-//
-//        verify(gui);
-//    }
+    @Test
+    public void testHandleTrainerAction() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
+        Trainer trainerCard = createMock(Trainer.class);
+        Player player = createMock(Player.class);
+        Energy notTrainerCard = createMock(Energy.class);
+
+        // Case 1: Trainer not selected
+        expect(gui.getLastSelectedCard()).andReturn(notTrainerCard);
+        gui.displayMessage("Trainer has not been selected!");
+        
+        // Case 2: Trainer selected
+        ArrayList<Card> pokemonList = new ArrayList<>();
+        Pokemon selectedPokemon = createMock(Pokemon.class);
+        pokemonList.add(selectedPokemon);
+
+        expect(gui.getLastSelectedCard()).andReturn(trainerCard);
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
+        expect(handler.getAllPlayerPokemon()).andReturn(pokemonList);
+        expect(handler.getAllPlayerEnergy()).andReturn(new ArrayList<>());
+        expect(trainerCard.getName()).andReturn("Potion").anyTimes();
+        
+        player.removeFromHand(trainerCard);
+        
+        // select pokemon/energy (displayTrainerPokemonSelection/displayTrainerEnergySelection)
+        gui.displayMessage(anyString());
+        gui.removeAllButtons();
+        gui.displayCards(pokemonList);
+        gui.displayConfirmAndCancelButton();
+        gui.waitForAction();
+        expect(gui.isCancelled()).andReturn(false);
+        expect(gui.getLastSelectedCard()).andReturn(selectedPokemon);
+
+        trainerCard.doEffects(eq(player), eq(selectedPokemon), isNull());
+
+        replay(gui, handler, player, trainerCard, selectedPokemon);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
+        game.handleTrainerAction(); // No trainer
+        game.handleTrainerAction(); // Potion trainer
+
+        verify(gui, handler, player, trainerCard);
+    }
+
+    @Test
+    public void testHandleUseTrainerSwitch() {
+        GameGUI gui = createMock(GameGUI.class);
+        Random rand = createMock(Random.class);
+        SetupGame setupGame = createMock(SetupGame.class);
+        PlayerHandler handler = createNiceMock(PlayerHandler.class);
+        Trainer switchCard = createMock(Trainer.class);
+        Player player = createMock(Player.class);
+        Pokemon active = createMock(Pokemon.class);
+        Pokemon selected = createMock(Pokemon.class);
+        ArrayList<Card> bench = new ArrayList<>();
+        bench.add(selected);
+
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
+        expect(handler.getAllPlayerPokemon()).andReturn(bench);
+        expect(handler.getActivePokemon()).andReturn(active);
+        expect(handler.getHandPokemon()).andReturn(new ArrayList<>());
+        expect(handler.getAllPlayerEnergy()).andReturn(new ArrayList<>());
+        expect(switchCard.getName()).andReturn("Switch").anyTimes();
+        
+        player.removeFromHand(switchCard);
+        
+        // Pokemon Selection for switch
+        gui.displayMessage(anyString());
+        gui.removeAllButtons();
+        gui.displayCards(anyObject(ArrayList.class));
+        gui.displayConfirmAndCancelButton();
+        gui.waitForAction();
+        expect(gui.isCancelled()).andReturn(false).anyTimes();
+        expect(gui.getLastSelectedCard()).andReturn(selected);
+        
+        switchCard.doEffects(player, selected, null);
+        gui.replaceActiveCard(player, selected);
+
+        replay(gui, handler, player, switchCard, active, selected);
+
+        Game game = new Game(gui, rand, setupGame, handler);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
+        game.handleUseTrainer(switchCard);
+
+        verify(gui, handler, player, switchCard);
+    }
 
 
 
@@ -1336,7 +1405,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleAddEnergy(e);
-        verify(gui, p);
+        verify(gui, p, handler);
     }
 
     @Test
@@ -1370,7 +1439,7 @@ public class GameTest {
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         game.handleRetreatAction();
 
-        verify(gui, poke, p);
+        verify(gui, poke, p, handler);
     }
 
     @Test
@@ -1393,7 +1462,7 @@ public class GameTest {
         Game game = new Game(gui, rand, setupGame, handler);
         game.handleAttackOpponent();
 
-        verify(gui);
+        verify(gui, handler);
     }
 
     @Test
@@ -2210,6 +2279,217 @@ public class GameTest {
         game.setupGame();
 
         verify(gui, player, p, gameSetup);
+    }
+
+    @Test
+    public void testDisplayTrainerPokemonSelectionOtherTrainer() {
+        GUI gui = createMock(GUI.class);
+        Trainer t = new Trainer("Bill", "Draw 2 cards.");
+        Game game = new Game(gui, null, null, null);
+        assertNull(game.displayTrainerPokemonSelection(t, new ArrayList<>()));
+    }
+
+    @Test
+    public void testDisplayTrainerEnergySelectionOtherTrainer() {
+        GUI gui = createMock(GUI.class);
+        Trainer t = new Trainer("Bill", "Draw 2 cards.");
+        Game game = new Game(gui, null, null, null);
+        assertNull(game.displayTrainerEnergySelection(t, new ArrayList<>()));
+    }
+
+    @Test
+    public void testHandleUseTrainerWithGenericTrainer() {
+        GUI gui = createMock(GUI.class);
+        PlayerHandler ph = createMock(PlayerHandler.class);
+        Player active = createMock(Player.class);
+        Trainer t = new Trainer("Generic", "No Effect"); // Registry does not contain "No Effect"
+        
+        expect(ph.getCurrentPlayer()).andReturn(active);
+        expect(ph.getAllPlayerPokemon()).andReturn(new ArrayList<>());
+        expect(ph.getAllPlayerEnergy()).andReturn(new ArrayList<>());
+        active.removeFromHand(t);
+        
+        replay(ph, active);
+        Game game = new Game(gui, null, null, ph);
+        game.handleUseTrainer(t);
+        verify(ph, active);
+    }
+
+    @Test
+    public void testHandleEvolveActionNotPokemon() {
+        GUI gui = createMock(GUI.class);
+        expect(gui.getLastSelectedCard()).andReturn(new Energy(EnergyType.GRASS));
+        gui.displayMessage("Pokemon has not been selected!");
+        replay(gui);
+
+        Game game = new Game(gui, null, null, null);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
+        game.handleEvolveAction();
+        verify(gui);
+    }
+
+    @Test
+    public void testHandleEvolveStage0() {
+        GUI gui = createMock(GUI.class);
+        Pokemon p = new Pokemon("Pika", "Lightning", 0, 60);
+        expect(gui.getLastSelectedCard()).andReturn(p);
+        gui.displayMessage("This is a basic Pokemon, not an evolution. Try adding Pika to the bench if you have room!");
+        replay(gui);
+
+        Game game = new Game(gui, null, null, null);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
+        game.handleEvolveAction();
+        verify(gui);
+    }
+
+    @Test
+    public void testHandleEvolveNoPreEvolutions() {
+        GUI gui = createMock(GUI.class);
+        PlayerHandler ph = createMock(PlayerHandler.class);
+        Pokemon stage1 = new Pokemon("Ivysaur", "Grass", 1, 60);
+        stage1.setEvolvesFrom("Bulbasaur");
+        
+        expect(gui.getLastSelectedCard()).andReturn(stage1);
+        expect(ph.getOnlyPreEvolutionsFromActivePlayer(stage1)).andReturn(new ArrayList<>());
+        gui.displayMessage("You have no Pokemon that can evolve into Ivysaur");
+        replay(gui, ph);
+
+        Game game = new Game(gui, null, null, ph);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
+        game.handleEvolveAction();
+        verify(gui, ph);
+    }
+
+    @Test
+    public void testHandleEvolveSuccessActive() {
+        GUI gui = createMock(GUI.class);
+        PlayerHandler ph = createMock(PlayerHandler.class);
+        Player player = createMock(Player.class);
+        Pokemon basic = new Pokemon("Bulbasaur", "Grass", 0, 40);
+        Pokemon stage1 = new Pokemon("Ivysaur", "Grass", 1, 60);
+        stage1.setEvolvesFrom("Bulbasaur");
+        ArrayList<Card> preEvs = new ArrayList<>();
+        preEvs.add(basic);
+        
+        expect(gui.getLastSelectedCard()).andReturn(stage1);
+        expect(ph.getOnlyPreEvolutionsFromActivePlayer(stage1)).andReturn(preEvs);
+        
+        // displayEvolveInfo
+        gui.displayMessage("Select Pokemon to evolve from");
+        gui.removeAllButtons();
+        gui.displayCards(preEvs);
+        gui.displayConfirmAndCancelButton();
+        gui.waitForAction();
+        expect(gui.isCancelled()).andReturn(false);
+        expect(gui.getLastSelectedCard()).andReturn(basic);
+        
+        expect(ph.evolve(stage1, basic)).andReturn("Active");
+        expect(ph.getCurrentPlayer()).andReturn(player);
+        gui.makeActiveCard(player, stage1);
+        
+        replay(gui, ph);
+        Game game = new Game(gui, null, null, ph);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
+        game.handleEvolveAction();
+        verify(gui, ph);
+    }
+
+    @Test
+    public void testHandleEvolveSuccessBench() {
+        GUI gui = createMock(GUI.class);
+        PlayerHandler ph = createMock(PlayerHandler.class);
+        Player player = createMock(Player.class);
+        Pokemon basic = new Pokemon("Bulbasaur", "Grass", 0, 40);
+        Pokemon stage1 = new Pokemon("Ivysaur", "Grass", 1, 60);
+        stage1.setEvolvesFrom("Bulbasaur");
+        ArrayList<Card> preEvs = new ArrayList<>();
+        preEvs.add(basic);
+        
+        expect(gui.getLastSelectedCard()).andReturn(stage1);
+        expect(ph.getOnlyPreEvolutionsFromActivePlayer(stage1)).andReturn(preEvs);
+        
+        // displayEvolveInfo mock flow
+        gui.displayMessage("Select Pokemon to evolve from");
+        gui.removeAllButtons();
+        gui.displayCards(preEvs);
+        gui.displayConfirmAndCancelButton();
+        gui.waitForAction();
+        expect(gui.isCancelled()).andReturn(false);
+        expect(gui.getLastSelectedCard()).andReturn(basic);
+        
+        expect(ph.evolve(stage1, basic)).andReturn("Bench");
+        expect(ph.getCurrentPlayer()).andReturn(player).anyTimes();
+        gui.removeBenchCard(player, basic);
+        gui.addBenchCard(player, stage1);
+        
+        replay(gui, ph);
+        Game game = new Game(gui, null, null, ph);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
+        game.handleEvolveAction();
+        verify(gui, ph);
+    }
+
+    @Test
+    public void testHandleEvolveErrorCases() {
+        GUI gui = createMock(GUI.class);
+        PlayerHandler ph = createMock(PlayerHandler.class);
+        Pokemon basic = new Pokemon("Bulbasaur", "Grass", 0, 40);
+        Pokemon stage1 = new Pokemon("Ivysaur", "Grass", 1, 60);
+        stage1.setEvolvesFrom("Bulbasaur");
+        ArrayList<Card> preEvs = new ArrayList<>();
+        preEvs.add(basic);
+        
+        expect(gui.getLastSelectedCard()).andReturn(stage1);
+        expect(ph.getOnlyPreEvolutionsFromActivePlayer(stage1)).andReturn(preEvs);
+        
+        // displayEvolveInfo mock flow
+        gui.displayMessage("Select Pokemon to evolve from");
+        gui.removeAllButtons();
+        gui.displayCards(preEvs);
+        gui.displayConfirmAndCancelButton();
+        gui.waitForAction();
+        expect(gui.isCancelled()).andReturn(false);
+        expect(gui.getLastSelectedCard()).andReturn(basic);
+        
+        // Test "Error" path
+        expect(ph.evolve(stage1, basic)).andReturn("Error");
+        gui.displayMessage("Evolution could not be completed");
+        
+        replay(gui, ph);
+        Game game = new Game(gui, null, null, ph);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
+        game.handleEvolveAction();
+        verify(gui, ph);
+    }
+
+    @Test
+    public void testHandleEvolveJustPlayed() {
+        GUI gui = createMock(GUI.class);
+        PlayerHandler ph = createMock(PlayerHandler.class);
+        Pokemon basic = new Pokemon("Bulbasaur", "Grass", 0, 40);
+        Pokemon stage1 = new Pokemon("Ivysaur", "Grass", 1, 60);
+        stage1.setEvolvesFrom("Bulbasaur");
+        ArrayList<Card> preEvs = new ArrayList<>();
+        preEvs.add(basic);
+        
+        expect(gui.getLastSelectedCard()).andReturn(stage1).times(1);
+        expect(ph.getOnlyPreEvolutionsFromActivePlayer(stage1)).andReturn(preEvs).times(1);
+        gui.displayMessage("Select Pokemon to evolve from");
+        gui.removeAllButtons();
+        gui.displayCards(preEvs);
+        gui.displayConfirmAndCancelButton();
+        gui.waitForAction();
+        expect(gui.isCancelled()).andReturn(false);
+        expect(gui.getLastSelectedCard()).andReturn(basic);
+        
+        expect(ph.evolve(stage1, basic)).andReturn("JustPlayed");
+        gui.displayMessage("Base Pokemon was just played");
+        
+        replay(gui, ph);
+        Game game = new Game(gui, null, null, ph);
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
+        game.handleEvolveAction();
+        verify(gui, ph);
     }
 }
 
