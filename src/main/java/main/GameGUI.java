@@ -23,6 +23,8 @@ public class GameGUI implements GUI {
     private JFrame frame;
     private BoardPanel handPanel;
     private BoardPanel decisionPanel;
+    
+    private CardDropZoneDetector dropZoneDetector;
 
     private Color deckColor = Color.WHITE;
     private Color player1ActiveColor = Color.WHITE;
@@ -61,6 +63,7 @@ public class GameGUI implements GUI {
     public ResourceBundle getMessages() { return messages; }
     public BufferedImage getFlag() { return flag; }
     public int getNumBenchCards() { return Player.MAX_BENCH_SIZE; }
+    public JFrame getFrame() { return frame; }
 
     public void createGUI() {
         // Creating the JFrame
@@ -71,11 +74,17 @@ public class GameGUI implements GUI {
         frame.setLocation(frameXLoc, frameYLoc);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        BoardPositionMap map = new BoardPositionMap(frameWidth, frameHeight);
+        this.dropZoneDetector = new CardDropZoneDetector(map);
+
         frame.setLayout(new BorderLayout());
         this.handPanel = new BoardPanel(this);
         frame.add(handPanel, BorderLayout.CENTER);
         this.decisionPanel = new BoardPanel(this);
         frame.add(decisionPanel, BorderLayout.SOUTH);
+
+        DropZoneHighlightGlassPane glass = new DropZoneHighlightGlassPane(this.dropZoneDetector);
+        frame.setGlassPane(glass);
 
         frame.setVisible(true);
         setDeckColor(Color.RED);
@@ -154,6 +163,16 @@ public class GameGUI implements GUI {
 
     private void setLastSelectedCard(Card card) {
         this.lastSelectedCard = card;
+    }
+
+    public void setLastSelectedCardForDrag(Card card) {
+        this.lastSelectedCard = card;
+        this.lastSelectedAttack = null;
+    }
+
+    public void triggerSimulatedAction(String action) {
+        this.lastActionButtonPressed = action;
+        this.waitForAction = true;
     }
 
     private void setLastSelectedAttack(Attack attack) {
@@ -469,6 +488,15 @@ public class GameGUI implements GUI {
     @Override
     public JButton createLinkedButtonCard(String message, Card currCard) {
         JButton btn = new JButton(message);
+        
+        if (dropZoneDetector == null) {
+            BoardPositionMap map = new BoardPositionMap(frameWidth, frameHeight);
+            this.dropZoneDetector = new CardDropZoneDetector(map);
+        }
+        
+        GhostingDragAdapter dragAdapter = new GhostingDragAdapter(this, currCard, dropZoneDetector);
+        btn.addMouseListener(dragAdapter);
+        btn.addMouseMotionListener(dragAdapter);
         
         String url = currCard.getImageUrl();
         if (url != null) {

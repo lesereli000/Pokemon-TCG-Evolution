@@ -88,6 +88,45 @@ public class Game {
             case "CardInfo" -> displayCardInfo();
             case "Evolve" -> handleEvolveAction();
             case "PlayTrainer" -> handleTrainerAction();
+            default -> {
+                if (action != null && action.endsWith("_DROP")) {
+                    handleInstantDrop(action);
+                }
+            }
+        }
+    }
+
+    protected void handleInstantDrop(String action) {
+        Card card = gui.getLastSelectedCard();
+        if (action.equals("P1_ACTIVE_DROP")) {
+            if (card instanceof Energy) {
+                handleInstantEnergyAttach(card, playerHandler.getCurrentPlayer().getActivePokemon());
+            } else if (card instanceof Pokemon) {
+                handleEvolve((Pokemon) card);
+            } else if (card instanceof Trainer) {
+                handleUseTrainer((Trainer) card);
+            }
+        } else if (action.startsWith("P1_BENCH_")) {
+            int slot = Integer.parseInt(action.split("_")[2]);
+            ArrayList<Card> bench = playerHandler.getOnlyPokemonFromBench(2); 
+            // In typical PokeTCG, you can't have more than 5 on bench anyway.
+            if (card instanceof Pokemon && ((Pokemon) card).stage == 0) {
+                handleAddToBench((Pokemon) card);
+            } else if (card instanceof Energy && bench.size() > slot) {
+                handleInstantEnergyAttach(card, (Pokemon) bench.get(slot));
+            } else if (card instanceof Pokemon && ((Pokemon) card).stage > 0 && bench.size() > slot) {
+                // Potential instant evolve logic here if slot matches base pokemon
+                handleEvolve((Pokemon) card);
+            }
+        }
+    }
+
+    private void handleInstantEnergyAttach(Card energy, Pokemon target) {
+        if (playerHandler.activeCanAddEnergy()) {
+            playerHandler.addEnergyToPokemon((Energy) energy, target);
+        } else {
+            String message = messages.getString("addEnergyErr");
+            gui.displayMessage(message);
         }
     }
 

@@ -77,7 +77,6 @@ public class GameGUISystemTest {
         harness.clickButtonSync(confirmMsg);
         assertFalse("Action should not be cancelled", gui.isCancelled());
     }
-
     @Test(timeout = 10000)
     public void testCreateFlipButton() throws Exception {
         ResourceBundle messages = gui.getMessages();
@@ -134,7 +133,7 @@ public class GameGUISystemTest {
         gui.setPlayers(p1, p2);
 
         gui.makeActiveCard(p1, new Pokemon("P1 Active", "Grass", 0, 50));
-        assertEquals(Color.GREEN, harness.getPlayer1ActiveColor());
+        assertEquals(Color.GREEN, gui.getPlayer1ActiveColor());
 
         gui.setDeckColor(Color.BLUE);
         assertEquals(Color.BLUE, gui.getDeckColor());
@@ -315,4 +314,39 @@ public class GameGUISystemTest {
         gui.createLinkedButtonCard("No Image", p);
         assertNotNull(harness.getButtonWithText("No Image"));
     }
+
+    @Test(timeout = 10000)
+    public void testCreateLinkedButtonCardSelection() throws Exception {
+        Pokemon card = new Pokemon("Test Pokemon", "Fire", 0, 50);
+        gui.createLinkedButtonCard("Test Card", card);
+        
+        javax.swing.JButton button = harness.getButtonWithText("Test Card");
+        assertNotNull("Button should be created", button);
+        
+        // Simulate click synchronously
+        harness.clickButtonSync("Test Card");
+        
+        // Check selection
+        Card selected = gui.getLastSelectedCard();
+        assertEquals("Selected card should match", card, selected);
+        
+        // Check button background (green for selected)
+        assertEquals("Button background should be green after selection", Color.GREEN, button.getBackground());
+    }
+
+    @Test(timeout = 10000)
+    public void testButtonLifecycleAndGameIsOver() throws Exception {
+        // Initially no buttons
+        assertTrue("Game should be over with no buttons", gui.gameIsOver());
+        
+        // Create a button
+        javax.swing.JButton btn = gui.createButton("Test Button");
+        assertNotNull("Button should be created", btn);
+        assertFalse("Game should not be over with buttons", gui.gameIsOver());
+        
+        // Remove the button
+        gui.removeButton(btn);
+        assertTrue("Game should be over after removing all buttons", gui.gameIsOver());
+    }
+
 }

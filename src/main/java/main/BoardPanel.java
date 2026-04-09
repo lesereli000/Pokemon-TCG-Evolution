@@ -33,9 +33,11 @@ public class BoardPanel extends JPanel {
     static final int deckOffset = 15;
 
     private final GameGUI gui;
+    private final BoardPositionMap posMap;
 
     public BoardPanel(GameGUI gui) {
         this.gui = gui;
+        this.posMap = new BoardPositionMap(frameWidth, frameHeight);
     }
 
     @Override
@@ -132,18 +134,15 @@ public class BoardPanel extends JPanel {
         ArrayList<Card> p1Bench = p1.getPokemonOnBench();
         g2d.setColor(Color.WHITE);
         for (int i = 0; i < gui.getNumBenchCards(); i++) {
-            int x = (marginSide * 3) / 2 + (cardWidth * 2) + benchHorizontalOffset
-                    + (i * (benchHorizontalIncrement + cardWidth));
-            int y = frameHeight - cardHeight - marginBottom - benchVerticalOffset;
-            g2d.drawRect(x, y, cardWidth, cardHeight);
+            Rectangle bounds = posMap.getZones().get(DropZoneType.valueOf("P1_BENCH_" + i));
+            g2d.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
             
             if (p1Bench.size() > i) {
                 Card currentCard = p1Bench.get(i);
-                if (!drawCardImage(g2d, currentCard, x, y, cardWidth, cardHeight)) {
+                if (!drawCardImage(g2d, currentCard, bounds.x, bounds.y, bounds.width, bounds.height)) {
                     g2d.drawString(currentCard.getName(),
-                            marginSide + (cardWidth * 2) + benchHorizontalOffset
-                                    + (i * (benchHorizontalIncrement + cardWidth)) + (cardWidth / 3),
-                            frameHeight - cardHeight - marginBottom - benchVerticalOffset + (cardHeight / 2));
+                            bounds.x + (bounds.width / 3),
+                            bounds.y + (bounds.height / 2));
                 }
             }
         }
@@ -152,17 +151,14 @@ public class BoardPanel extends JPanel {
     private void drawActiveP1(Graphics2D g2d, Player p1) {
         Pokemon p1Active = p1.getActivePokemon();
         g2d.setColor(gui.getPlayer1ActiveColor());
-        int x = (frameWidth / 2) - (cardWidth / 2);
-        int y = (frameHeight / 2) + activeVerticalMargin - activeVerticalOffset;
-        g2d.drawRect(x, y, cardWidth, cardHeight);
+        Rectangle bounds = posMap.getZones().get(DropZoneType.P1_ACTIVE);
+        g2d.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
         
         if (p1Active != null && p1.hasActive()) {
-            if (!drawCardImage(g2d, p1Active, x, y, cardWidth, cardHeight)) {
+            if (!drawCardImage(g2d, p1Active, bounds.x, bounds.y, bounds.width, bounds.height)) {
                 String actvPok = gui.getMessages().getString("actvPok");
-                g2d.drawString(actvPok, x + marginSide / 8,
-                        (frameHeight / 2) - activeVerticalOffset + marginTop / 2);
-                g2d.drawString(p1Active.getName(), x + marginSide / 8,
-                        (frameHeight / 2) - activeVerticalOffset + marginTop);
+                g2d.drawString(actvPok, bounds.x + marginSide / 8, bounds.y + bounds.height / 3);
+                g2d.drawString(p1Active.getName(), bounds.x + marginSide / 8, bounds.y + bounds.height / 2);
             }
         }
     }
@@ -199,18 +195,15 @@ public class BoardPanel extends JPanel {
         ArrayList<Card> p2Bench = p2.getPokemonOnBench();
         g2d.setColor(Color.WHITE);
         for (int i = 0; i < gui.getNumBenchCards(); i++) {
-            int x = frameWidth - (marginSide * 3) / 2 - (cardWidth * 3) - benchHorizontalOffset
-                    - (i * (benchHorizontalIncrement + cardWidth));
-            int y = marginTop;
-            g2d.drawRect(x, y, cardWidth, cardHeight);
+            Rectangle bounds = posMap.getZones().get(DropZoneType.valueOf("P2_BENCH_" + i));
+            g2d.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
             
             if (p2Bench.size() > i) {
                 Card currentCard = p2Bench.get(i);
-                if (!drawCardImage(g2d, currentCard, x, y, cardWidth, cardHeight)) {
+                if (!drawCardImage(g2d, currentCard, bounds.x, bounds.y, bounds.width, bounds.height)) {
                     g2d.drawString(currentCard.getName(),
-                            frameWidth - marginSide - (cardWidth * 3) - benchHorizontalOffset
-                                    - (i * (benchHorizontalIncrement + cardWidth)) + (cardWidth / 3),
-                            marginTop + (cardHeight / 2));
+                            bounds.x + (bounds.width / 3),
+                            bounds.y + (bounds.height / 2));
                 }
             }
         }
@@ -219,19 +212,16 @@ public class BoardPanel extends JPanel {
     private void drawActiveP2(Graphics2D g2d, Player p2) {
         Pokemon p2Active = p2.getActivePokemon();
         g2d.setColor(gui.getPlayer2ActiveColor());
-        int x = (frameWidth / 2) - (cardWidth / 2);
-        int y = (frameHeight / 2) - activeVerticalMargin - cardHeight - activeVerticalOffset;
+        Rectangle bounds = posMap.getZones().get(DropZoneType.P2_ACTIVE);
         
         if (p2Active != null && p2.hasActive()) {
-            if (!drawCardImage(g2d, p2Active, x, y, cardWidth, cardHeight)) {
+            if (!drawCardImage(g2d, p2Active, bounds.x, bounds.y, bounds.width, bounds.height)) {
                 String actvPok = gui.getMessages().getString("actvPok");
-                g2d.drawString(actvPok, x + marginSide / 8,
-                        (frameHeight / 2) - activeVerticalMargin - cardHeight - activeVerticalOffset / 4);
-                g2d.drawString(p2Active.getName(), x + marginSide / 8,
-                        (frameHeight / 2) - activeVerticalMargin - cardHeight - activeVerticalOffset / 8);
+                g2d.drawString(actvPok, bounds.x + marginSide / 8, bounds.y + bounds.height / 3);
+                g2d.drawString(p2Active.getName(), bounds.x + marginSide / 8, bounds.y + bounds.height / 2);
             }
         }
-        g2d.drawRect(x, y, cardWidth, cardHeight);
+        g2d.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
     }
 
     private boolean drawCardImage(Graphics2D g2d, Card card, int x, int y, int width, int height) {
