@@ -57,23 +57,19 @@ public class Game {
     }
 
     protected void selectActiveLoop() {
-        displayCurrentPlayerHand();
         displayActiveDirections();
+        displayCurrentPlayerHand();
         gui.setupActivePokemon();
         gui.waitForButtonPressed();
-        
         Card selectedCard = gui.getLastSelectedCard();
-        ArrayList<Card> currentHand = playerHandler.getCurrentPlayerHand();
-
-        // Guard against null selection or cards not in the current hand
-        if (selectedCard != null && currentHand.contains(selectedCard) && checkBasicPokemon(selectedCard)) {
+        if(selectedCard != null && checkBasicPokemon(selectedCard)) {
             makeNewActivePokemon((Pokemon) selectedCard);
             displayCurrentPlayerHand();
         } else {
             String message = (selectedCard == null) ? "Please select a card." : messages.getString("notBasic");
             gui.displayMessage(message);
             gui.removeAllButtons();
-            selectActiveLoop(); // Retry
+            selectActiveLoop();
         }
     }
 
@@ -374,12 +370,10 @@ public class Game {
         Pokemon selectedPokemon = displayTrainerPokemonSelection(trainer, playerPokemon);
         Energy selectedEnergy = displayTrainerEnergySelection(trainer, playerEnergy);
 
-        // If a selection was required but cancelled, abort.
+        // If a selection was required but not made (e.g. cancelled), abort.
         String name = trainer.getName();
-        if (gui.isCancelled()) {
-            if (name.equals("Switch") || name.equals("Potion") || name.equals("Super Potion")) {
-                return; 
-            }
+        if (selectedPokemon == null && (name.equals("Switch") || name.equals("Potion") || name.equals("Super Potion"))) {
+            return;
         }
 
         currentPlayer.removeFromHand(trainer);

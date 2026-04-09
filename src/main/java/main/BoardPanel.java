@@ -296,7 +296,7 @@ public class BoardPanel extends JPanel {
         g2d.drawString(turnText, (frameWidth * 5) / 7 - textWidth, frameHeight / 2 + 100 - (80 * 2) / 3);
     }
 
-    private void drawPokemonStatus(Graphics2D g2d, Pokemon pokemon, Rectangle bounds, String position) {
+    void drawPokemonStatus(Graphics2D g2d, Pokemon pokemon, Rectangle bounds, String position) {
         if (pokemon == null) return;
 
         int statusHeight = (int) (bounds.height * 0.3);
@@ -365,7 +365,7 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    private Color getEnergyColor(EnergyType type) {
+    Color getEnergyColor(EnergyType type) {
         return switch (type) {
             case FIRE -> new Color(255, 69, 0);
             case WATER -> new Color(30, 144, 255);
