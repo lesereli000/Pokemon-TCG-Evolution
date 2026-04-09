@@ -32,7 +32,7 @@ public class GhostingDragAdapter extends MouseAdapter {
 
         DropZoneHighlightGlassPane glass = (DropZoneHighlightGlassPane) frame.getGlassPane();
         glass.setLayout(null);
-        glass.setHighlightsVisible(true);
+        glass.setHighlightsVisible(true, card);
         glass.setVisible(true);
 
         String url = card.getImageUrl();
@@ -92,6 +92,9 @@ public class GhostingDragAdapter extends MouseAdapter {
         if (zone != DropZoneType.NONE) {
             String intent = zone.name() + "_DROP";
             gui.triggerSimulatedAction(intent);
+        } else {
+            // Generic board drop for non-targeted actions (e.g. Draw 2 Trainers)
+            gui.triggerSimulatedAction("BOARD_DROP");
         }
     }
 }

@@ -20,7 +20,7 @@ public class GhostingDragAdapterTest {
         
         // Initialize detector
         BoardPositionMap map = new BoardPositionMap(1200, 900);
-        CardDropZoneDetector detector = new CardDropZoneDetector(map);
+        CardDropZoneDetector detector = new CardDropZoneDetector(map, mockGui);
         
         // The adapter
         GhostingDragAdapter adapter = new GhostingDragAdapter(mockGui, mockCard, detector);
@@ -64,11 +64,13 @@ public class GhostingDragAdapterTest {
         GameGUI mockGui = EasyMock.createNiceMock(GameGUI.class);
         Card mockCard = new Pokemon("Pikachu", "Lightning", 0, 60);
         BoardPositionMap map = new BoardPositionMap(1200, 900);
-        CardDropZoneDetector detector = new CardDropZoneDetector(map);
+        CardDropZoneDetector detector = new CardDropZoneDetector(map, mockGui);
         
         GhostingDragAdapter adapter = new GhostingDragAdapter(mockGui, mockCard, detector);
         
-        // Expect NO simulated actions to be triggered because it's dropped in the void
+        // Expect BOARD_DROP for non-targeted drop in invalid space
+        mockGui.triggerSimulatedAction("BOARD_DROP");
+        EasyMock.expectLastCall().once();
         EasyMock.replay(mockGui);
         
         Point voidPoint = new Point(0, 0); // Top left, background

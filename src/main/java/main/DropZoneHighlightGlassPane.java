@@ -11,6 +11,7 @@ import javax.swing.*;
 public class DropZoneHighlightGlassPane extends JPanel {
     private final CardDropZoneDetector detector;
     private boolean highlightsVisible = false;
+    private Card draggedCard = null;
     
     // Premium electric blue color palette
     private final Color zoneFillColor = new Color(0, 150, 255, 40);
@@ -22,9 +23,14 @@ public class DropZoneHighlightGlassPane extends JPanel {
         setOpaque(false);
     }
 
-    public void setHighlightsVisible(boolean visible) {
+    public void setHighlightsVisible(boolean visible, Card card) {
         this.highlightsVisible = visible;
+        this.draggedCard = card;
         repaint();
+    }
+
+    public void setHighlightsVisible(boolean visible) {
+        setHighlightsVisible(visible, null);
     }
 
     @Override
@@ -37,6 +43,11 @@ public class DropZoneHighlightGlassPane extends JPanel {
         Map<DropZoneType, Rectangle> zones = detector.getPositionMap().getZones();
         
         for (Map.Entry<DropZoneType, Rectangle> entry : zones.entrySet()) {
+            DropZoneType type = entry.getKey();
+            
+            // Check validity using the detector's logic
+            if (!detector.isValidForCard(type, draggedCard)) continue;
+            
             Rectangle rect = entry.getValue();
             
             // Draw Glow (Outer)

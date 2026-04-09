@@ -12,7 +12,7 @@ public class CardDropZoneDetectorTest {
     @Test
     public void testValidDropZoneRetrieval() {
         BoardPositionMap mockMap = new BoardPositionMap(1200, 900);
-        CardDropZoneDetector detector = new CardDropZoneDetector(mockMap);
+        CardDropZoneDetector detector = new CardDropZoneDetector(mockMap, null);
         
         // Let's get the known rectangle for P1_BENCH_0 to find a good point inside it
         Map<DropZoneType, Rectangle> zones = mockMap.getZones();
@@ -29,7 +29,7 @@ public class CardDropZoneDetectorTest {
     @Test
     public void testInvalidVoidDropZone() {
         BoardPositionMap mockMap = new BoardPositionMap(1200, 900);
-        CardDropZoneDetector detector = new CardDropZoneDetector(mockMap);
+        CardDropZoneDetector detector = new CardDropZoneDetector(mockMap, null);
         
         // Point obviously in empty space
         Point emptySpace = new Point(0, 0);
@@ -39,7 +39,7 @@ public class CardDropZoneDetectorTest {
     @Test
     public void testUnauthorizedOpponentZone() {
         BoardPositionMap mockMap = new BoardPositionMap(1200, 900);
-        CardDropZoneDetector detector = new CardDropZoneDetector(mockMap);
+        CardDropZoneDetector detector = new CardDropZoneDetector(mockMap, null);
         
         Map<DropZoneType, Rectangle> zones = mockMap.getZones();
         Rectangle p2ActiveRect = zones.get(DropZoneType.P2_ACTIVE);

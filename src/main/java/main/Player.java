@@ -51,8 +51,13 @@ public class Player {
     }
 
     public void setActivePokemon(Pokemon activePokemon) {
+        if (activePokemon == null) {
+            this.hasActive = false;
+            this.activePokemon = null;
+            return;
+        }
         this.activePokemon = activePokemon;
-        hasActive = true;
+        this.hasActive = true;
         removeFromHand(this.activePokemon);
     }
 
@@ -198,11 +203,24 @@ public class Player {
 
     protected void setNewActivePokemon(Pokemon newActive) {
         this.activePokemon = newActive;
-        bench.removeCard(newActive);
+        if (newActive != null) {
+            this.hasActive = true;
+            bench.removeCard(newActive);
+        } else {
+            this.hasActive = false;
+        }
     }
 
     public Deck getBench() {
         return bench;
+    }
+
+    public Deck getHand() {
+        return hand;
+    }
+
+    public Deck getDeck() {
+        return deck;
     }
 
     public int getNumPrizeCards() {

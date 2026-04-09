@@ -75,7 +75,7 @@ public class GameGUI implements GUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         BoardPositionMap map = new BoardPositionMap(frameWidth, frameHeight);
-        this.dropZoneDetector = new CardDropZoneDetector(map);
+        this.dropZoneDetector = new CardDropZoneDetector(map, this);
 
         frame.setLayout(new BorderLayout());
         this.handPanel = new BoardPanel(this);
@@ -491,7 +491,7 @@ public class GameGUI implements GUI {
         
         if (dropZoneDetector == null) {
             BoardPositionMap map = new BoardPositionMap(frameWidth, frameHeight);
-            this.dropZoneDetector = new CardDropZoneDetector(map);
+            this.dropZoneDetector = new CardDropZoneDetector(map, this);
         }
         
         GhostingDragAdapter dragAdapter = new GhostingDragAdapter(this, currCard, dropZoneDetector);

@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Map;
 import javax.swing.*;
 
 /**
@@ -144,6 +145,9 @@ public class BoardPanel extends JPanel {
                             bounds.x + (bounds.width / 3),
                             bounds.y + (bounds.height / 2));
                 }
+                if (currentCard instanceof Pokemon) {
+                    drawPokemonStatus(g2d, (Pokemon) currentCard, bounds, "ABOVE");
+                }
             }
         }
     }
@@ -155,11 +159,14 @@ public class BoardPanel extends JPanel {
         g2d.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
         
         if (p1Active != null && p1.hasActive()) {
+            String name = p1Active.getName();
+            if (name == null) name = "Unknown";
             if (!drawCardImage(g2d, p1Active, bounds.x, bounds.y, bounds.width, bounds.height)) {
                 String actvPok = gui.getMessages().getString("actvPok");
                 g2d.drawString(actvPok, bounds.x + marginSide / 8, bounds.y + bounds.height / 3);
-                g2d.drawString(p1Active.getName(), bounds.x + marginSide / 8, bounds.y + bounds.height / 2);
+                g2d.drawString(name, bounds.x + marginSide / 8, bounds.y + bounds.height / 2);
             }
+            drawPokemonStatus(g2d, p1Active, bounds, "RIGHT");
         }
     }
 
@@ -205,6 +212,9 @@ public class BoardPanel extends JPanel {
                             bounds.x + (bounds.width / 3),
                             bounds.y + (bounds.height / 2));
                 }
+                if (currentCard instanceof Pokemon) {
+                    drawPokemonStatus(g2d, (Pokemon) currentCard, bounds, "BELOW");
+                }
             }
         }
     }
@@ -215,11 +225,14 @@ public class BoardPanel extends JPanel {
         Rectangle bounds = posMap.getZones().get(DropZoneType.P2_ACTIVE);
         
         if (p2Active != null && p2.hasActive()) {
+            String name = p2Active.getName();
+            if (name == null) name = "Unknown";
             if (!drawCardImage(g2d, p2Active, bounds.x, bounds.y, bounds.width, bounds.height)) {
                 String actvPok = gui.getMessages().getString("actvPok");
                 g2d.drawString(actvPok, bounds.x + marginSide / 8, bounds.y + bounds.height / 3);
-                g2d.drawString(p2Active.getName(), bounds.x + marginSide / 8, bounds.y + bounds.height / 2);
+                g2d.drawString(name, bounds.x + marginSide / 8, bounds.y + bounds.height / 2);
             }
+            drawPokemonStatus(g2d, p2Active, bounds, "RIGHT");
         }
         g2d.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
     }
@@ -229,7 +242,28 @@ public class BoardPanel extends JPanel {
         if (url != null) {
             BufferedImage image = ImageLoader.getImage(url, this);
             if (image != null) {
-                g2d.drawImage(image, x, y, width, height, null);
+                double imgWidth = image.getWidth();
+                double imgHeight = image.getHeight();
+                double imgRatio = imgWidth / imgHeight;
+                double boxRatio = (double) width / height;
+
+                int drawWidth, drawHeight, drawX, drawY;
+
+                if (imgRatio > boxRatio) {
+                    // Image is wider than box
+                    drawWidth = width;
+                    drawHeight = (int) (width / imgRatio);
+                    drawX = x;
+                    drawY = y + (height - drawHeight) / 2;
+                } else {
+                    // Image is taller than box
+                    drawHeight = height;
+                    drawWidth = (int) (height * imgRatio);
+                    drawY = y;
+                    drawX = x + (width - drawWidth) / 2;
+                }
+
+                g2d.drawImage(image, drawX, drawY, drawWidth, drawHeight, null);
                 return true;
             }
         }
@@ -260,5 +294,91 @@ public class BoardPanel extends JPanel {
         FontMetrics metrics = g2d.getFontMetrics(gui.getBoldFont());
         int textWidth = metrics.stringWidth(turnText);
         g2d.drawString(turnText, (frameWidth * 5) / 7 - textWidth, frameHeight / 2 + 100 - (80 * 2) / 3);
+    }
+
+    private void drawPokemonStatus(Graphics2D g2d, Pokemon pokemon, Rectangle bounds, String position) {
+        if (pokemon == null) return;
+
+        int statusHeight = (int) (bounds.height * 0.3);
+        int statusWidth = bounds.width;
+        int statusX = bounds.x + 2;
+        int statusY;
+        
+        switch (position) {
+            case "ABOVE" -> statusY = bounds.y - statusHeight - 5;
+            case "BELOW" -> statusY = bounds.y + bounds.height + 5;
+            case "RIGHT" -> {
+                statusX = bounds.x + bounds.width + 10;
+                statusY = bounds.y + (bounds.height - statusHeight) / 2;
+            }
+            default -> statusY = bounds.y;
+        }
+        
+        // Background Gradient
+        GradientPaint gp = new GradientPaint(statusX, statusY, new Color(0, 0, 0, 160), 
+                                           statusX, statusY + statusHeight, new Color(0, 0, 0, 200));
+        g2d.setPaint(gp);
+        g2d.fillRoundRect(statusX, statusY, statusWidth - 4, statusHeight, 8, 8);
+
+        // HP Bar
+        int hpY = statusY + 6;
+        int hpWidth = statusWidth - 20;
+        int hpHeight = 8;
+        int curHP = pokemon.getCurHP();
+        int maxHP = pokemon.getMaxHP();
+        double hpPercent = (double) curHP / maxHP;
+
+        g2d.setColor(new Color(50, 50, 50, 255));
+        g2d.fillRoundRect(statusX + 8, hpY, hpWidth, hpHeight, 4, 4);
+
+        Color hpColor = Color.GREEN;
+        if (hpPercent < 0.2) hpColor = Color.RED;
+        else if (hpPercent < 0.5) hpColor = Color.YELLOW;
+        
+        g2d.setColor(hpColor);
+        g2d.fillRoundRect(statusX + 8, hpY, (int) (hpWidth * Math.max(0, hpPercent)), hpHeight, 4, 4);
+
+        // HP Text
+        g2d.setColor(Color.WHITE);
+        g2d.setFont(new Font("SansSerif", Font.BOLD, 10));
+        g2d.drawString("HP: " + curHP + "/" + maxHP, statusX + 8, hpY + hpHeight + 12);
+
+        // Energy Summary
+        Map<EnergyType, Integer> energyMap = pokemon.getEnergyMap();
+        int energyX = statusX + 8;
+        int energyY = hpY + hpHeight + 20;
+
+        for (Map.Entry<EnergyType, Integer> entry : energyMap.entrySet()) {
+            if (entry.getValue() > 0 && entry.getKey() != EnergyType.COLORLESS) {
+                EnergyType type = entry.getKey();
+                g2d.setColor(getEnergyColor(type));
+                g2d.fillOval(energyX, energyY, 10, 10);
+                g2d.setColor(Color.WHITE);
+                g2d.setFont(new Font("SansSerif", Font.BOLD, 9));
+                g2d.drawString("x" + entry.getValue(), energyX + 12, energyY + 9);
+                energyX += 30;
+                if (energyX > statusX + statusWidth - 20) {
+                    energyX = statusX + 8;
+                    energyY += 12;
+                }
+            }
+        }
+    }
+
+    private Color getEnergyColor(EnergyType type) {
+        return switch (type) {
+            case FIRE -> new Color(255, 69, 0);
+            case WATER -> new Color(30, 144, 255);
+            case GRASS -> new Color(50, 205, 50);
+            case LIGHTNING -> new Color(255, 215, 0);
+            case FIGHTING -> new Color(210, 105, 30);
+            case PSYCHIC -> new Color(153, 50, 204);
+            case DARKNESS -> new Color(70, 70, 70);
+            case METAL -> new Color(169, 169, 169);
+            case FAIRY -> new Color(255, 182, 193);
+            case DRAGON -> new Color(184, 134, 11);
+            case COLORLESS -> Color.LIGHT_GRAY;
+            default -> Color.WHITE;
+        };
     }
 }

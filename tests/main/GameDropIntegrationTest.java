@@ -1,75 +1,115 @@
 package main;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.easymock.EasyMock;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Random;
 import java.util.ResourceBundle;
+import static org.junit.Assert.*;
+import static org.easymock.EasyMock.*;
 
 public class GameDropIntegrationTest {
 
-    @Test
-    public void testInstantEnergyAttachToActive() {
-        GUI mockGui = createNiceMock(GUI.class);
-        PlayerHandler mockHandler = createNiceMock(PlayerHandler.class);
-        Player mockPlayer = createNiceMock(Player.class);
-        Pokemon mockActive = createNiceMock(Pokemon.class);
-        Energy energy = new Energy(EnergyType.LIGHTNING);
-        
-        // Setup state
-        expect(mockHandler.getCurrentPlayer()).andReturn(mockPlayer).anyTimes();
-        expect(mockPlayer.getActivePokemon()).andReturn(mockActive).anyTimes();
-        expect(mockHandler.activeCanAddEnergy()).andReturn(true).anyTimes();
-        
-        // Trigger action
-        expect(mockGui.waitForButtonPressed()).andReturn("P1_ACTIVE_DROP");
-        expect(mockGui.getLastSelectedCard()).andReturn(energy);
-        
-        // Expectation: Instant attachment
-        mockHandler.addEnergyToPokemon(energy, mockActive);
-        expectLastCall().once();
-        
-        // Verification that it does NOT display the selection logic
-        // We will use a mock that would fail if un-expected methods are called,
-        // or just verify the specific call.
-        
-        replay(mockGui, mockHandler, mockPlayer, mockActive);
-        
-        Game game = new Game(mockGui, new Random(), createNiceMock(SetupGame.class), mockHandler);
+    private Game game;
+    private GUI gui;
+    private PlayerHandler playerHandler;
+    private Player p1;
+    private Player p2;
+
+    @Before
+    public void setUp() {
+        // Use NiceMocks for both to avoid strict call-counting issues
+        gui = createNiceMock(GUI.class);
+        playerHandler = createNiceMock(PlayerHandler.class);
+        game = new Game(gui, null, null, playerHandler);
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         
-        game.mainGameLoop();
+        p1 = new Player("Player 1");
+        // Initialize deck with cards so drawCard works
+        for(int i=0; i<10; i++) {
+            p1.getDeck().addCard(new Energy(EnergyType.FIGHTING));
+        }
         
-        verify(mockHandler);
+        p2 = new Player("Player 2");
+        p1.activePokemon = new Pokemon("Pika 1", "Lightning", 0, 60);
+        p2.activePokemon = new Pokemon("Squirtle 2", "Water", 0, 50);
     }
 
     @Test
-    public void testInstantBenchDrop() {
-        GUI mockGui = createNiceMock(GUI.class);
-        PlayerHandler mockHandler = createNiceMock(PlayerHandler.class);
-        Pokemon pikachu = new Pokemon("Pikachu", "Lightning", 0, 60);
+    public void testEnergyDropOnActive() {
+        Energy energy = new Energy(EnergyType.LIGHTNING);
         
-        // Trigger action
-        expect(mockGui.waitForButtonPressed()).andReturn("P1_BENCH_0_DROP");
-        expect(mockGui.getLastSelectedCard()).andReturn(pikachu);
+        expect(gui.getLastSelectedCard()).andReturn(energy).anyTimes();
+        expect(playerHandler.getPlayerTurn()).andReturn(1).anyTimes();
+        expect(playerHandler.getCurrentPlayer()).andReturn(p1).anyTimes();
+        expect(playerHandler.activeCanAddEnergy()).andReturn(true).anyTimes();
         
-        // Expectation: Instant bench addition
-        mockHandler.addToBench(pikachu);
-        expectLastCall().once();
-        mockGui.addBenchCard(anyObject(Player.class), eq(pikachu));
+        // Logical side effect
+        playerHandler.addEnergyToPokemon(energy, p1.activePokemon);
         expectLastCall().once();
         
-        replay(mockGui, mockHandler);
+        replay(gui, playerHandler);
+        game.handleInstantDrop("P1_ACTIVE_DROP");
+        verify(gui, playerHandler);
+    }
+
+    @Test
+    public void testEnergyDropOnBench() {
+        Energy energy = new Energy(EnergyType.LIGHTNING);
+        Pokemon benchPkmn = new Pokemon("Bench 1", "Grass", 0, 40);
+        ArrayList<Card> benchList = new ArrayList<>();
+        benchList.add(benchPkmn);
         
-        Game game = new Game(mockGui, new Random(), createNiceMock(SetupGame.class), mockHandler);
-        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
+        expect(gui.getLastSelectedCard()).andReturn(energy).anyTimes();
+        expect(playerHandler.getPlayerTurn()).andReturn(1).anyTimes();
+        expect(playerHandler.getCurrentPlayer()).andReturn(p1).anyTimes();
+        expect(playerHandler.getOnlyPokemonFromBench(1)).andReturn(benchList).anyTimes();
+        expect(playerHandler.activeCanAddEnergy()).andReturn(true).anyTimes();
         
-        game.mainGameLoop();
+        playerHandler.addEnergyToPokemon(energy, benchPkmn);
+        expectLastCall().once();
         
-        verify(mockHandler, mockGui);
+        replay(gui, playerHandler);
+        game.handleInstantDrop("P1_BENCH_0_DROP");
+        verify(gui, playerHandler);
+    }
+
+    @Test
+    public void testTrainerBoardDrop() {
+        Trainer bill = new Trainer("Bill", "Draw 2 cards.");
+        p1.getHand().addCard(bill);
+        
+        expect(gui.getLastSelectedCard()).andReturn(bill);
+        expect(playerHandler.getPlayerTurn()).andReturn(1).anyTimes();
+        expect(playerHandler.getCurrentPlayer()).andReturn(p1).anyTimes();
+        
+        replay(gui, playerHandler);
+        game.handleInstantDrop("BOARD_DROP");
+        verify(gui, playerHandler);
+        
+        assertFalse("Bill should be removed from hand", p1.getHand().getCards().contains(bill));
+        // Started with 1 card (Bill), Bill removed (-1), drew 2 (+2) = 2
+        assertEquals("Bill should have triggered 2 draws", 2, p1.getHand().getCards().size());
+    }
+
+    @Test
+    public void testEvolveDropOnActive() {
+        Pokemon raichu = new Pokemon("Raichu", "Lightning", 1, 90);
+        raichu.setEvolvesFrom("Pika 1"); // Matches active pokemon name
+        
+        expect(gui.getLastSelectedCard()).andReturn(raichu).anyTimes();
+        expect(playerHandler.getPlayerTurn()).andReturn(1).anyTimes();
+        expect(playerHandler.getCurrentPlayer()).andReturn(p1).anyTimes();
+        
+        ArrayList<Card> preEvolutions = new ArrayList<>();
+        preEvolutions.add(p1.activePokemon);
+        expect(playerHandler.getOnlyPreEvolutionsFromActivePlayer(raichu)).andReturn(preEvolutions).anyTimes();
+        
+        // Logical side effect: evolve should be called directly with p1.activePokemon
+        expect(playerHandler.evolve(raichu, p1.activePokemon)).andReturn("Active").once();
+        
+        replay(gui, playerHandler);
+        game.handleInstantDrop("P1_ACTIVE_DROP");
+        verify(gui, playerHandler);
     }
 }
