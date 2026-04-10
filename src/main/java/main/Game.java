@@ -1,5 +1,7 @@
 package main;
 
+import main.ui.*;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Locale;

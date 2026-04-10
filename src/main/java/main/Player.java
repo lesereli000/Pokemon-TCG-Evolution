@@ -197,7 +197,7 @@ public class Player {
         }
     }
 
-    protected boolean hasActive() {
+    public boolean hasActive() {
         return hasActive;
     }
 

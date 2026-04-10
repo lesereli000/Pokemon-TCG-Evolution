@@ -1,4 +1,6 @@
-package main;
+package main.ui;
+
+import main.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -13,32 +15,19 @@ import javax.swing.*;
  */
 public class BoardPanel extends JPanel {
 
-    // Layout Constants moved from GameGUI
-    static final int frameWidth = 1200;
-    static final int frameHeight = frameWidth * 3 / 4;
-    static final int backgroundLineThickness = 4;
-    static final int cardWidth = (frameWidth * 2) / 25;
-    static final int cardHeight = cardWidth * 7 / 5;
-    static final int marginSide = 40;
-    static final int marginTop = 180;
-    static final int sideMarginTop = 80;
-    static final int marginBottom = 75;
-    static final int marginPrizeCardVertical = 15;
-    static final int prizeCardsOffset = cardWidth / 2;
-    static final int pcVerticalOffset = cardHeight / 15;
-    static final int benchHorizontalOffset = frameWidth / 19;
-    static final int benchHorizontalIncrement = cardHeight / 6;
-    static final int benchVerticalOffset = (frameHeight / 8) - 100;
-    static final int activeVerticalOffset = (frameHeight / 16) - 100;
-    static final int activeVerticalMargin = cardHeight / 16;
-    static final int deckOffset = 15;
 
     private final GameGUI gui;
     private final BoardPositionMap posMap;
 
+    enum Side {
+        TOP("P2"), BOTTOM("P1");
+        final String prefix;
+        Side(String prefix) { this.prefix = prefix; }
+    }
+
     public BoardPanel(GameGUI gui) {
         this.gui = gui;
-        this.posMap = new BoardPositionMap(frameWidth, frameHeight);
+        this.posMap = new BoardPositionMap();
     }
 
     @Override
@@ -46,27 +35,25 @@ public class BoardPanel extends JPanel {
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setStroke(new BasicStroke(backgroundLineThickness));
+        g2d.setStroke(new BasicStroke(UIConstants.BACKGROUND_LINE_THICKNESS));
 
         drawBackground(g2d);
         drawPlayerLabels(g2d);
         drawFlag(g2d);
 
         // Draw Player 1 (Bottom/User)
-        drawPlayerSection(g2d, gui.getPlayer1(), 1);
+        drawPlayerSection(g2d, gui.getPlayer1(), Side.BOTTOM);
 
         // Draw Player 2 (Top/Opponent)
-        drawPlayerSection(g2d, gui.getPlayer2(), 2);
+        drawPlayerSection(g2d, gui.getPlayer2(), Side.TOP);
 
         drawSharedArea(g2d);
         drawTurnText(g2d);
     }
 
-    private static final Color BACKGROUND_COLOR = new Color(37, 150, 190);
-
     private void drawBackground(Graphics2D g2d) {
-        g2d.setColor(BACKGROUND_COLOR);
-        g2d.fillRect(0, 0, frameWidth, frameHeight);
+        g2d.setColor(UIConstants.BACKGROUND_COLOR);
+        g2d.fillRect(0, 0, UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
     }
 
     private void drawPlayerLabels(Graphics2D g2d) {
@@ -76,165 +63,132 @@ public class BoardPanel extends JPanel {
         
         // P1 Label
         g2d.drawString(playerLabel + " 1",
-                (marginSide * 7) / 4 + (cardWidth * 2) + benchHorizontalOffset
-                        + (2 * (benchHorizontalIncrement + cardWidth)),
-                frameHeight - (cardHeight * 8) / 7 - marginBottom - benchVerticalOffset);
+                (UIConstants.MARGIN_SIDE * 7) / 4 + (UIConstants.CARD_WIDTH * 2) + UIConstants.BENCH_HORIZONTAL_OFFSET
+                        + (2 * (UIConstants.BENCH_HORIZONTAL_INCREMENT + UIConstants.CARD_WIDTH)),
+                UIConstants.FRAME_HEIGHT - (UIConstants.CARD_HEIGHT * 8) / 7 - UIConstants.MARGIN_BOTTOM - UIConstants.BENCH_VERTICAL_OFFSET);
         
         // P2 Label
         g2d.drawString(playerLabel + " 2", 
-                frameWidth - (marginSide * 5) / 4 - (cardWidth * 3) - benchHorizontalOffset
-                - (2 * (benchHorizontalIncrement + cardWidth)), marginTop + (cardHeight * 17) / 14);
+                UIConstants.FRAME_WIDTH - (UIConstants.MARGIN_SIDE * 5) / 4 - (UIConstants.CARD_WIDTH * 3) - UIConstants.BENCH_HORIZONTAL_OFFSET
+                - (2 * (UIConstants.BENCH_HORIZONTAL_INCREMENT + UIConstants.CARD_WIDTH)), UIConstants.MARGIN_TOP + (UIConstants.CARD_HEIGHT * 17) / 14);
     }
 
     private void drawFlag(Graphics2D g2d) {
         BufferedImage flag = gui.getFlag();
         if (flag != null) {
-            int x = 7 * frameWidth / 11;
-            int y = frameHeight / 2 - 100;
+            int x = 7 * UIConstants.FRAME_WIDTH / 11;
+            int y = UIConstants.FRAME_HEIGHT / 2 - 100;
             Image scaledFlag = flag.getScaledInstance(120, 80, Image.SCALE_SMOOTH);
             g2d.drawImage(scaledFlag, x, y, null);
         }
     }
 
-    private void drawPlayerSection(Graphics2D g2d, Player player, int side) {
+    void drawPlayerSection(Graphics2D g2d, Player player, Side side) {
         if (player == null) return;
         
         g2d.setFont(gui.getPlainFont());
         
-        if (side == 1) {
-            drawPrizeCardsP1(g2d, player);
-            drawBenchP1(g2d, player);
-            drawActiveP1(g2d, player);
-            drawDeckAndDiscardP1(g2d);
-        } else {
-            drawPrizeCardsP2(g2d, player);
-            drawBenchP2(g2d, player);
-            drawActiveP2(g2d, player);
-            drawDeckAndDiscardP2(g2d);
-        }
+        drawPrizeCards(g2d, player, side);
+        drawBench(g2d, player, side);
+        drawActive(g2d, player, side);
+        drawDeckAndDiscard(g2d, player, side);
     }
 
-    private void drawPrizeCardsP1(Graphics2D g2d, Player p1) {
-        int p1Prizes = p1.getNumPrizeCards();
-        for (int i = 0; i < Math.min(p1Prizes, 3); i++) {
-            g2d.setColor(Color.YELLOW);
-            g2d.drawRect(marginSide,
-                    frameHeight - (cardHeight * (i + 1)) - marginBottom - marginPrizeCardVertical * i, cardWidth,
-                    cardHeight);
+    void drawPrizeCards(Graphics2D g2d, Player player, Side side) {
+        int prizeCount = player.getNumPrizeCards();
+        g2d.setColor(Color.YELLOW);
+        
+        for (int i = 0; i < Math.min(prizeCount, 3); i++) {
+            int x, y;
+            if (side == Side.BOTTOM) {
+                x = UIConstants.MARGIN_SIDE;
+                y = UIConstants.FRAME_HEIGHT - (UIConstants.CARD_HEIGHT * (i + 1)) - UIConstants.MARGIN_BOTTOM - UIConstants.MARGIN_PRIZE_CARD_VERTICAL * i;
+            } else {
+                x = UIConstants.FRAME_WIDTH - UIConstants.MARGIN_SIDE - UIConstants.CARD_WIDTH;
+                y = UIConstants.SIDE_MARGIN_TOP + (i * (UIConstants.MARGIN_PRIZE_CARD_VERTICAL + UIConstants.CARD_HEIGHT));
+            }
+            g2d.drawRect(x, y, UIConstants.CARD_WIDTH, UIConstants.CARD_HEIGHT);
         }
-        if (p1Prizes > 3) {
-            for (int i = 0; i < p1Prizes - 3; i++) {
-                g2d.setColor(Color.YELLOW);
-                g2d.drawRect(marginSide + prizeCardsOffset, frameHeight - cardHeight * (i + 1) - marginBottom
-                        - marginPrizeCardVertical * i - pcVerticalOffset, cardWidth, cardHeight);
+        
+        if (prizeCount > 3) {
+            for (int i = 0; i < prizeCount - 3; i++) {
+                int x, y;
+                if (side == Side.BOTTOM) {
+                    x = UIConstants.MARGIN_SIDE + UIConstants.PRIZE_CARDS_OFFSET;
+                    y = UIConstants.FRAME_HEIGHT - UIConstants.CARD_HEIGHT * (i + 1) - UIConstants.MARGIN_BOTTOM - UIConstants.MARGIN_PRIZE_CARD_VERTICAL * i - UIConstants.PC_VERTICAL_OFFSET;
+                } else {
+                    x = UIConstants.FRAME_WIDTH - UIConstants.PRIZE_CARDS_OFFSET - UIConstants.MARGIN_SIDE - UIConstants.CARD_WIDTH;
+                    y = UIConstants.SIDE_MARGIN_TOP + (i * (UIConstants.MARGIN_PRIZE_CARD_VERTICAL + UIConstants.CARD_HEIGHT)) + UIConstants.PC_VERTICAL_OFFSET;
+                }
+                g2d.drawRect(x, y, UIConstants.CARD_WIDTH, UIConstants.CARD_HEIGHT);
             }
         }
     }
 
-    private void drawBenchP1(Graphics2D g2d, Player p1) {
-        ArrayList<Card> p1Bench = p1.getPokemonOnBench();
+    void drawBench(Graphics2D g2d, Player player, Side side) {
+        ArrayList<Card> bench = player.getPokemonOnBench();
         g2d.setColor(Color.WHITE);
+        String statusPos = (side == Side.BOTTOM) ? "ABOVE" : "BELOW";
+        
         for (int i = 0; i < gui.getNumBenchCards(); i++) {
-            Rectangle bounds = posMap.getZones().get(DropZoneType.valueOf("P1_BENCH_" + i));
+            Rectangle bounds = posMap.getZones().get(DropZoneType.valueOf(side.prefix + "_BENCH_" + i));
             g2d.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
             
-            if (p1Bench.size() > i) {
-                Card currentCard = p1Bench.get(i);
+            if (bench.size() > i) {
+                Card currentCard = bench.get(i);
                 if (!drawCardImage(g2d, currentCard, bounds.x, bounds.y, bounds.width, bounds.height)) {
                     g2d.drawString(currentCard.getName(),
                             bounds.x + (bounds.width / 3),
                             bounds.y + (bounds.height / 2));
                 }
                 if (currentCard instanceof Pokemon) {
-                    drawPokemonStatus(g2d, (Pokemon) currentCard, bounds, "ABOVE");
+                    drawPokemonStatus(g2d, (Pokemon) currentCard, bounds, statusPos);
                 }
             }
         }
     }
 
-    private void drawActiveP1(Graphics2D g2d, Player p1) {
-        Pokemon p1Active = p1.getActivePokemon();
-        g2d.setColor(gui.getPlayer1ActiveColor());
-        Rectangle bounds = posMap.getZones().get(DropZoneType.P1_ACTIVE);
+    void drawActive(Graphics2D g2d, Player player, Side side) {
+        Pokemon active = player.getActivePokemon();
+        Color activeColor = (side == Side.BOTTOM) ? gui.getPlayer1ActiveColor() : gui.getPlayer2ActiveColor();
+        g2d.setColor(activeColor);
+        
+        Rectangle bounds = posMap.getZones().get(DropZoneType.valueOf(side.prefix + "_ACTIVE"));
         g2d.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
         
-        if (p1Active != null && p1.hasActive()) {
-            String name = p1Active.getName();
+        if (active != null && player.hasActive()) {
+            String name = active.getName();
             if (name == null) name = "Unknown";
-            if (!drawCardImage(g2d, p1Active, bounds.x, bounds.y, bounds.width, bounds.height)) {
+            if (!drawCardImage(g2d, active, bounds.x, bounds.y, bounds.width, bounds.height)) {
                 String actvPok = gui.getMessages().getString("actvPok");
-                g2d.drawString(actvPok, bounds.x + marginSide / 8, bounds.y + bounds.height / 3);
-                g2d.drawString(name, bounds.x + marginSide / 8, bounds.y + bounds.height / 2);
+                g2d.drawString(actvPok, bounds.x + UIConstants.MARGIN_SIDE / 8, bounds.y + bounds.height / 3);
+                g2d.drawString(name, bounds.x + UIConstants.MARGIN_SIDE / 8, bounds.y + bounds.height / 2);
             }
-            drawPokemonStatus(g2d, p1Active, bounds, "RIGHT");
+            drawPokemonStatus(g2d, active, bounds, "RIGHT");
         }
     }
 
-    private void drawDeckAndDiscardP1(Graphics2D g2d) {
+    void drawDeckAndDiscard(Graphics2D g2d, Player player, Side side) {
         g2d.setColor(Color.WHITE);
+        int discardX, discardY, deckX, deckY;
+        
+        if (side == Side.BOTTOM) {
+            discardX = UIConstants.FRAME_WIDTH - UIConstants.MARGIN_SIDE - UIConstants.CARD_WIDTH;
+            discardY = UIConstants.FRAME_HEIGHT - UIConstants.MARGIN_BOTTOM - UIConstants.CARD_HEIGHT;
+            deckX = discardX;
+            deckY = UIConstants.FRAME_HEIGHT - UIConstants.MARGIN_BOTTOM - (UIConstants.CARD_HEIGHT * 2) - UIConstants.DECK_OFFSET;
+        } else {
+            discardX = UIConstants.MARGIN_SIDE;
+            discardY = UIConstants.SIDE_MARGIN_TOP;
+            deckX = discardX;
+            deckY = UIConstants.SIDE_MARGIN_TOP + UIConstants.CARD_HEIGHT + UIConstants.DECK_OFFSET;
+        }
+        
         // Discard
-        g2d.drawRect(frameWidth - marginSide - cardWidth, frameHeight - marginBottom - cardHeight, cardWidth,
-                cardHeight);
+        g2d.drawRect(discardX, discardY, UIConstants.CARD_WIDTH, UIConstants.CARD_HEIGHT);
         // Deck
         g2d.setColor(gui.getDeckColor());
-        g2d.drawRect(frameWidth - marginSide - cardWidth,
-                frameHeight - marginBottom - (cardHeight * 2) - deckOffset, cardWidth, cardHeight);
-    }
-
-    private void drawPrizeCardsP2(Graphics2D g2d, Player p2) {
-        int p2Prizes = p2.getNumPrizeCards();
-        for (int i = 0; i < Math.min(p2Prizes, 3); i++) {
-            g2d.setColor(Color.YELLOW);
-            g2d.drawRect(frameWidth - marginSide - cardWidth,
-                    sideMarginTop + (i * (marginPrizeCardVertical + cardHeight)), cardWidth, cardHeight);
-        }
-        if (p2Prizes > 3) {
-            for (int i = 0; i < p2Prizes - 3; i++) {
-                g2d.setColor(Color.YELLOW);
-                g2d.drawRect(frameWidth - prizeCardsOffset - marginSide - cardWidth,
-                        sideMarginTop + (i * (marginPrizeCardVertical + cardHeight)) + pcVerticalOffset, cardWidth,
-                        cardHeight);
-            }
-        }
-    }
-
-    private void drawBenchP2(Graphics2D g2d, Player p2) {
-        ArrayList<Card> p2Bench = p2.getPokemonOnBench();
-        g2d.setColor(Color.WHITE);
-        for (int i = 0; i < gui.getNumBenchCards(); i++) {
-            Rectangle bounds = posMap.getZones().get(DropZoneType.valueOf("P2_BENCH_" + i));
-            g2d.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
-            
-            if (p2Bench.size() > i) {
-                Card currentCard = p2Bench.get(i);
-                if (!drawCardImage(g2d, currentCard, bounds.x, bounds.y, bounds.width, bounds.height)) {
-                    g2d.drawString(currentCard.getName(),
-                            bounds.x + (bounds.width / 3),
-                            bounds.y + (bounds.height / 2));
-                }
-                if (currentCard instanceof Pokemon) {
-                    drawPokemonStatus(g2d, (Pokemon) currentCard, bounds, "BELOW");
-                }
-            }
-        }
-    }
-
-    private void drawActiveP2(Graphics2D g2d, Player p2) {
-        Pokemon p2Active = p2.getActivePokemon();
-        g2d.setColor(gui.getPlayer2ActiveColor());
-        Rectangle bounds = posMap.getZones().get(DropZoneType.P2_ACTIVE);
-        
-        if (p2Active != null && p2.hasActive()) {
-            String name = p2Active.getName();
-            if (name == null) name = "Unknown";
-            if (!drawCardImage(g2d, p2Active, bounds.x, bounds.y, bounds.width, bounds.height)) {
-                String actvPok = gui.getMessages().getString("actvPok");
-                g2d.drawString(actvPok, bounds.x + marginSide / 8, bounds.y + bounds.height / 3);
-                g2d.drawString(name, bounds.x + marginSide / 8, bounds.y + bounds.height / 2);
-            }
-            drawPokemonStatus(g2d, p2Active, bounds, "RIGHT");
-        }
-        g2d.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
+        g2d.drawRect(deckX, deckY, UIConstants.CARD_WIDTH, UIConstants.CARD_HEIGHT);
     }
 
     private boolean drawCardImage(Graphics2D g2d, Card card, int x, int y, int width, int height) {
@@ -270,20 +224,12 @@ public class BoardPanel extends JPanel {
         return false;
     }
 
-    private void drawDeckAndDiscardP2(Graphics2D g2d) {
-        g2d.setColor(Color.WHITE);
-        // Discard
-        g2d.drawRect(marginSide, sideMarginTop, cardWidth, cardHeight);
-        // Deck
-        g2d.setColor(gui.getDeckColor());
-        g2d.drawRect(marginSide, sideMarginTop + (cardHeight) + deckOffset, cardWidth, cardHeight);
-    }
 
     private void drawSharedArea(Graphics2D g2d) {
         g2d.setColor(Color.WHITE);
         // Stadium Card
-        g2d.drawRect((frameWidth / 2) - ((cardWidth / 4) * 9),
-                (frameHeight / 2) - (cardHeight / 2) - activeVerticalOffset, cardWidth, cardHeight);
+        g2d.drawRect((UIConstants.FRAME_WIDTH / 2) - ((UIConstants.CARD_WIDTH / 4) * 9),
+                (UIConstants.FRAME_HEIGHT / 2) - (UIConstants.CARD_HEIGHT / 2) - UIConstants.ACTIVE_VERTICAL_OFFSET, UIConstants.CARD_WIDTH, UIConstants.CARD_HEIGHT);
     }
 
     private void drawTurnText(Graphics2D g2d) {
@@ -293,7 +239,7 @@ public class BoardPanel extends JPanel {
         turnText = MessageFormat.format(turnText, gui.getPlayerTurn());
         FontMetrics metrics = g2d.getFontMetrics(gui.getBoldFont());
         int textWidth = metrics.stringWidth(turnText);
-        g2d.drawString(turnText, (frameWidth * 5) / 7 - textWidth, frameHeight / 2 + 100 - (80 * 2) / 3);
+        g2d.drawString(turnText, (UIConstants.FRAME_WIDTH * 5) / 7 - textWidth, UIConstants.FRAME_HEIGHT / 2 + 100 - (80 * 2) / 3);
     }
 
     void drawPokemonStatus(Graphics2D g2d, Pokemon pokemon, Rectangle bounds, String position) {

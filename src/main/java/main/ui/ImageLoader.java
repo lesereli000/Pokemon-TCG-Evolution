@@ -1,4 +1,4 @@
-package main;
+package main.ui;
 
 import java.awt.Component;
 import java.awt.Image;

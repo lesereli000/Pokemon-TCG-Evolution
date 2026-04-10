@@ -1,4 +1,4 @@
-package main;
+package main.ui;
 
 import org.junit.Test;
 import java.awt.Rectangle;
@@ -9,15 +9,12 @@ public class BoardPositionMapTest {
 
     @Test
     public void testP1ActiveGeometries() {
-        int width = 1200;
-        int height = 900;
-        
-        BoardPositionMap positionMap = new BoardPositionMap(width, height);
+        BoardPositionMap positionMap = new BoardPositionMap();
         Map<DropZoneType, Rectangle> zones = positionMap.getZones();
-        
+
         Rectangle p1Active = zones.get(DropZoneType.P1_ACTIVE);
         assertNotNull("P1_ACTIVE DropZone Rectangle should exist", p1Active);
-        
+
         // Expected calculations based on original BoardPanel constants
         // cardWidth = (1200 * 2) / 25 = 96
         // cardHeight = 96 * 7 / 5 = 134
@@ -33,15 +30,12 @@ public class BoardPositionMapTest {
 
     @Test
     public void testP1BenchGeometries() {
-        int width = 1200;
-        int height = 900;
-        
-        BoardPositionMap positionMap = new BoardPositionMap(width, height);
+        BoardPositionMap positionMap = new BoardPositionMap();
         Map<DropZoneType, Rectangle> zones = positionMap.getZones();
-        
+
         Rectangle p1Bench0 = zones.get(DropZoneType.P1_BENCH_0);
         assertNotNull(p1Bench0);
-        
+
         // Expected calculations
         // marginSide = 40
         // marginBottom = 75
@@ -54,7 +48,7 @@ public class BoardPositionMapTest {
         assertEquals("Y coordinate of P1 bench slot 0", 679, p1Bench0.y);
         assertEquals(96, p1Bench0.width);
         assertEquals(134, p1Bench0.height);
-        
+
         Rectangle p1Bench1 = zones.get(DropZoneType.P1_BENCH_1);
         assertEquals(315 + (118), p1Bench1.x); // 315 + (22 + 96) = 433
     }

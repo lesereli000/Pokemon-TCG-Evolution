@@ -1,4 +1,6 @@
-package main;
+package main.ui;
+
+import main.*;
 
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -60,7 +62,7 @@ public class CardDropZoneDetector {
 
         if (card instanceof Pokemon) {
             Pokemon pkmn = (Pokemon) card;
-            if (pkmn.stage == 0) { // Basic
+            if (pkmn.getStage() == 0) { // Basic
                 // If initializing (no active), only ACTIVE is valid
                 if (!player.hasActive() || player.getActivePokemon() == null) {
                     return zoneName.endsWith("_ACTIVE");

@@ -1,4 +1,6 @@
-package main;
+package main.ui;
+
+import main.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -220,8 +222,12 @@ public class GameGUISystemTest {
     public void testAttackMessage() throws Exception {
         Player p1 = new Player("Player 1");
         Player p2 = new Player("Player 2");
-        p1.activePokemon = new Pokemon("Pika", "Lightning", 0, 60);
-        p2.activePokemon = new Pokemon("Squirtle", "Water", 0, 50);
+        Pokemon pika1 = new Pokemon("Pika", "Lightning", 0, 60);
+        Pokemon squirtle2 = new Pokemon("Squirtle", "Water", 0, 50);
+        p1.getHand().addCard(pika1);
+        p2.getHand().addCard(squirtle2);
+        p1.setActivePokemon(pika1);
+        p2.setActivePokemon(squirtle2);
         Attack atk = new Attack("Thunder", new ArrayList<>(), 40);
 
         harness.dismissDialogAsync(200);
@@ -244,7 +250,8 @@ public class GameGUISystemTest {
         // Test Dead Info
         harness.dismissDialogAsync(200);
         Player deadP = new Player("Defending");
-         deadP.activePokemon = p;
+         deadP.getHand().addCard(p);
+         deadP.setActivePokemon(p);
         gui.displayDeadActiveInfo(deadP);
 
         assertTrue("All dialogs dismissed correctly", true);

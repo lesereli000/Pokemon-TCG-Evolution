@@ -1,4 +1,6 @@
-package main;
+package main.ui;
+
+import main.*;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -9,14 +11,13 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Font;
 import java.awt.Paint;
-import java.util.ArrayList;
 
 public class AdvancedBoardPanelTest {
 
     private void setupGraphicsMocks(GameGUI gui, Graphics2D g2d) {
         expect(gui.getBoldFont()).andReturn(new Font("Arial", Font.BOLD, 12)).anyTimes();
         expect(gui.getPlainFont()).andReturn(new Font("Arial", Font.PLAIN, 12)).anyTimes();
-        
+
         g2d.translate(anyInt(), anyInt());
         expectLastCall().anyTimes();
         g2d.setColor(anyObject(Color.class));
@@ -42,7 +43,7 @@ public class AdvancedBoardPanelTest {
     @Test
     public void testEnergyColors() {
         BoardPanel panel = new BoardPanel(null);
-        
+
         assertEquals(new Color(255, 69, 0), panel.getEnergyColor(EnergyType.FIRE));
         assertEquals(new Color(30, 144, 255), panel.getEnergyColor(EnergyType.WATER));
         assertEquals(new Color(50, 205, 50), panel.getEnergyColor(EnergyType.GRASS));
@@ -61,26 +62,26 @@ public class AdvancedBoardPanelTest {
         GameGUI gui = createMock(GameGUI.class);
         BoardPanel panel = new BoardPanel(gui);
         Graphics2D g2d = createMock(Graphics2D.class);
-        
+
         setupGraphicsMocks(gui, g2d);
         replay(gui, g2d);
 
         Rectangle bounds = new Rectangle(100, 100, 80, 120);
-        
+
         // Green HP (> 50%)
         Pokemon greenPkmn = new Pokemon("Bulba", "Grass", 0, 100);
         panel.drawPokemonStatus(g2d, greenPkmn, bounds, "ABOVE");
-        
+
         // Yellow HP (< 50%)
         Pokemon yellowPkmn = new Pokemon("Bulba", "Grass", 0, 100);
         yellowPkmn.takeDamage(60, EnergyType.FIRE);
         panel.drawPokemonStatus(g2d, yellowPkmn, bounds, "BELOW");
-        
+
         // Red HP (< 20%)
         Pokemon redPkmn = new Pokemon("Bulba", "Grass", 0, 100);
         redPkmn.takeDamage(90, EnergyType.FIRE);
         panel.drawPokemonStatus(g2d, redPkmn, bounds, "RIGHT");
-        
+
         verify(gui, g2d);
     }
 
@@ -89,22 +90,22 @@ public class AdvancedBoardPanelTest {
         GameGUI gui = createMock(GameGUI.class);
         BoardPanel panel = new BoardPanel(gui);
         Graphics2D g2d = createMock(Graphics2D.class);
-        
+
         setupGraphicsMocks(gui, g2d);
         replay(gui, g2d);
 
         Rectangle bounds = new Rectangle(100, 100, 80, 120);
         Pokemon complexPkmn = new Pokemon("Ryu", "Dragon", 0, 150);
-        
+
         complexPkmn.addEnergy(new Energy(EnergyType.FIRE));
         complexPkmn.addEnergy(new Energy(EnergyType.WATER));
         complexPkmn.addEnergy(new Energy(EnergyType.GRASS));
         complexPkmn.addEnergy(new Energy(EnergyType.LIGHTNING)); // LIGHTNING is GOLD in the enum name
         complexPkmn.addEnergy(new Energy(EnergyType.FIGHTING));
         complexPkmn.addEnergy(new Energy(EnergyType.COLORLESS));
-        
+
         panel.drawPokemonStatus(g2d, complexPkmn, bounds, "RIGHT");
-        
+
         verify(gui, g2d);
     }
 }

@@ -1,4 +1,6 @@
-package main;
+package main.ui;
+
+import main.*;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -19,8 +21,8 @@ public class GhostingDragAdapter extends MouseAdapter {
         this.gui = gui;
         this.card = card;
         this.detector = detector;
-        this.cardWidth = (GameGUI.frameWidth * 2) / 25;
-        this.cardHeight = cardWidth * 7 / 5;
+        this.cardWidth = UIConstants.CARD_WIDTH;
+        this.cardHeight = UIConstants.CARD_HEIGHT;
     }
 
     @Override

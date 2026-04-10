@@ -1,4 +1,6 @@
-package main;
+package main.ui;
+
+import main.*;
 
 import java.awt.Component;
 import java.awt.image.BufferedImage;
@@ -46,6 +48,7 @@ public class ImageLoaderTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testGetImageCacheHit() throws Exception {
         String url = "http://example.com/test.png";
         BufferedImage mockImage = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
@@ -60,6 +63,7 @@ public class ImageLoaderTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testGetImageAlreadyLoading() throws Exception {
         String url = "http://example.com/loading.png";
         
@@ -89,6 +93,7 @@ public class ImageLoaderTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testLoadIntoButtonCacheHit() throws Exception {
         String url = "http://example.com/button.png";
         BufferedImage mockImage = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
@@ -109,6 +114,7 @@ public class ImageLoaderTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testLoadIntoButtonAlreadyLoading() throws Exception {
         String url = "http://example.com/button_loading.png";
         JButton button = createMock(JButton.class);
@@ -140,6 +146,7 @@ public class ImageLoaderTest {
     }
 
     @Test(timeout = 10000)
+    @SuppressWarnings("unchecked")
     public void testLoadIntoButtonAsyncLoadFailure() throws Exception {
         String url = "http://invalid.url/test.png";
         JButton button = createMock(JButton.class);
@@ -163,6 +170,7 @@ public class ImageLoaderTest {
     }
 
     @Test(timeout = 10000)
+    @SuppressWarnings("unchecked")
     public void testGetImageAsyncLoadFailure() throws Exception {
         String url = "http://invalid.url/test.png";
         Component comp = createMock(Component.class);

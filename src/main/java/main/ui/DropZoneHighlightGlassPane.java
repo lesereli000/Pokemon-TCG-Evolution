@@ -1,4 +1,6 @@
-package main;
+package main.ui;
+
+import main.*;
 
 import java.awt.*;
 import java.util.Map;

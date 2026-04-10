@@ -1,4 +1,6 @@
-package main;
+package main.ui;
+
+import main.*;
 
 import static org.easymock.EasyMock.*;
 import org.junit.Test;
@@ -13,7 +15,7 @@ public class CardDropZoneDetectorTest {
 
     @Test
     public void testValidDropZoneRetrieval() {
-        BoardPositionMap mockMap = new BoardPositionMap(1200, 900);
+        BoardPositionMap mockMap = new BoardPositionMap();
         CardDropZoneDetector detector = new CardDropZoneDetector(mockMap, null);
         
         // Let's get the known rectangle for P1_BENCH_0 to find a good point inside it
@@ -30,7 +32,7 @@ public class CardDropZoneDetectorTest {
 
     @Test
     public void testInvalidVoidDropZone() {
-        BoardPositionMap mockMap = new BoardPositionMap(1200, 900);
+        BoardPositionMap mockMap = new BoardPositionMap();
         CardDropZoneDetector detector = new CardDropZoneDetector(mockMap, null);
         
         // Point obviously in empty space
@@ -40,7 +42,7 @@ public class CardDropZoneDetectorTest {
 
     @Test
     public void testUnauthorizedOpponentZone() {
-        BoardPositionMap mockMap = new BoardPositionMap(1200, 900);
+        BoardPositionMap mockMap = new BoardPositionMap();
         CardDropZoneDetector detector = new CardDropZoneDetector(mockMap, null);
         
         Map<DropZoneType, Rectangle> zones = mockMap.getZones();
@@ -54,7 +56,7 @@ public class CardDropZoneDetectorTest {
     @Test
     public void testIsValidForCardBasicChecks() {
         GameGUI gui = createMock(GameGUI.class);
-        CardDropZoneDetector detector = new CardDropZoneDetector(new BoardPositionMap(1200, 900), gui);
+        CardDropZoneDetector detector = new CardDropZoneDetector(new BoardPositionMap(), gui);
         
         assertFalse(detector.isValidForCard(DropZoneType.NONE, new Pokemon("Pika", "Lightning", 0, 60)));
         assertFalse(detector.isValidForCard(DropZoneType.P1_ACTIVE, null));
@@ -64,7 +66,7 @@ public class CardDropZoneDetectorTest {
     public void testIsValidForCardTurnValidation() {
         GameGUI gui = createMock(GameGUI.class);
         Player p1 = createMock(Player.class);
-        CardDropZoneDetector detector = new CardDropZoneDetector(new BoardPositionMap(1200, 900), gui);
+        CardDropZoneDetector detector = new CardDropZoneDetector(new BoardPositionMap(), gui);
         Pokemon pkmn = new Pokemon("Pika", "Lightning", 0, 60);
 
         expect(gui.getPlayerTurn()).andReturn(1).anyTimes();
@@ -84,7 +86,7 @@ public class CardDropZoneDetectorTest {
     public void testIsValidForCardEnergyPlacement() {
         GameGUI gui = createMock(GameGUI.class);
         Player p1 = createMock(Player.class);
-        CardDropZoneDetector detector = new CardDropZoneDetector(new BoardPositionMap(1200, 900), gui);
+        CardDropZoneDetector detector = new CardDropZoneDetector(new BoardPositionMap(), gui);
         Energy energy = new Energy(EnergyType.FIRE);
 
         expect(gui.getPlayerTurn()).andReturn(1).anyTimes();
@@ -119,7 +121,7 @@ public class CardDropZoneDetectorTest {
     public void testIsValidForCardPokemonPlacement() {
         GameGUI gui = createMock(GameGUI.class);
         Player p1 = createMock(Player.class);
-        CardDropZoneDetector detector = new CardDropZoneDetector(new BoardPositionMap(1200, 900), gui);
+        CardDropZoneDetector detector = new CardDropZoneDetector(new BoardPositionMap(), gui);
         Pokemon pkmn = new Pokemon("Pika", "Lightning", 0, 60);
 
         expect(gui.getPlayerTurn()).andReturn(1).anyTimes();

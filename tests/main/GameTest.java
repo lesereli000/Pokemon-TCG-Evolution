@@ -1,5 +1,7 @@
 package main;
 
+import main.ui.*;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -1356,7 +1358,7 @@ public class GameTest {
         // Pokemon Selection for switch
         gui.displayMessage(anyString());
         gui.removeAllButtons();
-        gui.displayCards(anyObject(ArrayList.class));
+        gui.displayCards(anyObject());
         gui.displayConfirmAndCancelButton();
         gui.waitForAction();
         expect(gui.isCancelled()).andReturn(false).anyTimes();
@@ -2563,6 +2565,74 @@ public class GameTest {
         // Check that NO effect is called
         replay(gui, ph, p1);
         game.handleUseTrainer(trainer);
+        verify(gui, ph, p1);
+    }
+
+    @Test
+    public void testHandleInstantDropActiveEnergy() {
+        GUI gui = createMock(GUI.class);
+        PlayerHandler ph = createMock(PlayerHandler.class);
+        Player p1 = createMock(Player.class);
+        Pokemon pikachu = new Pokemon("Pikachu", "Lightning", 0, 60);
+        Energy energy = new Energy(EnergyType.LIGHTNING);
+        
+        Game game = new Game(gui, null, null, ph);
+        
+        expect(gui.getLastSelectedCard()).andReturn(energy);
+        expect(ph.getPlayerTurn()).andReturn(1).anyTimes();
+        expect(ph.getCurrentPlayer()).andReturn(p1).anyTimes();
+        expect(p1.getActivePokemon()).andReturn(pikachu);
+        expect(ph.activeCanAddEnergy()).andReturn(true);
+        
+        // Effects of attachment called on ph
+        ph.addEnergyToPokemon(energy, pikachu);
+        expectLastCall();
+        
+        // GUI Refresh
+        expect(p1.handAsList()).andReturn(new ArrayList<Card>());
+        gui.displayCards(anyObject());
+        expectLastCall();
+        gui.displayActionButtons();
+        expectLastCall();
+        gui.setLastSelectedCardForDrag(null);
+        expectLastCall();
+        
+        replay(gui, ph, p1);
+        game.handleInstantDrop("P1_ACTIVE_DROP");
+        verify(gui, ph, p1);
+    }
+
+    @Test
+    public void testHandleInstantDropBenchBasic() {
+        GUI gui = createMock(GUI.class);
+        PlayerHandler ph = createMock(PlayerHandler.class);
+        Player p1 = createMock(Player.class);
+        Pokemon bulba = new Pokemon("Bulbasaur", "Grass", 0, 50);
+        
+        Game game = new Game(gui, null, null, ph);
+        
+        expect(gui.getLastSelectedCard()).andReturn(bulba);
+        expect(ph.getPlayerTurn()).andReturn(1).anyTimes();
+        expect(ph.getCurrentPlayer()).andReturn(p1).anyTimes();
+        expect(ph.getOnlyPokemonFromBench(1)).andReturn(new ArrayList<Card>());
+        
+        // Effects of benching called on ph
+        ph.addToBench(bulba);
+        expectLastCall();
+        gui.addBenchCard(p1, bulba);
+        expectLastCall();
+        
+        // GUI Refresh
+        expect(p1.handAsList()).andReturn(new ArrayList<Card>());
+        gui.displayCards(anyObject());
+        expectLastCall();
+        gui.displayActionButtons();
+        expectLastCall();
+        gui.setLastSelectedCardForDrag(null);
+        expectLastCall();
+        
+        replay(gui, ph, p1);
+        game.handleInstantDrop("P1_BENCH_0_DROP");
         verify(gui, ph, p1);
     }
 }

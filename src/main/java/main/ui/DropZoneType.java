@@ -1,4 +1,4 @@
-package main;
+package main.ui;
 
 public enum DropZoneType {
     P1_ACTIVE,
