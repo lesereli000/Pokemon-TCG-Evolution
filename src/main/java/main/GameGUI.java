@@ -90,7 +90,7 @@ public class GameGUI implements GUI {
     public void createFlipButton() {
         String message = messages.getString("flipCoin");
         createSDHoldingButton(message);
-        while (!waitForAction) {
+        while (!waitForAction && !Thread.currentThread().isInterrupted()) {
             Thread.onSpinWait();
         }
         this.waitForAction = false;
@@ -99,7 +99,7 @@ public class GameGUI implements GUI {
     @Override
     public void waitForPassTurn() {
         createPassTurnButton();
-        while (!waitForAction) {
+        while (!waitForAction && !Thread.currentThread().isInterrupted()) {
             Thread.onSpinWait();
         }
         this.waitForAction = false;
@@ -367,7 +367,7 @@ public class GameGUI implements GUI {
 
     @Override
     public void waitForAction() {
-        while (!waitForAction) {
+        while (!waitForAction && !Thread.currentThread().isInterrupted()) {
             Thread.onSpinWait();
         }
         this.waitForAction = false;
@@ -432,7 +432,7 @@ public class GameGUI implements GUI {
 
     @Override
     public String waitForButtonPressed() {
-        while (!waitForAction) {
+        while (!waitForAction && !Thread.currentThread().isInterrupted()) {
             Thread.onSpinWait();
         }
         this.waitForAction = false;
