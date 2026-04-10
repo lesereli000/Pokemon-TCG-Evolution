@@ -27,14 +27,8 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: List Test Files
-      run: find Tests -name "*.java"
-
-    - name: Effective POM
-      run: mvn help:effective-pom
-      
     - name: Build with Maven
-      run: xvfb-run --server-args="-screen 0 1280x1024x24" mvn -B -X clean verify
+      run: xvfb-run --server-args="-screen 0 1280x1024x24" mvn -B clean verify
 
     - name: Upload Test Reports
       if: always()
