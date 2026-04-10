@@ -47,7 +47,7 @@
         <dependency>
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
-            <version>5.2.0</version>
+            <version>5.4.0</version>
             <scope>compile</scope>
         </dependency>
 
@@ -205,7 +205,15 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
                 <configuration>
-                    <argLine>@{argLine}</argLine>
+                    <argLine>
+                        @{argLine}
+                        -Dnet.bytebuddy.experimental=true
+                        --add-opens java.base/java.lang=ALL-UNNAMED
+                        --add-opens java.base/java.util=ALL-UNNAMED
+                        --add-opens java.base/java.io=ALL-UNNAMED
+                        --add-opens java.desktop/java.awt=ALL-UNNAMED
+                        --add-opens java.desktop/javax.swing=ALL-UNNAMED
+                    </argLine>
                     <systemPropertyVariables>
                         <java.awt.headless>false</java.awt.headless>
                     </systemPropertyVariables>
