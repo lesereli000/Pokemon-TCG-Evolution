@@ -1,7 +1,5 @@
 package main.ui;
 
-import main.*;
-
 import java.awt.Component;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Field;
@@ -52,7 +50,7 @@ public class ImageLoaderTest {
     public void testGetImageCacheHit() throws Exception {
         String url = "http://example.com/test.png";
         BufferedImage mockImage = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
-        
+
         // Manually put in cache
         Field cacheField = ImageLoader.class.getDeclaredField("imageCache");
         cacheField.setAccessible(true);
@@ -66,7 +64,7 @@ public class ImageLoaderTest {
     @SuppressWarnings("unchecked")
     public void testGetImageAlreadyLoading() throws Exception {
         String url = "http://example.com/loading.png";
-        
+
         // Manually put in loading set
         Field loadingField = ImageLoader.class.getDeclaredField("loading");
         loadingField.setAccessible(true);
@@ -138,10 +136,10 @@ public class ImageLoaderTest {
 
         BufferedImage result = ImageLoader.getImage(url, comp);
         assertNull(result);
-        
+
         // Wait for thread to complete the catch block
         Thread.sleep(500);
-        
+
         verify(comp);
     }
 
@@ -151,17 +149,17 @@ public class ImageLoaderTest {
         String url = "http://invalid.url/test.png";
         JButton button = createMock(JButton.class);
         Component comp = createMock(Component.class);
-        
+
         // Expect no calls since load fails
         replay(button, comp);
-        
+
         ImageLoader.loadIntoButton(url, button, 10, 10);
-        
+
         // Wait for background thread to finish (it will fail)
         Thread.sleep(1000);
-        
+
         verify(button, comp);
-        
+
         // Verify loading set is cleared
         Field loadingField = ImageLoader.class.getDeclaredField("loading");
         loadingField.setAccessible(true);
@@ -174,17 +172,17 @@ public class ImageLoaderTest {
     public void testGetImageAsyncLoadFailure() throws Exception {
         String url = "http://invalid.url/test.png";
         Component comp = createMock(Component.class);
-        
+
         replay(comp);
-        
+
         BufferedImage result = ImageLoader.getImage(url, comp);
         assertNull(result);
-        
+
         // Wait for background thread to finish
         Thread.sleep(1000);
-        
+
         verify(comp);
-        
+
         // Verify loading set is cleared
         Field loadingField = ImageLoader.class.getDeclaredField("loading");
         loadingField.setAccessible(true);

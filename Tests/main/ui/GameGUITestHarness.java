@@ -1,16 +1,17 @@
 package main.ui;
 
-import main.*;
-
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
- * A testing harness for GameGUI to facilitate systems-level and automated GUI testing.
- * Provides reflective access to internal components and utility methods to interact
- * with the GUI asynchronously, which is necessary due to GameGUI's blocking spin loops.
+ * A testing harness for GameGUI to facilitate systems-level and automated GUI
+ * testing.
+ * Provides reflective access to internal components and utility methods to
+ * interact
+ * with the GUI asynchronously, which is necessary due to GameGUI's blocking
+ * spin loops.
  */
 public class GameGUITestHarness {
     private GameGUI gui;
@@ -56,9 +57,10 @@ public class GameGUITestHarness {
 
     /**
      * Clicks a button asynchronously after a short delay.
-     * This is required for methods in GameGUI that block the caller thread (like waitForAction).
+     * This is required for methods in GameGUI that block the caller thread (like
+     * waitForAction).
      *
-     * @param text The text of the button to click.
+     * @param text    The text of the button to click.
      * @param delayMs The delay in milliseconds before attempting to click.
      */
     public void clickButtonAsync(String text, long initialDelayMs) {
@@ -73,7 +75,7 @@ public class GameGUITestHarness {
                         Thread.sleep(50);
                     }
                 }
-                
+
                 if (btn != null) {
                     final JButton finalBtn = btn;
                     SwingUtilities.invokeLater(() -> finalBtn.doClick());
@@ -109,7 +111,7 @@ public class GameGUITestHarness {
                 long startTime = System.currentTimeMillis();
                 boolean dismissed = false;
                 while (!dismissed && (System.currentTimeMillis() - startTime < 2000)) {
-                    final boolean[] found = {false};
+                    final boolean[] found = { false };
                     SwingUtilities.invokeAndWait(() -> {
                         Window[] windows = Window.getWindows();
                         for (Window window : windows) {

@@ -5,9 +5,7 @@ import main.*;
 import org.junit.Test;
 import javax.swing.*;
 import java.awt.*;
-import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
-import java.util.ArrayList;
 
 public class GameGUILineCoverageTest {
 
@@ -21,16 +19,16 @@ public class GameGUILineCoverageTest {
         } catch (Exception e) {
             // Ignore other initialization issues
         }
-        
+
         // These should now have the components if createGUI got far enough
         try {
             gui.setDeckColor(Color.RED);
-            
+
             Player p1 = new Player("P1");
             gui.makeActiveCard(p1, null);
-            
+
             gui.triggerSimulatedAction("BOARD_DROP");
-            // If waitForButtonPressed hangs, this might be a problem, 
+            // If waitForButtonPressed hangs, this might be a problem,
             // but triggerSimulatedAction sets the flag to true.
             assertEquals("BOARD_DROP", gui.waitForButtonPressed());
         } catch (NullPointerException e) {
@@ -43,8 +41,9 @@ public class GameGUILineCoverageTest {
         GameGUI gui = new GameGUI();
         try {
             gui.createGUI();
-        } catch (Exception e) {}
-        
+        } catch (Exception e) {
+        }
+
         JButton btn = new JButton("Test");
         try {
             gui.removeButton(btn);
