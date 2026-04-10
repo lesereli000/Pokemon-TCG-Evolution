@@ -160,7 +160,7 @@ public class PlayerHandler {
 
     public ArrayList<Card> getAllPlayerPokemon() {
         ArrayList<Card> playerPokemon = currentPlayer.getOnlyPokemonFromHand();
-        playerPokemon.add(currentPlayer.activePokemon);
+        playerPokemon.add(currentPlayer.getActivePokemon());
         ArrayList<Card> benchPokemon = currentPlayer.getPokemonOnBench();
         playerPokemon.addAll(benchPokemon);
         return playerPokemon;

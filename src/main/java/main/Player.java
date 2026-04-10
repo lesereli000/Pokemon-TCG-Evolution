@@ -52,13 +52,11 @@ public class Player {
 
     public void setActivePokemon(Pokemon activePokemon) {
         if (activePokemon == null) {
-            this.hasActive = false;
-            this.activePokemon = null;
+            forceSetActivePokemon(null);
             return;
         }
-        this.activePokemon = activePokemon;
-        this.hasActive = true;
-        removeFromHand(this.activePokemon);
+        forceSetActivePokemon(activePokemon);
+        removeFromHand(activePokemon);
     }
 
     public ArrayList<Card> getOnlyPokemonFromHand() {
@@ -199,6 +197,11 @@ public class Player {
 
     public boolean hasActive() {
         return hasActive;
+    }
+
+    public void forceSetActivePokemon(Pokemon p) {
+        this.activePokemon = p;
+        this.hasActive = (p != null);
     }
 
     protected void setNewActivePokemon(Pokemon newActive) {

@@ -33,8 +33,10 @@ public class GameDropIntegrationTest {
         }
         
         p2 = new Player("Player 2");
-        p1.activePokemon = new Pokemon("Pika 1", "Lightning", 0, 60);
-        p2.activePokemon = new Pokemon("Squirtle 2", "Water", 0, 50);
+        Pokemon pika1 = new Pokemon("Pika 1", "Lightning", 0, 60);
+        Pokemon squirtle2 = new Pokemon("Squirtle 2", "Water", 0, 50);
+        p1.forceSetActivePokemon(pika1);
+        p2.forceSetActivePokemon(squirtle2);
     }
 
     @Test
@@ -47,7 +49,7 @@ public class GameDropIntegrationTest {
         expect(playerHandler.activeCanAddEnergy()).andReturn(true).anyTimes();
         
         // Logical side effect
-        playerHandler.addEnergyToPokemon(energy, p1.activePokemon);
+        playerHandler.addEnergyToPokemon(energy, p1.getActivePokemon());
         expectLastCall().once();
         
         replay(gui, playerHandler);
@@ -104,11 +106,11 @@ public class GameDropIntegrationTest {
         expect(playerHandler.getCurrentPlayer()).andReturn(p1).anyTimes();
         
         ArrayList<Card> preEvolutions = new ArrayList<>();
-        preEvolutions.add(p1.activePokemon);
+        preEvolutions.add(p1.getActivePokemon());
         expect(playerHandler.getOnlyPreEvolutionsFromActivePlayer(raichu)).andReturn(preEvolutions).anyTimes();
         
         // Logical side effect: evolve should be called directly with p1.activePokemon
-        expect(playerHandler.evolve(raichu, p1.activePokemon)).andReturn("Active").once();
+        expect(playerHandler.evolve(raichu, p1.getActivePokemon())).andReturn("Active").once();
         
         replay(gui, playerHandler);
         game.handleInstantDrop("P1_ACTIVE_DROP");

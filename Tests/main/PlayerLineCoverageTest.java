@@ -18,7 +18,7 @@ public class PlayerLineCoverageTest {
         p.hand.addCard(evo);
 
         // Test evolving active pokemon
-        p.activePokemon = base;
+        p.forceSetActivePokemon(base);
         String result = p.evolvePokemon(evo, base);
         assertEquals("Active", result);
         assertEquals(evo, p.activePokemon);
