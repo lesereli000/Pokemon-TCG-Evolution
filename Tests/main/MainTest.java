@@ -20,19 +20,19 @@ public class MainTest {
 
         Thread mainThread = new Thread(() -> {
             try {
-                // We provide dummy input if needed, but Main doesn't use System.in
                 Main.main(new String[0]);
             } catch (Exception e) {
-                // Expected if GUI fails in headless
+                // Ignore errors during shutdown or headless issues
             }
         });
 
         mainThread.start();
         try {
-            Thread.sleep(1000); // Give it a second to initialize
+            Thread.sleep(1000); 
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        } finally {
+            mainThread.interrupt();
         }
-        mainThread.interrupt();
     }
 }

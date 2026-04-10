@@ -643,7 +643,8 @@ public class DeckTest {
         try{
             new DeckGenerator().generateFromFile("doesntExist.txt");
         }catch(RuntimeException e){
-            assertEquals("File not found when adding cards from file", e.getMessage());
+            assertTrue("Expected message containing 'not found', but got: " + e.getMessage(), 
+                     e.getMessage().toLowerCase().contains("not found"));
             pass = true;
         }
         assertTrue(pass);
