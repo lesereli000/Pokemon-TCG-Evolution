@@ -229,6 +229,10 @@ public class Pokemon extends Card {
         this.energies.addAll(energies);
     }
 
+    public int getRetreatCost() {
+        return retreatCost;
+    }
+
     public String getReport(ResourceBundle messages) {
         StringBuilder report = new StringBuilder();
         int stageNum = this.getStage();

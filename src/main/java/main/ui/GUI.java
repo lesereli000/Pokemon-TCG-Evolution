@@ -1,4 +1,6 @@
-package main;
+package main.ui;
+
+import main.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +19,7 @@ public interface GUI {
     void displayMessage(String message);
     void makeActiveCard(Player player, Card newActive);
     Card getLastSelectedCard();
+    void setLastSelectedCardForDrag(Card card);
     Attack getLastSelectedAttack();
     void displayCards(ArrayList<Card> currentCards);
     JButton createButton(String message);

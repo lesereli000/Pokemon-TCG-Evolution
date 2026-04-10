@@ -51,9 +51,12 @@ public class Player {
     }
 
     public void setActivePokemon(Pokemon activePokemon) {
-        this.activePokemon = activePokemon;
-        hasActive = true;
-        removeFromHand(this.activePokemon);
+        if (activePokemon == null) {
+            forceSetActivePokemon(null);
+            return;
+        }
+        forceSetActivePokemon(activePokemon);
+        removeFromHand(activePokemon);
     }
 
     public ArrayList<Card> getOnlyPokemonFromHand() {
@@ -192,17 +195,35 @@ public class Player {
         }
     }
 
-    protected boolean hasActive() {
+    public boolean hasActive() {
         return hasActive;
+    }
+
+    public void forceSetActivePokemon(Pokemon p) {
+        this.activePokemon = p;
+        this.hasActive = (p != null);
     }
 
     protected void setNewActivePokemon(Pokemon newActive) {
         this.activePokemon = newActive;
-        bench.removeCard(newActive);
+        if (newActive != null) {
+            this.hasActive = true;
+            bench.removeCard(newActive);
+        } else {
+            this.hasActive = false;
+        }
     }
 
     public Deck getBench() {
         return bench;
+    }
+
+    public Deck getHand() {
+        return hand;
+    }
+
+    public Deck getDeck() {
+        return deck;
     }
 
     public int getNumPrizeCards() {

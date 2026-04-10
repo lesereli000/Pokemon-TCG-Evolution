@@ -1,4 +1,6 @@
-package main;
+package main.ui;
+
+import main.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -9,20 +11,21 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.util.concurrent.Semaphore;
 
 //https://stackoverflow.com/questions/601274/how-do-i-properly-load-a-bufferedimage-in-java
 
 public class GameGUI implements GUI {
 
-    static final int frameWidth = 1200;
-    static final int frameHeight = frameWidth * 3 / 4;
-    static final int frameXLoc = 0;
-    static final int frameYLoc = 0;
+    private static final int FRAME_X_LOC = 0;
+    private static final int FRAME_Y_LOC = 0;
     static final int origNumPrizeCards = Player.PRIZE_CARD_SIZE;
 
     private JFrame frame;
     private BoardPanel handPanel;
     private BoardPanel decisionPanel;
+    
+    private CardDropZoneDetector dropZoneDetector;
 
     private Color deckColor = Color.WHITE;
     private Color player1ActiveColor = Color.WHITE;
@@ -34,10 +37,8 @@ public class GameGUI implements GUI {
     private ArrayList<JButton> buttons = new ArrayList<>();
     private ArrayList<JButton> selectedCardActionButtons = new ArrayList<>();
 
-    private final Font boldFont = new Font("Arial", Font.BOLD, 16);
-    private final Font plainFont = new Font("Arial", Font.PLAIN, 12);
 
-    private volatile boolean waitForAction = false;
+    private final Semaphore actionSemaphore = new Semaphore(0);
     private boolean activeTurn = false;
     private boolean confirmPokemonState = false;
     private volatile Card lastSelectedCard = null;
@@ -56,26 +57,33 @@ public class GameGUI implements GUI {
     public Color getDeckColor() { return deckColor; }
     public Color getPlayer1ActiveColor() { return player1ActiveColor; }
     public Color getPlayer2ActiveColor() { return player2ActiveColor; }
-    public Font getBoldFont() { return boldFont; }
-    public Font getPlainFont() { return plainFont; }
+    public Font getBoldFont() { return UIConstants.BOLD_FONT; }
+    public Font getPlainFont() { return UIConstants.PLAIN_FONT; }
     public ResourceBundle getMessages() { return messages; }
     public BufferedImage getFlag() { return flag; }
     public int getNumBenchCards() { return Player.MAX_BENCH_SIZE; }
+    public JFrame getFrame() { return frame; }
 
     public void createGUI() {
         // Creating the JFrame
         frame = new JFrame();
         String title = messages.getString("title");
         frame.setTitle(title);
-        frame.setSize(frameWidth, frameHeight);
-        frame.setLocation(frameXLoc, frameYLoc);
+        frame.setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
+        frame.setLocation(FRAME_X_LOC, FRAME_Y_LOC);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        BoardPositionMap map = new BoardPositionMap();
+        this.dropZoneDetector = new CardDropZoneDetector(map, this);
 
         frame.setLayout(new BorderLayout());
         this.handPanel = new BoardPanel(this);
         frame.add(handPanel, BorderLayout.CENTER);
         this.decisionPanel = new BoardPanel(this);
         frame.add(decisionPanel, BorderLayout.SOUTH);
+
+        DropZoneHighlightGlassPane glass = new DropZoneHighlightGlassPane(this.dropZoneDetector);
+        frame.setGlassPane(glass);
 
         frame.setVisible(true);
         setDeckColor(Color.RED);
@@ -90,19 +98,21 @@ public class GameGUI implements GUI {
     public void createFlipButton() {
         String message = messages.getString("flipCoin");
         createSDHoldingButton(message);
-        while (!waitForAction && !Thread.currentThread().isInterrupted()) {
-            Thread.onSpinWait();
+        try {
+            actionSemaphore.acquire();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
-        this.waitForAction = false;
     }
 
     @Override
     public void waitForPassTurn() {
         createPassTurnButton();
-        while (!waitForAction && !Thread.currentThread().isInterrupted()) {
-            Thread.onSpinWait();
+        try {
+            actionSemaphore.acquire();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
-        this.waitForAction = false;
     }
 
     public void removeButton(JButton button) {
@@ -156,6 +166,16 @@ public class GameGUI implements GUI {
         this.lastSelectedCard = card;
     }
 
+    public void setLastSelectedCardForDrag(Card card) {
+        this.lastSelectedCard = card;
+        this.lastSelectedAttack = null;
+    }
+
+    public void triggerSimulatedAction(String action) {
+        this.lastActionButtonPressed = action;
+        actionSemaphore.release();
+    }
+
     private void setLastSelectedAttack(Attack attack) {
         this.lastSelectedAttack = attack;
     }
@@ -188,15 +208,15 @@ public class GameGUI implements GUI {
         this.confirmPokemonState = true;
         btn.addActionListener(e -> {
             cancelled = false;
-            this.waitForAction = true;
             this.confirmPokemonState = false;
+            actionSemaphore.release();
         });
         String msg = messages.getString("cancel");
         JButton cancel = new JButton(msg);
         cancel.addActionListener(e -> {
-            this.waitForAction = true;
             this.confirmPokemonState = false;
             cancelled = true;
+            actionSemaphore.release();
         });
         buttons.add(btn);
         buttons.add(cancel);
@@ -226,8 +246,8 @@ public class GameGUI implements GUI {
         StringBuilder attackReport = new StringBuilder();
         String currentName = currentPlayer.getName();
         String defendingName = defendingPlayer.getName();
-        Pokemon currentPokemon = currentPlayer.activePokemon;
-        Pokemon defendingPokemon = defendingPlayer.activePokemon;
+        Pokemon currentPokemon = currentPlayer.getActivePokemon();
+        Pokemon defendingPokemon = defendingPlayer.getActivePokemon();
 
         String atkReport = messages.getString("atkReport");
         attackReport.append(atkReport).append("\n");
@@ -255,7 +275,7 @@ public class GameGUI implements GUI {
     public void displayRetreatEnergy(Pokemon pokemon, boolean canRetreat) {
         StringBuilder retreatReport = new StringBuilder();
         String retreatMessageTop = messages.getString("retreatMessageTop");
-        retreatMessageTop = MessageFormat.format(retreatMessageTop, pokemon.retreatCost);
+        retreatMessageTop = MessageFormat.format(retreatMessageTop, pokemon.getRetreatCost());
         String retreatMessageBottom = messages.getString("retreatMessageBottom");
         retreatMessageBottom = MessageFormat.format(retreatMessageBottom, pokemon.getName());
         retreatReport.append(retreatMessageTop).append("\n").append(retreatMessageBottom).append("\n");
@@ -322,7 +342,6 @@ public class GameGUI implements GUI {
         frame.repaint();
 
         engBtn.addActionListener(e -> {
-            this.waitForAction = true;
             locale = Locale.US;
             messages = ResourceBundle.getBundle("MessagesBundle", locale);
             try {
@@ -332,10 +351,10 @@ public class GameGUI implements GUI {
             }
             removeButton(engBtn);
             removeButton(germanBtn);
+            actionSemaphore.release();
         });
 
         germanBtn.addActionListener(e -> {
-            this.waitForAction = true;
             locale = Locale.GERMANY;
             messages = ResourceBundle.getBundle("MessagesBundle", locale);
             try {
@@ -345,6 +364,7 @@ public class GameGUI implements GUI {
             }
             removeButton(engBtn);
             removeButton(germanBtn);
+            actionSemaphore.release();
         });
 
         waitForButtonPressed();
@@ -367,10 +387,11 @@ public class GameGUI implements GUI {
 
     @Override
     public void waitForAction() {
-        while (!waitForAction && !Thread.currentThread().isInterrupted()) {
-            Thread.onSpinWait();
+        try {
+            actionSemaphore.acquire();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
-        this.waitForAction = false;
     }
 
     @Override
@@ -393,7 +414,7 @@ public class GameGUI implements GUI {
 
     private void displayPokemonActionButtons(Pokemon card) {
         removeSelectedCardActionButtons();
-        if (card.stage == 0) {
+        if (card.getStage() == 0) {
             String addPokBench = messages.getString("addPokBench");
             selectedCardActionButtons.add(createLinkedButtonAction(addPokBench, "AddToBench"));
         } else {
@@ -432,10 +453,11 @@ public class GameGUI implements GUI {
 
     @Override
     public String waitForButtonPressed() {
-        while (!waitForAction && !Thread.currentThread().isInterrupted()) {
-            Thread.onSpinWait();
+        try {
+            actionSemaphore.acquire();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
-        this.waitForAction = false;
         return this.lastActionButtonPressed;
     }
 
@@ -470,11 +492,19 @@ public class GameGUI implements GUI {
     public JButton createLinkedButtonCard(String message, Card currCard) {
         JButton btn = new JButton(message);
         
+        if (dropZoneDetector == null) {
+            BoardPositionMap map = new BoardPositionMap();
+            this.dropZoneDetector = new CardDropZoneDetector(map, this);
+        }
+        
+        GhostingDragAdapter dragAdapter = new GhostingDragAdapter(this, currCard, dropZoneDetector);
+        btn.addMouseListener(dragAdapter);
+        btn.addMouseMotionListener(dragAdapter);
+        
         String url = currCard.getImageUrl();
         if (url != null) {
-            // Scaling constants from BoardPanel
-            int width = (frameWidth * 2) / 25;
-            int height = width * 7 / 5;
+            int width = UIConstants.CARD_WIDTH;
+            int height = UIConstants.CARD_HEIGHT;
             ImageLoader.loadIntoButton(url, btn, width, height);
             btn.setPreferredSize(new Dimension(width, height));
         }
@@ -499,7 +529,7 @@ public class GameGUI implements GUI {
                             displayTrainerActionButtons((Trainer) currCard);
                         }
                     } else {
-                        if (currCard instanceof Pokemon && ((Pokemon) currCard).stage == 0) {
+                        if (currCard instanceof Pokemon && ((Pokemon) currCard).getStage() == 0) {
                             displayActiveActionButton();
                         } else {
                             removeSelectedCardActionButtons();
@@ -535,7 +565,7 @@ public class GameGUI implements GUI {
         JButton btn = new JButton(name);
         btn.addActionListener(e -> {
             this.lastActionButtonPressed = action;
-            waitForAction = true;
+            actionSemaphore.release();
         });
         buttons.add(btn);
         decisionPanel.add(btn);
@@ -550,7 +580,7 @@ public class GameGUI implements GUI {
     public JButton createSDHoldingButton(String message) {
         JButton btn = new JButton(message);
         btn.addActionListener(e -> {
-            this.waitForAction = true;
+            actionSemaphore.release();
             removeButton(btn);
         });
         buttons.add(btn);
@@ -567,7 +597,7 @@ public class GameGUI implements GUI {
         String message = messages.getString("passTurn");
         JButton btn = new JButton(message);
         btn.addActionListener(e -> {
-            this.waitForAction = true;
+            actionSemaphore.release();
             removeButton(btn);
         });
         buttons.add(btn);

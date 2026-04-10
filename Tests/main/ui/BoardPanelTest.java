@@ -1,4 +1,6 @@
-package main;
+package main.ui;
+
+import main.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -181,7 +183,7 @@ public class BoardPanelTest {
     @Test
     public void testDrawCardWithImageUrlButNoImage() {
         Pokemon p = new Pokemon("Pika", "Lightning", 0, 60);
-        p.imageUrl = "http://example.com/pika.png";
+        p.setImageUrl("http://example.com/pika.png");
         ArrayList<Card> bench = new ArrayList<>();
         bench.add(p);
 

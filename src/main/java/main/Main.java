@@ -1,5 +1,7 @@
 package main;
 
+import main.ui.*;
+
 import java.util.Random;
 
 public class Main {

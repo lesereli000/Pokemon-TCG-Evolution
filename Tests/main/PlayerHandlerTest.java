@@ -683,7 +683,7 @@ public class PlayerHandlerTest {
         benchList.add(benchPok);
 
         expect(player.getOnlyPokemonFromHand()).andReturn(handList);
-        player.activePokemon = active;
+        expect(player.getActivePokemon()).andReturn(active);
         expect(player.getPokemonOnBench()).andReturn(benchList);
 
         replay(player, active, handPok, benchPok);

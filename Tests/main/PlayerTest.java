@@ -196,7 +196,7 @@ public class PlayerTest {
         expect(p.canAttack()).andReturn(true);
         replay(p);
         
-        player.activePokemon = p; // Field injection for test
+        player.forceSetActivePokemon(p);
         assertTrue(player.canAttack());
         verify(p);
     }
@@ -210,7 +210,7 @@ public class PlayerTest {
         expectLastCall();
         replay(p);
         
-        player.activePokemon = p;
+        player.forceSetActivePokemon(p);
         player.takeDamage(10, EnergyType.FIRE);
         player.takeDamage(0, EnergyType.FIRE);
         verify(p);
@@ -222,7 +222,7 @@ public class PlayerTest {
         expect(p.getCurHP()).andReturn(50);
         replay(p);
         
-        player.activePokemon = p;
+        player.forceSetActivePokemon(p);
         assertEquals(50, player.getActiveHP());
         verify(p);
     }
@@ -299,7 +299,7 @@ public class PlayerTest {
         expectLastCall();
         replay(p);
         
-        player.activePokemon = p;
+        player.forceSetActivePokemon(p);
         player.heal(10);
         player.heal(0);
         verify(p);

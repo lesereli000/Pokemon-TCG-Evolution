@@ -570,11 +570,17 @@ public class DeckTest {
     @Test
     public void testDeckShuffle() {
         Deck d = new Deck();
-        d.addCard(new CardGenerator().generateCard("Pikachu"));
-        d.addCard(new CardGenerator().generateCard("Squirtle"));
-        d.addCard(new CardGenerator().generateCard("Psychic Energy"));
-        d.addCard(new CardGenerator().generateCard("Potion"));
-        d.addCard(new CardGenerator().generateCard("Water Energy"));
+        CardGenerator cg = new CardGenerator();
+        d.addCard(cg.generateCard("Pikachu"));
+        d.addCard(cg.generateCard("Squirtle"));
+        d.addCard(cg.generateCard("Psychic Energy"));
+        d.addCard(cg.generateCard("Potion"));
+        d.addCard(cg.generateCard("Water Energy"));
+        d.addCard(cg.generateCard("Bulbasaur"));
+        d.addCard(cg.generateCard("Charmander"));
+        d.addCard(cg.generateCard("Fire Energy"));
+        d.addCard(cg.generateCard("Grass Energy"));
+        d.addCard(cg.generateCard("Bill"));
 
         ArrayList<Card> originalDeck = new ArrayList<Card>(d.getCards());
         assertTrue(d.shuffle());
@@ -901,7 +907,7 @@ public class DeckTest {
         expect(mockPlayer.getOnlyPokemonFromHand()).andReturn(handPokemonList);
         expect(mockPlayer.getPokemonOnBench()).andReturn(benchPokemonList);
 
-        mockPlayer.activePokemon = activePokemon;
+        expect(mockPlayer.getActivePokemon()).andReturn(activePokemon);
 
         replay(mockPlayer);
 

@@ -1,4 +1,6 @@
-package main;
+package main.ui;
+
+import main.*;
 
 import javax.swing.*;
 import java.awt.*;
