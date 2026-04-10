@@ -22,7 +22,7 @@ public class PlayerHandlerTest {
     @Test
     public void testCompletePlayerSetupHeads() {
         PlayerHandler handler = new PlayerHandler();
-        handler.completePlayerSetup("Heads");
+        handler.completePlayerSetup("Heads", "WaterDeck.txt");
 
         assertEquals("Player 1", handler.getCurrentPlayer().getName());
         assertEquals(1, handler.getPlayerTurn());
@@ -38,7 +38,7 @@ public class PlayerHandlerTest {
     @Test
     public void testCompletePlayerSetupTails() {
         PlayerHandler handler = new PlayerHandler();
-        handler.completePlayerSetup("Tails");
+        handler.completePlayerSetup("Tails", "FireDeck.txt");
 
         assertEquals("Player 2", handler.getCurrentPlayer().getName());
         assertEquals(2, handler.getPlayerTurn());
@@ -49,15 +49,15 @@ public class PlayerHandlerTest {
     public void testSetupBothDecks() {
         Player player1 = createMock(Player.class);
         Player player2 = createMock(Player.class);
-        player1.createCustomDeck();
-        player2.createCustomDeck();
+        player1.createCustomDeck("WaterDeck.txt");
+        player2.createCustomDeck("WaterDeck.txt");
         replay(player1, player2);
 
         PlayerHandler handler = new PlayerHandler();
         handler.player1 = player1;
         handler.player2 = player2;
 
-        handler.setupBothDecks();
+        handler.setupBothDecks("WaterDeck.txt");
         verify(player1, player2);
     }
 

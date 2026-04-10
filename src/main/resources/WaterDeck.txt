@@ -1,0 +1,13 @@
+4,Squirtle
+2,Wartortle
+1,Blastoise
+4,Poliwag
+2,Poliwhirl
+1,Poliwrath
+20,Water Energy
+10,Fighting Energy
+4,Bill
+4,Potion
+2,Switch
+4,Energy Retrieval
+2,Super Potion

@@ -27,9 +27,10 @@ public class Game {
 
     protected void setupGame() {
         decideLocale();
+        String deckFileName = gui.displayDeckOptions();
         setupFlipButton();
         String coinFlipResult = gameSetup.completeGameSetup();
-        playerHandler.completePlayerSetup(coinFlipResult);
+        playerHandler.completePlayerSetup(coinFlipResult, deckFileName);
         gui.setPlayers(playerHandler.player1, playerHandler.player2);
         int playerTurn = playerHandler.getPlayerTurn();
         gui.updateTurn(playerTurn);

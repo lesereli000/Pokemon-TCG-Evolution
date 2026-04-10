@@ -311,4 +311,11 @@ public class PlayerTest {
         player.createCustomDeck();
         assertTrue("Deck should be populated from file", player.deckSize() > 0);
     }
+
+    @Test
+    public void testCreateCustomDeckOverload() {
+        // This relies on WaterDeck.txt existing in resources
+        player.createCustomDeck("WaterDeck.txt");
+        assertEquals("Water Deck should have exactly 60 cards", 60, player.deckSize());
+    }
 }

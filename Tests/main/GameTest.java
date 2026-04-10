@@ -372,12 +372,15 @@ public class GameTest {
         ArrayList<Card> hand = createMock(ArrayList.class);
         // Setup expectations
 
+        //decide deck
+        expect(gui.displayDeckOptions()).andReturn("Overgrowth.txt");
+
         //setupFlipButton()
         gui.createFlipButton();
 
         //coinflip
         expect(setupGame.completeGameSetup()).andReturn("Heads");
-        handler.completePlayerSetup("Heads");
+        handler.completePlayerSetup("Heads", "Overgrowth.txt");
         gui.setPlayers(handler.player1, handler.player2);
 
         //player
@@ -2153,11 +2156,14 @@ public class GameTest {
         expect(gui.displayLocaleOptions()).andReturn(Locale.US);
         gui.displayMessage("You have chosen: English");
 
+        //decide deck
+        expect(gui.displayDeckOptions()).andReturn("Overgrowth.txt");
+
         //setupFlipButton()
         gui.createFlipButton();
 
         expect(gameSetup.completeGameSetup()).andReturn("Heads");
-        handler.completePlayerSetup("Heads");
+        handler.completePlayerSetup("Heads", "Overgrowth.txt");
         gui.setPlayers(handler.player1, handler.player2);
         expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         gui.updateTurn(1);
@@ -2221,11 +2227,14 @@ public class GameTest {
         expect(gui.displayLocaleOptions()).andReturn(Locale.US);
         gui.displayMessage("You have chosen: English");
 
+        //decide deck
+        expect(gui.displayDeckOptions()).andReturn("Overgrowth.txt");
+
         //setupFlipButton()
         gui.createFlipButton();
 
         expect(gameSetup.completeGameSetup()).andReturn("Heads");
-        handler.completePlayerSetup("Heads");
+        handler.completePlayerSetup("Heads", "Overgrowth.txt");
         gui.setPlayers(handler.player1, handler.player2);
         expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         gui.updateTurn(1);

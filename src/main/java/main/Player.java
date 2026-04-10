@@ -31,9 +31,13 @@ public class Player {
 
     }
 
-    public void createCustomDeck() {
-        this.deck = new DeckGenerator().generateFromFile("Overgrowth.txt");
+    public void createCustomDeck(String deckFileName) {
+        this.deck = new DeckGenerator().generateFromFile(deckFileName);
         this.deck.shuffle();
+    }
+
+    public void createCustomDeck() {
+        createCustomDeck("Overgrowth.txt");
     }
 
     public boolean drawCard(){

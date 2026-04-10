@@ -373,6 +373,55 @@ public class GameGUI implements GUI {
     }
 
     @Override
+    public String displayDeckOptions() {
+        displayMessage("Select a deck!\n\nWählen Sie ein Deck aus!");
+        JButton overBtn = new JButton("Overgrowth");
+        JButton waterBtn = new JButton("Water");
+        JButton fireBtn = new JButton("Fire");
+
+        buttons.add(overBtn);
+        handPanel.add(overBtn);
+        buttons.add(waterBtn);
+        handPanel.add(waterBtn);
+        buttons.add(fireBtn);
+        handPanel.add(fireBtn);
+        
+        handPanel.repaint();
+        frame.revalidate();
+        frame.repaint();
+        
+        final String[] result = new String[1];
+
+        overBtn.addActionListener(e -> {
+            result[0] = "Overgrowth.txt";
+            removeButton(overBtn);
+            removeButton(waterBtn);
+            removeButton(fireBtn);
+            actionSemaphore.release();
+        });
+
+        waterBtn.addActionListener(e -> {
+            result[0] = "WaterDeck.txt";
+            removeButton(overBtn);
+            removeButton(waterBtn);
+            removeButton(fireBtn);
+            actionSemaphore.release();
+        });
+
+        fireBtn.addActionListener(e -> {
+            result[0] = "FireDeck.txt";
+            removeButton(overBtn);
+            removeButton(waterBtn);
+            removeButton(fireBtn);
+            actionSemaphore.release();
+        });
+
+        waitForButtonPressed();
+        frame.repaint();
+        return result[0];
+    }
+
+    @Override
     public boolean gameIsOver() {
         return buttons.isEmpty();
     }

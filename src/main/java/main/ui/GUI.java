@@ -69,6 +69,8 @@ public interface GUI {
 
     Locale displayLocaleOptions();
 
+    String displayDeckOptions();
+
     boolean gameIsOver();
 
     void refreshGUI();
