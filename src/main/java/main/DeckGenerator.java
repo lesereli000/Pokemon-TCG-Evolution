@@ -50,7 +50,7 @@ public class DeckGenerator {
                             "File " + fileString + " is in the incorrect format: Deck has too many cards");
                 }
 
-                String name = parts[1];
+                String name = parts[1].trim();
                 parsedEntries.add(new DeckEntry(count, name));
             }
         }

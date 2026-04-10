@@ -1,0 +1,13 @@
+4,Charmander
+2,Charmeleon
+1,Charizard
+4,Vulpix
+2,Ninetales
+1,Arcanine
+20,Fire Energy
+10,Grass Energy
+4,Bill
+4,Potion
+2,Switch
+4,Energy Retrieval
+2,Super Potion
