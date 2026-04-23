@@ -27,10 +27,17 @@ public class Game {
 
     protected void setupGame() {
         decideLocale();
-        String deckFileName = gui.displayDeckOptions();
+        
+        // Independent deck selection for both players
+        String p1Deck = gui.displayDeckOptions();
+        String p2Deck = gui.displayDeckOptions();
+        
         setupFlipButton();
         String coinFlipResult = gameSetup.completeGameSetup();
-        playerHandler.completePlayerSetup(coinFlipResult, deckFileName);
+        
+        // Pass both decks to playerHandler
+        playerHandler.completePlayerSetup(coinFlipResult, p1Deck, p2Deck);
+        
         gui.setPlayers(playerHandler.player1, playerHandler.player2);
         int playerTurn = playerHandler.getPlayerTurn();
         gui.updateTurn(playerTurn);
@@ -110,6 +117,8 @@ public class Game {
             String benchPrefix = "P" + turn + "_BENCH_";
             boolean actionTaken = false;
 
+            EvolutionValidator evolValidator = new EvolutionValidator();
+
             if (action.equals("BOARD_DROP")) {
                 if (card instanceof Trainer) {
                     handleUseTrainer((Trainer) card);
@@ -120,8 +129,15 @@ public class Game {
                     handleInstantEnergyAttach(card, currentPlayer.getActivePokemon());
                     actionTaken = true;
                 } else if (card instanceof Pokemon) {
-                    handleEvolve((Pokemon) card, currentPlayer.getActivePokemon());
-                    actionTaken = true;
+                    Pokemon target = currentPlayer.getActivePokemon();
+                    if (evolValidator.canEvolveFrom(card, target)) {
+                        handleEvolve((Pokemon) card, target);
+                        actionTaken = true;
+                    } else if (currentPlayer.getPokemonOnBench().contains(card)) {
+                        // Dragged from bench to active = Retreat/Switch
+                        handleRetreat(currentPlayer, card);
+                        actionTaken = true;
+                    }
                 } else if (card instanceof Trainer) {
                     handleUseTrainer((Trainer) card);
                     actionTaken = true;
@@ -142,8 +158,11 @@ public class Game {
                     handleInstantEnergyAttach(card, (Pokemon) bench.get(slot));
                     actionTaken = true;
                 } else if (card instanceof Pokemon && ((Pokemon) card).stage > 0 && bench.size() > slot) {
-                    handleEvolve((Pokemon) card, (Pokemon) bench.get(slot));
-                    actionTaken = true;
+                    Pokemon target = (Pokemon) bench.get(slot);
+                    if (evolValidator.canEvolveFrom(card, target)) {
+                        handleEvolve((Pokemon) card, target);
+                        actionTaken = true;
+                    }
                 } else if (card instanceof Trainer) {
                     handleUseTrainer((Trainer) card);
                     actionTaken = true;
@@ -196,9 +215,18 @@ public class Game {
         if(canRetreat) {
             Card newActive = retreatPokemon();
             if(newActive != null) {
-                playerHandler.setNewActive(newActive);
+                handleRetreat(activePlayer, newActive);
             }
         }
+    }
+
+    private void handleRetreat(Player player, Card newActive) {
+        if (newActive instanceof Pokemon) {
+            playerHandler.setNewActive((Pokemon) newActive);
+        }
+        gui.replaceActiveCard(player, newActive);
+        gui.displayCards(player.handAsList());
+        gui.displayActionButtons();
     }
 
     protected Card retreatPokemon() {
@@ -216,7 +244,6 @@ public class Game {
                 gui.displayMessage(message);
                 return retreatPokemon();
             } else {
-                gui.replaceActiveCard(playerHandler.getCurrentPlayer(), selectedCard);
                 return selectedCard;
             }
         } else {

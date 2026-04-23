@@ -50,6 +50,7 @@ public class GameGUI implements GUI {
     private Locale locale;
     private ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
     private BufferedImage flag = null;
+    private boolean isGameStarted = false;
 
     public Player getPlayer1() { return player1; }
     public Player getPlayer2() { return player2; }
@@ -81,6 +82,10 @@ public class GameGUI implements GUI {
         frame.add(handPanel, BorderLayout.CENTER);
         this.decisionPanel = new BoardPanel(this);
         frame.add(decisionPanel, BorderLayout.SOUTH);
+
+        // Hide panels initially
+        handPanel.setVisible(false);
+        decisionPanel.setVisible(false);
 
         DropZoneHighlightGlassPane glass = new DropZoneHighlightGlassPane(this.dropZoneDetector);
         frame.setGlassPane(glass);
@@ -234,11 +239,13 @@ public class GameGUI implements GUI {
 
     @Override
     public void displayPossibleAttacks(ArrayList<Attack> attacks) {
-        String attackReport = generateAttackReport(attacks);
-        JOptionPane.showMessageDialog(frame, attackReport);
+        // Remove existing buttons to show only attacks
+        removeAllButtons();
         for (Attack attack : attacks) {
             createLinkedButtonAttack(attack);
         }
+        decisionPanel.setVisible(true);
+        decisionPanel.repaint();
     }
 
     @Override
@@ -330,13 +337,29 @@ public class GameGUI implements GUI {
     @Override
     public Locale displayLocaleOptions() {
         displayMessage("Select a language!\n\nWählen Sie eine Sprache aus!");
-        JButton engBtn = new JButton("English");
-        JButton germanBtn = new JButton("Deutsch");
+        
+        JButton engBtn = new JButton();
+        JButton germanBtn = new JButton();
+
+        // Use flag icons
+        try {
+            BufferedImage usFlag = ImageIO.read(getClass().getResource("/USFlag.png"));
+            BufferedImage deFlag = ImageIO.read(getClass().getResource("/deutschflag.png"));
+            engBtn.setIcon(new ImageIcon(usFlag.getScaledInstance(120, 80, Image.SCALE_SMOOTH)));
+            germanBtn.setIcon(new ImageIcon(deFlag.getScaledInstance(120, 80, Image.SCALE_SMOOTH)));
+            engBtn.setName("English");
+            germanBtn.setName("Deutsch");
+        } catch (Exception e) {
+            engBtn.setText("English");
+            germanBtn.setText("Deutsch");
+        }
 
         buttons.add(engBtn);
         handPanel.add(engBtn);
         buttons.add(germanBtn);
         handPanel.add(germanBtn);
+        
+        handPanel.setVisible(true); // Show handPanel for selection
         handPanel.repaint();
         frame.revalidate();
         frame.repaint();
@@ -374,10 +397,26 @@ public class GameGUI implements GUI {
 
     @Override
     public String displayDeckOptions() {
-        displayMessage("Select a deck!\n\nWählen Sie ein Deck aus!");
-        JButton overBtn = new JButton("Overgrowth");
-        JButton waterBtn = new JButton("Water");
-        JButton fireBtn = new JButton("Fire");
+        String msg = messages.getString("language").contains("Deutsch") ? "Wählen Sie ein Deck aus!" : "Select a deck!";
+        displayMessage(msg);
+        
+        JButton overBtn = new JButton();
+        JButton waterBtn = new JButton();
+        JButton fireBtn = new JButton();
+
+        // Load deck icons
+        try {
+            overBtn.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/overgrowth_deck.png")).getScaledInstance(150, 210, Image.SCALE_SMOOTH)));
+            waterBtn.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/water_deck.png")).getScaledInstance(150, 210, Image.SCALE_SMOOTH)));
+            fireBtn.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/fire_deck.png")).getScaledInstance(150, 210, Image.SCALE_SMOOTH)));
+            overBtn.setName("Overgrowth");
+            waterBtn.setName("Water");
+            fireBtn.setName("Fire");
+        } catch (Exception e) {
+            overBtn.setText("Overgrowth");
+            waterBtn.setText("Water");
+            fireBtn.setText("Fire");
+        }
 
         buttons.add(overBtn);
         handPanel.add(overBtn);
@@ -386,6 +425,7 @@ public class GameGUI implements GUI {
         buttons.add(fireBtn);
         handPanel.add(fireBtn);
         
+        handPanel.setVisible(true);
         handPanel.repaint();
         frame.revalidate();
         frame.repaint();
@@ -600,10 +640,11 @@ public class GameGUI implements GUI {
         JButton btn = new JButton(currAttack.name);
         btn.addActionListener(e -> {
             setLastSelectedAttack(currAttack);
+            actionSemaphore.release(); // Release immediately on selection
         });
         buttons.add(btn);
-        handPanel.add(btn);
-        handPanel.repaint();
+        decisionPanel.add(btn); // Add to decision panel instead of hand panel
+        decisionPanel.repaint();
         frame.revalidate();
         frame.repaint();
 
@@ -681,6 +722,10 @@ public class GameGUI implements GUI {
         this.playerTurn = playerTurn;
         this.lastSelectedCard = null;
         this.lastSelectedAttack = null;
+
+        // Ensure panels are visible once game starts
+        handPanel.setVisible(true);
+        decisionPanel.setVisible(true);
 
         handPanel.repaint();
         decisionPanel.repaint();

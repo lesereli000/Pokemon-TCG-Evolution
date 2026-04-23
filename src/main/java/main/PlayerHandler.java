@@ -11,10 +11,10 @@ public class PlayerHandler {
     protected Player defendingPlayer;
     protected ArrayList<Pokemon> playedThisTurn = new ArrayList<>();
 
-    public void completePlayerSetup(String coinFlipResult, String deckFileName) {
+    public void completePlayerSetup(String coinFlipResult, String p1Deck, String p2Deck) {
         createPlayers();
         setPlayerTurns(coinFlipResult);
-        setupBothDecks(deckFileName);
+        setupDecks(p1Deck, p2Deck);
         setupBothHands();
         setupPrizeCards();
     }
@@ -43,9 +43,9 @@ public class PlayerHandler {
         return playerTurn;
     }
 
-    protected void setupBothDecks(String deckFileName) {
-        player1.createCustomDeck(deckFileName);
-        player2.createCustomDeck(deckFileName);
+    protected void setupDecks(String p1Deck, String p2Deck) {
+        player1.createCustomDeck(p1Deck);
+        player2.createCustomDeck(p2Deck);
     }
 
     protected void setupBothHands() {

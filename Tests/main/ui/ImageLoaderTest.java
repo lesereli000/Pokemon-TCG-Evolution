@@ -77,6 +77,8 @@ public class ImageLoaderTest {
     @Test
     public void testLoadIntoButtonNullUrl() {
         JButton button = createMock(JButton.class);
+        button.setBackground(anyObject());
+        button.setText("No Image");
         replay(button);
         ImageLoader.loadIntoButton(null, button, 10, 10);
         verify(button);
@@ -85,6 +87,8 @@ public class ImageLoaderTest {
     @Test
     public void testLoadIntoButtonEmptyUrl() {
         JButton button = createMock(JButton.class);
+        button.setBackground(anyObject());
+        button.setText("No Image");
         replay(button);
         ImageLoader.loadIntoButton("", button, 10, 10);
         verify(button);

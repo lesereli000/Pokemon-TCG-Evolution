@@ -4,6 +4,8 @@ import main.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Map;
@@ -28,6 +30,59 @@ public class BoardPanel extends JPanel {
     public BoardPanel(GameGUI gui) {
         this.gui = gui;
         this.posMap = new BoardPositionMap();
+        
+        // Add mouse listener for dragging from bench
+        MouseAdapter boardDragAdapter = new MouseAdapter() {
+            private GhostingDragAdapter activeDrag = null;
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                Card cardUnderMouse = getCardAtPoint(e.getPoint());
+                if (cardUnderMouse != null) {
+                    activeDrag = new GhostingDragAdapter(gui, cardUnderMouse, new CardDropZoneDetector(posMap, gui));
+                    activeDrag.mousePressed(e);
+                }
+            }
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if (activeDrag != null) {
+                    activeDrag.mouseDragged(e);
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (activeDrag != null) {
+                    activeDrag.mouseReleased(e);
+                    activeDrag = null;
+                }
+            }
+        };
+        addMouseListener(boardDragAdapter);
+        addMouseMotionListener(boardDragAdapter);
+    }
+
+    private Card getCardAtPoint(Point p) {
+        // Check Bench P1
+        for (int i = 0; i < Player.MAX_BENCH_SIZE; i++) {
+            Rectangle rect = posMap.getZones().get(DropZoneType.valueOf("P1_BENCH_" + i));
+            if (rect != null && rect.contains(p)) {
+                Player p1 = gui.getPlayer1();
+                if (p1 != null && p1.getPokemonOnBench().size() > i) {
+                    return p1.getPokemonOnBench().get(i);
+                }
+            }
+        }
+        // Check Bench P2 (if allowed, but usually only current player)
+        // Check Active P1
+        Rectangle activeRect = posMap.getZones().get(DropZoneType.P1_ACTIVE);
+        if (activeRect != null && activeRect.contains(p)) {
+            Player p1 = gui.getPlayer1();
+            if (p1 != null && p1.getActivePokemon() != null) return p1.getActivePokemon();
+        }
+        
+        return null;
     }
 
     @Override
@@ -52,25 +107,30 @@ public class BoardPanel extends JPanel {
     }
 
     private void drawBackground(Graphics2D g2d) {
-        g2d.setColor(UIConstants.BACKGROUND_COLOR);
+        // Subtle vertical gradient for the background
+        GradientPaint gp = new GradientPaint(0, 0, UIConstants.BACKGROUND_COLOR, 
+                                           0, UIConstants.FRAME_HEIGHT, new Color(10, 15, 25));
+        g2d.setPaint(gp);
         g2d.fillRect(0, 0, UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
+        
+        // Draw a subtle grid or separator line
+        g2d.setColor(new Color(255, 255, 255, 20));
+        g2d.drawLine(0, UIConstants.FRAME_HEIGHT / 2, UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT / 2);
     }
 
     private void drawPlayerLabels(Graphics2D g2d) {
-        g2d.setColor(Color.WHITE);
+        g2d.setColor(new Color(255, 255, 255, 180));
         g2d.setFont(gui.getBoldFont());
         String playerLabel = gui.getMessages().getString("player");
         
+        // Use a more dynamic position for labels
+        int centerX = UIConstants.FRAME_WIDTH / 2;
+        
         // P1 Label
-        g2d.drawString(playerLabel + " 1",
-                (UIConstants.MARGIN_SIDE * 7) / 4 + (UIConstants.CARD_WIDTH * 2) + UIConstants.BENCH_HORIZONTAL_OFFSET
-                        + (2 * (UIConstants.BENCH_HORIZONTAL_INCREMENT + UIConstants.CARD_WIDTH)),
-                UIConstants.FRAME_HEIGHT - (UIConstants.CARD_HEIGHT * 8) / 7 - UIConstants.MARGIN_BOTTOM - UIConstants.BENCH_VERTICAL_OFFSET);
+        g2d.drawString(playerLabel + " 1 (You)", 20, UIConstants.FRAME_HEIGHT - 20);
         
         // P2 Label
-        g2d.drawString(playerLabel + " 2", 
-                UIConstants.FRAME_WIDTH - (UIConstants.MARGIN_SIDE * 5) / 4 - (UIConstants.CARD_WIDTH * 3) - UIConstants.BENCH_HORIZONTAL_OFFSET
-                - (2 * (UIConstants.BENCH_HORIZONTAL_INCREMENT + UIConstants.CARD_WIDTH)), UIConstants.MARGIN_TOP + (UIConstants.CARD_HEIGHT * 17) / 14);
+        g2d.drawString(playerLabel + " 2 (Opponent)", 20, 30);
     }
 
     private void drawFlag(Graphics2D g2d) {
@@ -107,7 +167,7 @@ public class BoardPanel extends JPanel {
                 x = UIConstants.FRAME_WIDTH - UIConstants.MARGIN_SIDE - UIConstants.CARD_WIDTH;
                 y = UIConstants.SIDE_MARGIN_TOP + (i * (UIConstants.MARGIN_PRIZE_CARD_VERTICAL + UIConstants.CARD_HEIGHT));
             }
-            g2d.drawRect(x, y, UIConstants.CARD_WIDTH, UIConstants.CARD_HEIGHT);
+            g2d.drawRoundRect(x, y, UIConstants.CARD_WIDTH, UIConstants.CARD_HEIGHT, 12, 12);
         }
         
         if (prizeCount > 3) {
@@ -120,7 +180,7 @@ public class BoardPanel extends JPanel {
                     x = UIConstants.FRAME_WIDTH - UIConstants.PRIZE_CARDS_OFFSET - UIConstants.MARGIN_SIDE - UIConstants.CARD_WIDTH;
                     y = UIConstants.SIDE_MARGIN_TOP + (i * (UIConstants.MARGIN_PRIZE_CARD_VERTICAL + UIConstants.CARD_HEIGHT)) + UIConstants.PC_VERTICAL_OFFSET;
                 }
-                g2d.drawRect(x, y, UIConstants.CARD_WIDTH, UIConstants.CARD_HEIGHT);
+                g2d.drawRoundRect(x, y, UIConstants.CARD_WIDTH, UIConstants.CARD_HEIGHT, 12, 12);
             }
         }
     }
@@ -132,7 +192,7 @@ public class BoardPanel extends JPanel {
         
         for (int i = 0; i < gui.getNumBenchCards(); i++) {
             Rectangle bounds = posMap.getZones().get(DropZoneType.valueOf(side.prefix + "_BENCH_" + i));
-            g2d.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
+            g2d.drawRoundRect(bounds.x, bounds.y, bounds.width, bounds.height, 10, 10);
             
             if (bench.size() > i) {
                 Card currentCard = bench.get(i);
@@ -154,7 +214,7 @@ public class BoardPanel extends JPanel {
         g2d.setColor(activeColor);
         
         Rectangle bounds = posMap.getZones().get(DropZoneType.valueOf(side.prefix + "_ACTIVE"));
-        g2d.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
+        g2d.drawRoundRect(bounds.x, bounds.y, bounds.width, bounds.height, 15, 15);
         
         if (active != null && player.hasActive()) {
             String name = active.getName();
@@ -185,10 +245,10 @@ public class BoardPanel extends JPanel {
         }
         
         // Discard
-        g2d.drawRect(discardX, discardY, UIConstants.CARD_WIDTH, UIConstants.CARD_HEIGHT);
+        g2d.drawRoundRect(discardX, discardY, UIConstants.CARD_WIDTH, UIConstants.CARD_HEIGHT, 10, 10);
         // Deck
         g2d.setColor(gui.getDeckColor());
-        g2d.drawRect(deckX, deckY, UIConstants.CARD_WIDTH, UIConstants.CARD_HEIGHT);
+        g2d.drawRoundRect(deckX, deckY, UIConstants.CARD_WIDTH, UIConstants.CARD_HEIGHT, 10, 10);
     }
 
     private boolean drawCardImage(Graphics2D g2d, Card card, int x, int y, int width, int height) {

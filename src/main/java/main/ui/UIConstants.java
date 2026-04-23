@@ -34,15 +34,16 @@ public final class UIConstants {
     public static final int DECK_OFFSET = 15;
 
     // Visual styles
-    public static final int BACKGROUND_LINE_THICKNESS = 4;
-    public static final Color BACKGROUND_COLOR = new Color(37, 150, 190);
-    public static final Color SELECTION_GREEN = new Color(50, 205, 50, 180);
-    public static final Color HP_BAR_BG = new Color(50, 50, 50, 255);
-    public static final Color STATUS_OVERLAY_BG = new Color(0, 0, 0, 180);
+    public static final int BACKGROUND_LINE_THICKNESS = 3;
+    public static final Color BACKGROUND_COLOR = new Color(20, 30, 48); // Deep Midnight Blue
+    public static final Color ACCENT_COLOR = new Color(0, 150, 255); // Electric Blue
+    public static final Color SELECTION_GREEN = new Color(50, 255, 126, 180); // Vibrant Mint
+    public static final Color HP_BAR_BG = new Color(40, 40, 40, 255);
+    public static final Color STATUS_OVERLAY_BG = new Color(0, 0, 0, 200);
 
     // Fonts
-    public static final Font BOLD_FONT = new Font("Arial", Font.BOLD, 16);
-    public static final Font PLAIN_FONT = new Font("Arial", Font.PLAIN, 12);
-    public static final Font HP_FONT = new Font("SansSerif", Font.BOLD, 10);
-    public static final Font ENERGY_FONT = new Font("SansSerif", Font.BOLD, 9);
+    public static final Font BOLD_FONT = new Font("Segoe UI", Font.BOLD, 18);
+    public static final Font PLAIN_FONT = new Font("Segoe UI", Font.PLAIN, 14);
+    public static final Font HP_FONT = new Font("Segoe UI", Font.BOLD, 12);
+    public static final Font ENERGY_FONT = new Font("Segoe UI", Font.BOLD, 11);
 }

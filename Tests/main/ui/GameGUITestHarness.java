@@ -47,7 +47,7 @@ public class GameGUITestHarness {
      */
     public JButton getButtonWithText(String text) throws Exception {
         for (JButton btn : getButtons()) {
-            if (btn.getText().equals(text)) {
+            if (btn.getText().equals(text) || (btn.getName() != null && btn.getName().equals(text))) {
                 return btn;
             }
         }
@@ -152,7 +152,7 @@ public class GameGUITestHarness {
 
     public JButton getButtonContainingText(String substring) throws Exception {
         for (JButton btn : getButtons()) {
-            if (btn.getText().contains(substring)) {
+            if (btn.getText().contains(substring) || (btn.getName() != null && btn.getName().contains(substring))) {
                 return btn;
             }
         }
