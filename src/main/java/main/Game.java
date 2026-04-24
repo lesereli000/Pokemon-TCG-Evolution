@@ -16,13 +16,19 @@ public class Game {
     protected boolean gameOver;
     protected Locale locale;
     protected ResourceBundle messages;
+    protected TurnManager turnManager;
 
     public Game(GUI gui, Random random, SetupGame gameSetup, PlayerHandler playerHandler) {
+        this(gui, random, gameSetup, playerHandler, null);
+    }
+
+    public Game(GUI gui, Random random, SetupGame gameSetup, PlayerHandler playerHandler, TurnManager turnManager) {
         this.gui = gui;
         this.random = random;
         this.gameSetup = gameSetup;
         this.playerHandler = playerHandler;
         this.gameOver = false;
+        this.turnManager = turnManager != null ? turnManager : new DefaultTurnManager(this);
     }
 
     protected void setupGame() {
@@ -120,53 +126,11 @@ public class Game {
             EvolutionValidator evolValidator = new EvolutionValidator();
 
             if (action.equals("BOARD_DROP")) {
-                if (card instanceof Trainer) {
-                    handleUseTrainer((Trainer) card);
-                    actionTaken = true;
-                }
+                actionTaken = handleBoardDrop(card);
             } else if (action.equals(activeZone)) {
-                if (card instanceof Energy) {
-                    handleInstantEnergyAttach(card, currentPlayer.getActivePokemon());
-                    actionTaken = true;
-                } else if (card instanceof Pokemon) {
-                    Pokemon target = currentPlayer.getActivePokemon();
-                    if (evolValidator.canEvolveFrom(card, target)) {
-                        handleEvolve((Pokemon) card, target);
-                        actionTaken = true;
-                    } else if (currentPlayer.getPokemonOnBench().contains(card)) {
-                        // Dragged from bench to active = Retreat/Switch
-                        handleRetreat(currentPlayer, card);
-                        actionTaken = true;
-                    }
-                } else if (card instanceof Trainer) {
-                    handleUseTrainer((Trainer) card);
-                    actionTaken = true;
-                }
+                actionTaken = handleActiveDrop(card, currentPlayer);
             } else if (action.startsWith(benchPrefix)) {
-                String slotStr = action.substring(benchPrefix.length());
-                if (slotStr.contains("_")) {
-                    slotStr = slotStr.split("_")[0];
-                }
-                int slot = Integer.parseInt(slotStr);
-                
-                ArrayList<Card> bench = playerHandler.getOnlyPokemonFromBench(1); // 1 = Current Player
-                
-                if (card instanceof Pokemon && ((Pokemon) card).stage == 0) {
-                    handleAddToBench((Pokemon) card);
-                    actionTaken = true;
-                } else if (card instanceof Energy && bench.size() > slot) {
-                    handleInstantEnergyAttach(card, (Pokemon) bench.get(slot));
-                    actionTaken = true;
-                } else if (card instanceof Pokemon && ((Pokemon) card).stage > 0 && bench.size() > slot) {
-                    Pokemon target = (Pokemon) bench.get(slot);
-                    if (evolValidator.canEvolveFrom(card, target)) {
-                        handleEvolve((Pokemon) card, target);
-                        actionTaken = true;
-                    }
-                } else if (card instanceof Trainer) {
-                    handleUseTrainer((Trainer) card);
-                    actionTaken = true;
-                }
+                actionTaken = handleBenchDrop(action, card, benchPrefix);
             }
             
             if (actionTaken) {
@@ -184,7 +148,54 @@ public class Game {
         }
     }
 
-    private void handleInstantEnergyAttach(Card energy, Pokemon target) {
+    protected boolean handleBoardDrop(Card card) {
+        if (card instanceof Trainer) {
+            handleUseTrainer((Trainer) card);
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean handleActiveDrop(Card card, Player currentPlayer) {
+        if (card instanceof Energy) {
+            handleInstantEnergyAttach(card, currentPlayer.getActivePokemon());
+            return true;
+        } else if (card instanceof Pokemon) {
+            handleEvolve((Pokemon) card, currentPlayer.getActivePokemon());
+            return true;
+        } else if (card instanceof Trainer) {
+            handleUseTrainer((Trainer) card);
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean handleBenchDrop(String action, Card card, String benchPrefix) {
+        String slotStr = action.substring(benchPrefix.length());
+        if (slotStr.contains("_")) {
+            slotStr = slotStr.split("_")[0];
+        }
+        int slot = Integer.parseInt(slotStr);
+        
+        ArrayList<Card> bench = playerHandler.getOnlyPokemonFromBench(1); // 1 = Current Player
+        
+        if (card instanceof Pokemon && ((Pokemon) card).stage == 0) {
+            handleAddToBench((Pokemon) card);
+            return true;
+        } else if (card instanceof Energy && bench.size() > slot) {
+            handleInstantEnergyAttach(card, (Pokemon) bench.get(slot));
+            return true;
+        } else if (card instanceof Pokemon && ((Pokemon) card).stage > 0 && bench.size() > slot) {
+            handleEvolve((Pokemon) card, (Pokemon) bench.get(slot));
+            return true;
+        } else if (card instanceof Trainer) {
+            handleUseTrainer((Trainer) card);
+            return true;
+        }
+        return false;
+    }
+
+    protected void handleInstantEnergyAttach(Card energy, Pokemon target) {
         if (playerHandler.activeCanAddEnergy()) {
             playerHandler.addEnergyToPokemon((Energy) energy, target);
         } else {
@@ -390,7 +401,7 @@ public class Game {
         Player currentPlayer = playerHandler.getCurrentPlayer();
         ArrayList<Card> playerPokemon = playerHandler.getAllPlayerPokemon();
 
-        if(trainer.getName().equals("Switch")) {
+        if(trainer.requiresGuiSwitchUpdate()) {
             playerPokemon.remove(playerHandler.getActivePokemon());
             playerPokemon.removeAll(playerHandler.getHandPokemon());
         }
@@ -401,25 +412,21 @@ public class Game {
         Energy selectedEnergy = displayTrainerEnergySelection(trainer, playerEnergy);
 
         // If a selection was required but not made (e.g. cancelled), abort.
-        String name = trainer.getName();
-        if (selectedPokemon == null && (name.equals("Switch") || name.equals("Potion") || name.equals("Super Potion"))) {
+        if (selectedPokemon == null && trainer.requiresPokemonSelection()) {
             return;
         }
 
         currentPlayer.removeFromHand(trainer);
         trainer.doEffects(currentPlayer, selectedPokemon, selectedEnergy);
 
-        if(trainer.getName().equals("Switch") && selectedPokemon != null) {
+        if(trainer.requiresGuiSwitchUpdate() && selectedPokemon != null) {
             gui.replaceActiveCard(currentPlayer, (Card) selectedPokemon);
         }
     }
 
     protected Pokemon displayTrainerPokemonSelection(Trainer trainer, ArrayList<Card> pokemon) {
-        String trainerName = trainer.getName();
-        if(trainerName.equals("Potion") || trainerName.equals("Super Potion") || trainerName.equals("Switch")) {
-            String trainerText = "";
-            if(trainer.getName().equals("Switch")) trainerText = "selectPokSwitch";
-            if(!trainer.getName().equals("Switch")) trainerText = "selectPokPot";
+        if(trainer.requiresPokemonSelection()) {
+            String trainerText = trainer.requiresGuiSwitchUpdate() ? "selectPokSwitch" : "selectPokPot";
             String message = messages.getString(trainerText);
             gui.displayMessage(message);
             gui.removeAllButtons();
@@ -441,7 +448,7 @@ public class Game {
     }
 
     protected Energy displayTrainerEnergySelection(Trainer trainer, ArrayList<Card> energy) {
-        if(trainer.getName().equals("Super Potion")) {
+        if(trainer.requiresEnergySelection()) {
             String message = messages.getString("selectEnSuper");
             gui.displayMessage(message);
             gui.removeAllButtons();
@@ -469,17 +476,7 @@ public class Game {
     }
 
     protected void handlePassTurnAction() {
-        boolean hasActiveAlready = playerHandler.passTurn();
-        gui.updateTurn(playerHandler.getPlayerTurn());
-        boolean hasCards = playerHandler.drawCardFromDeck();
-        if(!hasCards) {
-            Player winner = playerHandler.getCurrentPlayer();
-            Player loser = playerHandler.getDefendingPlayer();
-            gameIsOver(winner, loser);
-        }
-        if(!hasActiveAlready) {
-            selectActiveLoop();
-        }
+        turnManager.passTurn();
     }
 
     protected void handleEvolveAction() {
@@ -492,7 +489,7 @@ public class Game {
         }
     }
 
-    private void handleEvolve(Pokemon evolution, Pokemon target) {
+    protected void handleEvolve(Pokemon evolution, Pokemon target) {
         int pokemonStage = evolution.getStage();
         if(pokemonStage != 0) {
             ArrayList<Card> onlyPreEvolutions = playerHandler.getOnlyPreEvolutionsFromActivePlayer(evolution);

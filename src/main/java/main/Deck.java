@@ -7,6 +7,16 @@ import java.util.stream.Collectors;
 
 public class Deck {
 
+    private Random random;
+
+    public Deck() {
+        this.random = new Random();
+    }
+
+    public Deck(Random random) {
+        this.random = random;
+    }
+
     ArrayList<Card> cards = new ArrayList<>();
 
     public int size() {
@@ -39,8 +49,7 @@ public class Deck {
     public boolean shuffle() {
         ArrayList<Card> shuffledCards = new ArrayList<>();
         while (!cards.isEmpty()) {
-            Random rand = new Random();
-            int num = rand.nextInt(cards.size());
+            int num = this.random.nextInt(cards.size());
             shuffledCards.add(cards.remove(num));
         }
         cards = shuffledCards;
