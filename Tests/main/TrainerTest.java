@@ -279,4 +279,84 @@ public class TrainerTest {
 
         verify(p);
     }
+
+    // --- requiresPokemonSelection ---
+
+    @Test
+    public void testRequiresPokemonSelectionForPotion() {
+        Trainer t = new Trainer("Potion", "Remove up to 2 damage counters from 1 of your Pokemon.");
+        assertTrue(t.requiresPokemonSelection());
+    }
+
+    @Test
+    public void testRequiresPokemonSelectionForSuperPotion() {
+        Trainer t = new Trainer("Super Potion",
+                "Discard 1 Energy card attached to your own Pokemon in order to remove up to 4 damage counters from that Pokemon.");
+        assertTrue(t.requiresPokemonSelection());
+    }
+
+    @Test
+    public void testRequiresPokemonSelectionForSwitch() {
+        Trainer t = new Trainer("Switch", "Switch 1 of your own Benched Pokemon with your Active Pokemon.");
+        assertTrue(t.requiresPokemonSelection());
+    }
+
+    @Test
+    public void testRequiresPokemonSelectionFalseForBill() {
+        Trainer t = new Trainer("Bill", "Draw 2 cards.");
+        assertFalse(t.requiresPokemonSelection());
+    }
+
+    @Test
+    public void testRequiresPokemonSelectionFalseForUnknown() {
+        Trainer t = new Trainer("Unknown", "Some random effect");
+        assertFalse(t.requiresPokemonSelection());
+    }
+
+    // --- requiresEnergySelection ---
+
+    @Test
+    public void testRequiresEnergySelectionForSuperPotion() {
+        Trainer t = new Trainer("Super Potion",
+                "Discard 1 Energy card attached to your own Pokemon in order to remove up to 4 damage counters from that Pokemon.");
+        assertTrue(t.requiresEnergySelection());
+    }
+
+    @Test
+    public void testRequiresEnergySelectionFalseForPotion() {
+        Trainer t = new Trainer("Potion", "Remove up to 2 damage counters from 1 of your Pokemon.");
+        assertFalse(t.requiresEnergySelection());
+    }
+
+    @Test
+    public void testRequiresEnergySelectionFalseForSwitch() {
+        Trainer t = new Trainer("Switch", "Switch 1 of your own Benched Pokemon with your Active Pokemon.");
+        assertFalse(t.requiresEnergySelection());
+    }
+
+    @Test
+    public void testRequiresEnergySelectionFalseForBill() {
+        Trainer t = new Trainer("Bill", "Draw 2 cards.");
+        assertFalse(t.requiresEnergySelection());
+    }
+
+    // --- requiresGuiSwitchUpdate ---
+
+    @Test
+    public void testRequiresGuiSwitchUpdateForSwitch() {
+        Trainer t = new Trainer("Switch", "Switch 1 of your own Benched Pokemon with your Active Pokemon.");
+        assertTrue(t.requiresGuiSwitchUpdate());
+    }
+
+    @Test
+    public void testRequiresGuiSwitchUpdateFalseForPotion() {
+        Trainer t = new Trainer("Potion", "Remove up to 2 damage counters from 1 of your Pokemon.");
+        assertFalse(t.requiresGuiSwitchUpdate());
+    }
+
+    @Test
+    public void testRequiresGuiSwitchUpdateFalseForBill() {
+        Trainer t = new Trainer("Bill", "Draw 2 cards.");
+        assertFalse(t.requiresGuiSwitchUpdate());
+    }
 }

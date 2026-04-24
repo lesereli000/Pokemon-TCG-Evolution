@@ -82,6 +82,19 @@ public class Trainer extends Card {
         }
     }
 
+    public boolean requiresPokemonSelection() {
+        String n = getName();
+        return n.equals("Potion") || n.equals("Super Potion") || n.equals("Switch");
+    }
+
+    public boolean requiresEnergySelection() {
+        return getName().equals("Super Potion");
+    }
+
+    public boolean requiresGuiSwitchUpdate() {
+        return getName().equals("Switch");
+    }
+
     @Override
     public CardType getCardType() {
         return CardType.TRAINER;
