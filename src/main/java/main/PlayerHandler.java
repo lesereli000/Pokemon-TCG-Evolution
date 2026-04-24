@@ -21,7 +21,7 @@ public class PlayerHandler {
         this.player2 = player2;
     }
 
-    public void completePlayerSetup(String coinFlipResult, String deckFileName) {
+    public void completePlayerSetup(String coinFlipResult, String p1Deck, String p2Deck) {
         setPlayerTurns(coinFlipResult);
         setupDecks(p1Deck, p2Deck);
         setupBothHands();

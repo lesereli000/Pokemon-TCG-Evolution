@@ -4,6 +4,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
+import static org.easymock.EasyMock.*;
+import main.ui.GUI;
+import main.ui.EvolutionValidator;
 
 public class FinalPushCoverageTest {
 
@@ -108,5 +111,66 @@ public class FinalPushCoverageTest {
         // Handler test
         handler.attackOpponent(a);
         assertEquals(30, def.getCurHP());
+    }
+
+    @Test
+    public void testGameInstantDropCoverage() {
+        GUI gui = createMock(GUI.class);
+        PlayerHandler handler = createMock(PlayerHandler.class);
+        Player player = createMock(Player.class);
+        Game game = new Game(gui, null, null, handler);
+        
+        Pokemon active = new Pokemon("Active", "Grass", 0, 50);
+        Energy energy = new Energy(EnergyType.GRASS);
+        
+        expect(gui.getLastSelectedCard()).andReturn(energy);
+        expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
+        expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
+        expect(player.getActivePokemon()).andReturn(active).anyTimes();
+        expect(handler.activeCanAddEnergy()).andReturn(true).anyTimes();
+        
+        // handleInstantEnergyAttach
+        handler.addEnergyToPokemon(energy, active);
+        expectLastCall().anyTimes();
+        
+        expect(player.handAsList()).andReturn(new ArrayList<>()).anyTimes();
+        gui.displayCards(anyObject());
+        expectLastCall().anyTimes();
+        gui.displayActionButtons();
+        expectLastCall().anyTimes();
+        gui.setLastSelectedCardForDrag(null);
+        expectLastCall().anyTimes();
+        
+        replay(gui, handler, player);
+        game.handleInstantDrop("P1_ACTIVE_DROP");
+        verify(gui, handler, player);
+    }
+
+    @Test
+    public void testEvolutionValidator() {
+        EvolutionValidator validator = new EvolutionValidator();
+        Pokemon pika = new Pokemon("Pika", "Lightning", 0, 50);
+        Pokemon raichu = new Pokemon("Raichu", "Lightning", 1, 80);
+        raichu.setEvolvesFrom("Pika");
+        
+        assertTrue(validator.canEvolveFrom(raichu, pika));
+        assertFalse(validator.canEvolveFrom(pika, raichu));
+    }
+
+    @Test
+    public void testPlayerHandlerEvolutionFiltering() {
+        PlayerHandler handler = new PlayerHandler();
+        Player p1 = new Player("P1");
+        handler.player1 = p1;
+        handler.currentPlayer = p1;
+        
+        Pokemon pika = new Pokemon("Pika", "Lightning", 0, 50);
+        p1.forceSetActivePokemon(pika);
+        
+        Pokemon raichu = new Pokemon("Raichu", "Lightning", 1, 80);
+        raichu.setEvolvesFrom("Pika");
+        
+        ArrayList<Card> preEvolutions = handler.getOnlyPreEvolutionsFromActivePlayer(raichu);
+        assertTrue(preEvolutions.contains(pika));
     }
 }

@@ -65,16 +65,16 @@ public class GhostingDragAdapter extends MouseAdapter {
     @Override
     public void mouseReleased(MouseEvent e) {
         JFrame frame = gui.getFrame();
-        if (frame != null) {
-            DropZoneHighlightGlassPane glass = (DropZoneHighlightGlassPane) frame.getGlassPane();
-            if (ghostLabel != null) {
-                glass.remove(ghostLabel);
-                ghostLabel = null;
-            }
-            glass.setHighlightsVisible(false);
-            glass.setVisible(false);
-            glass.repaint();
+        if (frame == null) return;
+        
+        DropZoneHighlightGlassPane glass = (DropZoneHighlightGlassPane) frame.getGlassPane();
+        if (ghostLabel != null) {
+            glass.remove(ghostLabel);
+            ghostLabel = null;
         }
+        glass.setHighlightsVisible(false);
+        glass.setVisible(false);
+        glass.repaint();
 
         Point releasePoint = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), frame);
         handleDrop(releasePoint);
