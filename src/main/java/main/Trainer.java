@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class Trainer extends Card{
+public class Trainer extends Card {
     private String effects;
     private TrainerSubtype subtype;
     private TrainerEffect effectStrategy;
@@ -18,25 +18,33 @@ public class Trainer extends Card{
             activePlayer.drawCard();
         });
 
-        effectRegistry.put("Remove up to 2 damage counters from 1 of your Pokemon.", (activePlayer, selectedPokemon, selectedEnergy) -> {
-            selectedPokemon.heal(2);
-        });
+        effectRegistry.put("Remove up to 2 damage counters from 1 of your Pokemon.",
+                (activePlayer, selectedPokemon, selectedEnergy) -> {
+                    selectedPokemon.heal(2);
+                });
 
-        effectRegistry.put("Discard 1 Energy card attached to your own Pokemon in order to remove up to 4 damage counters from that Pokemon.", (activePlayer, selectedPokemon, selectedEnergy) -> {
-            activePlayer.removeFromHand(selectedEnergy);
-            selectedPokemon.heal(4);
-        });
+        effectRegistry.put(
+                "Discard 1 Energy card attached to your own Pokemon in order to remove up to 4 damage counters from that Pokemon.",
+                (activePlayer, selectedPokemon, selectedEnergy) -> {
+                    activePlayer.removeFromHand(selectedEnergy);
+                    selectedPokemon.heal(4);
+                });
 
-        effectRegistry.put("Switch 1 of your own Benched Pokemon with your Active Pokemon.", (activePlayer, selectedPokemon, selectedEnergy) -> {
-            activePlayer.addBenchPokemon(activePlayer.getActivePokemon());
-            activePlayer.setNewActivePokemon(selectedPokemon);
-        });
+        effectRegistry.put("Switch 1 of your own Benched Pokemon with your Active Pokemon.",
+                (activePlayer, selectedPokemon, selectedEnergy) -> {
+                    activePlayer.addBenchPokemon(activePlayer.getActivePokemon());
+                    activePlayer.setNewActivePokemon(selectedPokemon);
+                });
+    }
+
+    public static void registerEffect(String name, TrainerEffect effect) {
+        effectRegistry.put(name, effect);
     }
 
     public Trainer(String name, String effects) {
         super(name);
         this.subtype = TrainerSubtype.TRAINER;
-        if(effects.isEmpty()){
+        if (effects.isEmpty()) {
             throw new CardCreationException("Trainer effects cannot be empty");
         } else {
             this.effects = effects;
@@ -46,12 +54,13 @@ public class Trainer extends Card{
 
     public Trainer(String name, TrainerSubtype subtype, String effects) {
         super(name);
-        if(subtype == TrainerSubtype.ITEM || subtype == TrainerSubtype.SUPPORTER || subtype == TrainerSubtype.STADIUM){
+        if (subtype == TrainerSubtype.ITEM || subtype == TrainerSubtype.SUPPORTER
+                || subtype == TrainerSubtype.STADIUM) {
             this.subtype = subtype;
         } else {
             throw new CardCreationException("Trainer subtype must be either Item, Supporter or Stadium");
         }
-        if(effects.isEmpty()){
+        if (effects.isEmpty()) {
             throw new CardCreationException("Trainer effects cannot be empty");
         } else {
             this.effects = effects;
@@ -59,11 +68,11 @@ public class Trainer extends Card{
         }
     }
 
-    public TrainerSubtype getTrainerType(){
+    public TrainerSubtype getTrainerType() {
         return this.subtype;
     }
 
-    public String getEffects(){
+    public String getEffects() {
         return this.effects;
     }
 
@@ -85,14 +94,14 @@ public class Trainer extends Card{
         report.append(nameStr).append("\n");
         String effectStr = messages.getString("trainerEffect");
         report.append(effectStr).append("\n");
-        
-        String effectKey = this.getName().substring(0, 1).toLowerCase() 
-                         + this.getName().substring(1).replace(" ", "") 
-                         + "Effect";
+
+        String effectKey = this.getName().substring(0, 1).toLowerCase()
+                + this.getName().substring(1).replace(" ", "")
+                + "Effect";
         if (messages.containsKey(effectKey)) {
             report.append(messages.getString(effectKey));
         }
-        
+
         return report.toString();
     }
 }

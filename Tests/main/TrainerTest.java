@@ -216,16 +216,16 @@ public class TrainerTest {
             @Override
             protected Object[][] getContents() {
                 return new Object[][] {
-                    {"trainerName", "Name: {0}"},
-                    {"trainerEffect", "Effect:"},
-                    {"billEffect", "Draw 2 cards"}
+                        { "trainerName", "Name: {0}" },
+                        { "trainerEffect", "Effect:" },
+                        { "billEffect", "Draw 2 cards" }
                 };
             }
         };
 
         Trainer t = new Trainer("Bill", "Draw 2 cards.");
         String report = t.getReport(messages);
-        
+
         assertTrue(report.contains("Name: Bill"));
         assertTrue(report.contains("Effect:"));
         assertTrue(report.contains("Draw 2 cards"));
@@ -237,16 +237,17 @@ public class TrainerTest {
             @Override
             protected Object[][] getContents() {
                 return new Object[][] {
-                    {"trainerName", "Name: {0}"},
-                    {"trainerEffect", "Effect:"},
-                    {"superPotionEffect", "Heal 4"}
+                        { "trainerName", "Name: {0}" },
+                        { "trainerEffect", "Effect:" },
+                        { "superPotionEffect", "Heal 4" }
                 };
             }
         };
 
-        Trainer t = new Trainer("Super Potion", "Discard 1 Energy card attached to your own Pokemon in order to remove up to 4 damage counters from that Pokemon.");
+        Trainer t = new Trainer("Super Potion",
+                "Discard 1 Energy card attached to your own Pokemon in order to remove up to 4 damage counters from that Pokemon.");
         String report = t.getReport(messages);
-        
+
         assertTrue(report.contains("Name: Super Potion"));
         assertTrue(report.contains("Heal 4"));
     }
@@ -257,6 +258,25 @@ public class TrainerTest {
         Player p = createMock(Player.class);
         replay(p);
         t.doEffects(p, null, null); // Should not throw exception
+        verify(p);
+    }
+
+    @Test
+    public void testRegisterEffect() {
+        String newEffectName = "Test Custom Effect";
+        TrainerEffect customEffect = (activePlayer, selectedPokemon, selectedEnergy) -> {
+            activePlayer.drawCard();
+        };
+
+        Trainer.registerEffect(newEffectName, customEffect);
+
+        Trainer t = new Trainer("Custom Trainer", newEffectName);
+        Player p = createMock(Player.class);
+        expect(p.drawCard()).andReturn(true);
+        replay(p);
+
+        t.doEffects(p, null, null);
+
         verify(p);
     }
 }
