@@ -16,13 +16,19 @@ public class Game {
     protected boolean gameOver;
     protected Locale locale;
     protected ResourceBundle messages;
+    protected TurnManager turnManager;
 
     public Game(GUI gui, Random random, SetupGame gameSetup, PlayerHandler playerHandler) {
+        this(gui, random, gameSetup, playerHandler, null);
+    }
+
+    public Game(GUI gui, Random random, SetupGame gameSetup, PlayerHandler playerHandler, TurnManager turnManager) {
         this.gui = gui;
         this.random = random;
         this.gameSetup = gameSetup;
         this.playerHandler = playerHandler;
         this.gameOver = false;
+        this.turnManager = turnManager != null ? turnManager : new DefaultTurnManager(this);
     }
 
     protected void setupGame() {
@@ -442,17 +448,7 @@ public class Game {
     }
 
     protected void handlePassTurnAction() {
-        boolean hasActiveAlready = playerHandler.passTurn();
-        gui.updateTurn(playerHandler.getPlayerTurn());
-        boolean hasCards = playerHandler.drawCardFromDeck();
-        if(!hasCards) {
-            Player winner = playerHandler.getCurrentPlayer();
-            Player loser = playerHandler.getDefendingPlayer();
-            gameIsOver(winner, loser);
-        }
-        if(!hasActiveAlready) {
-            selectActiveLoop();
-        }
+        turnManager.passTurn();
     }
 
     protected void handleEvolveAction() {
