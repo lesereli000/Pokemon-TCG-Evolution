@@ -36,6 +36,10 @@ public class Game {
         gui.updateTurn(playerTurn);
         displaySetupResults(coinFlipResult, playerTurn);
         selectActiveLoop();
+        runGameLoop();
+    }
+
+    protected void runGameLoop() {
         while(!gameOver) {
             mainGameLoop();
             if(gui.gameIsOver()) gameOver = true;
