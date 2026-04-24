@@ -12,7 +12,6 @@ public class PlayerHandlerTest {
     public void testSetupPlayers() {
 
         PlayerHandler playerHandler = new PlayerHandler();
-        playerHandler.createPlayers();
         Player player1 = playerHandler.player1;
         Player player2 = playerHandler.player2;
         assertEquals("Player 1", player1.getName());

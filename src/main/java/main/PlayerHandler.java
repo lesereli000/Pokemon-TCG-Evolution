@@ -11,8 +11,17 @@ public class PlayerHandler {
     protected Player defendingPlayer;
     protected ArrayList<Pokemon> playedThisTurn = new ArrayList<>();
 
+    public PlayerHandler() {
+        this.player1 = new Player("Player 1");
+        this.player2 = new Player("Player 2");
+    }
+
+    public PlayerHandler(Player player1, Player player2) {
+        this.player1 = player1;
+        this.player2 = player2;
+    }
+
     public void completePlayerSetup(String coinFlipResult, String deckFileName) {
-        createPlayers();
         setPlayerTurns(coinFlipResult);
         setupBothDecks(deckFileName);
         setupBothHands();
@@ -24,10 +33,7 @@ public class PlayerHandler {
         player2.drawPrizeCards();
     }
 
-    protected void createPlayers() {
-        player1 = new Player("Player 1");
-        player2 = new Player("Player 2");
-    }
+
 
     protected void setPlayerTurns(String coinFlipResult) {
         currentPlayer = coinFlipResult.equals("Heads") ? player1 : player2;

@@ -50,6 +50,15 @@ public class GameGUI implements GUI {
     private Locale locale;
     private ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
     private BufferedImage flag = null;
+    private UserPrompter prompter;
+
+    public GameGUI() {
+        this(new DefaultUserPrompter());
+    }
+
+    public GameGUI(UserPrompter prompter) {
+        this.prompter = prompter;
+    }
 
     public Player getPlayer1() { return player1; }
     public Player getPlayer2() { return player2; }
@@ -135,7 +144,7 @@ public class GameGUI implements GUI {
     }
 
     public void displayMessage(String message) {
-        JOptionPane.showMessageDialog(frame, message);
+        prompter.showMessage(frame, message);
     }
 
     @Override
@@ -235,7 +244,7 @@ public class GameGUI implements GUI {
     @Override
     public void displayPossibleAttacks(ArrayList<Attack> attacks) {
         String attackReport = generateAttackReport(attacks);
-        JOptionPane.showMessageDialog(frame, attackReport);
+        prompter.showMessage(frame, attackReport);
         for (Attack attack : attacks) {
             createLinkedButtonAttack(attack);
         }
