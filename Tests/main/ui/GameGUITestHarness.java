@@ -79,6 +79,10 @@ public class GameGUITestHarness {
                     SwingUtilities.invokeLater(() -> finalBtn.doClick());
                 } else {
                     System.err.println("GameGUITestHarness: Button not found after timeout: " + text);
+                    System.err.println("Available buttons:");
+                    for (JButton b : getButtons()) {
+                        System.err.println("  - Text: '" + b.getText() + "', Name: '" + b.getName() + "'");
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();

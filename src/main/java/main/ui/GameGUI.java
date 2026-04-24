@@ -48,7 +48,7 @@ public class GameGUI implements GUI {
     private int playerTurn = 0;
     private boolean cancelled;
     private Locale locale;
-    private ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
+    protected ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
     private BufferedImage flag = null;
     private boolean isGameStarted = false;
 
@@ -63,6 +63,7 @@ public class GameGUI implements GUI {
     public ResourceBundle getMessages() { return messages; }
     public BufferedImage getFlag() { return flag; }
     public int getNumBenchCards() { return Player.MAX_BENCH_SIZE; }
+    public ArrayList<JButton> getButtons() { return buttons; }
     public JFrame getFrame() { return frame; }
 
     public void createGUI() {
@@ -341,14 +342,15 @@ public class GameGUI implements GUI {
         JButton engBtn = new JButton();
         JButton germanBtn = new JButton();
 
+        engBtn.setName("English");
+        germanBtn.setName("Deutsch");
+
         // Use flag icons
         try {
             BufferedImage usFlag = ImageIO.read(getClass().getResource("/USFlag.png"));
             BufferedImage deFlag = ImageIO.read(getClass().getResource("/deutschflag.png"));
             engBtn.setIcon(new ImageIcon(usFlag.getScaledInstance(120, 80, Image.SCALE_SMOOTH)));
             germanBtn.setIcon(new ImageIcon(deFlag.getScaledInstance(120, 80, Image.SCALE_SMOOTH)));
-            engBtn.setName("English");
-            germanBtn.setName("Deutsch");
         } catch (Exception e) {
             engBtn.setText("English");
             germanBtn.setText("Deutsch");
@@ -404,14 +406,15 @@ public class GameGUI implements GUI {
         JButton waterBtn = new JButton();
         JButton fireBtn = new JButton();
 
+        overBtn.setName("Overgrowth");
+        waterBtn.setName("Water");
+        fireBtn.setName("Fire");
+
         // Load deck icons
         try {
             overBtn.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/overgrowth_deck.png")).getScaledInstance(150, 210, Image.SCALE_SMOOTH)));
             waterBtn.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/water_deck.png")).getScaledInstance(150, 210, Image.SCALE_SMOOTH)));
             fireBtn.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/fire_deck.png")).getScaledInstance(150, 210, Image.SCALE_SMOOTH)));
-            overBtn.setName("Overgrowth");
-            waterBtn.setName("Water");
-            fireBtn.setName("Fire");
         } catch (Exception e) {
             overBtn.setText("Overgrowth");
             waterBtn.setText("Water");
