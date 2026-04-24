@@ -1,5 +1,6 @@
 package main.ui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -19,9 +20,11 @@ public class ImageLoader {
     private static final Map<String, BufferedImage> imageCache = Collections.synchronizedMap(new HashMap<>());
     private static final Set<String> loading = Collections.synchronizedSet(new HashSet<>());
 
+    private static final String PLACEHOLDER_URL = "https://via.placeholder.com/150?text=Card+Image+Missing";
+
     /**
      * Get image from cache or start background load.
-     * Returns null if not in cache.
+     * Returns null if not in cache (starts loading).
      */
     public static BufferedImage getImage(String urlString, Component componentToRepaint) {
         if (urlString == null || urlString.isEmpty()) {
@@ -46,6 +49,7 @@ public class ImageLoader {
      */
     public static void loadIntoButton(String urlString, JButton button, int width, int height) {
         if (urlString == null || urlString.isEmpty()) {
+            setPlaceholder(button, width, height);
             return;
         }
 
@@ -79,18 +83,31 @@ public class ImageLoader {
                             componentToRepaint.repaint();
                         }
                     });
+                } else {
+                    handleLoadFailure(urlString, componentToRepaint, callback);
                 }
             } catch (IOException e) {
-                System.err.println("Failed to load image from: " + urlString);
+                System.err.println("Failed to load image from: " + urlString + " - using fallback.");
+                handleLoadFailure(urlString, componentToRepaint, callback);
             } finally {
                 loading.remove(urlString);
             }
         }).start();
     }
 
+    private static void handleLoadFailure(String urlString, Component componentToRepaint, java.util.function.Consumer<BufferedImage> callback) {
+        // You could put a default locally stored image here if the internet is down
+        // For now, we'll just log and potentially use a placeholder if we had one locally.
+    }
+
     private static void setIcon(JButton button, BufferedImage image, int width, int height) {
         Image scaled = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         button.setIcon(new ImageIcon(scaled));
         button.setText("");
+    }
+
+    private static void setPlaceholder(JButton button, int width, int height) {
+        button.setBackground(Color.LIGHT_GRAY);
+        button.setText("No Image");
     }
 }

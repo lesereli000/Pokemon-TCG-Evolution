@@ -373,14 +373,14 @@ public class GameTest {
         // Setup expectations
 
         //decide deck
-        expect(gui.displayDeckOptions()).andReturn("Overgrowth.txt");
+        expect(gui.displayDeckOptions()).andReturn("Overgrowth.txt").times(2);
 
         //setupFlipButton()
         gui.createFlipButton();
 
         //coinflip
         expect(setupGame.completeGameSetup()).andReturn("Heads");
-        handler.completePlayerSetup("Heads", "Overgrowth.txt");
+        handler.completePlayerSetup("Heads", "Overgrowth.txt", "Overgrowth.txt");
         gui.setPlayers(handler.player1, handler.player2);
 
         //player
@@ -769,6 +769,9 @@ public class GameTest {
         gui.replaceActiveCard(anyObject(Player.class), eq(newActive));
         expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         handler.setNewActive(newActive);
+        expect(player.handAsList()).andReturn(new ArrayList<>()).anyTimes(); // Added for handleRetreat
+        gui.displayCards(anyObject()); // Added for handleRetreat
+        gui.displayActionButtons(); // Added for handleRetreat
         expect(gui.isCancelled()).andReturn(false);
 
         replay(gui, handler, player, activePokemon);
@@ -822,7 +825,7 @@ public class GameTest {
         gui.waitForAction();
         expect(gui.getLastSelectedCard()).andReturn(newActive);
         expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
-        gui.replaceActiveCard(anyObject(Player.class), eq(newActive));
+        // gui.replaceActiveCard removed as it's not called by retreatPokemon()
         expect(gui.isCancelled()).andReturn(false);
 
         replay(gui, handler);
@@ -1170,6 +1173,9 @@ public class GameTest {
         expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         gui.replaceActiveCard(anyObject(Player.class), eq(p));
         handler.setNewActive(p);
+        expect(player.handAsList()).andReturn(cards).anyTimes(); // Added for handleRetreat
+        gui.displayCards(anyObject()); // Added for handleRetreat
+        gui.displayActionButtons(); // Added for handleRetreat
         expect(gui.isCancelled()).andReturn(false).times(2);
 
         replay(handler, gui, p, player);
@@ -2180,13 +2186,13 @@ public class GameTest {
         gui.displayMessage("You have chosen: English");
 
         //decide deck
-        expect(gui.displayDeckOptions()).andReturn("Overgrowth.txt");
+        expect(gui.displayDeckOptions()).andReturn("Overgrowth.txt").times(2);
 
         //setupFlipButton()
         gui.createFlipButton();
 
         expect(gameSetup.completeGameSetup()).andReturn("Heads");
-        handler.completePlayerSetup("Heads", "Overgrowth.txt");
+        handler.completePlayerSetup("Heads", "Overgrowth.txt", "Overgrowth.txt");
         gui.setPlayers(handler.player1, handler.player2);
         expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         gui.updateTurn(1);
@@ -2251,13 +2257,13 @@ public class GameTest {
         gui.displayMessage("You have chosen: English");
 
         //decide deck
-        expect(gui.displayDeckOptions()).andReturn("Overgrowth.txt");
+        expect(gui.displayDeckOptions()).andReturn("Overgrowth.txt").times(2);
 
         //setupFlipButton()
         gui.createFlipButton();
 
         expect(gameSetup.completeGameSetup()).andReturn("Heads");
-        handler.completePlayerSetup("Heads", "Overgrowth.txt");
+        handler.completePlayerSetup("Heads", "Overgrowth.txt", "Overgrowth.txt");
         gui.setPlayers(handler.player1, handler.player2);
         expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         gui.updateTurn(1);

@@ -47,7 +47,7 @@ public class GameGUITestHarness {
      */
     public JButton getButtonWithText(String text) throws Exception {
         for (JButton btn : getButtons()) {
-            if (btn.getText().equals(text)) {
+            if (btn.getText().equals(text) || (btn.getName() != null && btn.getName().equals(text))) {
                 return btn;
             }
         }
@@ -79,6 +79,10 @@ public class GameGUITestHarness {
                     SwingUtilities.invokeLater(() -> finalBtn.doClick());
                 } else {
                     System.err.println("GameGUITestHarness: Button not found after timeout: " + text);
+                    System.err.println("Available buttons:");
+                    for (JButton b : getButtons()) {
+                        System.err.println("  - Text: '" + b.getText() + "', Name: '" + b.getName() + "'");
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -152,7 +156,7 @@ public class GameGUITestHarness {
 
     public JButton getButtonContainingText(String substring) throws Exception {
         for (JButton btn : getButtons()) {
-            if (btn.getText().contains(substring)) {
+            if (btn.getText().contains(substring) || (btn.getName() != null && btn.getName().contains(substring))) {
                 return btn;
             }
         }

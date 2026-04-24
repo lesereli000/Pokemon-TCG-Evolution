@@ -71,8 +71,9 @@ public class CardDropZoneDetectorTest {
 
         expect(gui.getPlayerTurn()).andReturn(1).anyTimes();
         expect(gui.getPlayer1()).andReturn(p1).anyTimes();
-        expect(p1.hasActive()).andReturn(true).anyTimes(); // Added for safety
-        expect(p1.getActivePokemon()).andReturn(pkmn).anyTimes(); // Added for safety
+        expect(p1.hasActive()).andReturn(true).anyTimes();
+        expect(p1.getActivePokemon()).andReturn(pkmn).anyTimes();
+        expect(p1.getPokemonOnBench()).andReturn(new ArrayList<>()).anyTimes(); // Added for retreat check
         replay(gui, p1);
 
         // Valid: P1 drops on P1 side
@@ -128,7 +129,8 @@ public class CardDropZoneDetectorTest {
         expect(gui.getPlayer1()).andReturn(p1).anyTimes();
 
         // During setup, only active is valid
-        expect(p1.hasActive()).andReturn(false).times(2); // One for ACTIVE, one for BENCH
+        expect(p1.hasActive()).andReturn(false).anyTimes();
+        expect(p1.getPokemonOnBench()).andReturn(new ArrayList<>()).anyTimes();
         replay(gui, p1);
         
         assertTrue("Basic Pokemon valid on active during setup", detector.isValidForCard(DropZoneType.P1_ACTIVE, pkmn));

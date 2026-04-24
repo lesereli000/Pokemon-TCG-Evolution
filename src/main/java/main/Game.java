@@ -33,10 +33,17 @@ public class Game {
 
     protected void setupGame() {
         decideLocale();
-        String deckFileName = gui.displayDeckOptions();
+        
+        // Independent deck selection for both players
+        String p1Deck = gui.displayDeckOptions();
+        String p2Deck = gui.displayDeckOptions();
+        
         setupFlipButton();
         String coinFlipResult = gameSetup.completeGameSetup();
-        playerHandler.completePlayerSetup(coinFlipResult, deckFileName);
+        
+        // Pass both decks to playerHandler
+        playerHandler.completePlayerSetup(coinFlipResult, p1Deck, p2Deck);
+        
         gui.setPlayers(playerHandler.player1, playerHandler.player2);
         int playerTurn = playerHandler.getPlayerTurn();
         gui.updateTurn(playerTurn);
@@ -115,6 +122,8 @@ public class Game {
             String activeZone = "P" + turn + "_ACTIVE_DROP";
             String benchPrefix = "P" + turn + "_BENCH_";
             boolean actionTaken = false;
+
+            EvolutionValidator evolValidator = new EvolutionValidator();
 
             if (action.equals("BOARD_DROP")) {
                 actionTaken = handleBoardDrop(card);
@@ -217,9 +226,18 @@ public class Game {
         if(canRetreat) {
             Card newActive = retreatPokemon();
             if(newActive != null) {
-                playerHandler.setNewActive(newActive);
+                handleRetreat(activePlayer, newActive);
             }
         }
+    }
+
+    private void handleRetreat(Player player, Card newActive) {
+        if (newActive instanceof Pokemon) {
+            playerHandler.setNewActive((Pokemon) newActive);
+        }
+        gui.replaceActiveCard(player, newActive);
+        gui.displayCards(player.handAsList());
+        gui.displayActionButtons();
     }
 
     protected Card retreatPokemon() {
@@ -237,7 +255,6 @@ public class Game {
                 gui.displayMessage(message);
                 return retreatPokemon();
             } else {
-                gui.replaceActiveCard(playerHandler.getCurrentPlayer(), selectedCard);
                 return selectedCard;
             }
         } else {

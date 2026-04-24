@@ -62,6 +62,13 @@ public class CardDropZoneDetector {
 
         if (card instanceof Pokemon) {
             Pokemon pkmn = (Pokemon) card;
+            
+            // Check if dragging FROM BENCH (Retreating)
+            // This assumes the card passed in is already known to be on the bench
+            if (player.getPokemonOnBench().contains(pkmn)) {
+                return zoneName.endsWith("_ACTIVE");
+            }
+
             if (pkmn.getStage() == 0) { // Basic
                 // If initializing (no active), only ACTIVE is valid
                 if (!player.hasActive() || player.getActivePokemon() == null) {
@@ -71,12 +78,23 @@ public class CardDropZoneDetector {
                 if (zoneName.contains("_BENCH_")) {
                     String[] parts = zoneName.split("_");
                     int slot = Integer.parseInt(parts[2]);
-                    // Highlight the first empty bench slot or all valid slots
                     return player.getPokemonOnBench().size() == slot && slot < Player.MAX_BENCH_SIZE;
+                }
+            } else { // Evolution
+                EvolutionValidator validator = new EvolutionValidator();
+                if (zoneName.endsWith("_ACTIVE")) {
+                    return validator.canEvolveFrom(pkmn, player.getActivePokemon());
+                }
+                if (zoneName.contains("_BENCH_")) {
+                    String[] parts = zoneName.split("_");
+                    int slot = Integer.parseInt(parts[2]);
+                    if (player.getPokemonOnBench().size() > slot) {
+                        return validator.canEvolveFrom(pkmn, player.getPokemonOnBench().get(slot));
+                    }
                 }
             }
         }
 
-        return true; // Default to old behavior for other cards
+        return true; // Default to true for backward compatibility with existing tests
     }
 }
