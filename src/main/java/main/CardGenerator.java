@@ -28,7 +28,7 @@ public class CardGenerator {
             JSONArray database = loadDatabase();
             JSONObject cardData = findCardData(database, name);
             if (cardData == null) {
-                return null;
+                throw new PokemonNotFoundException("Card not found in database: " + name);
             }
 
             String supertype = cardData.getString("supertype");
@@ -44,7 +44,7 @@ public class CardGenerator {
             setImageUrl(card, cardData);
             return card;
         } catch (IOException e) {
-            throw new RuntimeException("File not found in directory!", e);
+            throw new MissingResourceException("File not found in directory: " + resourcePath, e);
         }
     }
 
@@ -57,7 +57,7 @@ public class CardGenerator {
         }
     }
 
-    private JSONArray loadDatabase() throws IOException {
+    protected JSONArray loadDatabase() throws IOException {
         if (!cachedDatabases.containsKey(resourcePath)) {
             InputStream is = getClass().getClassLoader().getResourceAsStream(resourcePath);
             if (is == null) {
@@ -145,7 +145,18 @@ public class CardGenerator {
         for(int j = 0; j < jsonAttacks.length(); j++) {
             JSONObject attackJson = jsonAttacks.getJSONObject(j);
             String attackName = attackJson.getString("name");
-            int damage = Integer.parseInt(attackJson.getString("damage"));
+            
+            int damage = 0;
+            if (attackJson.has("damage")) {
+                String damageStr = attackJson.getString("damage").replaceAll("[^0-9]", "");
+                if (!damageStr.isEmpty()) {
+                    try {
+                        damage = Integer.parseInt(damageStr);
+                    } catch (NumberFormatException e) {
+                        damage = 0;
+                    }
+                }
+            }
             
             JSONArray jsonCosts = attackJson.getJSONArray("cost");
             List<Energy> attackCosts = new ArrayList<>();

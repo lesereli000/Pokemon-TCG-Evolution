@@ -648,7 +648,7 @@ public class DeckTest {
         boolean pass = false;
         try{
             new DeckGenerator().generateFromFile("doesntExist.txt");
-        }catch(RuntimeException e){
+        }catch(MissingResourceException e){
             assertTrue("Expected message containing 'not found', but got: " + e.getMessage(), 
                      e.getMessage().toLowerCase().contains("not found"));
             pass = true;

@@ -25,6 +25,53 @@ public class CardGeneratorTest {
     }
 
     @Test
+    public void testCardNotInDatabase() {
+        CardGenerator pg = new CardGenerator();
+        try {
+            pg.generateCard("FakeCardNameThatDoesntExist");
+            fail("Expected PokemonNotFoundException to be thrown");
+        } catch (CardGenerator.PokemonNotFoundException e) {
+            assertEquals("Card not found in database: FakeCardNameThatDoesntExist", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testDamageParsing() throws java.io.IOException {
+        // Create a temporary JSON with damage "10+" and "20x" and ""
+        String tempJson = "[\n" +
+                "  {\n" +
+                "    \"id\": \"test-1\",\n" +
+                "    \"name\": \"TestPokemon\",\n" +
+                "    \"supertype\": \"Pokemon\",\n" +
+                "    \"subtypes\": [\"Basic\"],\n" +
+                "    \"hp\": \"50\",\n" +
+                "    \"types\": [\"Colorless\"],\n" +
+                "    \"attacks\": [\n" +
+                "      { \"name\": \"Attack1\", \"cost\": [\"Colorless\"], \"convertedEnergyCost\": 1, \"damage\": \"10+\", \"text\": \"\" },\n" +
+                "      { \"name\": \"Attack2\", \"cost\": [\"Colorless\"], \"convertedEnergyCost\": 1, \"damage\": \"20x\", \"text\": \"\" },\n" +
+                "      { \"name\": \"Attack3\", \"cost\": [\"Colorless\"], \"convertedEnergyCost\": 1, \"damage\": \"\", \"text\": \"\" }\n" +
+                "    ]\n" +
+                "  }\n" +
+                "]";
+        java.io.File tempFile = java.io.File.createTempFile("test_damage", ".json");
+        tempFile.deleteOnExit();
+        java.nio.file.Files.writeString(tempFile.toPath(), tempJson);
+
+        CardGenerator pg = new CardGenerator() {
+            @Override
+            protected org.json.JSONArray loadDatabase() throws java.io.IOException {
+                return new org.json.JSONArray(tempJson);
+            }
+        };
+
+        Pokemon p = (Pokemon) pg.generateCard("TestPokemon");
+        assertEquals(3, p.getAttacks().size());
+        assertEquals(10, p.getAttacks().get(0).getDamage());
+        assertEquals(20, p.getAttacks().get(1).getDamage());
+        assertEquals(0, p.getAttacks().get(2).getDamage());
+    }
+
+    @Test
     public void testPokemonGen() {
         Pokemon p = (Pokemon) new CardGenerator().generateCard("Charizard");
 
@@ -241,9 +288,9 @@ public class CardGeneratorTest {
         boolean pass = false;
         try {
             cg.generateCard("Pikachu");
-        } catch (RuntimeException e) {
+        } catch (MissingResourceException e) {
             pass = true;
-            assertEquals("File not found in directory!", e.getMessage());
+            assertEquals("File not found in directory: nonexistent.json", e.getMessage());
         }
         assertTrue(pass);
     }
@@ -255,8 +302,9 @@ public class CardGeneratorTest {
 
         try {
             cg.generateCard("Pikachu");
-        } catch (RuntimeException e) {
-            assertEquals("File not found in directory!", e.getMessage());
+            fail("Expected PokemonNotFoundException");
+        } catch (CardGenerator.PokemonNotFoundException e) {
+            assertEquals("Card not found in database: Pikachu", e.getMessage());
         }
     }
     @Test

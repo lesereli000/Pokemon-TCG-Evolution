@@ -20,7 +20,7 @@ public class DeckGenerator {
         Deck newDeck = new Deck();
         InputStream is = getClass().getClassLoader().getResourceAsStream(fileString);
         if (is == null) {
-            throw new RuntimeException("File not found when adding cards from file");
+            throw new MissingResourceException("File not found when adding cards from file: " + fileString);
         }
         ArrayList<DeckEntry> parsedEntries = new ArrayList<>();
         int totalCards = 0;

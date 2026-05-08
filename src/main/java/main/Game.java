@@ -142,6 +142,9 @@ public class Game {
             // Clear the drag selection
             gui.setLastSelectedCardForDrag(null);
             
+        } catch (InvalidMoveException | EnergyNotFoundException e) {
+            gui.displayMessage(e.getMessage());
+            gui.setLastSelectedCardForDrag(null);
         } catch (Exception e) {
             System.err.println("Instant Drop handling error: " + e.getMessage());
             e.printStackTrace();

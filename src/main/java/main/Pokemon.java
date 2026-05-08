@@ -121,7 +121,7 @@ public class Pokemon extends Card {
             }
         }
         if (!removed)
-            throw new IllegalArgumentException("Energy does not exist");
+            throw new EnergyNotFoundException("Energy does not exist");
     }
 
     public boolean canAttack(Attack attack) {
@@ -188,7 +188,7 @@ public class Pokemon extends Card {
 
     public void removeColorless(int energiesToRemove) {
         if (energiesToRemove > energies.size()) {
-            throw new IllegalArgumentException("Can not remove this many energies!");
+            throw new EnergyNotFoundException("Can not remove this many energies!");
         }
         int size = energies.size();
         int fromIndex = Math.max(0, size - energiesToRemove);
