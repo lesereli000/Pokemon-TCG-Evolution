@@ -225,7 +225,7 @@ public class GameTest {
         expect(player.getActivePokemon()).andReturn(p);
         pokemon.add(p);
 
-        //display add energy info
+        // display add energy info
         gui.displayMessage("Select Pokemon to add Energy to");
         gui.removeAllButtons();
         gui.displayCards(pokemon);
@@ -253,25 +253,25 @@ public class GameTest {
         SetupGame setupGame = createMock(SetupGame.class);
         Pokemon p = createMock(Pokemon.class);
         ArrayList<Card> hand = createMock(ArrayList.class);
-        //display directions
+        // display directions
         gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
 
-        //Display hand pre selection
+        // Display hand pre selection
         gui.removeAllButtons();
         expect(handler.getCurrentPlayerHand()).andReturn(hand).anyTimes();
         gui.displayCards(hand);
         gui.setupActivePokemon();
         expect(gui.waitForButtonPressed()).andReturn("");
         expect(gui.getLastSelectedCard()).andReturn(p);
-        //check basic pokemon
+        // check basic pokemon
         expect(p.getStage()).andReturn(0);
 
-        //make new active
+        // make new active
         expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         player.setActivePokemon(p);
         gui.makeActiveCard(anyObject(Player.class), eq(p));
 
-        //display hand post selection
+        // display hand post selection
         gui.removeAllButtons();
         gui.displayCards(hand);
 
@@ -294,40 +294,39 @@ public class GameTest {
         Pokemon p = createMock(Pokemon.class);
         ArrayList<Card> hand = createMock(ArrayList.class);
 
-
-        //display directions
+        // display directions
         gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
 
-        //Display hand pre selection
+        // Display hand pre selection
         gui.removeAllButtons();
         gui.displayCards(hand);
         gui.setupActivePokemon();
         expect(gui.waitForButtonPressed()).andReturn("AddToBench");
         expect(gui.getLastSelectedCard()).andReturn(p);
-        //check basic pokemon, fail then succeed
+        // check basic pokemon, fail then succeed
         expect(p.getStage()).andReturn(1).andReturn(0);
 
-        //Failed
+        // Failed
         gui.displayMessage("Not a basic Pokemon!");
         gui.removeAllButtons();
-        //Now succeed
-        //display directions
+        // Now succeed
+        // display directions
         gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
 
-        //Display hand pre selection
+        // Display hand pre selection
         gui.removeAllButtons();
         expect(handler.getCurrentPlayerHand()).andReturn(hand).anyTimes();
         gui.displayCards(hand);
         gui.setupActivePokemon();
         expect(gui.waitForButtonPressed()).andReturn("AddToBench");
         expect(gui.getLastSelectedCard()).andReturn(p);
-        //check basic pokemon, succeeding this time
+        // check basic pokemon, succeeding this time
 
-        //make new active
+        // make new active
         player.setActivePokemon(p);
         gui.makeActiveCard(anyObject(Player.class), eq(p));
 
-        //display hand post selection
+        // display hand post selection
         gui.removeAllButtons();
 
         gui.displayCards(hand);
@@ -372,27 +371,27 @@ public class GameTest {
         ArrayList<Card> hand = createMock(ArrayList.class);
         // Setup expectations
 
-        //decide deck
+        // decide deck
         expect(gui.displayDeckOptions()).andReturn("Overgrowth.txt").times(2);
 
-        //setupFlipButton()
+        // setupFlipButton()
         gui.createFlipButton();
 
-        //coinflip
+        // coinflip
         expect(setupGame.completeGameSetup()).andReturn("Heads");
         handler.completePlayerSetup("Heads", "Overgrowth.txt", "Overgrowth.txt");
         gui.setPlayers(handler.player1, handler.player2);
 
-        //player
+        // player
         expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
 
-        //displaySetupResults
+        // displaySetupResults
         gui.displayMessage("The result was Heads Player 1 goes first!");
 
-        //selectActiveLoop()
-        //displayActiveDirections()
+        // selectActiveLoop()
+        // displayActiveDirections()
         gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
-        //displayHand()
+        // displayHand()
         gui.removeAllButtons();
         expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         gui.updateTurn(1);
@@ -401,7 +400,7 @@ public class GameTest {
         gui.setupActivePokemon();
         expect(gui.waitForButtonPressed()).andReturn("");
         expect(gui.getLastSelectedCard()).andReturn(p);
-        //check basic
+        // check basic
         expect(p.getStage()).andReturn(0);
         player.setActivePokemon(p);
         gui.makeActiveCard(anyObject(Player.class), eq(p));
@@ -466,10 +465,10 @@ public class GameTest {
         gui.displayActionButtons();
         expect(gui.waitForButtonPressed()).andReturn("AddEnergy");
 
-        //handleEnergyAction()
+        // handleEnergyAction()
         expect(gui.getLastSelectedCard()).andReturn(e);
 
-        //handleAddEnergy()
+        // handleAddEnergy()
         expect(handler.activeCanAddEnergy()).andReturn(true);
         expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(handler.getOnlyPokemonFromBench(1)).andReturn(hand);
@@ -509,7 +508,7 @@ public class GameTest {
         gui.displayActionButtons();
         expect(gui.waitForButtonPressed()).andReturn("AddEnergy");
 
-        //handleEnergyAction()
+        // handleEnergyAction()
         expect(gui.getLastSelectedCard()).andReturn(p);
 
         gui.displayMessage("Energy has not been selected!");
@@ -538,10 +537,10 @@ public class GameTest {
         gui.displayActionButtons();
         expect(gui.waitForButtonPressed()).andReturn("AddEnergy");
 
-        //handleEnergyAction()
+        // handleEnergyAction()
         expect(gui.getLastSelectedCard()).andReturn(e);
 
-        //handleAddEnergy()
+        // handleAddEnergy()
         expect(handler.activeCanAddEnergy()).andReturn(false);
         gui.displayMessage("Unable to add energy!");
 
@@ -569,7 +568,7 @@ public class GameTest {
 
         Game game = new Game(gui, rand, setupGame, handler);
         game.handlePassTurnAction();
-        
+
     }
 
     @Test
@@ -586,11 +585,11 @@ public class GameTest {
         expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         gui.updateTurn(1);
 
-        //display hand
+        // display hand
         gui.removeAllButtons();
         expect(handler.getCurrentPlayerHand()).andReturn(hand);
         gui.displayCards(hand);
-        //display directions
+        // display directions
         gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
 
         gui.setupActivePokemon();
@@ -598,16 +597,16 @@ public class GameTest {
 
         expect(gui.getLastSelectedCard()).andReturn(p);
 
-        //check basic
+        // check basic
         expect(p.getStage()).andReturn(0);
 
-        //make new active
+        // make new active
         expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(handler.drawCardFromDeck()).andReturn(true);
         player.setActivePokemon(p);
         gui.makeActiveCard(anyObject(Player.class), eq(p));
 
-        //display hand
+        // display hand
         gui.removeAllButtons();
         expect(handler.getCurrentPlayerHand()).andReturn(hand);
         gui.displayCards(hand);
@@ -685,27 +684,26 @@ public class GameTest {
         expect(handler.isDefendingDead()).andReturn(true);
         gui.displayDeadActiveInfo(player2);
 
-        //handleDeadActive
+        // handleDeadActive
         expect(handler.getOnlyPokemonFromBench(2)).andReturn(cards);
 
-        //display dead active GUI
+        // display dead active GUI
         gui.removeAllButtons();
         gui.displayCards(cards);
         gui.displayConfirmAndCancelButton();
         gui.waitForAction();
 
-        //handleDeadActive
+        // handleDeadActive
         expect(gui.getLastSelectedCard()).andReturn(p);
 
-
-        //pickup prize card
+        // pickup prize card
         expect(handler.activePickupPrizeCard()).andReturn(5);
         gui.removePrizeCard(anyObject(Player.class));
         handler.killDefenderActive(p);
         gui.makeActiveCard(anyObject(Player.class), eq(p));
         gui.removeBenchCard(anyObject(Player.class), eq(p));
 
-        //pass turn
+        // pass turn
         expect(handler.passTurn()).andReturn(true);
         expect(handler.getPlayerTurn()).andReturn(1).times(2);
         expect(handler.drawCardFromDeck()).andReturn(true);
@@ -795,7 +793,8 @@ public class GameTest {
         expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(player.getActivePokemon()).andReturn(activePokemon);
         expect(activePokemon.canRetreat()).andReturn(false);
-        //expect(handler.canRetreat()).andReturn(false); Only called once because previous statement
+        // expect(handler.canRetreat()).andReturn(false); Only called once because
+        // previous statement
 
         gui.displayRetreatEnergy(activePokemon, false);
 
@@ -961,11 +960,11 @@ public class GameTest {
         gui.displayActionButtons();
         expect(gui.waitForButtonPressed()).andReturn("Retreat");
 
-        //handler
+        // handler
         expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         expect(player.getActivePokemon()).andReturn(p);
         expect(p.canRetreat()).andReturn(false);
-        //Only need one to be false to return flase in and statement
+        // Only need one to be false to return flase in and statement
 
         gui.displayRetreatEnergy(p, false);
 
@@ -1079,7 +1078,6 @@ public class GameTest {
         gui.displayWinningMessage(winner, loser);
         gui.closeWindow();
 
-
         replay(gui, handler, cards);
 
         Game game = new Game(gui, rand, setupGame, handler);
@@ -1152,7 +1150,7 @@ public class GameTest {
         expect(handler.canRetreat()).andReturn(true);
         gui.displayRetreatEnergy(p, true);
 
-        //retreat
+        // retreat
         gui.removeAllButtons();
         gui.displayMessage("Select new active Pokemon");
         expect(handler.getOnlyPokemonFromBench(1)).andReturn(cards);
@@ -1163,7 +1161,7 @@ public class GameTest {
         expect(gui.getLastSelectedCard()).andReturn(null).andReturn(p);
         gui.displayMessage("No card selected!");
 
-        //retreat again
+        // retreat again
         gui.removeAllButtons();
         gui.displayMessage("Select new active Pokemon");
         expect(handler.getOnlyPokemonFromBench(1)).andReturn(cards);
@@ -1306,7 +1304,7 @@ public class GameTest {
         // Case 1: Trainer not selected
         expect(gui.getLastSelectedCard()).andReturn(notTrainerCard);
         gui.displayMessage("Trainer has not been selected!");
-        
+
         // Case 2: Trainer selected
         ArrayList<Card> pokemonList = new ArrayList<>();
         Pokemon selectedPokemon = createMock(Pokemon.class);
@@ -1320,10 +1318,11 @@ public class GameTest {
         expect(trainerCard.requiresGuiSwitchUpdate()).andReturn(false).anyTimes();
         expect(trainerCard.requiresPokemonSelection()).andReturn(true).anyTimes();
         expect(trainerCard.requiresEnergySelection()).andReturn(false).anyTimes();
-        
+
         player.removeFromHand(trainerCard);
-        
-        // select pokemon/energy (displayTrainerPokemonSelection/displayTrainerEnergySelection)
+
+        // select pokemon/energy
+        // (displayTrainerPokemonSelection/displayTrainerEnergySelection)
         gui.displayMessage(anyString());
         gui.removeAllButtons();
         gui.displayCards(pokemonList);
@@ -1367,9 +1366,9 @@ public class GameTest {
         expect(switchCard.requiresGuiSwitchUpdate()).andReturn(true).anyTimes();
         expect(switchCard.requiresPokemonSelection()).andReturn(true).anyTimes();
         expect(switchCard.requiresEnergySelection()).andReturn(false).anyTimes();
-        
+
         player.removeFromHand(switchCard);
-        
+
         // Pokemon Selection for switch
         gui.displayMessage(anyString());
         gui.removeAllButtons();
@@ -1378,7 +1377,7 @@ public class GameTest {
         gui.waitForAction();
         expect(gui.isCancelled()).andReturn(false).anyTimes();
         expect(gui.getLastSelectedCard()).andReturn(selected);
-        
+
         switchCard.doEffects(player, selected, null);
         gui.replaceActiveCard(player, selected);
 
@@ -1390,8 +1389,6 @@ public class GameTest {
 
         verify(gui, handler, player, switchCard);
     }
-
-
 
     @Test
     public void testAddEnergyCancelled() {
@@ -1409,7 +1406,7 @@ public class GameTest {
         expect(handler.getOnlyPokemonFromBench(1)).andReturn(cards);
         expect(p.getActivePokemon()).andReturn(poke);
 
-        //displayAddEnergy()
+        // displayAddEnergy()
         gui.displayMessage("Select Pokemon to add Energy to");
         gui.removeAllButtons();
         gui.displayCards(cards);
@@ -1441,7 +1438,7 @@ public class GameTest {
         expect(handler.canRetreat()).andReturn(true);
         gui.displayRetreatEnergy(poke, true);
 
-        //retreatPokemon()
+        // retreatPokemon()
         gui.removeAllButtons();
         gui.displayMessage("Select new active Pokemon");
         expect(handler.getOnlyPokemonFromBench(1)).andReturn(cards);
@@ -1519,7 +1516,8 @@ public class GameTest {
         expect(gui.getLastSelectedCard()).andReturn(p);
         expect(p.getStage()).andReturn(0);
         expect(p.getName()).andReturn("Pikachu");
-        gui.displayMessage("This is a basic Pokemon, not an evolution. Try adding Pikachu to the bench if you have room!");
+        gui.displayMessage(
+                "This is a basic Pokemon, not an evolution. Try adding Pikachu to the bench if you have room!");
 
         replay(gui, p);
 
@@ -1569,7 +1567,7 @@ public class GameTest {
         expect(handler.getOnlyPreEvolutionsFromActivePlayer(p)).andReturn(cards);
         expect(cards.isEmpty()).andReturn(false);
 
-        //displayEvolveInfo
+        // displayEvolveInfo
         gui.displayMessage("Select Pokemon to evolve from");
         gui.removeAllButtons();
         gui.displayCards(cards);
@@ -1601,7 +1599,7 @@ public class GameTest {
         expect(handler.getOnlyPreEvolutionsFromActivePlayer(p)).andReturn(cards);
         expect(cards.isEmpty()).andReturn(false);
 
-        //displayEvolveInfo
+        // displayEvolveInfo
         gui.displayMessage("Select Pokemon to evolve from");
         gui.removeAllButtons();
         gui.displayCards(cards);
@@ -1612,7 +1610,7 @@ public class GameTest {
         expect(cards.contains(p2)).andReturn(false);
         gui.displayMessage("Pokemon has not been selected!");
 
-        //displayEvolveInfo again
+        // displayEvolveInfo again
         gui.displayMessage("Select Pokemon to evolve from");
         gui.removeAllButtons();
         gui.displayCards(cards);
@@ -1647,7 +1645,7 @@ public class GameTest {
         expect(handler.getOnlyPreEvolutionsFromActivePlayer(p)).andReturn(cards);
         expect(cards.isEmpty()).andReturn(false);
 
-        //displayEvolveInfo again
+        // displayEvolveInfo again
         gui.displayMessage("Select Pokemon to evolve from");
         gui.removeAllButtons();
         gui.displayCards(cards);
@@ -1684,7 +1682,7 @@ public class GameTest {
         expect(handler.getOnlyPreEvolutionsFromActivePlayer(p)).andReturn(cards);
         expect(cards.isEmpty()).andReturn(false);
 
-        //displayEvolveInfo again
+        // displayEvolveInfo again
         gui.displayMessage("Select Pokemon to evolve from");
         gui.removeAllButtons();
         gui.displayCards(cards);
@@ -1728,7 +1726,7 @@ public class GameTest {
         expect(handler.getOnlyPreEvolutionsFromActivePlayer(p)).andReturn(cards);
         expect(cards.isEmpty()).andReturn(false);
 
-        //displayEvolveInfo again
+        // displayEvolveInfo again
         gui.displayMessage("Select Pokemon to evolve from");
         gui.removeAllButtons();
         gui.displayCards(cards);
@@ -1914,7 +1912,7 @@ public class GameTest {
         expect(trainer.requiresGuiSwitchUpdate()).andReturn(false).anyTimes();
         expect(trainer.requiresPokemonSelection()).andReturn(false).anyTimes();
         expect(trainer.requiresEnergySelection()).andReturn(false).anyTimes();
-        trainer.doEffects(player, null, null);  // No Pokémon or energy needed
+        trainer.doEffects(player, null, null); // No Pokémon or energy needed
         expectLastCall();
 
         replay(gui, player, handler, trainer);
@@ -1999,8 +1997,8 @@ public class GameTest {
         Trainer trainer = createMock(Trainer.class);
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
-        Energy e1 = new Energy(EnergyType.fromName("Grass Energy"));  // in energy
-        Energy e2 = new Energy(EnergyType.fromName("Fire Energy"));   // NOT in energy
+        Energy e1 = new Energy(EnergyType.fromName("Grass Energy")); // in energy
+        Energy e2 = new Energy(EnergyType.fromName("Fire Energy")); // NOT in energy
         ArrayList<Card> hand = new ArrayList<>();
         ArrayList<Card> pokemon = new ArrayList<>();
         ArrayList<Card> energy = new ArrayList<>();
@@ -2084,7 +2082,7 @@ public class GameTest {
 
         Game game = new Game(gui, rand, gameSetup, ph);
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
-        game.handleTrainerAction();        // Verify interactions
+        game.handleTrainerAction(); // Verify interactions
 
         verify(gui, nonTrainerCard);
     }
@@ -2105,7 +2103,7 @@ public class GameTest {
         expect(handler.getCurrentPlayer()).andReturn(winner);
         expect(handler.getDefendingPlayer()).andReturn(loser);
 
-        //game is over
+        // game is over
         gui.displayWinningMessage(winner, loser);
         gui.closeWindow();
 
@@ -2181,14 +2179,14 @@ public class GameTest {
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
 
-        //decide locale
+        // decide locale
         expect(gui.displayLocaleOptions()).andReturn(Locale.US);
         gui.displayMessage("You have chosen: English");
 
-        //decide deck
+        // decide deck
         expect(gui.displayDeckOptions()).andReturn("Overgrowth.txt").times(2);
 
-        //setupFlipButton()
+        // setupFlipButton()
         gui.createFlipButton();
 
         expect(gameSetup.completeGameSetup()).andReturn("Heads");
@@ -2197,36 +2195,36 @@ public class GameTest {
         expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         gui.updateTurn(1);
 
-        //displaySetupResults()
+        // displaySetupResults()
         gui.displayMessage("The result was Heads Player 1 goes first!");
 
-        //selectActiveLoop
-        //displayCurrentHand
+        // selectActiveLoop
+        // displayCurrentHand
         gui.removeAllButtons();
         expect(handler.getCurrentPlayerHand()).andReturn(cards);
         gui.displayCards(cards);
 
-        //displayActiveDirections
+        // displayActiveDirections
         gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
 
         gui.setupActivePokemon();
         expect(gui.waitForButtonPressed()).andReturn("");
         expect(gui.getLastSelectedCard()).andReturn(p);
 
-        //checkBasic
+        // checkBasic
         expect(p.getStage()).andReturn(0);
 
-        //makeNewActivePokemon
+        // makeNewActivePokemon
         expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         player.setActivePokemon(p);
         gui.makeActiveCard(anyObject(Player.class), eq(p));
 
-        //displayCurrentPlayerHand
+        // displayCurrentPlayerHand
         gui.removeAllButtons();
         expect(handler.getCurrentPlayerHand()).andReturn(cards);
         gui.displayCards(cards);
 
-        //mainGameLoop
+        // mainGameLoop
         expect(handler.getCurrentPlayerHand()).andReturn(cards);
         gui.removeAllButtons();
         gui.displayCards(cards);
@@ -2252,14 +2250,14 @@ public class GameTest {
         Pokemon p = createMock(Pokemon.class);
         Player player = createMock(Player.class);
 
-        //decide locale
+        // decide locale
         expect(gui.displayLocaleOptions()).andReturn(Locale.US);
         gui.displayMessage("You have chosen: English");
 
-        //decide deck
+        // decide deck
         expect(gui.displayDeckOptions()).andReturn("Overgrowth.txt").times(2);
 
-        //setupFlipButton()
+        // setupFlipButton()
         gui.createFlipButton();
 
         expect(gameSetup.completeGameSetup()).andReturn("Heads");
@@ -2268,36 +2266,36 @@ public class GameTest {
         expect(handler.getPlayerTurn()).andReturn(1).anyTimes();
         gui.updateTurn(1);
 
-        //displaySetupResults()
+        // displaySetupResults()
         gui.displayMessage("The result was Heads Player 1 goes first!");
 
-        //selectActiveLoop
-        //displayCurrentHand
+        // selectActiveLoop
+        // displayCurrentHand
         gui.removeAllButtons();
         expect(handler.getCurrentPlayerHand()).andReturn(cards);
         gui.displayCards(cards);
 
-        //displayActiveDirections
+        // displayActiveDirections
         gui.displayMessage("Select a basic Pokemon to be your Active Pokemon");
 
         gui.setupActivePokemon();
         expect(gui.waitForButtonPressed()).andReturn("");
         expect(gui.getLastSelectedCard()).andReturn(p);
 
-        //checkBasic
+        // checkBasic
         expect(p.getStage()).andReturn(0);
 
-        //makeNewActivePokemon
+        // makeNewActivePokemon
         expect(handler.getCurrentPlayer()).andReturn(player).anyTimes();
         player.setActivePokemon(p);
         gui.makeActiveCard(anyObject(Player.class), eq(p));
 
-        //displayCurrentPlayerHand
+        // displayCurrentPlayerHand
         gui.removeAllButtons();
         expect(handler.getCurrentPlayerHand()).andReturn(cards);
         gui.displayCards(cards);
 
-        //mainGameLoop
+        // mainGameLoop
         expect(handler.getCurrentPlayerHand()).andReturn(cards);
         gui.removeAllButtons();
         gui.displayCards(cards);
@@ -2305,7 +2303,7 @@ public class GameTest {
         expect(gui.waitForButtonPressed()).andReturn("displayCardInfo");
         expect(gui.gameIsOver()).andReturn(false);
 
-        //again
+        // again
         expect(handler.getCurrentPlayerHand()).andReturn(cards);
         gui.removeAllButtons();
         gui.displayCards(cards);
@@ -2343,12 +2341,12 @@ public class GameTest {
         PlayerHandler ph = createMock(PlayerHandler.class);
         Player active = createMock(Player.class);
         Trainer t = new Trainer("Generic", "No Effect"); // Registry does not contain "No Effect"
-        
+
         expect(ph.getCurrentPlayer()).andReturn(active);
         expect(ph.getAllPlayerPokemon()).andReturn(new ArrayList<>());
         expect(ph.getAllPlayerEnergy()).andReturn(new ArrayList<>());
         active.removeFromHand(t);
-        
+
         replay(ph, active);
         Game game = new Game(gui, null, null, ph);
         game.handleUseTrainer(t);
@@ -2388,7 +2386,7 @@ public class GameTest {
         PlayerHandler ph = createMock(PlayerHandler.class);
         Pokemon stage1 = new Pokemon("Ivysaur", "Grass", 1, 60);
         stage1.setEvolvesFrom("Bulbasaur");
-        
+
         expect(gui.getLastSelectedCard()).andReturn(stage1);
         expect(ph.getOnlyPreEvolutionsFromActivePlayer(stage1)).andReturn(new ArrayList<>());
         gui.displayMessage("You have no Pokemon that can evolve into Ivysaur");
@@ -2410,10 +2408,10 @@ public class GameTest {
         stage1.setEvolvesFrom("Bulbasaur");
         ArrayList<Card> preEvs = new ArrayList<>();
         preEvs.add(basic);
-        
+
         expect(gui.getLastSelectedCard()).andReturn(stage1);
         expect(ph.getOnlyPreEvolutionsFromActivePlayer(stage1)).andReturn(preEvs);
-        
+
         // displayEvolveInfo
         gui.displayMessage("Select Pokemon to evolve from");
         gui.removeAllButtons();
@@ -2422,11 +2420,11 @@ public class GameTest {
         gui.waitForAction();
         expect(gui.isCancelled()).andReturn(false);
         expect(gui.getLastSelectedCard()).andReturn(basic);
-        
+
         expect(ph.evolve(stage1, basic)).andReturn("Active");
         expect(ph.getCurrentPlayer()).andReturn(player);
         gui.makeActiveCard(player, stage1);
-        
+
         replay(gui, ph);
         Game game = new Game(gui, null, null, ph);
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
@@ -2444,10 +2442,10 @@ public class GameTest {
         stage1.setEvolvesFrom("Bulbasaur");
         ArrayList<Card> preEvs = new ArrayList<>();
         preEvs.add(basic);
-        
+
         expect(gui.getLastSelectedCard()).andReturn(stage1);
         expect(ph.getOnlyPreEvolutionsFromActivePlayer(stage1)).andReturn(preEvs);
-        
+
         // displayEvolveInfo mock flow
         gui.displayMessage("Select Pokemon to evolve from");
         gui.removeAllButtons();
@@ -2456,12 +2454,12 @@ public class GameTest {
         gui.waitForAction();
         expect(gui.isCancelled()).andReturn(false);
         expect(gui.getLastSelectedCard()).andReturn(basic);
-        
+
         expect(ph.evolve(stage1, basic)).andReturn("Bench");
         expect(ph.getCurrentPlayer()).andReturn(player).anyTimes();
         gui.removeBenchCard(player, basic);
         gui.addBenchCard(player, stage1);
-        
+
         replay(gui, ph);
         Game game = new Game(gui, null, null, ph);
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
@@ -2478,10 +2476,10 @@ public class GameTest {
         stage1.setEvolvesFrom("Bulbasaur");
         ArrayList<Card> preEvs = new ArrayList<>();
         preEvs.add(basic);
-        
+
         expect(gui.getLastSelectedCard()).andReturn(stage1);
         expect(ph.getOnlyPreEvolutionsFromActivePlayer(stage1)).andReturn(preEvs);
-        
+
         // displayEvolveInfo mock flow
         gui.displayMessage("Select Pokemon to evolve from");
         gui.removeAllButtons();
@@ -2490,11 +2488,11 @@ public class GameTest {
         gui.waitForAction();
         expect(gui.isCancelled()).andReturn(false);
         expect(gui.getLastSelectedCard()).andReturn(basic);
-        
+
         // Test "Error" path
         expect(ph.evolve(stage1, basic)).andReturn("Error");
         gui.displayMessage("Evolution could not be completed");
-        
+
         replay(gui, ph);
         Game game = new Game(gui, null, null, ph);
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
@@ -2511,7 +2509,7 @@ public class GameTest {
         stage1.setEvolvesFrom("Bulbasaur");
         ArrayList<Card> preEvs = new ArrayList<>();
         preEvs.add(basic);
-        
+
         expect(gui.getLastSelectedCard()).andReturn(stage1).times(1);
         expect(ph.getOnlyPreEvolutionsFromActivePlayer(stage1)).andReturn(preEvs).times(1);
         gui.displayMessage("Select Pokemon to evolve from");
@@ -2521,10 +2519,10 @@ public class GameTest {
         gui.waitForAction();
         expect(gui.isCancelled()).andReturn(false);
         expect(gui.getLastSelectedCard()).andReturn(basic);
-        
+
         expect(ph.evolve(stage1, basic)).andReturn("JustPlayed");
         gui.displayMessage("Base Pokemon was just played");
-        
+
         replay(gui, ph);
         Game game = new Game(gui, null, null, ph);
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
@@ -2537,15 +2535,16 @@ public class GameTest {
         GUI gui = createMock(GUI.class);
         PlayerHandler ph = createMock(PlayerHandler.class);
         Player p1 = createMock(Player.class);
-        
+
         Game game = new Game(gui, null, null, ph);
-        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);        // Expectations for setup (called multiple times due to loop/recursion)
+        game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US); // Expectations for setup (called
+                                                                               // multiple times due to loop/recursion)
         expect(ph.getCurrentPlayer()).andReturn(p1).anyTimes();
         expect(ph.getCurrentPlayerHand()).andReturn(new ArrayList<Card>()).anyTimes();
         expect(p1.getName()).andReturn("Player 1").anyTimes();
         p1.setActivePokemon(anyObject());
         expectLastCall().anyTimes();
-        
+
         gui.displayMessage(anyString());
         expectLastCall().anyTimes();
         gui.displayCards(anyObject());
@@ -2556,28 +2555,27 @@ public class GameTest {
         expectLastCall().anyTimes();
         gui.makeActiveCard(anyObject(), anyObject());
         expectLastCall().anyTimes();
-        
+
         // Loop 1: Selection is null
         expect(gui.waitForButtonPressed()).andReturn("Select");
         expect(gui.getLastSelectedCard()).andReturn(null);
-        
+
         // Loop 2: Valid selection to break loop
         expect(gui.waitForButtonPressed()).andReturn("Select");
         Pokemon pkmn = new Pokemon("Pika", "Lightning", 0, 60);
         expect(gui.getLastSelectedCard()).andReturn(pkmn);
-        
+
         replay(gui, ph, p1);
         game.selectActiveLoop();
         verify(gui, ph, p1);
     }
-
 
     @Test
     public void testHandleUseTrainerCancellation() {
         GUI gui = createMock(GUI.class);
         PlayerHandler ph = createMock(PlayerHandler.class);
         Player p1 = createMock(Player.class);
-        
+
         Game game = new Game(gui, null, null, ph);
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
 
@@ -2586,20 +2584,20 @@ public class GameTest {
         expect(ph.getActivePokemon()).andReturn(new Pokemon("Pika", "Lightning", 0, 60)).anyTimes();
         expect(ph.getHandPokemon()).andReturn(new ArrayList<Card>()).anyTimes();
         expect(ph.getAllPlayerEnergy()).andReturn(new ArrayList<Card>()).anyTimes();
-        
+
         gui.displayMessage(anyString());
         expectLastCall().anyTimes();
         gui.displayCards(anyObject());
         expectLastCall().anyTimes();
         gui.removeAllButtons();
         expectLastCall().anyTimes();
-        
-        // Trainer that needs selection (Switch) 
+
+        // Trainer that needs selection (Switch)
         Trainer trainer = new Trainer("Switch", TrainerSubtype.ITEM, "SWITCH_ACTIVE_WITH_BENCH");
         gui.displayConfirmAndCancelButton();
         gui.waitForAction();
         expect(gui.isCancelled()).andReturn(true);
-        
+
         // Check that NO effect is called
         replay(gui, ph, p1);
         game.handleUseTrainer(trainer);
@@ -2613,19 +2611,19 @@ public class GameTest {
         Player p1 = createMock(Player.class);
         Pokemon pikachu = new Pokemon("Pikachu", "Lightning", 0, 60);
         Energy energy = new Energy(EnergyType.LIGHTNING);
-        
+
         Game game = new Game(gui, null, null, ph);
-        
+
         expect(gui.getLastSelectedCard()).andReturn(energy);
         expect(ph.getPlayerTurn()).andReturn(1).anyTimes();
         expect(ph.getCurrentPlayer()).andReturn(p1).anyTimes();
         expect(p1.getActivePokemon()).andReturn(pikachu);
         expect(ph.activeCanAddEnergy()).andReturn(true);
-        
+
         // Effects of attachment called on ph
         ph.addEnergyToPokemon(energy, pikachu);
         expectLastCall();
-        
+
         // GUI Refresh
         expect(p1.handAsList()).andReturn(new ArrayList<Card>());
         gui.displayCards(anyObject());
@@ -2634,7 +2632,7 @@ public class GameTest {
         expectLastCall();
         gui.setLastSelectedCardForDrag(null);
         expectLastCall();
-        
+
         replay(gui, ph, p1);
         game.handleInstantDrop("P1_ACTIVE_DROP");
         verify(gui, ph, p1);
@@ -2646,20 +2644,20 @@ public class GameTest {
         PlayerHandler ph = createMock(PlayerHandler.class);
         Player p1 = createMock(Player.class);
         Pokemon bulba = new Pokemon("Bulbasaur", "Grass", 0, 50);
-        
+
         Game game = new Game(gui, null, null, ph);
-        
+
         expect(gui.getLastSelectedCard()).andReturn(bulba);
         expect(ph.getPlayerTurn()).andReturn(1).anyTimes();
         expect(ph.getCurrentPlayer()).andReturn(p1).anyTimes();
         expect(ph.getOnlyPokemonFromBench(1)).andReturn(new ArrayList<Card>());
-        
+
         // Effects of benching called on ph
         ph.addToBench(bulba);
         expectLastCall();
         gui.addBenchCard(p1, bulba);
         expectLastCall();
-        
+
         // GUI Refresh
         expect(p1.handAsList()).andReturn(new ArrayList<Card>());
         gui.displayCards(anyObject());
@@ -2668,10 +2666,48 @@ public class GameTest {
         expectLastCall();
         gui.setLastSelectedCardForDrag(null);
         expectLastCall();
-        
+
         replay(gui, ph, p1);
         game.handleInstantDrop("P1_BENCH_0_DROP");
         verify(gui, ph, p1);
     }
-}
 
+    @Test
+    public void testBenchDropPerformance() {
+        GameGUI gui = createMock(GameGUI.class);
+        PlayerHandler ph = createMock(PlayerHandler.class);
+        Player p1 = createMock(Player.class);
+        Pokemon bulba = new Pokemon("Bulbasaur", "Grass", 0, 50);
+        
+        Game game = new Game(gui, null, null, ph);
+        
+        expect(gui.getLastSelectedCard()).andReturn(bulba).anyTimes();
+        expect(ph.getPlayerTurn()).andReturn(1).anyTimes();
+        expect(ph.getCurrentPlayer()).andReturn(p1).anyTimes();
+        expect(ph.getOnlyPokemonFromBench(1)).andReturn(new ArrayList<Card>()).anyTimes();
+        
+        ph.addToBench(bulba);
+        expectLastCall().anyTimes();
+        gui.addBenchCard(p1, bulba);
+        expectLastCall().anyTimes();
+        
+        expect(p1.handAsList()).andReturn(new ArrayList<Card>()).anyTimes();
+        gui.displayCards(anyObject());
+        expectLastCall().anyTimes();
+        gui.displayActionButtons();
+        expectLastCall().anyTimes();
+        gui.setLastSelectedCardForDrag(null);
+        expectLastCall().anyTimes();
+        
+        replay(gui, ph, p1);
+        
+        // Measure performance: loop 100 times
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 100; i++) {
+            game.handleInstantDrop("P1_BENCH_0_DROP");
+        }
+        long duration = System.currentTimeMillis() - start;
+        assertTrue("Bench drop took too long: " + duration + "ms", duration < 50);
+        verify(gui, ph, p1);
+    }
+}

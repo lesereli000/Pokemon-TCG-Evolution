@@ -465,7 +465,7 @@ public class PokemonTest {
         Pokemon pikachu = (Pokemon) pg.generateCard("Pikachu");
         Energy e = createMock(Energy.class);
 
-        assertThrows(IllegalArgumentException.class, () -> pikachu.removeEnergy(e));
+        assertThrows(EnergyNotFoundException.class, () -> pikachu.removeEnergy(e));
     }
 
     @Test
@@ -537,7 +537,7 @@ public class PokemonTest {
         boolean pass = false;
         try {
             p.removeColorless(1);
-        } catch (IllegalArgumentException e) {
+        } catch (EnergyNotFoundException e) {
             pass = true;
             assertEquals("Can not remove this many energies!", e.getMessage());
         }
@@ -600,7 +600,7 @@ public class PokemonTest {
         CardGenerator pg = new CardGenerator();
         Pokemon p = (Pokemon) pg.generateCard("Pikachu");
 
-        assertThrows(IllegalArgumentException.class, () -> p.removeColorless(1));
+        assertThrows(EnergyNotFoundException.class, () -> p.removeColorless(1));
     }
 
     @Test
@@ -753,7 +753,7 @@ public class PokemonTest {
     public void testRemoveEnergyNotFound() {
         Pokemon p = new Pokemon("P", "Grass", 0, 100);
         Energy e = new Energy(EnergyType.FIRE);
-        assertThrows(IllegalArgumentException.class, () -> p.removeEnergy(e));
+        assertThrows(EnergyNotFoundException.class, () -> p.removeEnergy(e));
     }
 
     @Test
