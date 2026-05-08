@@ -33,25 +33,26 @@ public class Game {
 
     protected void setupGame() {
         decideLocale();
-        
+
         // Independent deck selection for both players
         String p1Deck = gui.displayDeckOptions();
         String p2Deck = gui.displayDeckOptions();
-        
+
         setupFlipButton();
         String coinFlipResult = gameSetup.completeGameSetup();
-        
+
         // Pass both decks to playerHandler
         playerHandler.completePlayerSetup(coinFlipResult, p1Deck, p2Deck);
-        
+
         gui.setPlayers(playerHandler.player1, playerHandler.player2);
         int playerTurn = playerHandler.getPlayerTurn();
         gui.updateTurn(playerTurn);
         displaySetupResults(coinFlipResult, playerTurn);
         selectActiveLoop();
-        while(!gameOver) {
+        while (!gameOver) {
             mainGameLoop();
-            if(gui.gameIsOver()) gameOver = true;
+            if (gui.gameIsOver())
+                gameOver = true;
         }
     }
 
@@ -78,7 +79,7 @@ public class Game {
         gui.setupActivePokemon();
         gui.waitForButtonPressed();
         Card selectedCard = gui.getLastSelectedCard();
-        if(selectedCard != null && checkBasicPokemon(selectedCard)) {
+        if (selectedCard != null && checkBasicPokemon(selectedCard)) {
             makeNewActivePokemon((Pokemon) selectedCard);
             displayCurrentPlayerHand();
         } else {
@@ -115,8 +116,9 @@ public class Game {
     protected void handleInstantDrop(String action) {
         try {
             Card card = gui.getLastSelectedCard();
-            if (card == null) return;
-            
+            if (card == null)
+                return;
+
             int turn = playerHandler.getPlayerTurn();
             Player currentPlayer = playerHandler.getCurrentPlayer();
             String activeZone = "P" + turn + "_ACTIVE_DROP";
@@ -132,22 +134,29 @@ public class Game {
             } else if (action.startsWith(benchPrefix)) {
                 actionTaken = handleBenchDrop(action, card, benchPrefix);
             }
-            
+
             if (actionTaken) {
                 // Refresh the hand to show new cards (drawn by Trainers) or removed cards
                 gui.displayCards(currentPlayer.handAsList());
                 gui.displayActionButtons();
             }
-            
-            // Clear the drag selection
-            gui.setLastSelectedCardForDrag(null);
-            
         } catch (InvalidMoveException | EnergyNotFoundException e) {
             gui.displayMessage(e.getMessage());
-            gui.setLastSelectedCardForDrag(null);
+            Player currentPlayer = playerHandler.getCurrentPlayer();
+            if (currentPlayer != null) {
+                gui.displayCards(currentPlayer.handAsList());
+            }
         } catch (Exception e) {
             System.err.println("Instant Drop handling error: " + e.getMessage());
             e.printStackTrace();
+            gui.displayMessage("An unexpected error occurred during this move.");
+            Player currentPlayer = playerHandler.getCurrentPlayer();
+            if (currentPlayer != null) {
+                gui.displayCards(currentPlayer.handAsList());
+            }
+        } finally {
+            // Clear the drag selection
+            gui.setLastSelectedCardForDrag(null);
         }
     }
 
@@ -179,9 +188,9 @@ public class Game {
             slotStr = slotStr.split("_")[0];
         }
         int slot = Integer.parseInt(slotStr);
-        
+
         ArrayList<Card> bench = playerHandler.getOnlyPokemonFromBench(1); // 1 = Current Player
-        
+
         if (card instanceof Pokemon && ((Pokemon) card).stage == 0) {
             handleAddToBench((Pokemon) card);
             return true;
@@ -207,11 +216,9 @@ public class Game {
         }
     }
 
-
-
     protected void displayCardInfo() {
         boolean hasCardSelected = gui.hasCardSelected();
-        if(hasCardSelected) {
+        if (hasCardSelected) {
             Card lastSelectedCard = gui.getLastSelectedCard();
             gui.displayCardReport(lastSelectedCard);
         } else {
@@ -226,9 +233,9 @@ public class Game {
         Pokemon activePokemon = activePlayer.getActivePokemon();
         boolean canRetreat = activePokemon.canRetreat() && playerHandler.canRetreat();
         gui.displayRetreatEnergy(activePokemon, canRetreat);
-        if(canRetreat) {
+        if (canRetreat) {
             Card newActive = retreatPokemon();
-            if(newActive != null) {
+            if (newActive != null) {
                 handleRetreat(activePlayer, newActive);
             }
         }
@@ -251,9 +258,9 @@ public class Game {
         gui.displayCards(playerCards);
         gui.displayConfirmAndCancelButton();
         gui.waitForAction();
-        if(!gui.isCancelled()) {
+        if (!gui.isCancelled()) {
             Card selectedCard = gui.getLastSelectedCard();
-            if(!playerCards.contains(selectedCard)) {
+            if (!playerCards.contains(selectedCard)) {
                 message = messages.getString("noSelected");
                 gui.displayMessage(message);
                 return retreatPokemon();
@@ -266,7 +273,7 @@ public class Game {
     }
 
     protected void handleAttackAction() {
-        if(!playerHandler.playerCanAttack()) {
+        if (!playerHandler.playerCanAttack()) {
             String message = messages.getString("noAttack");
             gui.displayMessage(message);
         } else {
@@ -276,14 +283,14 @@ public class Game {
 
     protected void handleAttackOpponent() {
         Attack selectedAttack = displayAttackInfo();
-        if(selectedAttack != null) {
-            if(!playerHandler.attackOpponent(selectedAttack)) {
+        if (selectedAttack != null) {
+            if (!playerHandler.attackOpponent(selectedAttack)) {
                 String message = messages.getString("notEnergy");
                 gui.displayMessage(message);
             } else {
                 boolean defendingIsDead = playerHandler.isDefendingDead();
                 displayPostAttackInfo(selectedAttack, defendingIsDead);
-                if(defendingIsDead) {
+                if (defendingIsDead) {
                     handleDeadActive();
                 }
                 handlePassTurnAction();
@@ -296,7 +303,7 @@ public class Game {
         Player currentPlayer = playerHandler.getCurrentPlayer();
         Player defendingPlayer = playerHandler.getDefendingPlayer();
         gui.displayAttackMessage(currentPlayer, defendingPlayer, attack);
-        if(isDead) {
+        if (isDead) {
             gui.displayDeadActiveInfo(defendingPlayer);
         }
     }
@@ -304,17 +311,17 @@ public class Game {
     protected void handleDeadActive() {
         ArrayList<Card> activeBench = playerHandler.getOnlyPokemonFromBench(2);
         displayDeadActiveGUI(activeBench);
-        if(!gameOver) {
+        if (!gameOver) {
             Card lastSelectedCard = gui.getLastSelectedCard();
 
-            if(!activeBench.contains(lastSelectedCard)) {
+            if (!activeBench.contains(lastSelectedCard)) {
                 String message = messages.getString("invalidPokemon");
                 gui.displayMessage(message);
                 handleDeadActive();
             } else {
                 int playerTurn = playerHandler.getPlayerTurn();
                 handlePickupPrizeCard(playerTurn);
-                playerHandler.killDefenderActive((Pokemon)lastSelectedCard);
+                playerHandler.killDefenderActive((Pokemon) lastSelectedCard);
                 Player defendingPlayer = playerHandler.getDefendingPlayer();
                 gui.makeActiveCard(defendingPlayer, lastSelectedCard);
                 gui.removeBenchCard(defendingPlayer, lastSelectedCard);
@@ -325,16 +332,15 @@ public class Game {
     protected void handlePickupPrizeCard(int turn) {
         int prizeCardsLeft = playerHandler.activePickupPrizeCard();
         gui.removePrizeCard(playerHandler.getCurrentPlayer());
-        if(prizeCardsLeft == 0) {
+        if (prizeCardsLeft == 0) {
             Player winner = playerHandler.getCurrentPlayer();
             Player loser = playerHandler.getDefendingPlayer();
             gameIsOver(winner, loser);
         }
     }
 
-
     private void displayDeadActiveGUI(ArrayList<Card> playerPokemon) {
-        if(playerPokemon.isEmpty()) {
+        if (playerPokemon.isEmpty()) {
             Player winner = playerHandler.getCurrentPlayer();
             Player loser = playerHandler.getDefendingPlayer();
             gameIsOver(winner, loser);
@@ -359,9 +365,10 @@ public class Game {
         gui.displayPossibleAttacks(attacks);
         gui.displayConfirmAndCancelButton();
         gui.waitForAction();
-        if(gui.isCancelled()) return null;
+        if (gui.isCancelled())
+            return null;
         Attack attack = gui.getLastSelectedAttack();
-        if(!attacks.contains(attack)) {
+        if (!attacks.contains(attack)) {
             String message = messages.getString("atkNotSelect");
             gui.displayMessage(message);
             return displayAttackInfo();
@@ -372,31 +379,31 @@ public class Game {
 
     protected void handleBenchAction() {
         Card lastSelectedCard = gui.getLastSelectedCard();
-        if(!(lastSelectedCard instanceof Pokemon)) {
+        if (!(lastSelectedCard instanceof Pokemon)) {
             String message = messages.getString("noPokemon");
             gui.displayMessage(message);
         } else {
-            handleAddToBench((Pokemon)lastSelectedCard);
+            handleAddToBench((Pokemon) lastSelectedCard);
         }
     }
 
     protected void handleEnergyAction() {
         Card lastSelectedCard = gui.getLastSelectedCard();
-        if(!(lastSelectedCard instanceof Energy)) {
+        if (!(lastSelectedCard instanceof Energy)) {
             String message = messages.getString("noEnergy");
             gui.displayMessage(message);
         } else {
-            handleAddEnergy((Energy)lastSelectedCard);
+            handleAddEnergy((Energy) lastSelectedCard);
         }
     }
 
     protected void handleTrainerAction() {
         Card lastSelectedCard = gui.getLastSelectedCard();
-        if(!(lastSelectedCard instanceof Trainer)) {
+        if (!(lastSelectedCard instanceof Trainer)) {
             String message = messages.getString("noTrainer");
             gui.displayMessage(message);
         } else {
-            handleUseTrainer((Trainer)lastSelectedCard);
+            handleUseTrainer((Trainer) lastSelectedCard);
         }
     }
 
@@ -404,7 +411,7 @@ public class Game {
         Player currentPlayer = playerHandler.getCurrentPlayer();
         ArrayList<Card> playerPokemon = playerHandler.getAllPlayerPokemon();
 
-        if(trainer.requiresGuiSwitchUpdate()) {
+        if (trainer.requiresGuiSwitchUpdate()) {
             playerPokemon.remove(playerHandler.getActivePokemon());
             playerPokemon.removeAll(playerHandler.getHandPokemon());
         }
@@ -422,13 +429,13 @@ public class Game {
         currentPlayer.removeFromHand(trainer);
         trainer.doEffects(currentPlayer, selectedPokemon, selectedEnergy);
 
-        if(trainer.requiresGuiSwitchUpdate() && selectedPokemon != null) {
+        if (trainer.requiresGuiSwitchUpdate() && selectedPokemon != null) {
             gui.replaceActiveCard(currentPlayer, (Card) selectedPokemon);
         }
     }
 
     protected Pokemon displayTrainerPokemonSelection(Trainer trainer, ArrayList<Card> pokemon) {
-        if(trainer.requiresPokemonSelection()) {
+        if (trainer.requiresPokemonSelection()) {
             String trainerText = trainer.requiresGuiSwitchUpdate() ? "selectPokSwitch" : "selectPokPot";
             String message = messages.getString(trainerText);
             gui.displayMessage(message);
@@ -436,9 +443,10 @@ public class Game {
             gui.displayCards(pokemon);
             gui.displayConfirmAndCancelButton();
             gui.waitForAction();
-            if(gui.isCancelled()) return null;
+            if (gui.isCancelled())
+                return null;
             Pokemon selectedPokemon = (Pokemon) gui.getLastSelectedCard();
-            if(!pokemon.contains(selectedPokemon)) {
+            if (!pokemon.contains(selectedPokemon)) {
                 String msg = messages.getString("noPokemon");
                 gui.displayMessage(msg);
                 return displayTrainerPokemonSelection(trainer, pokemon);
@@ -451,14 +459,15 @@ public class Game {
     }
 
     protected Energy displayTrainerEnergySelection(Trainer trainer, ArrayList<Card> energy) {
-        if(trainer.requiresEnergySelection()) {
+        if (trainer.requiresEnergySelection()) {
             String message = messages.getString("selectEnSuper");
             gui.displayMessage(message);
             gui.removeAllButtons();
             gui.displayCards(energy);
             gui.displayConfirmAndCancelButton();
             gui.waitForAction();
-            if(gui.isCancelled()) return null;
+            if (gui.isCancelled())
+                return null;
             Card lastCard = gui.getLastSelectedCard();
             if (!(lastCard instanceof Energy)) {
                 String msg = messages.getString("noEnergy");
@@ -466,7 +475,7 @@ public class Game {
                 return displayTrainerEnergySelection(trainer, energy);
             }
             Energy selectedEnergy = (Energy) lastCard;
-            if(!energy.contains(selectedEnergy)) {
+            if (!energy.contains(selectedEnergy)) {
                 String msg = messages.getString("noEnergy");
                 gui.displayMessage(msg);
                 return displayTrainerEnergySelection(trainer, energy);
@@ -484,20 +493,20 @@ public class Game {
 
     protected void handleEvolveAction() {
         Card lastSelectedCard = gui.getLastSelectedCard();
-        if(!(lastSelectedCard instanceof Pokemon)) {
+        if (!(lastSelectedCard instanceof Pokemon)) {
             String message = messages.getString("noPokemon");
             gui.displayMessage(message);
         } else {
-            handleEvolve((Pokemon)lastSelectedCard, null);
+            handleEvolve((Pokemon) lastSelectedCard, null);
         }
     }
 
     protected void handleEvolve(Pokemon evolution, Pokemon target) {
         int pokemonStage = evolution.getStage();
-        if(pokemonStage != 0) {
+        if (pokemonStage != 0) {
             ArrayList<Card> onlyPreEvolutions = playerHandler.getOnlyPreEvolutionsFromActivePlayer(evolution);
 
-            if(onlyPreEvolutions.isEmpty()) {
+            if (onlyPreEvolutions.isEmpty()) {
                 String message = messages.getString("cantEvolve");
                 message = MessageFormat.format(message, evolution.getName());
                 gui.displayMessage(message);
@@ -508,9 +517,9 @@ public class Game {
                 } else {
                     basePokemon = displayEvolveInfo(onlyPreEvolutions);
                 }
-                
+
                 if (basePokemon != null) {
-                    switch(playerHandler.evolve(evolution, basePokemon)){
+                    switch (playerHandler.evolve(evolution, basePokemon)) {
                         case "Error":
                             String msg = messages.getString("evolveError");
                             gui.displayMessage(msg);
@@ -547,9 +556,10 @@ public class Game {
         gui.displayCards(pokemon);
         gui.displayConfirmAndCancelButton();
         gui.waitForAction();
-        if(gui.isCancelled()) return null;
+        if (gui.isCancelled())
+            return null;
         Pokemon selectedPokemon = (Pokemon) gui.getLastSelectedCard();
-        if(!pokemon.contains(selectedPokemon)) {
+        if (!pokemon.contains(selectedPokemon)) {
             String msg = messages.getString("noPokemon");
             gui.displayMessage(msg);
             return displayEvolveInfo(pokemon);
@@ -580,7 +590,7 @@ public class Game {
     }
 
     public boolean checkBasicPokemon(Card card) {
-        if(!(card instanceof Pokemon pokemon)) {
+        if (!(card instanceof Pokemon pokemon)) {
             return false;
         }
         int stage = pokemon.getStage();
@@ -589,7 +599,7 @@ public class Game {
 
     protected void handleAddToBench(Pokemon selectedPokemon) {
         int pokemonStage = selectedPokemon.getStage();
-        if(pokemonStage == 0) {
+        if (pokemonStage == 0) {
             playerHandler.addToBench(selectedPokemon);
             gui.addBenchCard(playerHandler.getCurrentPlayer(), selectedPokemon);
         } else {
@@ -599,7 +609,7 @@ public class Game {
     }
 
     protected void handleAddEnergy(Energy energy) {
-        if(!playerHandler.activeCanAddEnergy()) {
+        if (!playerHandler.activeCanAddEnergy()) {
             String message = messages.getString("addEnergyErr");
             gui.displayMessage(message);
         } else {
@@ -609,7 +619,7 @@ public class Game {
             onlyPokemon.add(activePokemon);
 
             Pokemon selectedPokemon = displayAddEnergyInfo(onlyPokemon);
-            if(selectedPokemon != null) {
+            if (selectedPokemon != null) {
                 playerHandler.addEnergyToPokemon(energy, selectedPokemon);
             }
         }
@@ -622,9 +632,10 @@ public class Game {
         gui.displayCards(pokemon);
         gui.displayConfirmAndCancelButton();
         gui.waitForAction();
-        if(gui.isCancelled()) return null;
+        if (gui.isCancelled())
+            return null;
         Pokemon selectedPokemon = (Pokemon) gui.getLastSelectedCard();
-        if(!pokemon.contains(selectedPokemon)) {
+        if (!pokemon.contains(selectedPokemon)) {
             String msg = messages.getString("noPokemon");
             gui.displayMessage(msg);
             return displayAddEnergyInfo(pokemon);
