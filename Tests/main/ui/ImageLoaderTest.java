@@ -16,6 +16,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -192,5 +193,43 @@ public class ImageLoaderTest {
         loadingField.setAccessible(true);
         Set<String> loading = (Set<String>) loadingField.get(null);
         assertFalse(loading.contains(url));
+    }
+
+    @Test(timeout = 500)
+    @SuppressWarnings("unchecked")
+    public void testImageLoaderConcurrencyPerformance() throws Exception {
+        // Pre-load the cache so we are only testing cache hit speed under concurrency
+        String url = "http://example.com/cached.png";
+        BufferedImage mockImage = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
+        Field cacheField = ImageLoader.class.getDeclaredField("imageCache");
+        cacheField.setAccessible(true);
+        Map<String, BufferedImage> cache = (Map<String, BufferedImage>) cacheField.get(null);
+        cache.put(url, mockImage);
+
+        int numThreads = 50;
+        Thread[] threads = new Thread[numThreads];
+        Component comp = createMock(Component.class);
+        replay(comp);
+
+        long startTime = System.currentTimeMillis();
+
+        for (int i = 0; i < numThreads; i++) {
+            threads[i] = new Thread(() -> {
+                BufferedImage result = ImageLoader.getImage(url, comp);
+                assertEquals(mockImage, result);
+            });
+            threads[i].start();
+        }
+
+        for (int i = 0; i < numThreads; i++) {
+            threads[i].join();
+        }
+
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+        
+        // Ensure that 50 concurrent cache hits resolve within 50ms total
+        assertTrue("Concurrency load test took too long: " + duration + "ms", duration < 50);
+        verify(comp);
     }
 }
