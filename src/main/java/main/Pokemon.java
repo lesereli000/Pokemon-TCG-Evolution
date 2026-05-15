@@ -153,8 +153,9 @@ public class Pokemon extends Card {
     }
 
     private boolean canPay(HashMap<EnergyType, Integer> energyCount, HashMap<EnergyType, Integer> costCount) {
-        for (EnergyType energyType : costCount.keySet()) {
-            int required = costCount.get(energyType);
+        for (java.util.Map.Entry<EnergyType, Integer> entry : costCount.entrySet()) {
+            EnergyType energyType = entry.getKey();
+            int required = entry.getValue();
             int available = energyCount.getOrDefault(energyType, 0);
             if (available < required) {
                 return false;

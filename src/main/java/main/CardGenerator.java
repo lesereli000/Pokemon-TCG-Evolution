@@ -112,6 +112,10 @@ public class CardGenerator {
                 weakness = "Darkness";
                 resistance = "Fighting";
             }
+            default -> {
+                weakness = "";
+                resistance = "";
+            }
         }
 
         int hp = pokemonJson.getInt("hp");

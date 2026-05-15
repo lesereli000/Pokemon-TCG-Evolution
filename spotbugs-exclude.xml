@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- Exclude internal representation exposure bugs which are intended by design in this game model -->
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2" />
+    </Match>
+    <!-- Exclude constructor throw warnings for simple POJOs/Entities where finalizer attacks are not a realistic threat -->
+    <Match>
+        <Bug pattern="CT_CONSTRUCTOR_THROW" />
+    </Match>
+</FindBugsFilter>

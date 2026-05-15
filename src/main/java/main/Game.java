@@ -10,7 +10,6 @@ import java.util.ResourceBundle;
 
 public class Game {
     protected GUI gui;
-    protected Random random;
     protected SetupGame gameSetup;
     protected PlayerHandler playerHandler;
     protected boolean gameOver;
@@ -24,7 +23,6 @@ public class Game {
 
     public Game(GUI gui, Random random, SetupGame gameSetup, PlayerHandler playerHandler, TurnManager turnManager) {
         this.gui = gui;
-        this.random = random;
         this.gameSetup = gameSetup;
         this.playerHandler = playerHandler;
         this.gameOver = false;
@@ -96,6 +94,7 @@ public class Game {
         gui.displayCards(playerHand);
         gui.displayActionButtons();
         String action = gui.waitForButtonPressed();
+        if (action == null) return;
         switch (action) {
             case "AddToBench" -> handleBenchAction();
             case "AddEnergy" -> handleEnergyAction();
@@ -106,7 +105,7 @@ public class Game {
             case "Evolve" -> handleEvolveAction();
             case "PlayTrainer" -> handleTrainerAction();
             default -> {
-                if (action != null && action.endsWith("_DROP")) {
+                if (action.endsWith("_DROP")) {
                     handleInstantDrop(action);
                 }
             }
@@ -124,8 +123,6 @@ public class Game {
             String activeZone = "P" + turn + "_ACTIVE_DROP";
             String benchPrefix = "P" + turn + "_BENCH_";
             boolean actionTaken = false;
-
-            EvolutionValidator evolValidator = new EvolutionValidator();
 
             if (action.equals("BOARD_DROP")) {
                 actionTaken = handleBoardDrop(card);
@@ -538,6 +535,8 @@ public class Game {
                             Player currentPlayer = playerHandler.getCurrentPlayer();
                             gui.removeBenchCard(currentPlayer, basePokemon);
                             gui.addBenchCard(currentPlayer, evolution);
+                            break;
+                        default:
                             break;
                     }
                 }

@@ -25,7 +25,7 @@ public class DeckGenerator {
         ArrayList<DeckEntry> parsedEntries = new ArrayList<>();
         int totalCards = 0;
 
-        try (Scanner scanFile = new Scanner(is)) {
+        try (Scanner scanFile = new Scanner(is, java.nio.charset.StandardCharsets.UTF_8)) {
             while (scanFile.hasNextLine()) {
                 String line = scanFile.nextLine();
                 if (line.trim().isEmpty()) continue;

@@ -59,6 +59,13 @@
             <version>3.0.1</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-annotations</artifactId>
+            <version>4.8.3</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -286,6 +293,7 @@
                     <effort>Max</effort>
                     <threshold>Normal</threshold>
                     <failOnError>true</failOnError>
+                    <excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
                     <!-- Exclude GUI classes from SpotBugs if needed, or tests. Usually SpotBugs only runs on main. -->
                 </configuration>
                 <executions>
