@@ -23,7 +23,7 @@ public class GameDropIntegrationTest {
         // Use NiceMocks for both to avoid strict call-counting issues
         gui = createNiceMock(GUI.class);
         playerHandler = createNiceMock(PlayerHandler.class);
-        game = new Game(gui, null, null, playerHandler);
+        game = new Game(gui, null, playerHandler);
         game.messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
         
         p1 = new Player("Player 1");

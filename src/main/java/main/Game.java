@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Game {
     protected GUI gui;
@@ -16,12 +18,13 @@ public class Game {
     protected Locale locale;
     protected ResourceBundle messages;
     protected TurnManager turnManager;
+    private static final Logger logger = Logger.getLogger(Game.class.getName());
 
-    public Game(GUI gui, Random random, SetupGame gameSetup, PlayerHandler playerHandler) {
-        this(gui, random, gameSetup, playerHandler, null);
+    public Game(GUI gui, SetupGame gameSetup, PlayerHandler playerHandler) {
+        this(gui, gameSetup, playerHandler, null);
     }
 
-    public Game(GUI gui, Random random, SetupGame gameSetup, PlayerHandler playerHandler, TurnManager turnManager) {
+    public Game(GUI gui, SetupGame gameSetup, PlayerHandler playerHandler, TurnManager turnManager) {
         this.gui = gui;
         this.gameSetup = gameSetup;
         this.playerHandler = playerHandler;
@@ -144,8 +147,7 @@ public class Game {
                 gui.displayCards(currentPlayer.handAsList());
             }
         } catch (Exception e) {
-            System.err.println("Instant Drop handling error: " + e.getMessage());
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Instant Drop handling error", e);
             gui.displayMessage("An unexpected error occurred during this move.");
             Player currentPlayer = playerHandler.getCurrentPlayer();
             if (currentPlayer != null) {

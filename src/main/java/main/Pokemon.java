@@ -4,6 +4,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class Pokemon extends Card {
@@ -153,7 +154,7 @@ public class Pokemon extends Card {
     }
 
     private boolean canPay(HashMap<EnergyType, Integer> energyCount, HashMap<EnergyType, Integer> costCount) {
-        for (java.util.Map.Entry<EnergyType, Integer> entry : costCount.entrySet()) {
+        for (Map.Entry<EnergyType, Integer> entry : costCount.entrySet()) {
             EnergyType energyType = entry.getKey();
             int required = entry.getValue();
             int available = energyCount.getOrDefault(energyType, 0);

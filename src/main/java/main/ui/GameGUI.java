@@ -12,6 +12,8 @@ import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 //https://stackoverflow.com/questions/601274/how-do-i-properly-load-a-bufferedimage-in-java
 
@@ -51,6 +53,7 @@ public class GameGUI implements GUI {
     protected ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", Locale.US);
     private BufferedImage flag = null;
     private UserPrompter prompter;
+    private static final Logger logger = Logger.getLogger(GameGUI.class.getName());
 
     public GameGUI() {
         this(new DefaultUserPrompter());
@@ -380,7 +383,7 @@ public class GameGUI implements GUI {
             try {
                 flag = ImageIO.read(getClass().getResource("/USFlag.png"));
             } catch (IOException ex) {
-                ex.printStackTrace();
+                logger.log(Level.WARNING, "Failed to load flag", ex);
             }
             removeButton(engBtn);
             removeButton(germanBtn);
@@ -393,7 +396,7 @@ public class GameGUI implements GUI {
             try {
                 flag = ImageIO.read(getClass().getResource("/deutschflag.png"));
             } catch (IOException ex) {
-                ex.printStackTrace();
+                logger.log(Level.WARNING, "Failed to load flag", ex);
             }
             removeButton(engBtn);
             removeButton(germanBtn);

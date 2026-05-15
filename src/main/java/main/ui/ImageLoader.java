@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,6 +21,7 @@ import javax.swing.SwingUtilities;
 public class ImageLoader {
     private static final Map<String, BufferedImage> imageCache = Collections.synchronizedMap(new HashMap<>());
     private static final Set<String> loading = Collections.synchronizedSet(new HashSet<>());
+    private static final Logger logger = Logger.getLogger(ImageLoader.class.getName());
 
     private static final String PLACEHOLDER_URL = "https://via.placeholder.com/150?text=Card+Image+Missing";
 
@@ -87,7 +90,7 @@ public class ImageLoader {
                     handleLoadFailure(urlString, componentToRepaint, callback);
                 }
             } catch (IOException e) {
-                System.err.println("Failed to load image from: " + urlString + " - using fallback.");
+                logger.log(Level.SEVERE, "Failed to load image from: " + urlString, e);
                 handleLoadFailure(urlString, componentToRepaint, callback);
             } finally {
                 loading.remove(urlString);

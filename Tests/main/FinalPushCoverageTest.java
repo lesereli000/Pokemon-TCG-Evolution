@@ -118,7 +118,7 @@ public class FinalPushCoverageTest {
         GUI gui = createMock(GUI.class);
         PlayerHandler handler = createMock(PlayerHandler.class);
         Player player = createMock(Player.class);
-        Game game = new Game(gui, null, null, handler);
+        Game game = new Game(gui, null, handler);
         
         Pokemon active = new Pokemon("Active", "Grass", 0, 50);
         Energy energy = new Energy(EnergyType.GRASS);
