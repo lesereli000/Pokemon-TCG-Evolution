@@ -17,6 +17,7 @@
         <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.organization>lesereli000</sonar.organization>
         <sonar.projectKey>lesereli000_Pokemon-TCG-Evolution</sonar.projectKey>
+        <sonar.scanner.force-ci-analysis>true</sonar.scanner.force-ci-analysis>
     </properties>
 
     <dependencyManagement>
