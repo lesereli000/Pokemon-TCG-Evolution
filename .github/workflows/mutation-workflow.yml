@@ -76,7 +76,7 @@ jobs:
           gh release download "$TOOL_VERSION" --repo "$TOOL_REPO" \
             --pattern "mutationtester-$TOOL_VERSION.jar" --output "$RUNNER_TEMP/mt/mutationtester.jar"
 
-            - name: Write config
+      - name: Write config
         run: |
           cat > "$RUNNER_TEMP/mt/mutation.config" <<EOF
           source_code_directory=src/main/java/main
