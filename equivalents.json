@@ -1,3 +1,5 @@
 {
-  "hiddenMutantIds": []
+  "hiddenMutantIds": [
+    "CONTENT|Game.java|handleBenchDrop|}elseif(cardinstanceofEnergy&&bench.size()>slot){|>|>="
+  ]
 }
