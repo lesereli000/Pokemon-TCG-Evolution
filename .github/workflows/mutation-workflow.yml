@@ -24,7 +24,7 @@ on:
 
 env:
   TOOL_VERSION: v0.1.0-rc.1
-  TOOL_REPO: EllieJin04/mutationtestor
+  TOOL_REPO: lesereli000/mutationtestor
 
 jobs:
   # Creates the mutation-data branch if needed and folds equivalent-mutant
@@ -79,10 +79,10 @@ jobs:
       - name: Write config
         run: |
           cat > "$RUNNER_TEMP/mt/mutation.config" <<EOF
-          source_code_directory=src/main/java
+          source_code_directory=src/main/java/main
           mutator_type=CUSTOM
           custom_mutation_spec=OperatorMutations.txt
-          test_command=mvn -q clean test
+          test_command=xvfb-run -a mvn -q clean test
           min_mutation_score=$MIN_SCORE
           EOF
 
