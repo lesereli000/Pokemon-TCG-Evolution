@@ -1,15 +1,3 @@
-# Mutation testing for a project, using a released MutationTester jar.
-# Copy this file to .github/workflows/mutation.yml in the project; it is the
-# only file the tool needs in the project's main branch. See docs/ci/README.md.
-#
-# One-time setup in the project:
-#   - Add a secret MUTATION_TOOL_TOKEN that can read EllieJin04/mutationtestor
-#     (needed while that repository is private).
-#   - If a branch ruleset covers all branches, let github-actions[bot] push to
-#     the mutation-data branch.
-#
-# Edit the "Write config" step and the toolchain setup step for the project.
-
 name: Mutation testing
 
 on:
@@ -21,15 +9,17 @@ on:
       min_score:
         description: Minimum mutation score (0-100)
         default: '70'
+      workers:
+        description: Mutants tested at once (1-4)
+        default: '4'
 
 env:
-  TOOL_VERSION: v0.1.0-rc.1
+  TOOL_VERSION: v0.1.0-rc.2
   TOOL_REPO: lesereli000/mutationtestor
 
 jobs:
   # Creates the mutation-data branch if needed and folds equivalent-mutant
-  # marks saved from reports into equivalents.json. Kept apart from the
-  # mutation job so the project's tests never run with a token that can push.
+  # marks saved from reports into equivalents.json.
   sync-equivalents:
     if: github.event.pull_request.head.repo.fork != true
     runs-on: ubuntu-latest
@@ -58,10 +48,10 @@ jobs:
       contents: read
     env:
       MIN_SCORE: ${{ inputs.min_score || '70' }}
+      MUTATION_WORKERS: ${{ inputs.workers || '4' }}
     steps:
       - uses: actions/checkout@v4
 
-      # Replace with whatever the project's own tests need.
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -76,25 +66,29 @@ jobs:
           gh release download "$TOOL_VERSION" --repo "$TOOL_REPO" \
             --pattern "mutationtester-$TOOL_VERSION.jar" --output "$RUNNER_TEMP/mt/mutationtester.jar"
 
-      - name: Debug coverage (temporary)
-        run: mvn test jacoco:report -Dtest='!main/ui/**'
-
+      # GUI code and GUI tests are left out: exclude_source keeps the main.ui
+      # package from being mutated, and -Dtest skips its tests. The pom
+      # already sets up JaCoCo, so coverage uses it (jacoco:report) instead
+      # of adding a second agent.
       - name: Write config
         run: |
           cat > "$RUNNER_TEMP/mt/mutation.config" <<EOF
           source_code_directory=src/main/java/main
+          exclude_source=src/main/java/main/ui
           mutator_type=CUSTOM
           custom_mutation_spec=OperatorMutations.txt
           test_command=mvn -q test -Dtest='!main/ui/**'
-          coverage_command=mvn test jacoco:report -Dtest='!main/ui/**'
+          coverage_command=mvn -q test jacoco:report -Dtest='!main/ui/**'
           coverage_report=target/site/jacoco/jacoco.xml
           min_mutation_score=$MIN_SCORE
+          time_limit_minutes=45
           EOF
 
-      # Runs from a temp folder so output/ stays out of the checkout.
-      # Exit code 1 = could not run, 2 = score below min_mutation_score.
+      # Exit code 1 = could not run, 2 = score below min_mutation_score,
+      # 3 = stopped early (time limit or cancel; the report is partial).
       - name: Run mutation testing
         working-directory: ${{ runner.temp }}/mt
+        timeout-minutes: 55
         run: java -jar mutationtester.jar "$GITHUB_WORKSPACE" mutation.config
 
       - name: Upload report
@@ -104,7 +98,8 @@ jobs:
           name: mutation-report
           path: ${{ runner.temp }}/mt/output/report/
 
-publish-report:
+  # Publishes main's latest report at https://lesereli000.github.io/Pokemon-TCG-Evolution/
+  publish-report:
     needs: mutation
     if: ${{ !cancelled() && needs.mutation.result != 'skipped' && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
