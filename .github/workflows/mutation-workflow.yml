@@ -76,13 +76,15 @@ jobs:
           gh release download "$TOOL_VERSION" --repo "$TOOL_REPO" \
             --pattern "mutationtester-$TOOL_VERSION.jar" --output "$RUNNER_TEMP/mt/mutationtester.jar"
 
-      - name: Write config
+            - name: Write config
         run: |
           cat > "$RUNNER_TEMP/mt/mutation.config" <<EOF
           source_code_directory=src/main/java/main
           mutator_type=CUSTOM
           custom_mutation_spec=OperatorMutations.txt
-          test_command=xvfb-run -a mvn -q clean test
+          test_command=mvn -q test -Dtest='!main/ui/**'
+          coverage_command=mvn -q org.jacoco:jacoco-maven-plugin:0.8.12:prepare-agent test org.jacoco:jacoco-maven-plugin:0.8.12:report -Dtest='!main/ui/**'
+          coverage_report=target/site/jacoco/jacoco.xml
           min_mutation_score=$MIN_SCORE
           EOF
 
