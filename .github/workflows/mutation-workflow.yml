@@ -101,7 +101,7 @@ jobs:
   # Publishes main's latest report at https://lesereli000.github.io/Pokemon-TCG-Evolution/
   publish-report:
     needs: mutation
-    if: ${{ !cancelled() && needs.mutation.result != 'skipped' && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    if: ${{ !cancelled() && needs.mutation.result != 'skipped' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     permissions:
       pages: write
