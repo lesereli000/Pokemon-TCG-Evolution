@@ -120,11 +120,18 @@ public class GameGUITestHarness {
                             if (window instanceof JDialog && window.isVisible()) {
                                 window.dispose();
                                 found[0] = true;
-                                break;
                             }
                         }
                     });
                     if (found[0]) {
+                        Thread.sleep(100);
+                        SwingUtilities.invokeAndWait(() -> {
+                            for (Window window : Window.getWindows()) {
+                                if (window instanceof JDialog && window.isVisible()) {
+                                    window.dispose();
+                                }
+                            }
+                        });
                         dismissed = true;
                     } else {
                         Thread.sleep(50);
