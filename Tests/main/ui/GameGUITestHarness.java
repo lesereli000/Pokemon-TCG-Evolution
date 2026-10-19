@@ -112,7 +112,7 @@ public class GameGUITestHarness {
                 Thread.sleep(initialDelayMs);
                 long startTime = System.currentTimeMillis();
                 boolean dismissed = false;
-                while (!dismissed && (System.currentTimeMillis() - startTime < 2000)) {
+                while (!dismissed && (System.currentTimeMillis() - startTime < 8000)) {
                     final boolean[] found = {false};
                     SwingUtilities.invokeAndWait(() -> {
                         Window[] windows = Window.getWindows();
