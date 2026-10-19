@@ -13,11 +13,6 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <sonar.java.binaries>target/classes</sonar.java.binaries>
-        <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-        <sonar.organization>lesereli000</sonar.organization>
-        <sonar.projectKey>lesereli000_Pokemon-TCG-Evolution</sonar.projectKey>
-        <sonar.scanner.force-ci-analysis>true</sonar.scanner.force-ci-analysis>
     </properties>
 
     <dependencyManagement>
