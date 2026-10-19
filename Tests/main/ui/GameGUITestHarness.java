@@ -112,7 +112,7 @@ public class GameGUITestHarness {
                 Thread.sleep(initialDelayMs);
                 long startTime = System.currentTimeMillis();
                 boolean dismissed = false;
-                while (!dismissed && (System.currentTimeMillis() - startTime < 2000)) {
+                while (!dismissed && (System.currentTimeMillis() - startTime < 8000)) {
                     final boolean[] found = {false};
                     SwingUtilities.invokeAndWait(() -> {
                         Window[] windows = Window.getWindows();
@@ -120,11 +120,18 @@ public class GameGUITestHarness {
                             if (window instanceof JDialog && window.isVisible()) {
                                 window.dispose();
                                 found[0] = true;
-                                break;
                             }
                         }
                     });
                     if (found[0]) {
+                        Thread.sleep(100);
+                        SwingUtilities.invokeAndWait(() -> {
+                            for (Window window : Window.getWindows()) {
+                                if (window instanceof JDialog && window.isVisible()) {
+                                    window.dispose();
+                                }
+                            }
+                        });
                         dismissed = true;
                     } else {
                         Thread.sleep(50);
