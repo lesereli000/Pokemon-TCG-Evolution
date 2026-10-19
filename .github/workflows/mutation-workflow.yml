@@ -76,6 +76,9 @@ jobs:
           gh release download "$TOOL_VERSION" --repo "$TOOL_REPO" \
             --pattern "mutationtester-$TOOL_VERSION.jar" --output "$RUNNER_TEMP/mt/mutationtester.jar"
 
+      - name: Debug coverage (temporary)
+        run: mvn org.jacoco:jacoco-maven-plugin:0.8.12:prepare-agent test org.jacoco:jacoco-maven-plugin:0.8.12:report -Dtest='!main/ui/**'
+
       - name: Write config
         run: |
           cat > "$RUNNER_TEMP/mt/mutation.config" <<EOF
