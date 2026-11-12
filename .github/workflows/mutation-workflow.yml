@@ -9,18 +9,42 @@ on:
       min_score:
         description: Minimum mutation score (0-100)
         default: '70'
+      safety_model_review:
+        description: Send code to the configured model (manual runs on main only)
+        type: boolean
+        default: false
       workers:
         description: Mutants tested at once (1-4)
         default: '4'
 
-env:
-  TOOL_VERSION: v0.1.0-rc.2
-  TOOL_REPO: lesereli000/mutationtestor
-
 jobs:
+  build-tool:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: lesereli000/mutationtestor
+          ref: 42382f1315ce51369b757a03fa462bd7b431d92a
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - name: Build mutation tester with safety support
+        run: mvn -B --no-transfer-progress -DskipTests package
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mutation-tester-jar
+          path: target/MutationTester-1.0-SNAPSHOT-jar-with-dependencies.jar
+          if-no-files-found: error
+
   # Creates the mutation-data branch if needed and folds equivalent-mutant
   # marks saved from reports into equivalents.json.
   sync-equivalents:
+    needs: build-tool
     if: github.event.pull_request.head.repo.fork != true
     runs-on: ubuntu-latest
     permissions:
@@ -29,19 +53,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download mutation tester
-        env:
-          GH_TOKEN: ${{ secrets.MUTATION_TOOL_TOKEN }}
-        run: |
-          gh release download "$TOOL_VERSION" --repo "$TOOL_REPO" \
-            --pattern "mutationtester-$TOOL_VERSION.jar" --output "$RUNNER_TEMP/mutationtester.jar"
+      - uses: actions/download-artifact@v4
+        with:
+          name: mutation-tester-jar
+          path: ${{ runner.temp }}/tool
 
       - name: Sync equivalent mutants
-        run: java -cp "$RUNNER_TEMP/mutationtester.jar" mutationtester.ci.EquivalentsSync
+        run: java -cp "$RUNNER_TEMP/tool/MutationTester-1.0-SNAPSHOT-jar-with-dependencies.jar" mutationtester.ci.EquivalentsSync
 
   mutation:
-    needs: sync-equivalents
-    if: ${{ !cancelled() && needs.sync-equivalents.result != 'failure' }}
+    needs: [build-tool, sync-equivalents]
+    if: ${{ !cancelled() && needs.build-tool.result == 'success' && needs.sync-equivalents.result != 'failure' }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     permissions:
@@ -58,13 +80,12 @@ jobs:
           java-version: '17'
           cache: maven
 
-      - name: Download mutation tester
-        env:
-          GH_TOKEN: ${{ secrets.MUTATION_TOOL_TOKEN }}
-        run: |
-          mkdir -p "$RUNNER_TEMP/mt"
-          gh release download "$TOOL_VERSION" --repo "$TOOL_REPO" \
-            --pattern "mutationtester-$TOOL_VERSION.jar" --output "$RUNNER_TEMP/mt/mutationtester.jar"
+      - uses: actions/download-artifact@v4
+        with:
+          name: mutation-tester-jar
+          path: ${{ runner.temp }}/mt
+      - name: Name executable
+        run: mv "$RUNNER_TEMP/mt/MutationTester-1.0-SNAPSHOT-jar-with-dependencies.jar" "$RUNNER_TEMP/mt/mutationtester.jar"
 
       # GUI code and GUI tests are left out: exclude_source keeps the main.ui
       # package from being mutated, and -Dtest skips its tests. The pom
@@ -82,6 +103,7 @@ jobs:
           coverage_report=target/site/jacoco/jacoco.xml
           min_mutation_score=$MIN_SCORE
           time_limit_minutes=45
+          unattended_safety=skip
           EOF
 
       # Exit code 1 = could not run, 2 = score below min_mutation_score,
@@ -89,6 +111,11 @@ jobs:
       - name: Run mutation testing
         working-directory: ${{ runner.temp }}/mt
         timeout-minutes: 55
+        env:
+          MUTATION_SAFETY_SEND_CODE: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.safety_model_review && 'yes' || 'no' }}
+          MUTATION_SAFETY_MODEL: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.safety_model_review && vars.MUTATION_SAFETY_MODEL || '' }}
+          MUTATION_SAFETY_API_URL: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.safety_model_review && vars.MUTATION_SAFETY_API_URL || '' }}
+          MUTATION_SAFETY_API_KEY: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.safety_model_review && secrets.MUTATION_SAFETY_API_KEY || '' }}
         run: java -jar mutationtester.jar "$GITHUB_WORKSPACE" mutation.config
 
       - name: Upload report
