@@ -1,0 +1,1 @@
+{"add":["CONTENT|Pokemon.java|heal|if(damageCounters<0){|<|<=","CONTENT|Game.java|handleInstantDrop|if(currentPlayer!=null){|!=|=="],"remove":[]}
