@@ -1,5 +1,7 @@
 {
   "hiddenMutantIds": [
-    "CONTENT|Game.java|handleBenchDrop|}elseif(cardinstanceofEnergy&&bench.size()>slot){|>|>="
+    "CONTENT|Game.java|handleBenchDrop|}elseif(cardinstanceofEnergy&&bench.size()>slot){|>|>=",
+    "CONTENT|Pokemon.java|heal|if(damageCounters<0){|<|<=",
+    "CONTENT|Game.java|handleInstantDrop|if(currentPlayer!=null){|!=|=="
   ]
 }
