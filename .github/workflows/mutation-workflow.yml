@@ -97,7 +97,7 @@ jobs:
           source_code_directory=src/main/java/main
           exclude_source=src/main/java/main/ui
           mutator_type=CUSTOM
-          custom_mutation_spec=OperatorMutations.txt
+          custom_mutation_spec=specs/OperatorMutations.spec
           test_command=mvn -q test -Dtest='!main/ui/**'
           coverage_command=mvn -q test jacoco:report -Dtest='!main/ui/**'
           coverage_report=target/site/jacoco/jacoco.xml
